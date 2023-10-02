@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigation } from 'react-router';
+import { useNavigation, Outlet } from 'react-router';
 import Navigation from '../Components/Layout/Navigation/Navigation';
 
 const RootLayout = () => {

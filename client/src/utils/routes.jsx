@@ -15,7 +15,7 @@ const routes = {
     name: 'slots',
     includeInNav:true,
   },
-  main: {
+  roulette: {
     path: '/roulette',
     element: <RoulettePage/>,
     name: 'roulette',
