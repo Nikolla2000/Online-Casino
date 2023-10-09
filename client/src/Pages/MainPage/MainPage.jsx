@@ -6,7 +6,9 @@ const MainPage = () => {
       <header>
         <h1>Welcome to Nikola's Casino</h1>
       </header>
-      <section className='games-section'></section>
+      <section className='games-section'>
+        <h3>POPULAR GAMES</h3>
+      </section>
     </div>
   );
 };
