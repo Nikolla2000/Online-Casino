@@ -1,9 +1,10 @@
 import React from 'react';
 
-const GameThumbnail = () => {
+const GameThumbnail = ({ data }) => {
+  console.log(data.image);
   return (
     <div className='game-thumnail-wrapper'>
-      <img src='' alt='game-image'/>
+      <img src={data.image} alt='game-image'/>
     </div>
   );
 };
