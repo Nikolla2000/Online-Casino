@@ -1,0 +1,14 @@
+@import "../../colorConstants.scss";
+
+.main-page-wrapper {
+
+  .games-section {
+
+    .games-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap:50px;
+    }
+  }
+}
