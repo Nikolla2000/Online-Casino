@@ -1,7 +1,60 @@
 @import "../../colorConstants.scss";
+@import url('https://fonts.googleapis.com/css2?family=Gabarito&family=Inter&display=swap');
 
 .main-page-wrapper {
-  background: "../../../src/assets/images/main-background.htm";
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  .video-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 1;
+  }
+
+
+  .content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: white;
+  }
+  
+  header {
+    font-family: 'Gabarito', sans-serif;
+    margin-bottom: 200px;
+    h1 {
+      font-weight: bold;
+      font-size: 3.5em;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+    }
+
+    .start-playing-btn{
+      button {
+        background-color: $primary-red;
+        color:$primary-white;
+        padding: 15px 30px;
+        border:none;
+        font-weight: bold;
+        font-size: 1.5em;
+        cursor: pointer;
+      }
+    }
+  }
   .games-section {
 
     .games-wrapper {
