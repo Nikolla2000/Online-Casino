@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { gamesData } from '../../Components/GameThumbnail/gamesData';
 import GameThumbnail from '../../Components/GameThumbnail/GameThumbnail';
 import "./MainPageStyles.scss"
-import videoBackground from '../../assets/images/background-video.mp4'
+import videoBackground from '../../assets/images/background-video2.mp4'
 
 const MainPage = () => {
   const [games, setGames] = useState(null)
@@ -19,6 +19,9 @@ const MainPage = () => {
       <div className="content">
         <header>
           <h1>Your Win Awaits</h1>
+          <div className="start-playing-btn">
+            <button>Start Playing</button>
+          </div>
         </header>
       </div>
       {/* <section className='games-section'>
