@@ -24,14 +24,6 @@ const MainPage = () => {
           </div>
         </header>
       </div>
-      {/* <section className='games-section'>
-        <h3>POPULAR GAMES</h3>
-        <div className="games-wrapper">
-          {gamesData.map((game, index) => (
-            <GameThumbnail data={game} key={index + 1}/>
-          ))}
-        </div>
-      </section> */}
     </div>
   );
 };
