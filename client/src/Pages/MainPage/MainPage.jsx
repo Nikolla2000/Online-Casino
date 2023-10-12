@@ -3,6 +3,7 @@ import { gamesData } from '../../Components/GameThumbnail/gamesData';
 import GameThumbnail from '../../Components/GameThumbnail/GameThumbnail';
 import "./MainPageStyles.scss"
 import videoBackground from '../../assets/images/background-video2.mp4'
+import { Link } from 'react-router-dom';
 
 const MainPage = () => {
   const [games, setGames] = useState(null)
@@ -20,7 +21,7 @@ const MainPage = () => {
         <header>
           <h1>Your Winnings Await</h1>
           <div className="start-playing-btn">
-            <a class="glowButton" href="#">Start Playing</a>
+            <Link to='/games' class="glowButton" href="#">Start Playing</Link>
           </div>
         </header>
       </div>
