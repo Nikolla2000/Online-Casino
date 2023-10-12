@@ -18,9 +18,9 @@ const MainPage = () => {
       </video>
       <div className="content">
         <header>
-          <h1>Your Win Awaits</h1>
+          <h1>Your Winnings Await</h1>
           <div className="start-playing-btn">
-            <button>Start Playing</button>
+            <a class="glowButton" href="#">Start Playing</a>
           </div>
         </header>
       </div>
