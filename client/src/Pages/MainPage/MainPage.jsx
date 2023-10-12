@@ -1,37 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { gamesData } from '../../Components/GameThumbnail/gamesData';
-import GameThumbnail from '../../Components/GameThumbnail/GameThumbnail';
+import React from 'react';
 import "./MainPageStyles.scss"
 import videoBackground from '../../assets/images/background-video2.mp4'
+import { Link } from 'react-router-dom';
+import "animate.css"
 
 const MainPage = () => {
-  const [games, setGames] = useState(null)
-
-  useEffect(() => {
-    setGames(gamesData)
-  }, [])
   return (
     <div className='main-page-wrapper'>
       <video autoPlay loop muted className="video-background">
         <source src={videoBackground} type="video/mp4" />
         Your browser does not support the video tag.
-      </video>
+      </video>'"animate__animated animate__bounce'
       <div className="content">
-        <header>
-          <h1>Your Win Awaits</h1>
+        <header className="animate__animated animate__fadeIn">
+          <h1>Your Winnings Await</h1>
           <div className="start-playing-btn">
-            <button>Start Playing</button>
+            <Link to='/games' class="glowButton" href="#">Start Playing</Link>
           </div>
         </header>
       </div>
-      {/* <section className='games-section'>
-        <h3>POPULAR GAMES</h3>
-        <div className="games-wrapper">
-          {gamesData.map((game, index) => (
-            <GameThumbnail data={game} key={index + 1}/>
-          ))}
-        </div>
-      </section> */}
     </div>
   );
 };

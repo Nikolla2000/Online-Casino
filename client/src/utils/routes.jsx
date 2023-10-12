@@ -1,3 +1,4 @@
+import GamesPage from "../Pages/GamesPage/GamesPage";
 import MainPage from "../Pages/MainPage/MainPage";
 import RoulettePage from "../Pages/RoulettePage/RoulettePage";
 import SlotsPage from "../Pages/SlotsPage/SlotsPage";
@@ -9,14 +10,20 @@ const routes = {
     name: 'main',
     includeInNav:true,
   },
+  games: {
+    path: '/games',
+    element: <GamesPage/>,
+    name: 'games',
+    includeInNav: false
+  },
   slots: {
-    path: '/slots',
+    path: '/games/slots',
     element: <SlotsPage/>,
     name: 'slots',
     includeInNav:true,
   },
   roulette: {
-    path: '/roulette',
+    path: '/games/roulette',
     element: <RoulettePage/>,
     name: 'roulette',
     includeInNav:true,
