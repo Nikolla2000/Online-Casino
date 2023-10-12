@@ -17,13 +17,13 @@ const routes = {
     includeInNav: false
   },
   slots: {
-    path: '/slots',
+    path: '/games/slots',
     element: <SlotsPage/>,
     name: 'slots',
     includeInNav:true,
   },
   roulette: {
-    path: '/roulette',
+    path: '/games/roulette',
     element: <RoulettePage/>,
     name: 'roulette',
     includeInNav:true,
