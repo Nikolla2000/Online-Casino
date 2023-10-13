@@ -1,0 +1,33 @@
+@import '../../../../colorConstants.scss';
+
+.introduction-section-wrapper {
+  background-color: $primary-black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap:50px;
+  padding: 120px 0;
+  width: 100%;
+
+  .image-wrapper {
+    width: 500px;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .text-wrapper {
+    color: $primary-white;
+    width: 30%;
+
+    h3 {
+      font-size: 2.5em;
+      margin-bottom:60px;
+    }
+
+    p {
+      color:$primary-grey;
+    }
+  }
+}
