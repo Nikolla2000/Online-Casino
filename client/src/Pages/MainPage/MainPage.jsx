@@ -7,11 +7,11 @@ import "animate.css"
 const MainPage = () => {
   return (
     <div className='main-page-wrapper'>
-      <div className="header-section">
-        <video autoPlay loop muted className="video-background">
-          <source src={videoBackground} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>'"animate__animated animate__bounce'
+      <video autoPlay loop muted className="video-background">
+        <source src={videoBackground} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>'"animate__animated animate__bounce'
+      <div className="content">
         <header className="animate__animated animate__fadeIn">
           <h1>Your Winnings Await</h1>
           <div className="start-playing-btn">
