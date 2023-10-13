@@ -2,13 +2,13 @@ import React from 'react';
 import "./MainPageStyles.scss"
 
 import HeaderSection from './Sections/HeaderSection/HeaderSection';
-import InstroductionSection from './Sections/IntroductionSection/InstroductionSection';
+import IntroductionSection from './Sections/IntroductionSection/IntroductionSection';
 
 const MainPage = () => {
   return (
     <div className='main-page-wrapper'>
       <HeaderSection/>
-      <InstroductionSection/>
+      <IntroductionSection/>
     </div>
   );
 };
