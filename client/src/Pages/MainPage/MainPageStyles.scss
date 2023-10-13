@@ -8,11 +8,8 @@ $spotThree: #ff0000;
 
 
 .main-page-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
+  margin: 0;
+  padding: 0;
   .video-background {
     position: absolute;
     top: 0;
@@ -31,21 +28,27 @@ $spotThree: #ff0000;
     z-index: 1;
   }
 
-
-  .content {
+  .header-section {
     position: relative;
     z-index: 1;
     text-align: center;
     color: white;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
   
   header {
     font-family: 'Gabarito', sans-serif;
-    margin-bottom: 200px;
+    margin-bottom: 100px;
     h1 {
       font-weight: bold;
       font-size: 3.7em;
       letter-spacing: 3px;
+      z-index: 4548;
     }
 
     .start-playing-btn{
@@ -97,15 +100,6 @@ $spotThree: #ff0000;
           pointer-events: none;
         }
       }
-    }
-  }
-  .games-section {
-
-    .games-wrapper {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap:50px;
     }
   }
 }
