@@ -1,6 +1,6 @@
 const User = require('../models/User.model');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const passport = require('passport');
 
 const register = async(req, res) => {
   const {
@@ -49,25 +49,24 @@ const register = async(req, res) => {
 
 
 const login = async (req, res) => {
-  try {
-    const {userName, password} = req.body
+  passport.authenticate('local', (err, user, info) => {
+    if (err) {
+      return next(err)
+    }
 
-    const user = await User.findOne({ userName })
     if(!user) {
-      return res.status(401).json({ message: 'Could\'nt find user with that username'});
+      return res.status(401).json({ message: info.message });
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if(!isPasswordValid) {
-      return res.status(401).json({ message: 'Invalid password'});
-    }
+    req.login(user, (err) => {
+      if (err) {
+        return next(err)
+      }
 
-    const token = user.createJWT();
-
-    res.json({ message: 'Login successful', token});
-  } catch (error) {
-    res.status(500).json({ message: error.message })
-  }
+      const token = user.createJWT();
+      res.json({ message: 'Login successful', token})
+    })
+  })(req, res, next);
 }
 
 module.exports = {
