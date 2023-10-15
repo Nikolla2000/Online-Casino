@@ -9,10 +9,14 @@ const connectDB = require("./db/connect");
 //Port
 const port = process.env.PORT || 3000;
 
-//routers( example : const someRouter = require("./routes/some.router"))
+//routers
+const userRouter = require('./routes/User.router')
 
 app.use(express.static("./public"));
 app.use(express.json());
+
+//routes
+app.use('/server/v1/user', userRouter);
 
 const start = async () => {
   try {
