@@ -40,7 +40,12 @@ const register = async(req, res) => {
       country, 
       city, 
       phoneNumber})
+
       await user.save()
+
+      const token = jwt.sign({ userId: user_id, username: user.userName}, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_LIFETIME,
+      })
       res.status(201).json({ message: "User registered successfully "})
   } catch (error) {
     res.status(500).json({ message: error.message })
