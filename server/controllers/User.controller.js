@@ -8,13 +8,27 @@ const register = async(req, res) => {
     lastName, 
     userName, 
     email,
-    password, 
+    password,
+    confirmPassword,
     registrationDate, 
     country, 
     city, 
     phoneNumber
   } = req.body;
 
+  if (
+    !firstName 
+    || !lastName 
+    || !userName 
+    || !email 
+    || !password
+    || !confirmPassword) {
+      return res.status(400).json({ message: 'All required fields must be provided' });
+    }
+
+    if(password !== confirmPassword){
+      res.status(400).json({ message: 'Passwords do not match'})
+    }
   try {
     const user = new User({
       firstName,
