@@ -5,7 +5,7 @@ const register = async(req, res) => {
     firstName,
     lastName, 
     userName, 
-    emailk,
+    email,
     password, 
     registrationDate, 
     country, 
@@ -14,7 +14,8 @@ const register = async(req, res) => {
   } = req.body;
 
   try {
-    const user = new User({firstName,
+    const user = new User({
+      firstName,
       lastName, 
       userName, 
       email,
