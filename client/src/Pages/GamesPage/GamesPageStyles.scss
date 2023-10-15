@@ -1,0 +1,12 @@
+@import "../../colorConstants.scss";
+
+.games-page-wrapper {
+
+  .games-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap:40px;
+  }
+}

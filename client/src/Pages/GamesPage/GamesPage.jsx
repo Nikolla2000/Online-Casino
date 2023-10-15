@@ -1,6 +1,7 @@
 import React from 'react';
 import { gamesData } from '../../Components/GameThumbnail/gamesData';
 import GameThumbnail from '../../Components/GameThumbnail/GameThumbnail';
+import "./GamesPageStyles.scss"
 
 const GamesPage = () => {
   return (
