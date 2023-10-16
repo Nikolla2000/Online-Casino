@@ -10,7 +10,7 @@ const GameThumbnail = ({ data }) => {
       <div className='game-thumbnail-wrapper'>
           <img src={data.image} alt='game-image'/>
       <Link to={data.linkPath}>
-        <Button variant='success' className='play-btn'>
+        <Button className='play-btn'>
           Play
         </Button>
       </Link>
