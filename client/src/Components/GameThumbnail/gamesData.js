@@ -1,10 +1,10 @@
 export const gamesData = [
   {
-    linkPath: '/slots',
+    linkPath: '/games/slots',
     image: '../../src/assets/images/slots-thumbnail.png'
   },
   {
-    linkPath: '/roulette',
+    linkPath: '/games/roulette',
     image: '../..//src/assets/images/roulette-thumbnail.jpg'
   }
 ]
