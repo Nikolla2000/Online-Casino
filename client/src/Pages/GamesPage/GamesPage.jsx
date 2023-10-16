@@ -7,7 +7,7 @@ const GamesPage = () => {
   return (
     <div className='games-page-wrapper'>
        <section className='games-section'>
-        <h3>POPULAR GAMES</h3>
+        <h2 className='games-page-heading'>TOP GAMES</h2>
         <div className="games-wrapper">
           {gamesData.map((game, index) => (
             <GameThumbnail data={game} key={index + 1}/>
