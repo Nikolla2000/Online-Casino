@@ -7,14 +7,14 @@ const GameThumbnail = ({ data }) => {
   console.log(data.image);
   return (
     <div className='game-wrapper'>
-    <div className='game-thumbnail-wrapper'>
-        <img src={data.image} alt='game-image'/>
-    </div>
+      <div className='game-thumbnail-wrapper'>
+          <img src={data.image} alt='game-image'/>
       <Link to={data.linkPath}>
         <Button variant='success' className='play-btn'>
           Play
         </Button>
       </Link>
+      </div>
     </div>
   );
 };
