@@ -18,6 +18,11 @@ nav {
       width: 100px;
     }
 
+    .nav-menu {
+      display: inline block;
+      text-align: right;
+    }
+
     .nav-menu,
     .show-mobile-menu {
       display: flex;
