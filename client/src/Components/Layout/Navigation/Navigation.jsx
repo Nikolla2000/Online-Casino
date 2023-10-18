@@ -1,5 +1,7 @@
 import React from 'react';
 import {  NavLink } from 'react-router-dom'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 import routes from '../../../utils/routes';
 import './NavigationStyles.scss'
 
@@ -17,6 +19,7 @@ const Navigation = () => {
               {element.name}  
             </NavLink>
           ))}
+          <FontAwesomeIcon icon={faUser} style={{color: '#fff'}}/>
         </div>
       </div>
       
