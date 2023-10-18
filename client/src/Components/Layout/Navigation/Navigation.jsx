@@ -1,15 +1,17 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {  NavLink } from 'react-router-dom'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faBars } from "@fortawesome/free-solid-svg-icons";
 import routes from '../../../utils/routes';
 import './NavigationStyles.scss'
 
 const Navigation = () => {
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+
   return (
     <nav>
       <div className="nav-wrapper">
-        <div className="nav-menu">
+      <div className={showMobileMenu ? "show-mobile-menu" : "nav-menu"}>
           {Object.values(routes)
           .filter((element) => element.includeInNav === true)
           .map((element, index) => (
@@ -19,8 +21,19 @@ const Navigation = () => {
               {element.name}  
             </NavLink>
           ))}
-          <FontAwesomeIcon icon={faUser} style={{color: '#fff'}}/>
+          <div className="user-icon">
+            <FontAwesomeIcon icon={faUser} style={{color: '#fff'}}/>
+          </div>
         </div>
+      </div>
+      <div className="mobile-menu-wrapper">
+        <FontAwesomeIcon
+          className="mobile-menu-btn"
+          icon={faBars}
+          onClick={() => {
+            setShowMobileMenu(!showMobileMenu)
+          }}
+        />
       </div>
       
     </nav>

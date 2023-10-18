@@ -21,6 +21,11 @@ nav {
     .nav-menu {
       display: inline block;
       text-align: right;
+
+      .user-icon {
+        font-size: 1.1em;
+        cursor: pointer;
+      }
     }
 
     .nav-menu,
