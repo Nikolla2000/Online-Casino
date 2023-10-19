@@ -3,7 +3,7 @@ import Modal from '@mui/material/Modal'; // Import the Modal component
 import Box from '@mui/material/Box'; // Import the Box component
 import Typography from '@mui/material/Typography'; // Import the Typography component
 
-const RegisterForm = () => {
+const RegisterForm = ({handleClose}) => {
   return (
     <div>
       <Modal
@@ -12,7 +12,7 @@ const RegisterForm = () => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
 >
-        <Box sx={style}>
+        <Box>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Text in a modal
           </Typography>
