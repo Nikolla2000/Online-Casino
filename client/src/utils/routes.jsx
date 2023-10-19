@@ -1,3 +1,4 @@
+import ContactPage from "../Pages/ContactPage/ContactPage";
 import GamesPage from "../Pages/GamesPage/GamesPage";
 import MainPage from "../Pages/MainPage/MainPage";
 import RoulettePage from "../Pages/RoulettePage/RoulettePage";
@@ -7,8 +8,14 @@ const routes = {
   main: {
     path: '/',
     element: <MainPage/>,
-    name: 'main',
+    name: 'home',
     includeInNav:true,
+  },
+  contact: {
+    path:'/contact',
+    element: <ContactPage/>,
+    name: 'contact',
+    includeInNav: true
   },
   games: {
     path: '/games',
@@ -20,13 +27,13 @@ const routes = {
     path: '/games/slots',
     element: <SlotsPage/>,
     name: 'slots',
-    includeInNav:true,
+    includeInNav:false,
   },
   roulette: {
     path: '/games/roulette',
     element: <RoulettePage/>,
     name: 'roulette',
-    includeInNav:true,
+    includeInNav:false,
   }
 }
 
