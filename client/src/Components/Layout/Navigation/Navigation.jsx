@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faBars } from "@fortawesome/free-solid-svg-icons";
 import routes from '../../../utils/routes';
 import './NavigationStyles.scss'
+import UserDropdown from '../UserDropdown/UserDropdown';
 
 const Navigation = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -24,6 +25,7 @@ const Navigation = () => {
           <div className="user-icon">
             <FontAwesomeIcon icon={faUser} style={{color: '#fff'}}/>
           </div>
+          <UserDropdown/>
         </div>
       </div>
       <div className="mobile-menu-wrapper">
