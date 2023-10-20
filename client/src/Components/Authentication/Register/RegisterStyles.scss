@@ -1,0 +1,17 @@
+.MuiBox-root {
+  background-color: rgba($color: #000000, $alpha: 0.8);
+  padding: 50px;
+  margin: 0 auto;
+  text-align: center;
+  form {
+    label {
+      display: block;
+    }
+  
+    input {
+      display: block;
+      margin: 0 auto;
+    }
+
+  }
+}
