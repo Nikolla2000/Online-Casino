@@ -6,8 +6,8 @@ import './RegisterStyles.scss'
 
 const RegisterForm = ({ handleClose}) => {
   const [formData, setFormData] = useState({
-    firstname: '',
-    lastname: '',
+    firstName: '',
+    lastName: '',
     username: '',
     email: '',
     phone: '',
@@ -23,9 +23,43 @@ const RegisterForm = ({ handleClose}) => {
       [name]: value,
     });
   };
+
+  const validateForm = () => {
+    const errors = {};
+  
+    if (formData.firstName.length < 2 || formData.firstName.length > 20) {
+      errors.firstName = 'First Name must be between 2 and 20 characters';
+    }
+  
+    if (formData.lastName.length < 2 || formData.lastName.length > 20) {
+      errors.lastName = 'Last Name must be between 2 and 20 characters';
+    }
+  
+    if (formData.username.length < 2 || formData.username.length > 20) {
+      errors.username = 'Username must be between 2 and 20 characters';
+    }
+  
+    if (formData.password.length < 6) {
+      errors.password = 'Password must be at least 6 characters';
+    }
+  
+    if (formData.password !== formData.confirm_password) {
+      errors.confirm_password = 'Passwords do not match';
+    }
+  
+    return errors;
+  };
+  
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log('submitted');
+    const errors = validateForm();
+
+    if (Object.keys(errors).length === 0) {
+      try {
+        
+      } catch (error) {
+        
+      }
   }
   return (
     <div className='register-modal-wrapper'>
@@ -46,7 +80,7 @@ const RegisterForm = ({ handleClose}) => {
           type="text"
           id="firstname"
           name="firstname"
-          value={formData.firstname}
+          value={formData.firstName}
           onChange={handleChange}
           required
         />
@@ -55,7 +89,7 @@ const RegisterForm = ({ handleClose}) => {
           type="text"
           id="lastname"
           name="lastname"
-          value={formData.lastname}
+          value={formData.lastName}
           onChange={handleChange}
           required
         />
