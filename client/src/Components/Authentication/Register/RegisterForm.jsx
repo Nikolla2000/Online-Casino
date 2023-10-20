@@ -12,12 +12,12 @@ const RegisterForm = ({handleClose}) => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
 >
-        <Box>
+        <Box sx={{ width: 400, color: '#fff' }}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            Text in a modal
+            Register
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+            <label>First Name</label>
           </Typography>
         </Box>
       </Modal>
