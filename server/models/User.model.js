@@ -13,6 +13,12 @@ const UserSchema = new mongoose.Schema({
     minLength: 2,
     maxLength: 20,
   },
+  userName: {
+    type: String,
+    required: true,
+    minLength: 5,
+    maxLength: 25
+  },
   email: {
     type: String,
     unique: true,
@@ -34,10 +40,6 @@ const UserSchema = new mongoose.Schema({
     default: Date.now,
   },
   country: {
-    type: String,
-    default: 'Unknown'
-  },
-  city: {
     type: String,
     default: 'Unknown'
   },
