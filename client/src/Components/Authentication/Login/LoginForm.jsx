@@ -38,7 +38,7 @@ const LoginForm = ({ handleClose }) => {
         <Typography id="modal-modal-description" sx={{ mt: 2 }}>
          <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="username">Username:</label>
+          <label htmlFor="username">Username</label>
           <input
             type="text"
             id="username"
@@ -49,7 +49,7 @@ const LoginForm = ({ handleClose }) => {
           />
         </div>
         <div>
-          <label htmlFor="password">Password:</label>
+          <label htmlFor="password">Password</label>
           <input
             type="password"
             id="password"

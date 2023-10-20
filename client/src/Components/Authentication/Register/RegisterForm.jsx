@@ -83,7 +83,7 @@ const RegisterForm = ({ handleClose}) => {
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
           <form onSubmit={handleSubmit}>
-        <label htmlFor="firstname">First Name:</label>
+        <label htmlFor="firstname">First Name</label>
         <input
           type="text"
           id="firstname"
@@ -92,7 +92,7 @@ const RegisterForm = ({ handleClose}) => {
           onChange={handleChange}
           required
         />
-        <label htmlFor="lastname">Last Name:</label>
+        <label htmlFor="lastname">Last Name</label>
         <input
           type="text"
           id="lastname"
@@ -101,7 +101,7 @@ const RegisterForm = ({ handleClose}) => {
           onChange={handleChange}
           required
         />
-        <label htmlFor="username">Username:</label>
+        <label htmlFor="username">Username</label>
         <input
           type="text"
           id="username"
@@ -110,7 +110,7 @@ const RegisterForm = ({ handleClose}) => {
           onChange={handleChange}
           required
         />
-        <label htmlFor="email">Email:</label>
+        <label htmlFor="email">Email</label>
         <input
           type="email"
           id="email"
@@ -119,7 +119,7 @@ const RegisterForm = ({ handleClose}) => {
           onChange={handleChange}
           required
         />
-        <label htmlFor="phone">Phone Number:</label>
+        <label htmlFor="phone">Phone Number</label>
         <input
           type="tel"
           id="phone"
@@ -128,7 +128,7 @@ const RegisterForm = ({ handleClose}) => {
           onChange={handleChange}
           required
         />
-        <label htmlFor="country">Country:</label>
+        <label htmlFor="country">Country</label>
         <select
           id="country"
           name="country"
@@ -143,7 +143,7 @@ const RegisterForm = ({ handleClose}) => {
           <option value="spain">Spain</option>
           <option value="other">Other</option>
         </select>
-        <label htmlFor="password">Password:</label>
+        <label htmlFor="password">Password</label>
         <input
           type="password"
           id="password"
@@ -152,7 +152,7 @@ const RegisterForm = ({ handleClose}) => {
           onChange={handleChange}
           required
         />
-        <label htmlFor="confirm_password">Confirm Password:</label>
+        <label htmlFor="confirm_password">Confirm Password</label>
         <input
           type="password"
           id="confirm_password"
