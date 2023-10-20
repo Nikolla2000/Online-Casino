@@ -16,6 +16,8 @@ const RegisterForm = ({ handleClose}) => {
     confirm_password: '',
   });
 
+  const [errorMessages, setErrorMessages] = useState('')
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -50,17 +52,23 @@ const RegisterForm = ({ handleClose}) => {
     return errors;
   };
   
-  const handleSubmit = (e) => {
-    e.preventDefault()
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
     const errors = validateForm();
-
+  
     if (Object.keys(errors).length === 0) {
       try {
-        
+        const response = await axios.post('/server/v1/user/register', formData);
+        console.log(`Registration success: ${response.data}`);
       } catch (error) {
-        
+        console.error(`Registration error: ${error}`);
       }
-  }
+    } else {
+      setErrorMessages(errors);
+    }
+  };
+
   return (
     <div className='register-modal-wrapper'>
       <Modal
