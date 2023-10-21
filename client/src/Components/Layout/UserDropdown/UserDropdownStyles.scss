@@ -1,3 +1,23 @@
+@import '../../../colorConstants.scss';
+
+@keyframes dropdownAnimation {
+  0%{
+    top:-200%
+  }
+  100%{
+    top:100%;
+  }
+}
+
+@keyframes reverseDropdownAnimation {
+  0% {
+    top: 100%;
+  }
+  100% {
+    top: -200%;
+  }
+}
+
 .user-dropdown {
   position: absolute;
   border-radius: 5px;
@@ -11,6 +31,27 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  animation: dropdownAnimation 0.4s ease-in-out;
 
+ .dropdown-buttons {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
 
+      button {
+        border:none;
+        background: transparent;
+        color:$primary-white;
+        font-weight: bold;
+        font-size: 1.2em;
+
+        &:hover {
+          transform: scale(1.1);
+        }
+      }
+ }
+}
+
+.reverse {
+  animation: reverseDropdownAnimation 0.4s ease-in-out;
 }

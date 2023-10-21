@@ -3,7 +3,7 @@ import './UserDropdownStyles.scss'
 import RegisterForm from '../../Authentication/Register/RegisterForm';
 import LoginForm from '../../Authentication/Login/LoginForm';
 
-const UserDropdown = () => {
+const UserDropdown = ({ show, play }) => {
   const [showRegisterModal, setShowRegisterModal] = useState(false)
   const [showLoginrModal, setShowLoginModal] = useState(false)
 
@@ -13,7 +13,7 @@ const UserDropdown = () => {
   }
 
   return (
-    <div className='user-dropdown'>
+    <div className={`user-dropdown ${play? 'reverse' : ''}`}>
       <div className="user-dropdown-img">
         <img src='../../../src/assets/images/user.png' alt='user-img' />
       </div>

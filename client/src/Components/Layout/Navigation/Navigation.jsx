@@ -8,6 +8,20 @@ import UserDropdown from '../UserDropdown/UserDropdown';
 
 const Navigation = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false)
+  const [playReverseAnimation, setPlayReverseAnimation] = useState(false)
+
+  const handleClick = () => {
+    if(!showDropdown) {
+      setShowDropdown(true)
+      setPlayReverseAnimation(false)
+    } else {
+      setPlayReverseAnimation(true)
+      setTimeout(() => {
+      setShowDropdown(false)
+    }, 2000)
+  }
+  }
 
   return (
     <nav>
@@ -22,10 +36,12 @@ const Navigation = () => {
               {element.name}  
             </NavLink>
           ))}
-          <div className="user-icon">
+          <div className="user-icon" onClick={handleClick}>
             <FontAwesomeIcon icon={faUser} style={{color: '#fff'}}/>
           </div>
-          <UserDropdown/>
+          {showDropdown && <UserDropdown 
+                              show={showDropdown}
+                              play={playReverseAnimation}/>}
         </div>
       </div>
       <div className="mobile-menu-wrapper">
