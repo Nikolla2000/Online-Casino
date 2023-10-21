@@ -17,9 +17,9 @@ const Navigation = () => {
       setPlayReverseAnimation(false)
     } else {
       setPlayReverseAnimation(true)
-      setTimeout(() => {
+
       setShowDropdown(false)
-    }, 2000)
+     
   }
   }
 
