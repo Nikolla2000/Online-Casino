@@ -14,8 +14,13 @@ const UserDropdown = () => {
 
   return (
     <div className='user-dropdown'>
-      <button onClick={() => setShowLoginModal(true)}>Login</button>
-      <button onClick={() => setShowRegisterModal(true)}>Register</button>
+      <div className="user-dropdown-img">
+        <img src='../../../src/assets/images/user.png' alt='user-img' />
+      </div>
+      <div className="dropdown-buttons">
+        <button onClick={() => setShowLoginModal(true)}>Login</button>
+        <button onClick={() => setShowRegisterModal(true)}>Register</button>
+      </div>
       {showRegisterModal && <RegisterForm handleClose={handleClose}/>}
       {showLoginrModal && <LoginForm handleClose={handleClose}/>}
     </div>
