@@ -1,5 +1,5 @@
 import React from 'react';
-
+import './SlotsStyles.scss'
 const SlotsPage = () => {
   return (
     <div className='slots-page-wrapper'>

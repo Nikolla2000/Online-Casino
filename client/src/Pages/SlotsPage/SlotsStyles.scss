@@ -1,0 +1,20 @@
+@import '../../colorConstants.scss';
+
+.slots-page-wrapper {
+  
+  .slots-game-wrapper{
+    margin: 0 auto;
+    
+    .slots-element-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap:20px;
+
+      .slot {
+        border: 1px solid black;
+        padding: 60px;
+      }
+    }
+  }
+}
