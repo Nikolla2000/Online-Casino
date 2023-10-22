@@ -3,6 +3,7 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import '../Register/RegisterStyles.scss'
+import axios from 'axios';
 
 const LoginForm = ({ handleClose }) => {
   const [formData, setFormData] = useState({
@@ -20,6 +21,11 @@ const LoginForm = ({ handleClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    try {
+      axios.post('/server/v1/user/login', formData) 
+    } catch (error) {
+      console.log(`Login error: ${error}`);
+    }
     console.log('Submitted data:', formData);
   };
 
