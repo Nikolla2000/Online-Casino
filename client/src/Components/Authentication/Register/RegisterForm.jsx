@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import axios from 'axios'
 import './RegisterStyles.scss'
 
 const RegisterForm = ({ handleClose}) => {
@@ -37,7 +38,7 @@ const RegisterForm = ({ handleClose}) => {
       errors.lastName = 'Last Name must be between 2 and 20 characters';
     }
   
-    if (formData.username.length < 2 || formData.username.length > 20) {
+    if (formData.username.length < 4 || formData.username.length > 20) {
       errors.username = 'Username must be between 2 and 20 characters';
     }
   
