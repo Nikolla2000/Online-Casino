@@ -48,12 +48,12 @@ const RegisterForm = ({ handleClose}) => {
     if (formData.password !== formData.confirm_password) {
       errors.confirm_password = 'Passwords do not match';
     }
-  
     return errors;
   };
   
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessages('')
   
     const errors = validateForm();
   
@@ -87,7 +87,7 @@ const RegisterForm = ({ handleClose}) => {
         <input
           type="text"
           id="firstname"
-          name="firstname"
+          name="firstName"
           value={formData.firstName}
           onChange={handleChange}
           required
@@ -96,7 +96,7 @@ const RegisterForm = ({ handleClose}) => {
         <input
           type="text"
           id="lastname"
-          name="lastname"
+          name="lastName"
           value={formData.lastName}
           onChange={handleChange}
           required
@@ -162,6 +162,7 @@ const RegisterForm = ({ handleClose}) => {
           required
         />
         <input type="submit" value="Register" />
+        <p>{Object.values(errorMessages)[0]}</p>
       </form>
           </Typography>
         </Box>
