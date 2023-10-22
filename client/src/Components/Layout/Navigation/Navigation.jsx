@@ -11,18 +11,6 @@ const Navigation = () => {
   const [showDropdown, setShowDropdown] = useState(false)
   const [playReverseAnimation, setPlayReverseAnimation] = useState(false)
 
-  const handleClick = () => {
-    if(!showDropdown) {
-      setShowDropdown(true)
-      setPlayReverseAnimation(false)
-    } else {
-      setPlayReverseAnimation(true)
-
-      setShowDropdown(false)
-     
-  }
-  }
-
   return (
     <nav>
       <div className="nav-wrapper">
