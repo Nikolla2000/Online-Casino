@@ -3,8 +3,11 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import '../Register/RegisterStyles.scss'
+import axios from 'axios';
 
 const LoginForm = ({ handleClose }) => {
+  const [loginErrorMsg, setLoginErrorMsg] = useState('')
+
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -20,7 +23,13 @@ const LoginForm = ({ handleClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Submitted data:', formData);
+    setLoginErrorMsg('')
+    try {
+      axios.post('/server/v1/user/login', formData)
+    } catch (error) {
+      setLoginErrorMsg('Invalid username or password')
+      console.log(`Login error: ${error}`);
+    }
   };
 
   return (
@@ -62,6 +71,7 @@ const LoginForm = ({ handleClose }) => {
         <div>
           <button type="submit">Login</button>
         </div>
+        <p>{loginErrorMsg}</p>
       </form>
         </Typography>
       </Box>

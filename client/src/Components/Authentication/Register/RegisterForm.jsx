@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import axios from 'axios'
 import './RegisterStyles.scss'
 
 const RegisterForm = ({ handleClose}) => {
@@ -37,7 +38,7 @@ const RegisterForm = ({ handleClose}) => {
       errors.lastName = 'Last Name must be between 2 and 20 characters';
     }
   
-    if (formData.username.length < 2 || formData.username.length > 20) {
+    if (formData.username.length < 4 || formData.username.length > 20) {
       errors.username = 'Username must be between 2 and 20 characters';
     }
   
@@ -48,12 +49,12 @@ const RegisterForm = ({ handleClose}) => {
     if (formData.password !== formData.confirm_password) {
       errors.confirm_password = 'Passwords do not match';
     }
-  
     return errors;
   };
   
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessages('')
   
     const errors = validateForm();
   
@@ -87,7 +88,7 @@ const RegisterForm = ({ handleClose}) => {
         <input
           type="text"
           id="firstname"
-          name="firstname"
+          name="firstName"
           value={formData.firstName}
           onChange={handleChange}
           required
@@ -96,7 +97,7 @@ const RegisterForm = ({ handleClose}) => {
         <input
           type="text"
           id="lastname"
-          name="lastname"
+          name="lastName"
           value={formData.lastName}
           onChange={handleChange}
           required
@@ -162,6 +163,7 @@ const RegisterForm = ({ handleClose}) => {
           required
         />
         <input type="submit" value="Register" />
+        <p>{Object.values(errorMessages)[0]}</p>
       </form>
           </Typography>
         </Box>
