@@ -13,7 +13,7 @@ const UserDropdown = ({ show, play }) => {
   }
 
   return (
-    <div className={`user-dropdown ${show? 'reverse' : ''}`}>
+    <div className={`user-dropdown ${!show? 'reverse' : ''}`}>
       <div className="user-dropdown-img">
         <img src='../../../src/assets/images/user.png' alt='user-img' />
       </div>

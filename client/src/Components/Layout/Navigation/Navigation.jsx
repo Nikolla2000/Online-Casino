@@ -36,7 +36,7 @@ const Navigation = () => {
               {element.name}  
             </NavLink>
           ))}
-          <div className="user-icon" onClick={handleClick}>
+          <div className="user-icon" onClick={() => setShowDropdown(!showDropdown)}>
             <FontAwesomeIcon icon={faUser} style={{color: '#fff'}}/>
           </div>
           {showDropdown && <UserDropdown 
