@@ -6,6 +6,8 @@ import '../Register/RegisterStyles.scss'
 import axios from 'axios';
 
 const LoginForm = ({ handleClose }) => {
+  const [loginErrorMsg, setLoginErrorMsg] = useState('')
+
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -21,12 +23,13 @@ const LoginForm = ({ handleClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoginErrorMsg('')
     try {
-      axios.post('/server/v1/user/login', formData) 
+      axios.post('/server/v1/user/login', formData)
     } catch (error) {
+      setLoginErrorMsg('Invalid username or password')
       console.log(`Login error: ${error}`);
     }
-    console.log('Submitted data:', formData);
   };
 
   return (
@@ -68,6 +71,7 @@ const LoginForm = ({ handleClose }) => {
         <div>
           <button type="submit">Login</button>
         </div>
+        <p>{loginErrorMsg}</p>
       </form>
         </Typography>
       </Box>
