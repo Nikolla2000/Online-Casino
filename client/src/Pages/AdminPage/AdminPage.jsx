@@ -10,7 +10,7 @@ const AdminPage = () => {
 
     const getUsers = async () => {
       try {
-        const response = await axios.get('/users', {
+        const response = await axios.get('/server/v1/user/allUsers', {
           signal: controller.signal
         });
         console.log(response.data);
@@ -27,7 +27,7 @@ const AdminPage = () => {
       controller.abort();
     }
   }, [])
-  
+
   return (
     <div className='admin-page-wrapper'>
       <h1>Admin page</h1>
