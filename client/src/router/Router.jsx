@@ -10,6 +10,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage/>,
     children: [
       { index: true, element: routes.main.element },
+      { path: routes.admin.path, element:routes.admin.element },
       { path: routes.contact.path, element:routes.contact.element },
       { path: routes.games.path, element:routes.games.element },
       { path: routes.slots.path, element:routes.slots.element },

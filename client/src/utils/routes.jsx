@@ -1,3 +1,4 @@
+import AdminPage from "../Pages/AdminPage/AdminPage";
 import ContactPage from "../Pages/ContactPage/ContactPage";
 import GamesPage from "../Pages/GamesPage/GamesPage";
 import MainPage from "../Pages/MainPage/MainPage";
@@ -10,6 +11,12 @@ const routes = {
     element: <MainPage/>,
     name: 'home',
     includeInNav:true,
+  },
+  admin: {
+    path: '/admin',
+    element: <AdminPage/>,
+    name: 'admin',
+    includeInNav: true
   },
   contact: {
     path:'/contact',
