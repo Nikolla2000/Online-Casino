@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import './AdminPageStyles.scss'
 import axios from 'axios';
 
 const AdminPage = () => {
