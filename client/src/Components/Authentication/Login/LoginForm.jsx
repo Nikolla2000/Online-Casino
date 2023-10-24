@@ -25,7 +25,7 @@ const LoginForm = ({ handleClose }) => {
     e.preventDefault();
     setLoginErrorMsg('')
     try {
-      axiosConfig.get('/')
+      axiosConfig.get('/user/allUsers')
     } catch (error) {
       setLoginErrorMsg('Invalid username or password')
       console.log(`Login error: ${error}`);

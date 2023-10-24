@@ -1,6 +1,7 @@
 require("dotenv").config();
 require("express-async-errors");
 const express = require("express");
+const cors = require('cors');
 const app = express();
 
 //connectDB
@@ -8,6 +9,13 @@ const connectDB = require("./db/connect");
 
 //Port
 const port = process.env.PORT || 3000;
+
+//cors
+app.use(cors({
+  origin: 'http://localhost:5173',
+  methods: 'GET,POST,PUT,DELETE',
+  allowedHeaders: 'Content-Type,Authorization',
+}));
 
 //routers
 const userRouter = require('./routes/User.router')
@@ -17,6 +25,7 @@ app.use(express.json());
 
 //routes
 app.use('/server/v1/user', userRouter);
+
 
 const start = async () => {
   try {
