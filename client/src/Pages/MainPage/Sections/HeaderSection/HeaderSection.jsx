@@ -14,7 +14,7 @@ const HeaderSection = () => {
         <header className="animate__animated animate__fadeIn">
           <h1>Your Winnings Await</h1>
           <div className="start-playing-btn">
-            <Link to='/games' class="glowButton" href="#">Start Playing</Link>
+            <Link to='/games' className="glowButton" href="#">Start Playing</Link>
           </div>
         </header>
       </div>

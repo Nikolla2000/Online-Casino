@@ -3,7 +3,7 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import '../Register/RegisterStyles.scss'
-import axios from 'axios';
+import axiosConfig from '../../../axiosConfig';
 
 const LoginForm = ({ handleClose }) => {
   const [loginErrorMsg, setLoginErrorMsg] = useState('')
@@ -25,7 +25,7 @@ const LoginForm = ({ handleClose }) => {
     e.preventDefault();
     setLoginErrorMsg('')
     try {
-      axios.post('/server/v1/user/login', formData)
+      axiosConfig.get('/user/allUsers')
     } catch (error) {
       setLoginErrorMsg('Invalid username or password')
       console.log(`Login error: ${error}`);
