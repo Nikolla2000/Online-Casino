@@ -83,6 +83,58 @@ const getAllUsers = async (req, res) => {
   }
 }
 
+const registerUser = async (req, res) => {
+  try {
+    const {
+      firstName,
+      lastName, 
+      userName, 
+      email,
+      password,
+      confirmPassword,
+      registrationDate, 
+      country, 
+      phoneNumber
+    } = req.body;
+
+    if (
+      !firstName 
+      || !lastName 
+      || !userName 
+      || !email 
+      || !password
+      || !confirmPassword) {
+        return res.status(400).json({ message: 'All required fields must be provided' });
+      }
+  
+      if(password !== confirmPassword){
+        res.status(400).json({ message: 'Passwords do not match'})
+      }
+
+      const existingUser = await User.findOne({ $or: [{ userName }, { email }] });
+
+      if (existingUser) {
+        return res.status(409).json({ message: 'User with this username or email already exists' });
+      }
+
+      const newUser = new User({
+        firstName,
+        lastName,
+        userName,
+        email,
+        password,
+        registrationDate,
+        country,
+        phoneNumber,
+      });
+
+      await newUser.save()
+      
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
 module.exports = {
   register,
   login,
