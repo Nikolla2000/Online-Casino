@@ -88,10 +88,10 @@ const registerUser = async (req, res) => {
     const {
       firstName,
       lastName, 
-      userName, 
+      username, 
       email,
       password,
-      confirmPassword,
+      confirm_password,
       registrationDate, 
       country, 
       phoneNumber
@@ -100,18 +100,18 @@ const registerUser = async (req, res) => {
     if (
       !firstName 
       || !lastName 
-      || !userName 
+      || !username 
       || !email 
       || !password
-      || !confirmPassword) {
+      || !confirm_password) {
         return res.status(400).json({ message: 'All required fields must be provided' });
       }
   
-      if(password !== confirmPassword){
+      if(password !== confirm_password){
         res.status(400).json({ message: 'Passwords do not match'})
       }
 
-      const existingUser = await User.findOne({ $or: [{ userName }, { email }] });
+      const existingUser = await User.findOne({ $or: [{ username }, { email }] });
 
       if (existingUser) {
         return res.status(409).json({ message: 'User with this username or email already exists' });
@@ -120,7 +120,7 @@ const registerUser = async (req, res) => {
       const newUser = new User({
         firstName,
         lastName,
-        userName,
+        username,
         email,
         password,
         registrationDate,
@@ -129,7 +129,8 @@ const registerUser = async (req, res) => {
       });
 
       await newUser.save()
-      
+
+      res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
     res.status(500).json({ message: error.message })
   }
@@ -137,6 +138,7 @@ const registerUser = async (req, res) => {
 
 module.exports = {
   register,
+  registerUser,
   login,
   getAllUsers
 }

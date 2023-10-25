@@ -2,8 +2,9 @@ import React, {useState} from 'react';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import axios from 'axios'
+import axios from '../../../axiosConfig'
 import './RegisterStyles.scss'
+import { toast } from 'react-hot-toast'
 
 const RegisterForm = ({ handleClose}) => {
   const [formData, setFormData] = useState({
@@ -11,7 +12,7 @@ const RegisterForm = ({ handleClose}) => {
     lastName: '',
     username: '',
     email: '',
-    phone: '',
+    phoneNumber: '',
     country: 'usa',
     password: '',
     confirm_password: '',
@@ -60,7 +61,14 @@ const RegisterForm = ({ handleClose}) => {
   
     if (Object.keys(errors).length === 0) {
       try {
-        const response = await axios.post('/server/v1/user/register', formData);
+        const response = await axios.post('/user/register', formData);
+        if(formData.error) {
+          toast.error(formData.error)
+        }
+        else {
+          setFormData({})
+          toast.success('Registration was successfull!')
+        }
         console.log(`Registration success: ${response.data}`);
       } catch (error) {
         console.error(`Registration error: ${error}`);
@@ -120,12 +128,12 @@ const RegisterForm = ({ handleClose}) => {
           onChange={handleChange}
           required
         />
-        <label htmlFor="phone">Phone Number</label>
+        <label htmlFor="phoneNumber">Phone Number</label>
         <input
           type="tel"
-          id="phone"
-          name="phone"
-          value={formData.phone}
+          id="phoneNumber"
+          name="phoneNumber"
+          value={formData.phoneNumber}
           onChange={handleChange}
           required
         />
