@@ -76,9 +76,8 @@ const RegisterForm = ({ handleClose}) => {
       } catch (error) {
         console.error(`Registration error: ${error}`);
 
-        toast.error('Invalid registration details')
         if(error.message === 'Request failed with status code 409') {
-          setErrorMessages({userexists: 'User with this username or email already exists'});
+         toast.error('User with this username or email already exists');
         }
       }
     } else {
