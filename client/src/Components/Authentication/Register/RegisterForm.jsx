@@ -50,6 +50,10 @@ const RegisterForm = ({ handleClose}) => {
     if (formData.password !== formData.confirm_password) {
       errors.confirm_password = 'Passwords do not match';
     }
+
+    if (!/^08\d{8}$/.test(formData.phone)) {
+      errors.phone = 'Phone number must start with "08" and have 10 digits';
+    }
     return errors;
   };
   
