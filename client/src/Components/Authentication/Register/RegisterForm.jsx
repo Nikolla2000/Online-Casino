@@ -66,20 +66,14 @@ const RegisterForm = ({ handleClose}) => {
     if (Object.keys(errors).length === 0) {
       try {
         const response = await axios.post('/user/register', formData);
-        if(response.data.error) {
-          toast.error(response.data.error)
-        } else if (response.status === 409) {
-          console.log('User with this username or email already exists');
-        }
-        else {
-          setFormData({})
-          toast.success('Registration was successfull!')
-        }
-
+        setFormData({})
+        toast.success('Registration was successfull!')
         console.log(`Registration success: ${response.data}`);
 
       } catch (error) {
         console.error(`Registration error: ${error}`);
+
+        toast.error('Invalid registration details')
         if(error.message === 'Request failed with status code 409') {
           setErrorMessages({userexists: 'User with this username or email already exists'});
         }
