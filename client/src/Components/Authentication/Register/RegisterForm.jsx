@@ -68,11 +68,20 @@ const RegisterForm = ({ handleClose}) => {
     if (Object.keys(errors).length === 0) {
       try {
         const response = await axios.post('/user/register', formData);
-        setFormData({})
+        setFormData({
+          firstName: '',
+          lastName: '',
+          username: '',
+          email: '',
+          phoneNumber: '',
+          country: '',
+          password: '',
+          confirm_password: '',
+        })
         toast.success('Registration was successfull!')
+        handleClose()
         navigate('/')
-        console.log(`Registration success: ${response.data}`);
-
+        
       } catch (error) {
         console.error(`Registration error: ${error}`);
 
