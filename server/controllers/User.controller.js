@@ -1,6 +1,7 @@
 const User = require('../models/User.model');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
+const { hashPassword, comparePasswords} = require('../helpers/auth')
 
 const register = async(req, res) => {
   const {
@@ -29,13 +30,15 @@ const register = async(req, res) => {
     if(password !== confirmPassword){
       res.status(400).json({ message: 'Passwords do not match'})
     }
+
+    const hashedPassword = await hashPassword(password)
   try {
     const user = new User({
       firstName,
       lastName, 
       userName, 
       email,
-      password, 
+      password: hashedPassword, 
       registrationDate, 
       country, 
       city, 
@@ -117,12 +120,14 @@ const registerUser = async (req, res) => {
         return res.status(409).json({ message: 'User with this username or email already exists' });
       }
 
+      const hashedPassword = await hashPassword(password)
+
       const newUser = new User({
         firstName,
         lastName,
         username,
         email,
-        password,
+        password: hashedPassword,
         registrationDate,
         country,
         phoneNumber,
