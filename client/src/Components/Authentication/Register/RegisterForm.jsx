@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import axios from '../../../axiosConfig'
 import './RegisterStyles.scss'
+import { useNavigate } from "react-router-dom"
 import { toast } from 'react-hot-toast'
 
 const RegisterForm = ({ handleClose}) => {
@@ -18,6 +19,7 @@ const RegisterForm = ({ handleClose}) => {
     confirm_password: '',
   });
 
+  const navigate = useNavigate()
   const [errorMessages, setErrorMessages] = useState('')
 
   const handleChange = (e) => {
@@ -68,6 +70,7 @@ const RegisterForm = ({ handleClose}) => {
         const response = await axios.post('/user/register', formData);
         setFormData({})
         toast.success('Registration was successfull!')
+        navigate('/')
         console.log(`Registration success: ${response.data}`);
 
       } catch (error) {
