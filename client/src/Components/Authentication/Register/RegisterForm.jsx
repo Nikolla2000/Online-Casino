@@ -13,7 +13,7 @@ const RegisterForm = ({ handleClose}) => {
     username: '',
     email: '',
     phoneNumber: '',
-    country: 'usa',
+    country: '',
     password: '',
     confirm_password: '',
   });
@@ -51,8 +51,8 @@ const RegisterForm = ({ handleClose}) => {
       errors.confirm_password = 'Passwords do not match';
     }
 
-    if (!/^08\d{8}$/.test(formData.phone)) {
-      errors.phone = 'Phone number must start with "08" and have 10 digits';
+    if (!/^08\d{8}$/.test(formData.phoneNumber)) {
+      errors.phoneNumber = 'Phone number must start with "08" and have 10 digits';
     }
     return errors;
   };
@@ -66,16 +66,23 @@ const RegisterForm = ({ handleClose}) => {
     if (Object.keys(errors).length === 0) {
       try {
         const response = await axios.post('/user/register', formData);
-        if(formData.error) {
-          toast.error(formData.error)
+        if(response.data.error) {
+          toast.error(response.data.error)
+        } else if (response.status === 409) {
+          console.log('User with this username or email already exists');
         }
         else {
           setFormData({})
           toast.success('Registration was successfull!')
         }
+
         console.log(`Registration success: ${response.data}`);
+
       } catch (error) {
         console.error(`Registration error: ${error}`);
+        if(error.message === 'Request failed with status code 409') {
+          setErrorMessages({userexists: 'User with this username or email already exists'});
+        }
       }
     } else {
       setErrorMessages(errors);
@@ -134,7 +141,7 @@ const RegisterForm = ({ handleClose}) => {
         />
         <label htmlFor="phoneNumber">Phone Number</label>
         <input
-          type="tel"
+          type="text"
           id="phoneNumber"
           name="phoneNumber"
           value={formData.phoneNumber}
