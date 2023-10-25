@@ -2,8 +2,10 @@ import React, {useState} from 'react';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import axios from 'axios'
+import axios from '../../../axiosConfig'
 import './RegisterStyles.scss'
+import { useNavigate } from "react-router-dom"
+import { toast } from 'react-hot-toast'
 
 const RegisterForm = ({ handleClose}) => {
   const [formData, setFormData] = useState({
@@ -11,12 +13,13 @@ const RegisterForm = ({ handleClose}) => {
     lastName: '',
     username: '',
     email: '',
-    phone: '',
-    country: 'usa',
+    phoneNumber: '',
+    country: '',
     password: '',
     confirm_password: '',
   });
 
+  const navigate = useNavigate()
   const [errorMessages, setErrorMessages] = useState('')
 
   const handleChange = (e) => {
@@ -49,6 +52,10 @@ const RegisterForm = ({ handleClose}) => {
     if (formData.password !== formData.confirm_password) {
       errors.confirm_password = 'Passwords do not match';
     }
+
+    if (!/^08\d{8}$/.test(formData.phoneNumber)) {
+      errors.phoneNumber = 'Phone number must start with "08" and have 10 digits';
+    }
     return errors;
   };
   
@@ -60,10 +67,18 @@ const RegisterForm = ({ handleClose}) => {
   
     if (Object.keys(errors).length === 0) {
       try {
-        const response = await axios.post('/server/v1/user/register', formData);
+        const response = await axios.post('/user/register', formData);
+        setFormData({})
+        toast.success('Registration was successfull!')
+        navigate('/')
         console.log(`Registration success: ${response.data}`);
+
       } catch (error) {
         console.error(`Registration error: ${error}`);
+
+        if(error.message === 'Request failed with status code 409') {
+         toast.error('User with this username or email already exists');
+        }
       }
     } else {
       setErrorMessages(errors);
@@ -120,12 +135,12 @@ const RegisterForm = ({ handleClose}) => {
           onChange={handleChange}
           required
         />
-        <label htmlFor="phone">Phone Number</label>
+        <label htmlFor="phoneNumber">Phone Number</label>
         <input
-          type="tel"
-          id="phone"
-          name="phone"
-          value={formData.phone}
+          type="text"
+          id="phoneNumber"
+          name="phoneNumber"
+          value={formData.phoneNumber}
           onChange={handleChange}
           required
         />
