@@ -160,13 +160,13 @@ const RegisterForm = ({ handleClose}) => {
           value={formData.country}
           onChange={handleChange}
         >
-          <option value="usa/can">USA/Canada</option>
-          <option value="uk">UK</option>
-          <option value="germany">Germany</option>
-          <option value="bul">Bulgaria</option>
-          <option value="france">France</option>
-          <option value="spain">Spain</option>
-          <option value="other">Other</option>
+          <option value="USA/Canada">USA/Canada</option>
+          <option value="United Kindom">UK</option>
+          <option value="Germany">Germany</option>
+          <option value="Bulgaria">Bulgaria</option>
+          <option value="France">France</option>
+          <option value="Spain">Spain</option>
+          <option value="Other">Other</option>
         </select>
         <label htmlFor="password">Password</label>
         <input
