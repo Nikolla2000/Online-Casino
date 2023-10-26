@@ -167,5 +167,6 @@ module.exports = {
   register,
   registerUser,
   login,
+  loginUser,
   getAllUsers
 }
