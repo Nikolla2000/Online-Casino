@@ -3,13 +3,13 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import '../Register/RegisterStyles.scss'
-import axiosConfig from '../../../axiosConfig';
+import axios from '../../../axiosConfig';
 
 const LoginForm = ({ handleClose }) => {
   const [loginErrorMsg, setLoginErrorMsg] = useState('')
 
   const [formData, setFormData] = useState({
-    username: '',
+    email: '',
     password: '',
   })
 
@@ -25,9 +25,9 @@ const LoginForm = ({ handleClose }) => {
     e.preventDefault();
     setLoginErrorMsg('')
     try {
-      axiosConfig.get('/user/allUsers')
+      axios.post('/user/login', formData)
     } catch (error) {
-      setLoginErrorMsg('Invalid username or password')
+      setLoginErrorMsg('Invalid email or password')
       console.log(`Login error: ${error}`);
     }
   };
@@ -47,12 +47,12 @@ const LoginForm = ({ handleClose }) => {
         <Typography id="modal-modal-description" sx={{ mt: 2 }}>
          <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="username">Username</label>
+          <label htmlFor="username">Email</label>
           <input
-            type="text"
-            id="username"
-            name="username"
-            value={formData.username}
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
             onChange={handleChange}
             required
           />

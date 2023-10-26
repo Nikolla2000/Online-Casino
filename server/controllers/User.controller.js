@@ -86,6 +86,8 @@ const getAllUsers = async (req, res) => {
   }
 }
 
+
+//Register Endpoint
 const registerUser = async (req, res) => {
   try {
     const {
@@ -141,9 +143,30 @@ const registerUser = async (req, res) => {
   }
 }
 
+
+//Login Endpoint
+const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+    if(!user) {
+      return res.json({ error: 'User with this email is not found' })
+    }
+
+    const match = await comparePasswords(password, user.password)
+    if(match) {
+      res.json('Passwords matched')
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message })
+  }
+}
+
 module.exports = {
   register,
   registerUser,
   login,
+  loginUser,
   getAllUsers
 }
