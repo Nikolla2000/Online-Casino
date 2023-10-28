@@ -155,13 +155,21 @@ const loginUser = async (req, res) => {
     }
 
     const match = await comparePasswords(password, user.password)
-    if(match) {
-      jwt.sign({ email: user.email, id: user._id, name: user.firstName }, process.env.JWT_SECRET, 
-      {}, (error, token) => {
-        if(error) throw error;
-        res.cookie('token', token).json(user)
-      })
+    if (match) {
+      jwt.sign(
+        { email: user.email, id: user._id, name: user.firstName },
+        process.env.JWT_SECRET,
+        {},
+        (error, token) => {
+          if (error) {
+            res.status(500).json({ error: 'Failed to create a token' });
+          } else {
+            res.cookie('token', token).json(user);
+          }
+        }
+      );
     }
+    
     if(!match) {
       res.json({ error: 'Passwords do not match' })
     }
@@ -181,7 +189,7 @@ const getProfile = (req, res) => {
     })
   }
   else {
-    res.json(null)
+    res.json('No token')
 }
 }
 
