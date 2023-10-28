@@ -2,6 +2,7 @@ require("dotenv").config();
 require("express-async-errors");
 const express = require("express");
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const app = express();
 
 //connectDB
@@ -19,6 +20,10 @@ app.use(cors({
 
 //routers
 const userRouter = require('./routes/User.router')
+
+//middleware
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: false }));
 
 app.use(express.static("./public"));
 app.use(express.json());
