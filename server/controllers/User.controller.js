@@ -155,13 +155,21 @@ const loginUser = async (req, res) => {
     }
 
     const match = await comparePasswords(password, user.password)
-    if(match) {
-      jwt.sign({ email: user.email, id: user._id, name: user.firstName }, process.env.JWT_SECRET, 
-      {}, (error, token) => {
-        if(error) throw error;
-        res.cookie('token', token).json(user)
-      })
+    if (match) {
+      jwt.sign(
+        { email: user.email, id: user._id, name: user.firstName },
+        process.env.JWT_SECRET,
+        {},
+        (error, token) => {
+          if (error) {
+            res.status(500).json({ error: 'Failed to create a token' });
+          } else {
+            res.cookie('token', token).json(user);
+          }
+        }
+      );
     }
+    
     if(!match) {
       res.json({ error: 'Passwords do not match' })
     }
@@ -170,10 +178,26 @@ const loginUser = async (req, res) => {
   }
 }
 
+
+//Get User
+const getProfile = (req, res) => {
+  const {token} = req.cookies;
+  if(token) {
+    jwt.verify(token, process.env.JWT_SECRET, {}, (error, user) => {
+      if(error) throw error;
+      res.json(user)
+    })
+  }
+  else {
+    res.json('No token')
+}
+}
+
 module.exports = {
   register,
   registerUser,
   login,
   loginUser,
-  getAllUsers
+  getAllUsers,
+  getProfile
 }
