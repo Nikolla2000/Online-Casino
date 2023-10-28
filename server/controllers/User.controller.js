@@ -156,7 +156,14 @@ const loginUser = async (req, res) => {
 
     const match = await comparePasswords(password, user.password)
     if(match) {
-      res.json('Passwords matched')
+      jwt.sign({ email: user.email, id: user._id, name: user.firstName }, process.env.JWT_SECRET, 
+      {}, (error, token) => {
+        if(error) throw error;
+        res.cookie('token', token).json(user)
+      })
+    }
+    if(!match) {
+      res.json({ error: 'Passwords do not match' })
     }
   } catch (error) {
     res.status(400).json({ message: error.message })
