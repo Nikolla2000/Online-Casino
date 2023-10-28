@@ -190,5 +190,6 @@ module.exports = {
   registerUser,
   login,
   loginUser,
-  getAllUsers
+  getAllUsers,
+  getProfile
 }
