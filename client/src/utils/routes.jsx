@@ -4,6 +4,7 @@ import GamesPage from "../Pages/GamesPage/GamesPage";
 import MainPage from "../Pages/MainPage/MainPage";
 import RoulettePage from "../Pages/RoulettePage/RoulettePage";
 import SlotsPage from "../Pages/SlotsPage/SlotsPage";
+import Dashboard from "../Pages/User/Dashboard/Dashboard";
 
 const routes = {
   main: {
@@ -16,6 +17,12 @@ const routes = {
     path: '/admin',
     element: <AdminPage/>,
     name: 'admin',
+    includeInNav: true
+  },
+  dashboard: {
+    path: '/dashboard',
+    element: <Dashboard/>,
+    name: 'profile',
     includeInNav: true
   },
   contact: {
