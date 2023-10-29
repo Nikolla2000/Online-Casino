@@ -3,15 +3,24 @@ import './UserDropdownStyles.scss'
 import RegisterForm from '../../Authentication/Register/RegisterForm';
 import LoginForm from '../../Authentication/Login/LoginForm';
 import { UserContext } from '../../../../context/userContext';
+import axios from '../../../axiosConfig';
 
 const UserDropdown = ({ show, play }) => {
   const [showRegisterModal, setShowRegisterModal] = useState(false)
   const [showLoginrModal, setShowLoginModal] = useState(false)
   const {user} = useContext(UserContext)
-
   const handleClose = () => {
     setShowRegisterModal(false)
     setShowLoginModal(false)
+  }
+
+  const loginOrLogout = () => {
+    if(user.name) {
+      axios.get('/user/logout')
+      location.reload()
+    } else {
+      setShowLoginModal(true)
+    }
   }
 
   return (
@@ -19,10 +28,10 @@ const UserDropdown = ({ show, play }) => {
       <div className="user-dropdown-img">
         <img src='../../../src/assets/images/user.png' alt='user-img' />
       </div>
-      {user && <h3 className='text-white text-xl'>Welcome, {user.name}!</h3>}
+      {user.name && <h3 className='text-white text-xl'>Welcome, {user.name}!</h3>}
       <div className="dropdown-buttons">
-        <button onClick={() => setShowLoginModal(true)}>
-          {!user ? 'Login' : 'Logout'}
+        <button onClick={loginOrLogout}>
+          {!user.name ? 'Login' : 'Logout'}
         </button>
         <button onClick={() => setShowRegisterModal(true)}>Register</button>
       </div>
