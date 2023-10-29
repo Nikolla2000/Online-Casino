@@ -111,6 +111,12 @@ const loginUser = async (req, res) => {
 }
 
 
+//
+const logoutUser = (req, res) => {
+  res.clearCookie('token').json({ message: 'Logout successfull' });
+}
+
+
 //Get User
 const getProfile = (req, res) => {
   const {token} = req.cookies;
@@ -126,10 +132,9 @@ const getProfile = (req, res) => {
 }
 
 module.exports = {
-  register,
   registerUser,
-  login,
   loginUser,
+  logoutUser,
   getAllUsers,
   getProfile
 }
