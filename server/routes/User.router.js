@@ -1,14 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const { register, registerUser, login, loginUser, getAllUsers, getProfile } = require('../controllers/User.controller');
+
+const {
+  registerUser,
+  loginUser,
+  logoutUser,
+  getAllUsers,
+  getProfile
+} = require('../controllers/User.controller');
+
 const { verifyJWT } = require('../middleware/authentication');
 
 router.post('/register', registerUser);
 router.post('/login', loginUser);
-router.get('/allUsers', getAllUsers)
-router.get('/profile', getProfile)
-// router.get('/userProfile', verifyJWT, (req, res) => {
-//   res.json({ message: 'User profile data' });
-// });
+router.get('/allUsers', getAllUsers);
+router.get('/profile', getProfile);
+router.get('/logout', logoutUser);
 
 module.exports = router;
