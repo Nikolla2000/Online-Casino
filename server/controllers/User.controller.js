@@ -164,7 +164,11 @@ const loginUser = async (req, res) => {
           if (error) {
             res.status(500).json({ error: 'Failed to create a token' });
           } else {
-            res.cookie('token', token).json(user);
+            res.cookie('token', token, {
+              httpOnly: true,
+              sameSite: 'None',
+              secure: true
+            }).json(user);
           }
         }
       );
