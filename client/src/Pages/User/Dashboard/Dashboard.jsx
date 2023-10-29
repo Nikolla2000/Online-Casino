@@ -5,11 +5,11 @@ const Dashboard = () => {
   const { user } = useContext(UserContext);
 
   return (
-    <div>
+    <div className='dashboard-wrapper'>
       <h1 className="text-2xl font-semibold mb-4">User Dashboard</h1>
       {user && (
         <div className="bg-gray-100 rounded p-4 mb-4">
-          <h2 className="text-lg font-semibold mb-2">Welcome, {user.firstName}!</h2>
+          <h2 className="text-lg font-semibold mb-2">Welcome, {user.name}!</h2>
           <p>Email: {user.email}</p>
           {/* More user info */}
         </div>
