@@ -1,82 +1,10 @@
 const User = require('../models/User.model');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
-const { hashPassword, comparePasswords} = require('../helpers/auth')
-
-const register = async(req, res) => {
-  const {
-    firstName,
-    lastName, 
-    userName, 
-    email,
-    password,
-    confirmPassword,
-    registrationDate, 
-    country, 
-    city, 
-    phoneNumber
-  } = req.body;
-
-  if (
-    !firstName 
-    || !lastName 
-    || !userName 
-    || !email 
-    || !password
-    || !confirmPassword) {
-      return res.status(400).json({ message: 'All required fields must be provided' });
-    }
-
-    if(password !== confirmPassword){
-      res.status(400).json({ message: 'Passwords do not match'})
-    }
-
-    const hashedPassword = await hashPassword(password)
-  try {
-    const user = new User({
-      firstName,
-      lastName, 
-      userName, 
-      email,
-      password: hashedPassword, 
-      registrationDate, 
-      country, 
-      city, 
-      phoneNumber})
-
-      await user.save()
-
-      const token = jwt.sign({ userId: user_id, username: user.userName}, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_LIFETIME,
-      })
-      res.status(201).json({ message: "User registered successfully "})
-  } catch (error) {
-    res.status(500).json({ message: error.message })
-  }
-}
+const { hashPassword, comparePasswords} = require('../helpers/auth');
 
 
-const login = async (req, res) => {
-  passport.authenticate('local', (err, user, info) => {
-    if (err) {
-      return next(err)
-    }
-
-    if(!user) {
-      return res.status(401).json({ message: info.message });
-    }
-
-    req.login(user, (err) => {
-      if (err) {
-        return next(err)
-      }
-
-      const token = user.createJWT();
-      res.json({ message: 'Login successful', token})
-    })
-  })(req, res, next);
-}
-
+//List all registered users
 const getAllUsers = async (req, res) => {
   try {
     const users = await User.find({})
@@ -183,6 +111,12 @@ const loginUser = async (req, res) => {
 }
 
 
+//
+const logoutUser = (req, res) => {
+  res.clearCookie('token').json({ message: 'Logout successfull' });
+}
+
+
 //Get User
 const getProfile = (req, res) => {
   const {token} = req.cookies;
@@ -198,10 +132,9 @@ const getProfile = (req, res) => {
 }
 
 module.exports = {
-  register,
   registerUser,
-  login,
   loginUser,
+  logoutUser,
   getAllUsers,
   getProfile
 }
