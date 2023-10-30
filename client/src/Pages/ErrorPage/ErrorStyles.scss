@@ -1,0 +1,36 @@
+@import '../../colorConstants.scss';
+
+.error-page-wrapper {
+  display: flex;
+  align-items: center;
+  .error-content-wrapper {
+    margin: 0 auto;
+    background-color: $secondary-dark-grey;
+    width: 60vw;
+    height: 70vh;
+
+    .error-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin-left: 0px;
+      p {
+        width: 60%;
+      }
+
+      button {
+        a {
+          background-color: rgb(244, 69, 69);
+        }
+      }
+    }
+
+    .slot-machine-img {
+      width:250px;
+
+      img {
+        width:100%;
+      }
+    }
+  }
+}
