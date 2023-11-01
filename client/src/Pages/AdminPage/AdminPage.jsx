@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import './AdminPageStyles.scss';
 import axios from '../../axiosConfig';
+import { UserContext } from '../../../context/userContext';
+import { useNavigate } from 'react-router';
 
 const AdminPage = () => {
   const [users, setUsers] = useState([]);
+  const {user} = useContext(UserContext)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchUsers = async () => {
+      if(user.name && user.email === 'nikollla2000@abv.bg'){
       let isMounted = true;
       const controller = new AbortController();
 
@@ -21,15 +26,17 @@ const AdminPage = () => {
       } catch (error) {
         console.error(error);
       }
-
       return () => {
         isMounted = false;
         controller.abort();
       };
-    };
-
-    fetchUsers();
-  }, []);
+    } else {
+      navigate('/errorPage')
+    }};
+    if(user) {
+      fetchUsers();
+    }
+  }, [user]);
 
   const admin = users.find(user => user.email === 'nikollla2000@abv.bg');
   const otherUsers = users.filter(user => user.email !== 'nikollla2000@abv.bg');
