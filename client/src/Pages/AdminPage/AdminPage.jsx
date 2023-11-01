@@ -1,46 +1,77 @@
 import React, { useEffect, useState } from 'react';
-import './AdminPageStyles.scss'
-import axios from 'axios';
+import './AdminPageStyles.scss';
+import axios from '../../axiosConfig';
 
 const AdminPage = () => {
-  const [users ,setUsers] = useState(0)
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    let isMounted = true;
-    const controller = new AbortController();
+    const fetchUsers = async () => {
+      let isMounted = true;
+      const controller = new AbortController();
 
-    const getUsers = async () => {
       try {
-        const response = await axios.get('/server/v1/user/allUsers', {
-          signal: controller.signal
+        const response = await axios.get('user/allUsers', {
+          signal: controller.signal,
         });
-        console.log(response.data);
-        isMounted && setUsers(response.data)
+
+        if (isMounted) {
+          setUsers(response.data);
+        }
       } catch (error) {
         console.error(error);
       }
-    }
 
-    getUsers();
+      return () => {
+        isMounted = false;
+        controller.abort();
+      };
+    };
 
-    return () => {
-      isMounted = false;
-      controller.abort();
-    }
-  }, [])
+    fetchUsers();
+  }, []);
 
   return (
     <div className='admin-page-wrapper'>
       <h1>Admin page</h1>
       <article>
-        <h3>Users List:</h3>
-        {users?.length 
-        ? ( <ul>
-          {users.map((user, i) => (
-            <li key={i + 1}>Name: {user.username}</li>
-          ))}
-        </ul>
-        ) : <p>No users to display</p>}
+        <h3>Users List: <strong>{users.length}</strong> registered users</h3>
+        {users.length ? (
+          <table className='w-full border border-collapse border-gray-300 text-center'>
+            <thead>
+              <tr>
+                <th className='p-2 border'>Name</th>
+                <th className='p-2 border'>Username</th>
+                <th className='p-2 border'>Email</th>
+                <th className='p-2 border'>Country</th>
+                <th className='p-2 border'>Phone Number</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map((user, i) => (
+                <tr key={i + 1}>
+                  <td className='p-2 border'>{user.firstName} {user.lastName}</td>
+                  {Object.entries(user).map(([key, value], j) => {
+                    if (
+                      key !== '_id' && 
+                      key !== 'firstName' && 
+                      key !== 'lastName' &&
+                      key !== 'password' && 
+                      key !== 'registrationDate' &&
+                      key !== '__v') {
+                      return (
+                        <td key={j + 1} className='p-2 border'>{value}</td>
+                      );
+                    }
+                    return null;
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p>No users to display</p>
+        )}
       </article>
     </div>
   );
