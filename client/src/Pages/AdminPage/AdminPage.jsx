@@ -31,6 +31,9 @@ const AdminPage = () => {
     fetchUsers();
   }, []);
 
+  const admin = users.find(user => user.email === 'nikollla2000@abv.bg');
+  const otherUsers = users.filter(user => user.email !== 'nikollla2000@abv.bg');
+
   return (
     <div className='admin-page-wrapper'>
       <h1>Admin page</h1>
@@ -48,23 +51,22 @@ const AdminPage = () => {
               </tr>
             </thead>
             <tbody>
-              {users.map((user, i) => (
+              {admin && (
+                <tr>
+                  <td className='p-2 border'>{admin.firstName} {admin.lastName}</td>
+                  <td className='p-2 border'>{admin.username}</td>
+                  <td className='p-2 border'>{admin.email}</td>
+                  <td className='p-2 border'>{admin.country}</td>
+                  <td className='p-2 border'>{admin.phoneNumber}</td>
+                </tr>
+              )}
+              {otherUsers.map((user, i) => (
                 <tr key={i + 1}>
                   <td className='p-2 border'>{user.firstName} {user.lastName}</td>
-                  {Object.entries(user).map(([key, value], j) => {
-                    if (
-                      key !== '_id' && 
-                      key !== 'firstName' && 
-                      key !== 'lastName' &&
-                      key !== 'password' && 
-                      key !== 'registrationDate' &&
-                      key !== '__v') {
-                      return (
-                        <td key={j + 1} className='p-2 border'>{value}</td>
-                      );
-                    }
-                    return null;
-                  })}
+                  <td className='p-2 border'>{user.username}</td>
+                  <td className='p-2 border'>{user.email}</td>
+                  <td className='p-2 border'>{user.country}</td>
+                  <td className='p-2 border'>{user.phoneNumber}</td>
                 </tr>
               ))}
             </tbody>
