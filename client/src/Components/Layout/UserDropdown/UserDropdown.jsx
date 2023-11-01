@@ -8,7 +8,9 @@ import axios from '../../../axiosConfig';
 const UserDropdown = ({ show, play }) => {
   const [showRegisterModal, setShowRegisterModal] = useState(false)
   const [showLoginrModal, setShowLoginModal] = useState(false)
+  
   const {user} = useContext(UserContext)
+
   const handleClose = () => {
     setShowRegisterModal(false)
     setShowLoginModal(false)
