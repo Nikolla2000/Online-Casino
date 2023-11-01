@@ -5,6 +5,8 @@ import MainPage from "../Pages/MainPage/MainPage";
 import RoulettePage from "../Pages/RoulettePage/RoulettePage";
 import SlotsPage from "../Pages/SlotsPage/SlotsPage";
 import Dashboard from "../Pages/User/Dashboard/Dashboard";
+import React, { useContext } from "react";
+import { UserContext } from "../../context/userContext";
 
 const routes = {
   main: {
@@ -17,7 +19,11 @@ const routes = {
     path: '/admin',
     element: <AdminPage/>,
     name: 'admin',
-    includeInNav: true
+    includeInNav: true,
+    get includeInNav() {
+      const { user } = useContext(UserContext);
+      return user && user.email === 'nikollla2000@abv.bg';
+    },
   },
   dashboard: {
     path: '/dashboard',
