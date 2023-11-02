@@ -1,19 +1,20 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import './UserDropdownStyles.scss'
 import RegisterForm from '../../Authentication/Register/RegisterForm';
 import LoginForm from '../../Authentication/Login/LoginForm';
 import { UserContext } from '../../../../context/userContext';
 import axios from '../../../axiosConfig';
+import { useSelector, useDispatch } from 'react-redux';
+import { hideModals, showLogin, showRegister } from '../../../redux/features/auth/authModalsSlice';
 
 const UserDropdown = ({ show, play }) => {
-  const [showRegisterModal, setShowRegisterModal] = useState(false)
-  const [showLoginrModal, setShowLoginModal] = useState(false)
-  
+  const dispatch = useDispatch()
+  const { showLoginModal, showRegisterModal } = useSelector(state => state.authModals)
+
   const {user} = useContext(UserContext)
 
   const handleClose = () => {
-    setShowRegisterModal(false)
-    setShowLoginModal(false)
+    dispatch(hideModals())
   }
 
   const loginOrLogout = () => {
@@ -21,7 +22,7 @@ const UserDropdown = ({ show, play }) => {
       axios.get('/user/logout')
       location.reload()
     } else {
-      setShowLoginModal(true)
+      dispatch(showLogin())
     }
   }
 
@@ -35,10 +36,10 @@ const UserDropdown = ({ show, play }) => {
         <button onClick={loginOrLogout}>
           {!user.name ? 'Login' : 'Logout'}
         </button>
-        <button onClick={() => setShowRegisterModal(true)}>Register</button>
+        <button onClick={() => dispatch(showRegister())}>Register</button>
       </div>
       {showRegisterModal && <RegisterForm handleClose={handleClose}/>}
-      {showLoginrModal && <LoginForm handleClose={handleClose}/>}
+      {showLoginModal && <LoginForm handleClose={handleClose}/>}
     </div>
   );
 };
