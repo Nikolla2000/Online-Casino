@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import '../Register/RegisterStyles.scss'
 import axios from '../../../axiosConfig';
 import { useDispatch } from 'react-redux';
-import { hideModals } from '../../../redux/features/auth/authModalsSlice';
+import { showRegister } from '../../../redux/features/auth/authModalsSlice';
 
 const LoginForm = ({ handleClose }) => {
   const [loginErrorMsg, setLoginErrorMsg] = useState('')
@@ -37,8 +37,7 @@ const LoginForm = ({ handleClose }) => {
   //redux
   const dispatch = useDispatch()
 
-  const showRegister = () => {
-    dispatch(hideModals())
+  const handleShowRegister = () => {
     dispatch(showRegister())
   }
 
@@ -82,7 +81,7 @@ const LoginForm = ({ handleClose }) => {
           <button type="submit" className='text-lg border-1 px-2 mt-2'>Login</button>
         </div>
         <p className='text-xs mt-3'>Dont have an account? <br></br> 
-        You can register <span className='text-red-500 cursor-pointer' onClick={showRegister}>here</span></p>
+        You can register <span className='text-red-500 cursor-pointer' onClick={handleShowRegister}>here</span></p>
         <p>{loginErrorMsg}</p>
       </form>
         </Typography>
