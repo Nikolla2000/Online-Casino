@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import '../Register/RegisterStyles.scss'
 import axios from '../../../axiosConfig';
+import { toast } from 'react-hot-toast'
 import { useDispatch } from 'react-redux';
 import { showRegister } from '../../../redux/features/auth/authModalsSlice';
 
@@ -29,6 +30,7 @@ const LoginForm = ({ handleClose }) => {
     try {
       axios.post('/user/login', formData)
       .then(() => location.reload())
+      .then(() => toast.success('Login successfull'))
     } catch (error) {
       setLoginErrorMsg('Invalid email or password')
       console.log(`Login error: ${error}`);
@@ -64,6 +66,7 @@ const LoginForm = ({ handleClose }) => {
             name="email"
             value={formData.email}
             onChange={handleChange}
+            style={{ color: '#000' }}
             required
           />
         </div>
@@ -75,6 +78,7 @@ const LoginForm = ({ handleClose }) => {
             name="password"
             value={formData.password}
             onChange={handleChange}
+            style={{ color: '#000' }}
             required
           />
         </div>

@@ -146,7 +146,7 @@ const RegisterForm = ({ handleClose}) => {
         />
         <label htmlFor="phoneNumber">Phone Number</label>
         <input
-          type="text"
+          type="number"
           id="phoneNumber"
           name="phoneNumber"
           value={formData.phoneNumber}
