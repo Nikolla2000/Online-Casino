@@ -28,6 +28,7 @@ const LoginForm = ({ handleClose }) => {
     setLoginErrorMsg('')
     try {
       axios.post('/user/login', formData)
+      .then(() => location.reload())
     } catch (error) {
       setLoginErrorMsg('Invalid email or password')
       console.log(`Login error: ${error}`);
