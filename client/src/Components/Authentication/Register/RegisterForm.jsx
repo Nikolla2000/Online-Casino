@@ -146,7 +146,7 @@ const RegisterForm = ({ handleClose}) => {
         />
         <label htmlFor="phoneNumber">Phone Number</label>
         <input
-          type="text"
+          type="number"
           id="phoneNumber"
           name="phoneNumber"
           value={formData.phoneNumber}
@@ -186,7 +186,7 @@ const RegisterForm = ({ handleClose}) => {
           onChange={handleChange}
           required
         />
-        <input type="submit" value="Register" />
+        <input type="submit" value="Register" className='text-lg border-1 px-2 mt-2'/>
         <p>{Object.values(errorMessages)[0]}</p>
       </form>
           </Typography>

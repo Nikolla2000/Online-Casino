@@ -4,6 +4,9 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import '../Register/RegisterStyles.scss'
 import axios from '../../../axiosConfig';
+import { toast } from 'react-hot-toast'
+import { useDispatch } from 'react-redux';
+import { showRegister } from '../../../redux/features/auth/authModalsSlice';
 
 const LoginForm = ({ handleClose }) => {
   const [loginErrorMsg, setLoginErrorMsg] = useState('')
@@ -26,11 +29,20 @@ const LoginForm = ({ handleClose }) => {
     setLoginErrorMsg('')
     try {
       axios.post('/user/login', formData)
+      .then(() => location.reload())
+      .then(() => toast.success('Login successfull'))
     } catch (error) {
       setLoginErrorMsg('Invalid email or password')
       console.log(`Login error: ${error}`);
     }
   };
+
+  //redux
+  const dispatch = useDispatch()
+
+  const handleShowRegister = () => {
+    dispatch(showRegister())
+  }
 
   return (
     <div className='login-modal-wrapper'>
@@ -54,6 +66,7 @@ const LoginForm = ({ handleClose }) => {
             name="email"
             value={formData.email}
             onChange={handleChange}
+            style={{ color: '#000' }}
             required
           />
         </div>
@@ -65,12 +78,15 @@ const LoginForm = ({ handleClose }) => {
             name="password"
             value={formData.password}
             onChange={handleChange}
+            style={{ color: '#000' }}
             required
           />
         </div>
-        <div>
-          <button type="submit">Login</button>
+        <div className=''>
+          <button type="submit" className='text-lg border-1 px-2 mt-2'>Login</button>
         </div>
+        <p className='text-xs mt-3'>Dont have an account? <br></br> 
+        You can register <span className='text-red-500 cursor-pointer' onClick={handleShowRegister}>here</span></p>
         <p>{loginErrorMsg}</p>
       </form>
         </Typography>

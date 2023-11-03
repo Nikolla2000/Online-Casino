@@ -8,9 +8,13 @@
       display: block;
     }
   
-    input {
+    input:not(:last-of-type) {
       display: block;
       margin: 0 auto;
+      color:#000;
+    }
+    select {
+      color:#000;
     }
 
   }
