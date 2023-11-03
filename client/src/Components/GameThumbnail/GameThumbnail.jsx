@@ -1,15 +1,27 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import "./GameThumbnail.scss"
 import {  Button } from 'react-bootstrap'
 import { UserContext } from '../../../context/userContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { hideModals, showLogin } from '../../redux/features/auth/authModalsSlice';
+import LoginForm from '../Authentication/Login/LoginForm';
 
 const GameThumbnail = ({ data }) => {
-  const { user } = useContext(UserContext)
+  const { user } = useContext(UserContext);
+
+  const dispatch = useDispatch()
+  const { showLoginModal, showRegisterModal } = useSelector(state => state.authModals)
+
+  const navigate = useNavigate()
 
   const handleClick = () => {
     if(!user.name) {
-      return
+      dispatch(showLogin())
+    }
+    else {
+      dispatch(hideModals())
+      navigate(data.linkPath)
     }
   }
   return (
@@ -17,11 +29,10 @@ const GameThumbnail = ({ data }) => {
       <div className='game-thumbnail-wrapper'>
           <img src={data.image} alt='game-image'/>
       <div onClick={handleClick}>
-        <Link to={data.linkPath}>
           <Button className='play-btn'>
             Play
           </Button>
-        </Link>
+        {showLoginModal && <LoginForm/>}
       </div>
       </div>
     </div>
