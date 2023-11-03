@@ -4,6 +4,8 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import '../Register/RegisterStyles.scss'
 import axios from '../../../axiosConfig';
+import { useDispatch } from 'react-redux';
+import { hideModals } from '../../../redux/features/auth/authModalsSlice';
 
 const LoginForm = ({ handleClose }) => {
   const [loginErrorMsg, setLoginErrorMsg] = useState('')
@@ -31,6 +33,14 @@ const LoginForm = ({ handleClose }) => {
       console.log(`Login error: ${error}`);
     }
   };
+
+  //redux
+  const dispatch = useDispatch()
+
+  const showRegister = () => {
+    dispatch(hideModals())
+    dispatch(showRegister())
+  }
 
   return (
     <div className='login-modal-wrapper'>
@@ -68,9 +78,11 @@ const LoginForm = ({ handleClose }) => {
             required
           />
         </div>
-        <div>
-          <button type="submit">Login</button>
+        <div className=''>
+          <button type="submit" className='text-lg border-1 px-2 mt-2'>Login</button>
         </div>
+        <p className='text-xs mt-3'>Dont have an account? <br></br> 
+        You can register <span className='text-red-500 cursor-pointer' onClick={showRegister}>here</span></p>
         <p>{loginErrorMsg}</p>
       </form>
         </Typography>

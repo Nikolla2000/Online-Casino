@@ -11,7 +11,7 @@ const GameThumbnail = ({ data }) => {
   const { user } = useContext(UserContext);
 
   const dispatch = useDispatch()
-  const { showLoginModal, showRegisterModal } = useSelector(state => state.authModals)
+  const { showLoginModal } = useSelector(state => state.authModals)
 
   const navigate = useNavigate()
 
