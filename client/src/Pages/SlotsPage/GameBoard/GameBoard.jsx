@@ -1,17 +1,10 @@
 import React from 'react';
 
-const GameBoard = () => {
+const GameBoard = ({ randomSlotItem }) => {
   const rows = new Array(3).fill(null);
   const cols = new Array(5).fill(null);
 
-  const randomSlotItem = () => {
-    const randomSlotItem = Math.floor(Math.random() * 12 + 1);
-    if (randomSlotItem < 10) {
-      return `0${randomSlotItem}`
-    } else {
-      return randomSlotItem
-    }
-  }
+
 
   return (
     <div className='gameboard-wrapper'>
