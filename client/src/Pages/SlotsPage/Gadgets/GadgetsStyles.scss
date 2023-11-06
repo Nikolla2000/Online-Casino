@@ -1,5 +1,13 @@
+@font-face {
+  font-family: 'Digital Numbers Regular';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Digital Numbers Regular'), url('../../../assets/fonts/DigitalNumbers-Regular.woff') format('woff');
+  }
+
 .gadgets-bar {
   background-color: blue;
+
   .spin-btn {
     button {
       background: radial-gradient(circle at 10% 20%, rgb(4, 159, 108) 0%, rgb(194, 254, 113) 90.1%);
@@ -10,6 +18,15 @@
       border-radius: 30px;
       letter-spacing: 1.5px;
       text-transform: uppercase;
+    }
+  }
+
+  .bets-wrapper {
+
+    .bet-value {
+      font-family: 'Digital Numbers Regular';
+      font-size: 2em;
+
     }
   }
 }
