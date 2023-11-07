@@ -21,6 +21,43 @@
     }
   }
 
+  .card-color-wrapper {
+    display: flex;
+    gap:2px;
+    border-radius: 20px;
+    box-shadow: 0px 2px 15px 4px rgba(0,0,0,0.75);
+
+
+    .heart-symbol, .spade-symbol {
+      cursor: pointer;
+      border: 2px solid black;
+      padding: 5px 20px;
+      
+      img {
+        width: 40px;
+      }
+    }
+    .heart-symbol {
+      border-radius: 20px 0 0 20px;
+      background: radial-gradient(849px at 0.9% 2.8%, rgb(255, 157, 255) 0%, rgb(255, 102, 142) 43.4%, rgb(255, 31, 56) 83.1%);
+
+      &:hover {
+        background: radial-gradient(422px at -10.3% 110.7%, rgb(219, 76, 180) 9.5%, rgb(231, 119, 209) 50.8%, rgb(255, 180, 241) 88.5%);
+      }
+    }
+    .spade-symbol {
+      border-radius: 0 20px 20px 0;
+      background: linear-gradient(-225deg, #5D9FFF 0%, #B8DCFF 48%, #6BBBFF 100%);
+
+      &:hover {
+        background: linear-gradient(89deg, rgb(21, 74, 189) 0.1%, rgb(26, 138, 211) 51.5%, rgb(72, 177, 234) 100.2%);
+      }
+    }
+    img {
+      width: 50px;
+    }
+  }
+
   .max-bets-btn {
     padding: 0 30px;
     border: 2px solid black;
