@@ -22,6 +22,16 @@
     }
   }
 
+  .sound-btn {
+    height: 52px;
+    border-radius: 50px;
+    padding: 10px;
+    box-shadow: 0px 2px 15px 4px rgba(0,0,0,0.75);
+
+    svg {
+      font-size: 1.5em;
+    }
+  }
   .double-btn {
     background: linear-gradient(to top, #0fd850 0%, #f9f047 100%);
     height: 40px;
