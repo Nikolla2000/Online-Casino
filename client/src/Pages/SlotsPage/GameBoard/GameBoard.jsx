@@ -11,7 +11,7 @@ const GameBoard = ({ randomSlotItem }) => {
       {rows.map((row, i) => (
         <div key={`row-${i}`} className='row'>
           {cols.map((col, j) => (
-            <div key={`col-${j}`} className='col'>
+            <div key={`col-${j}`} className='image-wrapper col'>
               <img src={`../../../src/assets/images/slot-items/slot_item_0${randomSlotItem()}.jpg`} />
             </div>
           ))}

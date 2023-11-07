@@ -2,19 +2,36 @@
 
 .slots-page-wrapper {
   background: url("../../assets//images/slot-items/background.jpg");
-  .slots-game-wrapper{
+  
+  .gameboard-wrapper {
+    width: 95vw;
+    height: 85vh;
+    padding-top:55px;
     margin: 0 auto;
-    
-    .slots-element-wrapper {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap:20px;
+    // display: flex;
+    // flex-direction: column;
+    // justify-content: center;
+    // align-items: center;
 
-      .slot {
-        border: 1px solid black;
-        padding: 60px;
+    .image-wrapper {
+      // width:1000px;
+      // height: 150px;
+      img {
+        width: 90%;
+        height: 100%;
       }
+    }
+  }
+}
+
+@media (max-width: 800px) {
+  .slots-page-wrapper {
+    transform: rotate(90deg);
+    // width: 100vw;
+    
+    .gameboard-wrapper {
+      height: 80vw;
+      width: 100vh;
     }
   }
 }

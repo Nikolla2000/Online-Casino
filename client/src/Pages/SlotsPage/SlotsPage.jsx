@@ -1,7 +1,6 @@
 import React from 'react';
 import './SlotsStyles.scss'
 import GameBoard from './GameBoard/GameBoard';
-import SpinButton from './Gadgets/SpinButton';
 import GadgetsBar from './Gadgets/GadgetsBar';
 const SlotsPage = () => {
 
