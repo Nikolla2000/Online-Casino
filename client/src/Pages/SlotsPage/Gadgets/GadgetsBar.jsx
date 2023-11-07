@@ -7,6 +7,9 @@ const GadgetsBar = () => {
   return (
     <div className='gadgets-bar flex flex-row'>
       <Bets/>
+      <div className='max-bets-btn text-white'>
+        <button className='uppercase'>max bet</button>
+      </div>
       <SpinButton/>
     </div>
   );

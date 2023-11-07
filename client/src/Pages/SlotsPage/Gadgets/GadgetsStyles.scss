@@ -21,6 +21,16 @@
     }
   }
 
+  .max-bets-btn {
+    padding: 0 30px;
+    border: 2px solid black;
+    box-shadow: 0px 2px 15px 4px rgba(0,0,0,0.75);
+    border-radius: 30px;
+    font-weight: bold;
+    height: 50px;
+    display: flex;
+  }
+
   .bets-wrapper {
     box-shadow: 0px 2px 15px 4px rgba(0,0,0,0.75);
     border-radius: 20px;
@@ -38,6 +48,7 @@
     .minus {
       border-radius: 20px 0 0 20px;
     }
+
     .bet-value {
       font-family: 'Digital Numbers Regular';
       font-size: 1.5em;
