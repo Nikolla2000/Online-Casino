@@ -8,6 +8,9 @@ const GadgetsBar = () => {
   return (
     <div className='gadgets-bar flex flex-row'>
       <Bets/>
+      <div className='double-btn'>
+        <button className='text-uppercase text-white font-bold'>Double</button>
+      </div>
       <ChooseCardColor/>
       <div className='max-bets-btn text-white'>
         <button className='uppercase'>max bet</button>
