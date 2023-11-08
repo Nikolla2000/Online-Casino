@@ -17,12 +17,26 @@
       background: linear-gradient(to top, #0fd850 0%, #f9f047 100%);
       color:#fff;
       font-weight: bold;
-      padding: 15px 40px;
+      padding: 15px 50px;
       font-size: 1.5em;
       border-radius: 30px;
       letter-spacing: 1.5px;
       text-transform: uppercase;
       box-shadow: 0px 2px 15px 4px rgba(0,0,0,0.75);
+    }
+  }
+
+  .total-credits-wrapper {
+    box-shadow: 0px 2px 15px 4px rgba(0,0,0,0.75);
+    border:2px solid blue;
+    padding: 5px 20px;
+    text-align: center;
+    border-radius: 20px;
+
+    .credits-value {
+      font-family: 'Digital Numbers Regular';
+      font-size: 1.5em;
+      color: purple;
     }
   }
 
@@ -39,10 +53,13 @@
   }
   .double-btn {
     background: linear-gradient(to top, #0fd850 0%, #f9f047 100%);
-    height: 40px;
+    height: 30px;
+    text-align: center;
     padding: 5px 30px;
     border-radius: 20px;
     box-shadow: 0px 2px 15px 4px rgba(0,0,0,0.75);
+    display: flex;
+    align-items: center;
 
 
   }
@@ -89,9 +106,10 @@
     box-shadow: 0px 2px 15px 4px rgba(0,0,0,0.75);
     border-radius: 30px;
     font-weight: bold;
-    height: 40px;
+    height: 30px;
     padding: 5px 30px;
     display: flex;
+    align-items: center;
   }
 
   .bets-wrapper {
