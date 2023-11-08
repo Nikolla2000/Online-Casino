@@ -2,11 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   bet: 100,
-  totalCredits: 10000
 }
 
-export const slotSlice = createSlice({
-  name: 'slot',
+export const betsSlice = createSlice({
+  name: 'bets',
   initialState,
   reducers: {
     increaseBet(state) {
@@ -26,5 +25,5 @@ export const slotSlice = createSlice({
   }
 })
 
-export const { increaseBet, decreaseBet } = slotSlice.actions;
-export default slotSlice.reducer;
+export const { increaseBet, decreaseBet } = betsSlice.actions;
+export default betsSlice.reducer;
