@@ -21,9 +21,12 @@ export const betsSlice = createSlice({
       } else {
         state.bet -= 100
       }
+    },
+    maxBet(state) {
+      state.bet = 1000;
     }
   }
 })
 
-export const { increaseBet, decreaseBet } = betsSlice.actions;
+export const { increaseBet, decreaseBet, maxBet } = betsSlice.actions;
 export default betsSlice.reducer;
