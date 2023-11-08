@@ -2,22 +2,26 @@
 
 .slots-page-wrapper {
   background: url("../../assets//images/slot-items/background.jpg");
+
+  .total-credits-wrapper {
+    background-color: blue;
+  }
   
   .gameboard-wrapper {
-    width: 95vw;
+    width: 85vw;
     height: 85vh;
     padding-top:55px;
     margin: 0 auto;
-    // display: flex;
-    // flex-direction: column;
-    // justify-content: center;
-    // align-items: center;
+
+    .row {
+      height: 32.5%;
+    }
 
     .image-wrapper {
-      // width:1000px;
       // height: 150px;
+      padding: 0;
       img {
-        width: 90%;
+        width: 95%;
         height: 100%;
       }
     }

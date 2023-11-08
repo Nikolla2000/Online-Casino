@@ -6,6 +6,7 @@ import ChooseCardColor from './ChooseCardColor';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faVolumeHigh, faVolumeXmark } from '@fortawesome/free-solid-svg-icons'; // Import the specific icon
+import TotalCredits from './TotalCredits';
 
 const GadgetsBar = () => {
   return (
@@ -14,14 +15,17 @@ const GadgetsBar = () => {
         <FontAwesomeIcon icon={faVolumeHigh} style={{color: "#ffffff",}} />
         {/* <FontAwesomeIcon icon={faVolumeXmark} style={{color: "#ffffff",}} /> */}
       </div>
+      <div className='flex flex-col gap-2'>
+        <div className='max-bets-btn text-white'>
+          <button className='uppercase'>max bet</button>
+        </div>
+        <div className='double-btn'>
+          <button className='text-uppercase text-white font-bold'>Double</button>
+        </div>
+      </div>
+      {/* <ChooseCardColor/> */}
       <Bets/>
-      <div className='double-btn'>
-        <button className='text-uppercase text-white font-bold'>Double</button>
-      </div>
-      <ChooseCardColor/>
-      <div className='max-bets-btn text-white'>
-        <button className='uppercase'>max bet</button>
-      </div>
+      <TotalCredits/>
       <SpinButton/>
     </div>
   );
