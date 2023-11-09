@@ -1,10 +1,11 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-const GameBoard = ({ randomSlotItem }) => {
+const GameBoard = () => {
   const slots = useSelector(state => state.slotMachine.slots)
   const rows = new Array(3).fill(null);
   const cols = new Array(5).fill(null);
+  console.log(slots);
 
   return (
     <div className='gameboard-wrapper'>
