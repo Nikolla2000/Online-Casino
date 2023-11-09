@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-  slots: Array.from({ length: 3 }, () => Array(5).fill(null)),
+  slots: Array.from({ length: 3 }, () => Array(5).fill(Math.floor(Math.random() * 12 + 1))),
   isSpinning: false,
 }
 
@@ -12,7 +12,7 @@ export const slotMachineSlice = createSlice({
     startSpinning(state) {
       state.isSpinning = true;
     },
-    stopSpinning(state) {
+    stopSpinning(state, action) {
       state.isSpinning = false;
       state.slots = action.payload;
     }

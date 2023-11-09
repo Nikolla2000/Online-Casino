@@ -7,6 +7,6 @@ export const store = configureStore({
   reducer: {
     authModals: authModalReducer,
     bets: betsReducer,
-    slots: slotsReducer,
+    slotMachine: slotsReducer,
   },
 })
