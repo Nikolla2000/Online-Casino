@@ -1,6 +1,6 @@
 const slotItems = [1, 2, 3, 4, 5, 6, 6, 7, 8, 9, 10, 11, 12];
 
-const spin = () => {
+const spin = (req, res) => {
   const result = [];
   for (let i = 0; i < 3; i++) {
     const row = [];
@@ -21,4 +21,9 @@ const getFinalCombination = (req, res) => {
     [slotItems[0], slotItems[4], slotItems[8], slotItems[1], slotItems[5]],
   ];
   res.json({ finalCombination });
+};
+
+module.exports = {
+  spin,
+  getFinalCombination,
 };
