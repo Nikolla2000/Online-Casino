@@ -25,6 +25,12 @@ const routes = {
       return user && user.email === 'nikollla2000@abv.bg';
     },
   },
+  games: {
+    path: '/games',
+    element: <GamesPage/>,
+    name: 'games',
+    includeInNav: true
+  },
   dashboard: {
     path: '/dashboard',
     element: <Dashboard/>,
@@ -36,12 +42,6 @@ const routes = {
     element: <ContactPage/>,
     name: 'contact',
     includeInNav: true
-  },
-  games: {
-    path: '/games',
-    element: <GamesPage/>,
-    name: 'games',
-    includeInNav: false
   },
   slots: {
     path: '/games/slots',

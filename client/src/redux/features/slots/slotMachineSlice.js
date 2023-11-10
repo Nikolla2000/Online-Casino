@@ -30,7 +30,9 @@ export const slotMachineSlice = createSlice({
 })
 
 // const isWinningCombination = (slots) => {
-//   if(slots)
+//   if (slots[0] === slots[1] && slots[1] === slots[2]) {
+    
+//   }
 // }
 
 export const { startSpinning, stopSpinning } = slotMachineSlice.actions;
