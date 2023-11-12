@@ -11,6 +11,10 @@ const SpinButton = () => {
   console.log(isSpinning, slots);
 
   const handleSpin = async () => {
+    if(isSpinning) {
+      return
+    }
+
     dispatch(startSpinning());
 
     try {

@@ -10,16 +10,14 @@ const GameBoard = () => {
 
   useEffect(() => {
     if (isSpinning) {
-      // Simulate spinning by updating the slot items with a delay
       const spinInterval = setInterval(() => {
         setSpinningSlots(generateRandomSlots());
       }, 50);
 
-      // Stop spinning after a certain duration
       setTimeout(() => {
         clearInterval(spinInterval);
         dispatch(stopSpinning(generateFinalSlots()));
-      }, 3000); // Adjust the duration as needed
+      }, 2000);
 
       return () => {
         clearInterval(spinInterval);
@@ -28,12 +26,10 @@ const GameBoard = () => {
   }, [isSpinning, dispatch]);
 
   const generateRandomSlots = () => {
-    // Replace this with your logic to generate random slot items for each slot position
     return slots.map(row => row.map(() => Math.floor(Math.random() * 12 + 1)));
   };
 
   const generateFinalSlots = () => {
-    // Replace this with your logic to generate the final slot items
     return slots.map(row => row.map(() => Math.floor(Math.random() * 12 + 1)));
   };
 
