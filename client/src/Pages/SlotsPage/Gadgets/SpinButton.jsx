@@ -8,17 +8,22 @@ const SpinButton = () => {
   const dispatch = useDispatch()
   const isSpinning = useSelector(state => state.slotMachine.isSpinning)
   const slots = useSelector(state => state.slotMachine.slots)
+  console.log(isSpinning, slots);
 
   const handleSpin = async () => {
+    if(isSpinning) {
+      return
+    }
+
     dispatch(startSpinning());
 
     try {
       const response = await axios.get('/slots/spin');
-      dispatch(stopSpinning(response.data.result));
+      // dispatch(stopSpinning(response.data.result));
     } catch (error) {
 
       console.error('Error spinning the slots:', error);
-      dispatch(stopSpinning([]));
+      // dispatch(stopSpinning([]));
     }
   };
 
