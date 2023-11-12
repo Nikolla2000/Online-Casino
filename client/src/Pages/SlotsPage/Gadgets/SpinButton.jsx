@@ -3,6 +3,8 @@ import './GadgetsStyles.scss'
 import { useDispatch, useSelector } from 'react-redux';
 import { startSpinning, stopSpinning } from '../../../redux/features/slots/slotMachineSlice';
 import axios from '../../../axiosConfig'
+import { Switch } from '@mui/material';
+import { FormLabel } from 'react-bootstrap';
 
 const SpinButton = () => {
   const dispatch = useDispatch()
@@ -29,9 +31,15 @@ const SpinButton = () => {
 
   return (
     <div className='spin-btn'>
-      <button onClick={handleSpin}>
+      <button onClick={handleSpin} style={{'display' : 'block'}}>
         Spin
       </button>
+      <div className="text-center">
+        <FormLabel label='sese'>
+          <Switch label='AutoStart'/>
+          <span className='text-teal-400 font-bold text-uppercase'>Auto Play</span>
+        </FormLabel>
+      </div>
     </div>
   );
 };
