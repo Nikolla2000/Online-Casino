@@ -5,6 +5,7 @@ const initialState = {
   isSpinning: false,
   isWin: false,
   winType: null,
+  autoPlay: false
 }
 
 export const slotMachineSlice = createSlice({
@@ -25,6 +26,12 @@ export const slotMachineSlice = createSlice({
       //   state.isWin = false;
       //   state.winType = null;
       // }
+    },
+    autoPlayOn(state) {
+      state.autoPlay = true;
+    },
+    autoPlayOff(state) {
+      state.autoPlay = false;
     }
   }
 })
