@@ -1,7 +1,7 @@
 import React from 'react';
 import './GadgetsStyles.scss'
 import { useDispatch, useSelector } from 'react-redux';
-import { startSpinning, stopSpinning } from '../../../redux/features/slots/slotMachineSlice';
+import { startSpinning, stopSpinning, toggleAutoPlay } from '../../../redux/features/slots/slotMachineSlice';
 import axios from '../../../axiosConfig'
 import { Switch } from '@mui/material';
 import { FormLabel } from 'react-bootstrap';
@@ -9,8 +9,10 @@ import { FormLabel } from 'react-bootstrap';
 const SpinButton = () => {
   const dispatch = useDispatch()
   const isSpinning = useSelector(state => state.slotMachine.isSpinning)
+  const autoPlay = useSelector(state => state.slotMachine.autoPlay)
   const slots = useSelector(state => state.slotMachine.slots)
-  console.log(isSpinning, slots);
+  // console.log(isSpinning, slots);
+  console.log(autoPlay);
 
   const handleSpin = async () => {
     if(isSpinning) {
@@ -29,6 +31,10 @@ const SpinButton = () => {
     }
   };
 
+  const toggle = () => {
+    dispatch(toggleAutoPlay())
+  }
+
   return (
     <div className='spin-btn'>
       <button onClick={handleSpin} style={{'display' : 'block'}}>
@@ -36,7 +42,7 @@ const SpinButton = () => {
       </button>
       <div className="text-center">
         <FormLabel label='sese'>
-          <Switch label='AutoStart'/>
+          <Switch label='AutoStart' onChange={toggle}/>
           <span className='text-teal-400 font-bold text-uppercase'>Auto Play</span>
         </FormLabel>
       </div>

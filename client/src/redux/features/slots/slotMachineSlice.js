@@ -27,8 +27,8 @@ export const slotMachineSlice = createSlice({
       //   state.winType = null;
       // }
     },
-    autoPlayOn(state) {
-      state.autoPlay = true;
+    toggleAutoPlay(state) {
+      state.autoPlay = !state.autoPlay;
     },
     autoPlayOff(state) {
       state.autoPlay = false;
@@ -42,5 +42,5 @@ export const slotMachineSlice = createSlice({
 //   }
 // }
 
-export const { startSpinning, stopSpinning } = slotMachineSlice.actions;
+export const { startSpinning, stopSpinning, toggleAutoPlay } = slotMachineSlice.actions;
 export default slotMachineSlice.reducer
