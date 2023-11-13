@@ -5,16 +5,23 @@ import { startSpinning, stopSpinning, toggleAutoPlay } from '../../../redux/feat
 import axios from '../../../axiosConfig'
 import { Switch } from '@mui/material';
 import { FormLabel } from 'react-bootstrap';
+import { spendCredits } from '../../../redux/features/slots/betsSlice';
 
 const SpinButton = () => {
   const dispatch = useDispatch()
   const isSpinning = useSelector(state => state.slotMachine.isSpinning)
   const autoPlay = useSelector(state => state.slotMachine.autoPlay)
   const slots = useSelector(state => state.slotMachine.slots)
+  const betsValue = useSelector(state => state.bets.bet)
+  const totalCredits = useSelector(state => state.bets.totalCredits)
   console.log(isSpinning, slots);
 
   const handleSpin = async () => {
     if(isSpinning) {
+      return
+    }
+    if(totalCredits < betsValue){
+      alert('not enough credits')
       return
     }
 
@@ -22,6 +29,7 @@ const SpinButton = () => {
 
     try {
       const response = await axios.get('/slots/spin');
+      dispatch(spendCredits())
     } catch (error) {
 
       console.error('Error spinning the slots:', error);
@@ -35,6 +43,7 @@ const SpinButton = () => {
 
   const autoSpinIntervalRef = useRef(null)
 
+  //Auto Play Function
   useEffect(() => {
     const startAutoSpin = () => {
       autoSpinIntervalRef.current = setInterval(() => {
