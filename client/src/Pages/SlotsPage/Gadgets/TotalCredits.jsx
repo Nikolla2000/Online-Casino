@@ -1,10 +1,13 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 const TotalCredits = () => {
+  const totalCredits = useSelector(state => state.bets.totalCredits)
+
   return (
     <div className='total-credits-wrapper bg-black'>
       <p className='text-white uppercase font-bold'>Total credits</p>
-      <p className='credits-value'><span className='font-sans'>$</span>10000</p>
+      <p className='credits-value'><span className='font-sans'>$</span>{totalCredits}</p>
     </div>
   );
 };

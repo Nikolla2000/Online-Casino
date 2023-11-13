@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   bet: 100,
+  totalCredits: 10000
 }
 
 export const betsSlice = createSlice({
@@ -24,9 +25,15 @@ export const betsSlice = createSlice({
     },
     maxBet(state) {
       state.bet = 1000;
+    },
+    spendCredits(state) {
+      if(state.totalCredits < state.bet){
+        return
+      }
+      state.totalCredits -= state.bet
     }
   }
 })
 
-export const { increaseBet, decreaseBet, maxBet } = betsSlice.actions;
+export const { increaseBet, decreaseBet, maxBet, spendCredits } = betsSlice.actions;
 export default betsSlice.reducer;
