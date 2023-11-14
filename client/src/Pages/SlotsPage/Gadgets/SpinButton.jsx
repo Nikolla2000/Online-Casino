@@ -5,6 +5,7 @@ import { startSpinning, stopSpinning, toggleAutoPlay } from '../../../redux/feat
 import axios from '../../../axiosConfig'
 import { Switch } from '@mui/material';
 import { FormLabel } from 'react-bootstrap';
+import { toast } from 'react-hot-toast'
 import { spendCredits } from '../../../redux/features/slots/betsSlice';
 
 const SpinButton = () => {
@@ -21,7 +22,7 @@ const SpinButton = () => {
       return
     }
     if(totalCredits < betsValue){
-      alert('not enough credits')
+      toast.error('Not Enough Credits')
       return
     }
 
