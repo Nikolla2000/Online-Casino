@@ -111,7 +111,7 @@ const loginUser = async (req, res) => {
 }
 
 
-//
+//Logout
 const logoutUser = (req, res) => {
   res.clearCookie('token').json({ message: 'Logout successfull' });
 }
@@ -131,10 +131,50 @@ const getProfile = (req, res) => {
 }
 }
 
+
+//Update total credits
+const updateTotalCredits = (req, res) => {
+  const { userId, totalCredits} = req.body
+
+  try {
+    const userToUpdate = User.findByIdAndUpdate(
+      { _id: userId },
+      { $set: { totalCredits: totalCredits } },
+      { new: true }
+    );
+
+    if(!updatedUser) {
+      return res.status(404).json({ message: error.message })
+    }
+
+    res.status(200).json({ message: 'Total credits updated successfully', user: updatedUser });
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
+const getTotalCredits = async (req, res) => {
+  const { id } = req.body;
+
+  try {
+    const user = await User.findOne({ _id: id }, 'totalCredits');
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({ totalCredits: user.totalCredits });r
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
+}
+
 module.exports = {
   registerUser,
   loginUser,
   logoutUser,
   getAllUsers,
-  getProfile
+  getProfile,
+  updateTotalCredits,
+  getTotalCredits
 }

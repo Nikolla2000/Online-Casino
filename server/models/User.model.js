@@ -50,6 +50,10 @@ const UserSchema = new mongoose.Schema({
     required: [true, "You must provide a phone number"],
     match: [/^08\d{8}$/, "Invalid phone number format"],
   },
+  totalCredits: {
+    type: Number,
+    default: 10000
+  }
 })
 
 UserSchema.methods.createJWT = function () {
