@@ -154,10 +154,10 @@ const updateTotalCredits = (req, res) => {
 }
 
 const getTotalCredits = async (req, res) => {
-  const { userId } = req.pararms;
+  const { id } = req.body;
 
   try {
-    const user = await User.findOne({ _id: userId }, 'totalCredits');
+    const user = await User.findOne({ _id: id }, 'totalCredits');
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
