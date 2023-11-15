@@ -31,8 +31,9 @@ const SpinButton = () => {
     dispatch(startSpinning());
 
     try {
-      const response = await axios.get('/slots/spin');
+      await axios.get('/slots/spin');
       dispatch(spendCredits())
+      await axios.put('/user/updateCredits', totalCredits)
     } catch (error) {
 
       console.error('Error spinning the slots:', error);

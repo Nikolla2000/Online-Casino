@@ -146,10 +146,27 @@ const updateTotalCredits = (req, res) => {
     if(!updatedUser) {
       return res.status(404).json({ message: error.message })
     }
+
+    res.status(200).json({ message: 'Total credits updated successfully', user: updatedUser });
   } catch (error) {
     res.status(500).json({ message: error.message })
   }
-  
+}
+
+const getTotalCredits = async (req, res) => {
+  const { userId } = req.pararms;
+
+  try {
+    const user = await User.findOne({ _id: userId }, 'totalCredits');
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({ totalCredits: user.totalCredits });r
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
 }
 
 module.exports = {
@@ -158,5 +175,6 @@ module.exports = {
   logoutUser,
   getAllUsers,
   getProfile,
-  updateTotalCredits
+  updateTotalCredits,
+  getTotalCredits
 }
