@@ -6,7 +6,8 @@ const {
   loginUser,
   logoutUser,
   getAllUsers,
-  getProfile
+  getProfile,
+  updateTotalCredits
 } = require('../controllers/User.controller');
 
 const { verifyJWT } = require('../middleware/authentication');
@@ -16,5 +17,6 @@ router.post('/login', loginUser);
 router.get('/allUsers', getAllUsers);
 router.get('/profile', getProfile);
 router.get('/logout', logoutUser);
+router.put('/updateCredits', updateTotalCredits)
 
 module.exports = router;
