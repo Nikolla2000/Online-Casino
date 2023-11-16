@@ -133,21 +133,17 @@ const getProfile = (req, res) => {
 
 
 //Update total credits
-const updateTotalCredits = (req, res) => {
+const updateTotalCredits = async (req, res) => {
   const { userId, totalCredits} = req.body
 
   try {
-    const userToUpdate = User.findByIdAndUpdate(
+    const userToUpdate = await User.findOneAndUpdate(
       { _id: userId },
       { $set: { totalCredits: totalCredits } },
       { new: true }
-    );
+    ).lean();
 
-    if(!updatedUser) {
-      return res.status(404).json({ message: error.message })
-    }
-
-    res.status(200).json({ message: 'Total credits updated successfully', user: updatedUser });
+    res.status(200).json({ message: 'Total credits updated successfully', user: userToUpdate });
   } catch (error) {
     res.status(500).json({ message: error.message })
   }

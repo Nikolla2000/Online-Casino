@@ -16,6 +16,7 @@ const TotalCredits = () => {
         try {
           const { data } = await axios.get('/user/getTotalCredits', { params: { id: user.id } });
           dispatch(updateCredits(data.totalCredits));
+          console.log(totalCredits);
         } catch (error) {
           console.error('Error fetching total credits:', error);
         }

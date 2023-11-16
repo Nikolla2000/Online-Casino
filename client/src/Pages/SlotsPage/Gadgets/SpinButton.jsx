@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import './GadgetsStyles.scss'
 import { useDispatch, useSelector } from 'react-redux';
+import { UserContext } from "../../../../context/userContext"
 import { startSpinning, stopSpinning, toggleAutoPlay } from '../../../redux/features/slots/slotMachineSlice';
 import axios from '../../../axiosConfig'
 import { Switch } from '@mui/material';
@@ -15,7 +16,7 @@ const SpinButton = () => {
   const slots = useSelector(state => state.slotMachine.slots)
   const betsValue = useSelector(state => state.bets.bet)
   const totalCredits = useSelector(state => state.bets.totalCredits)
-  console.log(isSpinning, slots);
+  const { user } = useContext(UserContext)
 
   const handleSpin = async () => {
     if(isSpinning) {
@@ -27,13 +28,13 @@ const SpinButton = () => {
       toast.error('Not Enough Credits')
       return
     }
-
+    
     dispatch(startSpinning());
 
     try {
       await axios.get('/slots/spin');
       dispatch(spendCredits())
-      await axios.put('/user/updateCredits', totalCredits)
+      await axios.put('/user/updateCredits', {id: user.id, totalCredits})
     } catch (error) {
 
       console.error('Error spinning the slots:', error);
