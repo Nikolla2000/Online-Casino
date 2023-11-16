@@ -154,7 +154,7 @@ const updateTotalCredits = (req, res) => {
 }
 
 const getTotalCredits = async (req, res) => {
-  const { id } = req.body;
+  const { id } = req.query;
 
   try {
     const user = await User.findOne({ _id: id }, 'totalCredits');
