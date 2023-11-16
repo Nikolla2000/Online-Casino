@@ -12,15 +12,19 @@ const TotalCredits = () => {
   
   useEffect(() => {
     const getTotalCredits = async () => {
-      const { data } = await axios.get(`/user/getTotalCredits`, user)
-      dispatch(updateCredits(data.totalCredits))
-    }
+      if (user && user.id) {
+        try {
+          const { data } = await axios.get('/user/getTotalCredits', { params: { id: user.id } });
+          dispatch(updateCredits(data.totalCredits));
+          console.log(totalCredits);
+        } catch (error) {
+          console.error('Error fetching total credits:', error);
+        }
+      }
+    };
 
-    if (user) {
-      getTotalCredits();
-    }
-
-  }, [user, dispatch])
+    getTotalCredits();
+  }, [user, dispatch]);
 
   return (
     <div className='total-credits-wrapper bg-black'>

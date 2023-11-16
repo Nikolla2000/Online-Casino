@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   bet: 100,
-  totalCredits: 10000
+  totalCredits: null
 }
 
 export const betsSlice = createSlice({
