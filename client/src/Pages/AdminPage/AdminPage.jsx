@@ -4,6 +4,8 @@ import axios from '../../axiosConfig';
 import { UserContext } from '../../../context/userContext';
 import { useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
+import { maxCredits } from '../../redux/features/slots/betsSlice';
+import { toast } from 'react-hot-toast';
 
 const AdminPage = () => {
   const [users, setUsers] = useState([]);
@@ -40,6 +42,16 @@ const AdminPage = () => {
     }
   }, [user]);
 
+  const restoreMaxCredits = () => {
+    dispatch(maxCredits())
+    try {
+      const {data} = axios.put('/user/updateCredits', { userId: id, totalCredits: 10000})
+      toast.success('Max Credits Restored Successfully!')
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const admin = users.find(user => user.email === 'nikollla2000@abv.bg');
   const otherUsers = users.filter(user => user.email !== 'nikollla2000@abv.bg');
 
@@ -67,6 +79,9 @@ const AdminPage = () => {
                   <td className='p-2 border'>{admin.email}</td>
                   <td className='p-2 border'>{admin.country}</td>
                   <td className='p-2 border'>{admin.phoneNumber}</td>
+                  <td className='p-2 border font-bold'>
+                    <button>Add 10000 Credits</button>
+                  </td>
                 </tr>
               )}
               {otherUsers.map((user, i) => (
@@ -76,7 +91,9 @@ const AdminPage = () => {
                   <td className='p-2 border'>{user.email}</td>
                   <td className='p-2 border'>{user.country}</td>
                   <td className='p-2 border'>{user.phoneNumber}</td>
-                  <td className='p-2 border font-bold'><button>Add 10000 Credits</button></td>           
+                  <td className='p-2 border font-bold'>
+                    <button>Add 10000 Credits</button>
+                  </td>           
                 </tr>
               ))}
             </tbody>
