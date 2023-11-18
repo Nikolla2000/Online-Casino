@@ -42,10 +42,13 @@ const AdminPage = () => {
     }
   }, [user]);
 
-  const restoreMaxCredits = () => {
+  const [userId, setUserId] = useState(null)
+
+  const restoreMaxCredits = (id) => {
+    setUserId(id)
     dispatch(maxCredits())
     try {
-      const {data} = axios.put('/user/updateCredits', { userId: id, totalCredits: 10000})
+      const {data} = axios.put('/user/updateCredits', { userId: userId, totalCredits: 10000})
       toast.success('Max Credits Restored Successfully!')
     } catch (error) {
       console.log(error);
@@ -80,7 +83,7 @@ const AdminPage = () => {
                   <td className='p-2 border'>{admin.country}</td>
                   <td className='p-2 border'>{admin.phoneNumber}</td>
                   <td className='p-2 border font-bold'>
-                    <button>Add 10000 Credits</button>
+                    <button onClick={() => restoreMaxCredits(admin._id)}>Add 10000 Credits</button>
                   </td>
                 </tr>
               )}
@@ -92,7 +95,7 @@ const AdminPage = () => {
                   <td className='p-2 border'>{user.country}</td>
                   <td className='p-2 border'>{user.phoneNumber}</td>
                   <td className='p-2 border font-bold'>
-                    <button>Add 10000 Credits</button>
+                    <button onClick={() => restoreMaxCredits(user._id)}>Add 10000 Credits</button>
                   </td>           
                 </tr>
               ))}
