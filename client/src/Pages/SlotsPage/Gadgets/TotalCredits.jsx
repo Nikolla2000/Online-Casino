@@ -4,7 +4,6 @@ import { updateCredits } from '../../../redux/features/slots/betsSlice';
 import axios from "../../../axiosConfig";
 import { UserContext } from "../../../../context/userContext" 
 
-
 const TotalCredits = () => {
   const totalCredits = useSelector(state => state.bets.totalCredits)
   const dispatch = useDispatch();
