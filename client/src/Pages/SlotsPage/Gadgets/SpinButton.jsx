@@ -34,11 +34,9 @@ const SpinButton = () => {
     try {
       await axios.get('/slots/spin');
       dispatch(spendCredits());
-  
-      // Use the then method to execute the second request after the first one is complete
-      await axios.put('/user/updateCredits', { userId: user.id, totalCredits })
+
+      await axios.put('/user/updateCredits', { userId: user.id, totalCredits: totalCredits - betsValue })
         .then(response => {
-          // Handle the response if needed
           console.log('Update Credits Response:', response);
         })
         .catch(error => {
