@@ -74,6 +74,7 @@ const AdminPage = () => {
                   <td className='p-2 border'>{user.email}</td>
                   <td className='p-2 border'>{user.country}</td>
                   <td className='p-2 border'>{user.phoneNumber}</td>
+                  <td className='p-2 border font-bold'><button>Add 10000 Credits</button></td>           
                 </tr>
               ))}
             </tbody>

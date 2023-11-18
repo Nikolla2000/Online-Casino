@@ -19,28 +19,37 @@ const SpinButton = () => {
   const { user } = useContext(UserContext)
 
   const handleSpin = async () => {
-    if(isSpinning) {
-      return
+    if (isSpinning) {
+      return;
     }
-    if(totalCredits < betsValue){
+    if (totalCredits < betsValue) {
       const audio = new Audio('../../../src/assets/sounds/error-sound.mp3');
       audio.play();
-      toast.error('Not Enough Credits')
-      return
+      toast.error('Not Enough Credits');
+      return;
     }
-
+  
     dispatch(startSpinning());
-
+  
     try {
       await axios.get('/slots/spin');
-      dispatch(spendCredits())
-      await axios.put('/user/updateCredits', {userId: user.id, totalCredits})
+      dispatch(spendCredits());
+  
+      // Use the then method to execute the second request after the first one is complete
+      await axios.put('/user/updateCredits', { userId: user.id, totalCredits })
+        .then(response => {
+          // Handle the response if needed
+          console.log('Update Credits Response:', response);
+        })
+        .catch(error => {
+          console.error('Error updating credits:', error);
+        });
     } catch (error) {
-
       console.error('Error spinning the slots:', error);
       dispatch(stopSpinning([]));
     }
   };
+  
 
   const toggle = () => {
     dispatch(toggleAutoPlay())
