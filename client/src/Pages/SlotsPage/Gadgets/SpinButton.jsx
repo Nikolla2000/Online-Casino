@@ -28,13 +28,13 @@ const SpinButton = () => {
       toast.error('Not Enough Credits')
       return
     }
-    
+
     dispatch(startSpinning());
 
     try {
       await axios.get('/slots/spin');
       dispatch(spendCredits())
-      await axios.put('/user/updateCredits', {id: user.id, totalCredits})
+      await axios.put('/user/updateCredits', {userId: user.id, totalCredits})
     } catch (error) {
 
       console.error('Error spinning the slots:', error);
