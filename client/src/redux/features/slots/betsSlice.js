@@ -26,6 +26,9 @@ export const betsSlice = createSlice({
     maxBet(state) {
       state.bet = 1000;
     },
+    maxCredits(state) {
+      state.totalCredits = 10000;
+    },
     spendCredits(state) {
       if(state.totalCredits < state.bet){
         return
@@ -38,5 +41,5 @@ export const betsSlice = createSlice({
   }
 })
 
-export const { increaseBet, decreaseBet, maxBet, spendCredits, updateCredits } = betsSlice.actions;
+export const { increaseBet, decreaseBet, maxBet, maxCredits, spendCredits, updateCredits } = betsSlice.actions;
 export default betsSlice.reducer;

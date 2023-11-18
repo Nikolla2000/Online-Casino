@@ -3,11 +3,13 @@ import './AdminPageStyles.scss';
 import axios from '../../axiosConfig';
 import { UserContext } from '../../../context/userContext';
 import { useNavigate } from 'react-router';
+import { useDispatch } from 'react-redux';
 
 const AdminPage = () => {
   const [users, setUsers] = useState([]);
   const {user} = useContext(UserContext)
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const fetchUsers = async () => {
