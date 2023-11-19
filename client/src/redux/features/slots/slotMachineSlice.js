@@ -1,4 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
+import checkSlotWin from "../../../hooks/checkSlotWin";
+import { twoColsWin } from "./betsSlice";
 
 const initialState = {
   slots: Array.from({ length: 3 }, () => Array(5).fill(Math.floor(Math.random() * 12 + 1))),
@@ -26,7 +28,7 @@ export const slotMachineSlice = createSlice({
       //   state.isWin = false;
       //   state.winType = null;
       // }
-      isWinningCombination(state.slots)
+      checkSlotWin(state.slots)
     },
     toggleAutoPlay(state) {
       state.autoPlay = !state.autoPlay;
@@ -58,6 +60,7 @@ const isWinningCombination = (slots) => {
         }
       else if (slots[i][0] === slots[i][1]){
         alert('2 cols')
+        store.dispatch(twoColsWin())
       }
   }
 }
