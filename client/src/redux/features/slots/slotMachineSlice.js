@@ -20,14 +20,7 @@ export const slotMachineSlice = createSlice({
     stopSpinning(state, action) {
       state.isSpinning = false;
       state.slots = action.payload;
-
-      // if(isWinningCombination(action.payload)) {
-      //   state.isWin = true;
-      //   state.winType = determineWinType(action.payload);
-      // } else {
-      //   state.isWin = false;
-      //   state.winType = null;
-      // }
+      
       checkSlotWin(state.slots)
     },
     toggleAutoPlay(state) {
