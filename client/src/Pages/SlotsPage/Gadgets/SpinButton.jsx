@@ -37,7 +37,7 @@ const SpinButton = () => {
 
       await axios.put('/user/updateCredits', { userId: user.id, totalCredits: totalCredits - betsValue })
         .then(response => {
-          console.log('Update Credits Response:', response);
+          // console.log('Update Credits Response:', response);
         })
         .catch(error => {
           console.error('Error updating credits:', error);

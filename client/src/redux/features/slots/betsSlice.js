@@ -37,9 +37,32 @@ export const betsSlice = createSlice({
     },
     updateCredits(state, action) {
       state.totalCredits = action.payload
-    }
+    },
+    twoColsWin(state) {
+      state.totalCredits += state.bet * 2
+    },
+    threeColsWin(state) {
+      state.totalCredits += state.bet * 10
+    },
+    fourColsWin(state) {
+      state.totalCredits += state.bet * 100
+    },
+    fiveColsWin(state) {
+      state.totalCredits += state.bet * 200
+    },
   }
 })
 
-export const { increaseBet, decreaseBet, maxBet, maxCredits, spendCredits, updateCredits } = betsSlice.actions;
+export const { increaseBet, 
+               decreaseBet, 
+               maxBet, 
+               maxCredits, 
+               spendCredits, 
+               updateCredits,
+               twoColsWin,
+               threeColsWin,
+               fourColsWin,
+               fiveColsWin
+            } = betsSlice.actions;
+
 export default betsSlice.reducer;
