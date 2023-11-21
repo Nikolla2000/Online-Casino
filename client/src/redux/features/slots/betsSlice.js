@@ -39,7 +39,7 @@ export const betsSlice = createSlice({
       state.totalCredits = action.payload
     },
     twoColsWin(state) {
-      alert('mamiii')
+      alert('bachka')
       state.totalCredits += state.bet * 2
     },
     threeColsWin(state) {

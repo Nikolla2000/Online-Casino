@@ -1,6 +1,6 @@
 import { twoColsWin } from "../redux/features/slots/betsSlice";
 
-const checkSlotWin = (slots, dispatch) => {
+const checkSlotWin = (slots) => {
 
   for (let i = 0; i < slots.length; i++) {
     if (
@@ -23,7 +23,7 @@ const checkSlotWin = (slots, dispatch) => {
     } 
     else if (slots[i][0] === slots[i][1]) {
       alert("2 cols");
-      twoColsWin();
+      twoColsWin()
     }
   }
 };
