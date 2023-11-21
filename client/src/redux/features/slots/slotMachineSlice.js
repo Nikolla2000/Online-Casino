@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import checkSlotWin from "../../../hooks/checkSlotWin";
 import { twoColsWin } from "./betsSlice";
 
+
 const initialState = {
   slots: Array.from({ length: 3 }, () => Array(5).fill(Math.floor(Math.random() * 12 + 1))),
   isSpinning: false,
@@ -43,8 +44,8 @@ export const slotMachineSlice = createSlice({
     autoPlayOff(state) {
       state.autoPlay = false;
     }
-  }
-})
+  },
+});
 
 // const isWinningCombination = (slots) => {
 //   for(let i = 0; i < slots.length; i++) {
