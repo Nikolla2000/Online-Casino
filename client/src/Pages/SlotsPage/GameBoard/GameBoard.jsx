@@ -13,7 +13,7 @@ const GameBoard = () => {
   const [isWin, setIsWin] = useState(false)
   const { user } = useContext(UserContext)
   
-  const checkSlotWin = (slots) => {
+  const checkSlotWin = async (slots) => {
   const audio = new Audio('../../../src/assets/sounds/slot-win-sound.mp3');
   setIsWin(false)
 
@@ -52,7 +52,7 @@ const GameBoard = () => {
     if(isWin === true) {
       setIsWin(false)
       try {
-        axios.put('/user/updateCredits', { userId: user.id, totalCredits})
+        await axios.put('/user/updateCredits', { userId: user.id, totalCredits})
       } catch (error) {
         console.log(error);
       }
