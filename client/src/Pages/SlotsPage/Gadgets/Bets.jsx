@@ -2,12 +2,12 @@ import React from 'react';
 import './GadgetsStyles.scss'
 
 import { useDispatch, useSelector } from 'react-redux';
-import { increaseBet, decreaseBet } from '../../../redux/features/slots/BetsSlice';
+import { increaseBet, decreaseBet } from '../../../redux/features/slots/slotMachineSlice';
 
 
 const Bets = () => {
   const dispatch = useDispatch()
-  const betValue = useSelector(state => state.bets.bet)
+  const betValue = useSelector(state => state.slotMachine.bet)
 
   const moreBet = () => {
     dispatch(increaseBet())

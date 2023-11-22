@@ -1,12 +1,63 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { startSpinning, stopSpinning } from '../../../redux/features/slots/slotMachineSlice';
+import { fiveColsWin, fourColsWin, startSpinning, stopSpinning, threeColsWin, twoColsWin } from '../../../redux/features/slots/slotMachineSlice';
+import { UserContext } from '../../../../context/userContext'
+import axios from '../../../axiosConfig';
 
 const GameBoard = () => {
   const dispatch = useDispatch();
   const isSpinning = useSelector(state => state.slotMachine.isSpinning);
+  const totalCredits = useSelector(state => state.slotMachine.totalCredits)
   const slots = useSelector(state => state.slotMachine.slots);
   const [spinningSlots, setSpinningSlots] = useState(slots);
+  const [isWin, setIsWin] = useState(false)
+  const { user } = useContext(UserContext)
+  
+  const checkSlotWin = async (slots) => {
+  const audio = new Audio('../../../src/assets/sounds/slot-win-sound.mp3');
+  setIsWin(false)
+
+    for (let i = 0; i < slots.length; i++) {
+      if (
+        slots[i][0] === slots[i][1] &&
+        slots[i][1] === slots[i][2] &&
+        slots[i][2] === slots[i][3] &&
+        slots[i][3] === slots[i][4]
+        ) {
+          setIsWin(true)
+          dispatch(fiveColsWin())
+          audio.play();
+        } 
+        else if (
+          slots[i][0] === slots[i][1] &&
+          slots[i][1] === slots[i][2] &&
+          slots[i][2] === slots[i][3]
+          ) {
+        setIsWin(true)
+        dispatch(fourColsWin())
+        audio.play();
+        } 
+        else if (slots[i][0] === slots[i][1] && slots[i][1] === slots[i][2]) {
+          setIsWin(true)
+          dispatch(threeColsWin())
+          audio.play();
+        } 
+        else if (slots[i][0] === slots[i][1]) {
+          setIsWin(true)
+          dispatch(twoColsWin())
+          audio.play();
+        }
+      }
+    
+    if(isWin === true) {
+      setIsWin(false)
+      try {
+        await axios.put('/user/updateCredits', { userId: user.id, totalCredits})
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
 
   useEffect(() => {
     if (isSpinning) {
@@ -16,7 +67,9 @@ const GameBoard = () => {
 
       setTimeout(() => {
         clearInterval(spinInterval);
-        dispatch(stopSpinning(generateFinalSlots()));
+        const finalSlots = generateFinalSlots()
+        dispatch(stopSpinning(finalSlots));
+        checkSlotWin(finalSlots)
       }, 2000);
 
       return () => {

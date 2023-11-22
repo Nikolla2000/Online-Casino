@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faVolumeHigh, faVolumeXmark } from '@fortawesome/free-solid-svg-icons';
 import TotalCredits from './TotalCredits';
 import { useDispatch } from 'react-redux';
-import { maxBet } from '../../../redux/features/slots/BetsSlice';
+import { maxBet } from '../../../redux/features/slots/slotMachineSlice';
 
 const GadgetsBar = () => {
   const dispatch = useDispatch()
