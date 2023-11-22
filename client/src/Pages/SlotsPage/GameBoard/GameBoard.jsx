@@ -12,49 +12,52 @@ const GameBoard = () => {
   const [spinningSlots, setSpinningSlots] = useState(slots);
   const [isWin, setIsWin] = useState(false)
   const { user } = useContext(UserContext)
-
   
-const checkSlotWin = (slots) => {
-
-  for (let i = 0; i < slots.length; i++) {
-    if (
-      slots[i][0] === slots[i][1] &&
-      slots[i][1] === slots[i][2] &&
-      slots[i][2] === slots[i][3] &&
-      slots[i][3] === slots[i][4]
-    ) {
-      setIsWin(true)
-      dispatch(fiveColsWin())
-    } 
-    else if (
-      slots[i][0] === slots[i][1] &&
-      slots[i][1] === slots[i][2] &&
-      slots[i][2] === slots[i][3]
-    ) {
-      setIsWin(true)
-      dispatch(fourColsWin())
-    } 
-    else if (slots[i][0] === slots[i][1] && slots[i][1] === slots[i][2]) {
-      setIsWin(true)
-      dispatch(threeColsWin())
-    } 
-    else if (slots[i][0] === slots[i][1]) {
-      setIsWin(true)
-      alert("2 cols");
-      dispatch(twoColsWin())
-      // console.log(totalCredits);
-    }
-  }
-
-  if(isWin) {
-    try {
-      axios.put('/user/updateCredits', { userId: user.id, totalCredits})
-    } catch (error) {
-      console.log(error);
-    }
+  const checkSlotWin = (slots) => {
+    const audio = new Audio('../../../src/assets/sounds/slot-win-sound.mp3');
     setIsWin(false)
-  }
-};
+
+    for (let i = 0; i < slots.length; i++) {
+      if (
+        slots[i][0] === slots[i][1] &&
+        slots[i][1] === slots[i][2] &&
+        slots[i][2] === slots[i][3] &&
+        slots[i][3] === slots[i][4]
+        ) {
+          setIsWin(true)
+          dispatch(fiveColsWin())
+        } 
+        else if (
+          slots[i][0] === slots[i][1] &&
+          slots[i][1] === slots[i][2] &&
+          slots[i][2] === slots[i][3]
+          ) {
+        setIsWin(true)
+        dispatch(fourColsWin())
+      } 
+      else if (slots[i][0] === slots[i][1] && slots[i][1] === slots[i][2]) {
+        setIsWin(true)
+        dispatch(threeColsWin())
+        audio.play();
+      } 
+      else if (slots[i][0] === slots[i][1]) {
+        setIsWin(true)
+        dispatch(twoColsWin())
+        audio.play();
+
+        // console.log(totalCredits);
+      }
+    }
+    
+    if(isWin === true) {
+      setIsWin(false)
+      try {
+        axios.put('/user/updateCredits', { userId: user.id, totalCredits})
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
 
   useEffect(() => {
     if (isSpinning) {

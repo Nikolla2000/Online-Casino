@@ -78,7 +78,6 @@ export const slotMachineSlice = createSlice({
       state.totalCredits = action.payload
     },
     twoColsWin(state) {
-      alert('bachka')
       state.totalCredits += state.bet * 2
     },
     threeColsWin(state) {
