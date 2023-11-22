@@ -115,8 +115,6 @@ const checkSlotWin = (slots, callback) => {
       alert("3 cols");
     } 
     else if (slots[i][0] === slots[i][1]) {
-      // alert("2 cols");
-      // callback()
     }
   }
 };

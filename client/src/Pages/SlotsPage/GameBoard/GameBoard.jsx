@@ -1,12 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { startSpinning, stopSpinning, twoColsWin } from '../../../redux/features/slots/slotMachineSlice';
+import { fiveColsWin, fourColsWin, startSpinning, stopSpinning, threeColsWin, twoColsWin } from '../../../redux/features/slots/slotMachineSlice';
+import { UserContext } from '../../../../context/userContext'
+import axios from '../../../axiosConfig';
 
 const GameBoard = () => {
   const dispatch = useDispatch();
   const isSpinning = useSelector(state => state.slotMachine.isSpinning);
+  const totalCredits = useSelector(state => state.slotMachine.totalCredits)
   const slots = useSelector(state => state.slotMachine.slots);
   const [spinningSlots, setSpinningSlots] = useState(slots);
+  const [isWin, setIsWin] = useState(false)
+  const { user } = useContext(UserContext)
 
   
 const checkSlotWin = (slots) => {
@@ -18,22 +23,36 @@ const checkSlotWin = (slots) => {
       slots[i][2] === slots[i][3] &&
       slots[i][3] === slots[i][4]
     ) {
-      alert("5 cols");
+      setIsWin(true)
+      dispatch(fiveColsWin())
     } 
     else if (
       slots[i][0] === slots[i][1] &&
       slots[i][1] === slots[i][2] &&
       slots[i][2] === slots[i][3]
     ) {
-      alert("4 cols");
+      setIsWin(true)
+      dispatch(fourColsWin())
     } 
     else if (slots[i][0] === slots[i][1] && slots[i][1] === slots[i][2]) {
-      alert("3 cols");
+      setIsWin(true)
+      dispatch(threeColsWin())
     } 
     else if (slots[i][0] === slots[i][1]) {
+      setIsWin(true)
       alert("2 cols");
       dispatch(twoColsWin())
+      // console.log(totalCredits);
     }
+  }
+
+  if(isWin) {
+    try {
+      axios.put('/user/updateCredits', { userId: user.id, totalCredits})
+    } catch (error) {
+      console.log(error);
+    }
+    setIsWin(false)
   }
 };
 
