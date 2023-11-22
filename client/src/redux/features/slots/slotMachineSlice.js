@@ -92,6 +92,8 @@ export const slotMachineSlice = createSlice({
   },
 });
 
+//DA NAPRAVQ CREATE ASYNC THUNK ZA UPDATE REQUEST
+
 const checkSlotWin = (slots, callback) => {
 
   for (let i = 0; i < slots.length; i++) {
