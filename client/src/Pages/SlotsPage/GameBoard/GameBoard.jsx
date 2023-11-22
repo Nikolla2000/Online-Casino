@@ -14,8 +14,8 @@ const GameBoard = () => {
   const { user } = useContext(UserContext)
   
   const checkSlotWin = (slots) => {
-    const audio = new Audio('../../../src/assets/sounds/slot-win-sound.mp3');
-    setIsWin(false)
+  const audio = new Audio('../../../src/assets/sounds/slot-win-sound.mp3');
+  setIsWin(false)
 
     for (let i = 0; i < slots.length; i++) {
       if (
@@ -26,6 +26,7 @@ const GameBoard = () => {
         ) {
           setIsWin(true)
           dispatch(fiveColsWin())
+          audio.play();
         } 
         else if (
           slots[i][0] === slots[i][1] &&
@@ -34,20 +35,19 @@ const GameBoard = () => {
           ) {
         setIsWin(true)
         dispatch(fourColsWin())
-      } 
-      else if (slots[i][0] === slots[i][1] && slots[i][1] === slots[i][2]) {
-        setIsWin(true)
-        dispatch(threeColsWin())
         audio.play();
-      } 
-      else if (slots[i][0] === slots[i][1]) {
-        setIsWin(true)
-        dispatch(twoColsWin())
-        audio.play();
-
-        // console.log(totalCredits);
+        } 
+        else if (slots[i][0] === slots[i][1] && slots[i][1] === slots[i][2]) {
+          setIsWin(true)
+          dispatch(threeColsWin())
+          audio.play();
+        } 
+        else if (slots[i][0] === slots[i][1]) {
+          setIsWin(true)
+          dispatch(twoColsWin())
+          audio.play();
+        }
       }
-    }
     
     if(isWin === true) {
       setIsWin(false)
