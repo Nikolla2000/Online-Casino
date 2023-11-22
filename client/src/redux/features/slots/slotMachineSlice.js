@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import checkSlotWin from "../../../hooks/checkSlotWin";
-import { twoColsWin } from "./betsSlice";
+// import checkSlotWin from "../../../hooks/checkSlotWin";
+// import { twoColsWin } from "./betsSlice";
 
 
 const initialState = {
@@ -38,7 +38,7 @@ export const slotMachineSlice = createSlice({
       state.isSpinning = false;
       state.slots = action.payload;
       
-      checkSlotWin(state.slots)
+      // checkSlotWin(state.slots, twoColsWin)
     },
     toggleAutoPlay(state) {
       state.autoPlay = !state.autoPlay;
@@ -46,6 +46,8 @@ export const slotMachineSlice = createSlice({
     autoPlayOff(state) {
       state.autoPlay = false;
     },
+
+    //Bets Reducers
     increaseBet(state) {
       if(state.bet === 1000) {
         return
@@ -113,8 +115,8 @@ const checkSlotWin = (slots, callback) => {
       alert("3 cols");
     } 
     else if (slots[i][0] === slots[i][1]) {
-      alert("2 cols");
-      twoColsWin()
+      // alert("2 cols");
+      // callback()
     }
   }
 };

@@ -2,20 +2,19 @@ import React, { useContext, useEffect, useRef } from 'react';
 import './GadgetsStyles.scss'
 import { useDispatch, useSelector } from 'react-redux';
 import { UserContext } from "../../../../context/userContext"
-import { startSpinning, stopSpinning, toggleAutoPlay } from '../../../redux/features/slots/slotMachineSlice';
+import { startSpinning, stopSpinning, toggleAutoPlay, spendCredits } from '../../../redux/features/slots/slotMachineSlice';
 import axios from '../../../axiosConfig'
 import { Switch } from '@mui/material';
 import { FormLabel } from 'react-bootstrap';
 import { toast } from 'react-hot-toast'
-import { spendCredits } from '../../../redux/features/slots/betsSlice';
 
 const SpinButton = () => {
   const dispatch = useDispatch()
   const isSpinning = useSelector(state => state.slotMachine.isSpinning)
   const autoPlay = useSelector(state => state.slotMachine.autoPlay)
   const slots = useSelector(state => state.slotMachine.slots)
-  const betsValue = useSelector(state => state.bets.bet)
-  const totalCredits = useSelector(state => state.bets.totalCredits)
+  const betsValue = useSelector(state => state.slotMachine.bet)
+  const totalCredits = useSelector(state => state.slotMachine.totalCredits)
   const { user } = useContext(UserContext)
 
   const handleSpin = async () => {

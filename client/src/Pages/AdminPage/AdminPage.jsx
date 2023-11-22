@@ -4,7 +4,7 @@ import axios from '../../axiosConfig';
 import { UserContext } from '../../../context/userContext';
 import { useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
-import { maxCredits } from '../../redux/features/slots/betsSlice';
+import { maxCredits } from '../../redux/features/slots/slotMachineSlice';
 import { toast } from 'react-hot-toast';
 
 const AdminPage = () => {

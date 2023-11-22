@@ -1,6 +1,6 @@
 import { twoColsWin } from "../redux/features/slots/betsSlice";
 
-const checkSlotWin = (slots) => {
+const checkSlotWin = (slots, callback) => {
 
   for (let i = 0; i < slots.length; i++) {
     if (

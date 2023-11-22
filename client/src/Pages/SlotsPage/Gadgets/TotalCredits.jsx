@@ -1,11 +1,11 @@
 import React, { useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateCredits } from '../../../redux/features/slots/betsSlice';
+import { updateCredits } from '../../../redux/features/slots/slotMachineSlice';
 import axios from "../../../axiosConfig";
 import { UserContext } from "../../../../context/userContext" 
 
 const TotalCredits = () => {
-  const totalCredits = useSelector(state => state.bets.totalCredits)
+  const totalCredits = useSelector(state => state.slotMachine.totalCredits)
   const dispatch = useDispatch();
   const { user } = useContext(UserContext)
   
