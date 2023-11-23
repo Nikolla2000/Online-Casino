@@ -26,14 +26,14 @@ const GameThumbnail = ({ data }) => {
   }
   return (
     <div className='game-wrapper'>
+      <div onClick={handleClick}>
+          {/* <Button className='play-btn'> */}
       <div className='game-thumbnail-wrapper'>
           <img src={data.image} alt='game-image'/>
-      <div onClick={handleClick}>
-          <Button className='play-btn'>
-            Play
-          </Button>
+            
         {showLoginModal && <LoginForm/>}
       </div>
+          {/* </Button> */}
       </div>
     </div>
   );

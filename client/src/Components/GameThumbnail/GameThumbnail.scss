@@ -2,22 +2,18 @@
 
 .game-wrapper {
 text-align: center;
-  a {
-    text-align: center;
-    position: absolute;
-    top:75%;
-    left: 35%;
-  }
+  // a {
+  //   text-align: center;
+  //   position: absolute;
+  //   top:75%;
+  //   left: 35%;
+  // }
   button {
-    margin: 10px 0;
-    width: 100px;
-    background-color: #19b14e;
     border: none;
-    font-weight: bold;
-    letter-spacing: 1px;
+
 
     &:hover {
-      background-color: #15883e;
+      background: transparent;
     }
   }
 }
@@ -25,22 +21,17 @@ text-align: center;
 .game-thumbnail-wrapper {
   width: 230px;
   height: 300px;
+  border-radius: 30px;
   position: relative;
   transition: background-color 0.3s ease;
+  cursor: pointer;
   
   img{
     width: 100%;
     height: 100%;
   }
-    // &:hover {
-    //   ::before {
-    //     content: '';
-    //     position: absolute;
-    //     width: 100%;
-    //     height: 100%;
-    //     background-color: $primary-dark-grey;
-    //     z-index: 1;
-    //     opacity: 0.8;
-    //   }
-    // }
+    &:hover {
+      transition: box-shadow 0.5s ease;
+      box-shadow: -1px 3px 30px 4px rgba(255,255,255,1);
+    }
 }
