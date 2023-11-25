@@ -1,9 +1,10 @@
 import React from 'react';
+import PageHeaderComponent from '../../Components/PageHeader/PageHeader';
 
 const ContactPage = () => {
   return (
     <div>
-      Contact Page
+      <PageHeaderComponent heading={{title: "Contact", breadcrumb: "Contact"}}/>
     </div>
   );
 };
