@@ -1,0 +1,140 @@
+@keyframes rotate {
+  0% {
+      transform: rotate(0);
+  }
+  100% {
+      transform: rotate(1turn);
+  }
+  0% {
+      -webkit-transform: rotate(0);
+  }
+  100% {
+      -webkit-transform: rotate(1turn);
+  }
+}
+
+.page-header {
+  background-color: $page-header;
+  width: 100%;
+  height: 400px;
+  text-align: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top:90px;
+
+  h1 {
+      color: $primary-white;
+      font-weight: bold;
+      text-align: center;
+  }
+
+  nav {
+      position: static;
+      display: flex;
+      justify-content: center;
+      background-color: $page-header;
+
+  }
+
+  a:hover {
+      position: relative;
+  }
+
+  a:hover::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -5px; 
+      width: 100%;
+      height: 2px;
+      background-color: $primary-white; 
+    }
+  
+  .breadcrumb-item::before {
+      color: #fff;
+  }
+
+  a {
+      text-decoration: none;
+      color: $primary-white;
+  }
+
+
+  //Shapes
+  .shape {
+      position: absolute;
+  }
+
+  .shape1 {
+      left: 5%;
+      animation-name: rotate;
+      animation-duration: 20s;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+      bottom: 23%;
+  }
+
+  .shape2 {
+      right: 15%;
+      top: 15%;
+      animation-name: rotate;
+      animation-duration: 20s;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+  }
+
+  .shape3 {
+      right: auto;
+      top: 10%;
+      left: 10%;
+      right: 10%;
+      animation-name: rotate;
+      animation-duration: 20s;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+  }
+
+  .shape4 {
+      right: 65%;
+      top: 70%;
+      animation-name: rotate;
+      animation-duration: 20s;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+  }
+  .shape5 {
+      right: 5%;
+      top: 10%;
+      animation-name: rotate;
+      animation-duration: 20s;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+  }
+  .shape6 {
+      right: 35%;
+      top: 80%;
+      animation-name: rotate;
+      animation-duration: 20s;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .shape {
+
+      img {
+          width:50px;
+      }
+  }
+
+      .shape1, .shape2 {
+          img {
+              width:100px;
+          }
+      }
+  }
