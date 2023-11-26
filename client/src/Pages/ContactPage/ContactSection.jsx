@@ -1,15 +1,13 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRocketChat, faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';
+import ContactItem from './ContactItem';
+import { contactData } from './contactData';
 
-const ContactSection = ({ contactData }) => {
+const ContactSection = () => {
   return (
-    <div>
-      <div className="icon">
-        <FontAwesomeIcon icon={contactData.icon} style={{color: "#fa16fe",}} />
-      </div>
-      <div className="section-heading">{contactData.heading}</div>
-      <div className="section-descr">{contactData.description}</div>
+    <div className='contact-section-wrapper'>
+      {contactData.map((data, i) => (
+        <ContactItem data={data} key={i+1}/>
+      ))}
     </div>
   );
 };

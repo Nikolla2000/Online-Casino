@@ -1,15 +1,16 @@
 import React from "react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const ContacItem = ({ contactData }) => {
+const ContactItem = ({ data }) => {
   return (
     <div>
       <div className="icon">
-        <FontAwesomeIcon icon={contactData.icon} style={{color: "#fa16fe",}} />
+        <FontAwesomeIcon icon={data.icon} style={{color: "#fa16fe"}} />
       </div>
-      <div className="section-heading">{contactData.heading}</div>
-      <div className="section-descr">{contactData.description}</div>
+      <div className="section-heading">{data.heading}</div>
+      <div className="section-descr">{data.description}</div>
     </div>
   );
 };
 
-export default ContacItem
+export default ContactItem
