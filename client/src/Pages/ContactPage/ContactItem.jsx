@@ -1,8 +1,6 @@
-import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRocketChat, faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';
+import React from "react";
 
-const ContactSection = ({ contactData }) => {
+const ContacItem = ({ contactData }) => {
   return (
     <div>
       <div className="icon">
@@ -14,4 +12,4 @@ const ContactSection = ({ contactData }) => {
   );
 };
 
-export default ContactSection;
+export default ContacItem
