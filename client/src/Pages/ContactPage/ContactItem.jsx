@@ -13,6 +13,11 @@ const ContactItem = ({ data }) => {
       <div className="section-descr">
         <p>{data.description}</p>
       </div>
+      {data.button == true ? (
+        <div className="open-chat-btn">
+          <button>Chat now</button>
+        </div>
+      ) : ''}
     </div>
   );
 };
