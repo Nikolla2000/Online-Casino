@@ -7,8 +7,12 @@ const ContactItem = ({ data }) => {
       <div className="icon">
         <FontAwesomeIcon icon={data.icon} style={{color: "#fa16fe"}} />
       </div>
-      <div className="section-heading">{data.heading}</div>
-      <div className="section-descr">{data.description}</div>
+      <div className="section-heading">
+        <h3>{data.heading}</h3>
+      </div>
+      <div className="section-descr">
+        <p>{data.description}</p>
+      </div>
     </div>
   );
 };
