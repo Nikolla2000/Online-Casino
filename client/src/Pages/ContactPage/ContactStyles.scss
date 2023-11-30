@@ -16,6 +16,16 @@
         }
 
         .contact-item {
+            .icon {
+                svg {
+                    font-size: 40px;
+                }
+            }
+            .section-heading {
+                h3 {
+                    font-style: italic;
+                }
+            }
             .open-chat-btn {
                 background-color: rgb(21, 212, 180);
                 color:#fff;

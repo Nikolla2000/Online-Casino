@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const ContactItem = ({ data }) => {
   return (
     <div className="contact-item">
-      <div className="icon">
+      <div className="icon mb-3">
         <FontAwesomeIcon icon={data.icon} style={{color: "#fa16fe"}} />
       </div>
       <div className="section-heading">
