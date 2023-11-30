@@ -14,5 +14,15 @@
             font-size: 28px;
             font-weight: bold;
         }
+
+        .contact-item {
+            .open-chat-btn {
+                background-color: rgb(21, 212, 180);
+                color:#fff;
+                padding: 8px 12px;
+                display: inline-block;
+                font-weight: bold;
+            }
+        }
     }
 }
