@@ -3,8 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const ContactItem = ({ data }) => {
   return (
-    <div>
-      <div className="icon">
+    <div className="contact-item">
+      <div className="icon mb-3">
         <FontAwesomeIcon icon={data.icon} style={{color: "#fa16fe"}} />
       </div>
       <div className="section-heading">
@@ -14,8 +14,8 @@ const ContactItem = ({ data }) => {
         <p>{data.description}</p>
       </div>
       {data.button == true ? (
-        <div className="open-chat-btn">
-          <button>Chat now</button>
+        <div className="open-chat-btn mt-4">
+          <button>CHAT NOW</button>
         </div>
       ) : ''}
     </div>
