@@ -5,7 +5,7 @@ import { Row, Col } from "react-bootstrap";
 
 const ContactSection = () => {
   return (
-    <div className='contact-section-wrapper container'>
+    <div className='contact-section-wrapper'>
       <Row>
         {contactData.map((data, i) => (
           <Col lg={4} md={12}>

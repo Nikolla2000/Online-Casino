@@ -1,5 +1,11 @@
 .contact-page-wrapper {
+    width: 100%;
+
     .contact-section-wrapper {
+        padding: 50px;
+        display: block;
+        margin: 0;
+        border:none;
         background: url("../../assets/images/contact-background.png") ;
         background-size: cover;
         color: #fff;
