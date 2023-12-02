@@ -14,7 +14,7 @@ const ContactItem = ({ data }) => {
         <p>{data.description}</p>
       </div>
       {data.button == true ? (
-        <div className={`open-chat-btn mt-4 ${data.heading === "Email" && "bg-blue-500"}`}>
+        <div className={`open-chat-btn mt-4 ${data.heading === "Email" && "blue"}`}>
           <button>
             {data.heading === "Live Support" ? "CHAT NOW" : "EMAIL US"}
             </button>
