@@ -43,12 +43,36 @@ const Footer = () => {
                     </div>
                 </div>
             </div>
+            <div className="line"></div>
             <div className="social-medias-section">
-                <h3>Play Responsibly!</h3>
                 <div className="social-media-icons">
-                    React, NodeJs, HTML/SASS, JavaScript, ExpressJS, 
-                    MongoDb, Tailwind, Redux
+                    <div className="social-media-icon">
+                        <a href='https://www.facebook.com/nikola.uzunov.18/' target='_blank' >
+                            <img src="../../src/assets/images/social-media-icons/facebook-svgrepo-com.svg" alt="social-media-icon" />
+                        </a>
+                    </div>
+                    <div className="social-media-icon">
+                        <a href='https://instagram.com/nikola.uzunov19/' target='_blank'>
+                            <img src="../../src/assets/images/social-media-icons/instagram-svgrepo-com.svg" alt="social-media-icon" />
+                        </a>
+                    </div>
+                    <div className="social-media-icon">
+                        <a href='https://nikolauzunov.netlify.app' target='_blank'>
+                            <img src="../../src/assets/images/social-media-icons/letter-n-svgrepo-com.svg" alt="social-media-icon" />
+                        </a>
+                    </div>
+                    <div className="social-media-icon">
+                        <a href='https://github.com/Nikolla2000' target='_blank'>
+                            <img src="../../src/assets/images/social-media-icons/github-svgrepo-com.svg" alt="social-media-icon" />
+                        </a>
+                    </div>
+                    <div className="social-media-icon">
+                        <a href='https://www.linkedin.com/in/nikola-uzunov/' target='_blank'>
+                            <img src="../../src/assets/images/social-media-icons/linkedin-svgrepo-com.svg" alt="social-media-icon" />
+                        </a>
+                    </div>
                 </div>
+                <h3>Play Responsibly!</h3>
             </div>
         </div>
     )
