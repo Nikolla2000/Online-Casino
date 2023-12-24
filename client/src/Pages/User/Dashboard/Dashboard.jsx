@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../../../context/userContext';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Dashboard = () => {
   const { user } = useContext(UserContext);
@@ -19,11 +20,12 @@ const Dashboard = () => {
   }, [user]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div><CircularProgress color="secondary" /></div>;
   }
 
   return (
     <div className='dashboard-wrapper'>
+
       <div className="left-section">
         <div className="profile-image-wrapper">
           <img src="../../src/assets/images/user.png" alt="" />
