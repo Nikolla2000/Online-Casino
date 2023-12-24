@@ -1,11 +1,15 @@
 @import "../../../colorConstants.scss";
 
 .dashboard-wrapper {
+  background-color: $secondary-dark-grey;
   padding: 100px 0;
   display: flex;
 
   .left-section {
     width: 20%;
+    background-color: $primary-dark-grey;
+    padding: 20px 0;
+    margin-left: 50px;
     .profile-image-wrapper {
       width: 140px;
       margin: 0 auto;
@@ -27,18 +31,19 @@
     .name-details {
       text-align: center;
       margin: 20px 0;
+      color:$primary-white;
 
        h3 { font-size: 20px;}
-       h5 { font-size: 14px; color: #333; opacity: 0.8; margin: 5px 0;}
+       h5 { font-size: 14px; color: #999; opacity: 0.9; margin: 5px 0;}
     }
     .profile-nav {
       margin: 50px 0;
-      color: $secondary-light-grey;
+      color: #777;
       
-      p { margin: 5px 0 0 70px; cursor: pointer; transition: color 0.3s ease-in;
-        &:hover {color: $primary-black;}}
-        
-      .current { color: $primary-black;}
+      p { margin: 10px 0 0 70px; cursor: pointer; transition: color 0.3s ease-in;
+        &:hover {color: $primary-white;}}
+
+      .current { color: $primary-white;}
     }
   }
 }

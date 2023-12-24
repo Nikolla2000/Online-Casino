@@ -44,7 +44,6 @@ const Dashboard = () => {
       </div>
 
       <div className="mid-section">
-        <div className="stats">test stats</div>
       </div>
 
       <div className="right-section"></div>
