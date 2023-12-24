@@ -6,9 +6,11 @@ import { UserContext } from '../../../../context/userContext';
 import axios from '../../../axiosConfig';
 import { useSelector, useDispatch } from 'react-redux';
 import { hideModals, showLogin, showRegister } from '../../../redux/features/auth/authModalsSlice';
+import { Link, useNavigate } from 'react-router-dom';
 
 const UserDropdown = ({ show, play }) => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const { showLoginModal, showRegisterModal } = useSelector(state => state.authModals)
 
   const {user} = useContext(UserContext)
@@ -17,14 +19,21 @@ const UserDropdown = ({ show, play }) => {
     dispatch(hideModals())
   }
 
-  const loginOrLogout = () => {
-    if(user.name) {
-      axios.get('/user/logout')
-      location.reload()
+  const loginOrLogout = async () => {
+    if (user.name) {
+      try {
+        await axios.get('/user/logout');
+  
+        navigate('/');
+        location.reload();
+      } catch (error) {
+        console.error('Logout error:', error);
+      }
     } else {
-      dispatch(showLogin())
+      dispatch(showLogin());
     }
-  }
+  };
+  
 
   return (
     <div className={`user-dropdown ${!show? 'reverse' : ''}`}>
@@ -33,10 +42,11 @@ const UserDropdown = ({ show, play }) => {
       </div>
       {user.name && <h3 className='text-white text-xl'>Welcome, {user.name}!</h3>}
       <div className="dropdown-buttons">
+        {user.name && <button><Link to='dashboard'>Profile</Link></button>}
         <button onClick={loginOrLogout}>
           {!user.name ? 'Login' : 'Logout'}
         </button>
-        <button onClick={() => dispatch(showRegister())}>Register</button>
+        {!user.name && <button onClick={() => dispatch(showRegister())}>Register</button>}
       </div>
       {showRegisterModal && <RegisterForm handleClose={handleClose}/>}
       {showLoginModal && <LoginForm handleClose={handleClose}/>}

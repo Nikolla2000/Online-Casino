@@ -114,6 +114,7 @@ const loginUser = async (req, res) => {
 //Logout
 const logoutUser = (req, res) => {
   res.clearCookie('token').json({ message: 'Logout successfull' });
+  res.redirect('/');
 }
 
 

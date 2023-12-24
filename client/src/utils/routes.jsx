@@ -35,7 +35,7 @@ const routes = {
     path: '/dashboard',
     element: <Dashboard/>,
     name: 'profile',
-    includeInNav: true
+    includeInNav: false
   },
   contact: {
     path:'/contact',
