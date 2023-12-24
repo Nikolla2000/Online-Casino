@@ -1,0 +1,25 @@
+@import "../../../colorConstants.scss";
+
+.dashboard-wrapper {
+
+  .left-section {
+
+    .profile-image-wrapper {
+      width: 140px;
+      margin: 0 auto;
+      position: relative;
+      .change-pic-button {
+        position: absolute;
+        top:80%;
+        right: 0;
+        background: linear-gradient(109.6deg, rgb(162, 2, 63) 11.2%, rgb(231, 62, 68) 53.6%, rgb(255, 129, 79) 91.1%);
+        color:#fff;
+        border-radius: 50%;
+        font-weight: bold;
+        font-size: 24px;
+        padding: 0px 10px;
+        cursor: pointer;
+      }
+    }
+  }
+}

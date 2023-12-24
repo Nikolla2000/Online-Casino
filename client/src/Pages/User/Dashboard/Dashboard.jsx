@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../../../context/userContext';
 import CircularProgress from '@mui/material/CircularProgress';
+import "./DashboardStyles.scss";
 
 const Dashboard = () => {
   const { user } = useContext(UserContext);
@@ -34,9 +35,16 @@ const Dashboard = () => {
         <div className="name-details">
           <h3>{user.name}</h3>
         </div>
+        <div className="profile-nav">
+          <p>Stats</p>
+          <p>Account Info</p>
+          <p>Logout</p>
+        </div>
       </div>
 
-      <div className="mid-section"></div>
+      <div className="mid-section">
+
+      </div>
 
       <div className="right-section"></div>
     </div>
