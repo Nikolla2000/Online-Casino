@@ -1,13 +1,16 @@
 @import "../../../colorConstants.scss";
 
 .dashboard-wrapper {
+  padding: 100px 0;
+  display: flex;
 
   .left-section {
-
+    width: 20%;
     .profile-image-wrapper {
       width: 140px;
       margin: 0 auto;
       position: relative;
+
       .change-pic-button {
         position: absolute;
         top:80%;
@@ -20,6 +23,22 @@
         padding: 0px 10px;
         cursor: pointer;
       }
+    }
+    .name-details {
+      text-align: center;
+      margin: 20px 0;
+
+       h3 { font-size: 20px;}
+       h5 { font-size: 14px; color: #333; opacity: 0.8; margin: 5px 0;}
+    }
+    .profile-nav {
+      margin: 50px 0;
+      color: $secondary-light-grey;
+      
+      p { margin: 5px 0 0 70px; cursor: pointer; transition: color 0.3s ease-in;
+        &:hover {color: $primary-black;}}
+        
+      .current { color: $primary-black;}
     }
   }
 }

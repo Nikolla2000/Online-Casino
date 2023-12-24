@@ -25,7 +25,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className='dashboard-wrapper'>
+    <div className='dashboard-wrapper container'>
 
       <div className="left-section">
         <div className="profile-image-wrapper">
@@ -34,16 +34,17 @@ const Dashboard = () => {
         </div>
         <div className="name-details">
           <h3>{user.name}</h3>
+          <h5>Master of the slots</h5>
         </div>
         <div className="profile-nav">
-          <p>Stats</p>
+          <p className='current'>Stats</p>
           <p>Account Info</p>
           <p>Logout</p>
         </div>
       </div>
 
       <div className="mid-section">
-
+        <div className="stats">test stats</div>
       </div>
 
       <div className="right-section"></div>
