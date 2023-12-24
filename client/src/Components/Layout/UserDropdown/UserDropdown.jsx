@@ -42,7 +42,7 @@ const UserDropdown = ({ show, play }) => {
       </div>
       {user.name && <h3 className='text-white text-xl'>Welcome, {user.name}!</h3>}
       <div className="dropdown-buttons">
-        {user.name && <button><Link to='dashboard'>Profile</Link></button>}
+        {user.name && <button><Link to='dashboard' className='text-capitalize'>Profile</Link></button>}
         <button onClick={loginOrLogout}>
           {!user.name ? 'Login' : 'Logout'}
         </button>

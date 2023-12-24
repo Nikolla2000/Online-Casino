@@ -1,29 +1,42 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../../../context/userContext';
 
 const Dashboard = () => {
   const { user } = useContext(UserContext);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const waitForUser = async () => {
+      return !!user.name;
+    };
+
+    const fetchData = async () => {
+      const userAvailable = await waitForUser();
+      setIsLoading(false);
+    };
+
+    fetchData();
+  }, [user]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className='dashboard-wrapper'>
-      <h1 className="text-2xl font-semibold mb-4">User Dashboard</h1>
-      {user && (
-        <div className="bg-gray-100 rounded p-4 mb-4">
-          <h2 className="text-lg font-semibold mb-2">Welcome, {user.name}!</h2>
-          <p>Email: {user.email}</p>
-          {/* More user info */}
+      <div className="left-section">
+        <div className="profile-image-wrapper">
+          <img src="../../src/assets/images/user.png" alt="" />
+          <div className="change-pic-button">+</div>
         </div>
-      )}
-      <div className="flex space-x-4">
-        <div className="w-1/2 bg-white rounded p-4">
-          <h3 className="text-lg font-semibold mb-2">Stats</h3>
-          {/* User stats */}
-        </div>
-        <div className="w-1/2 bg-white rounded p-4">
-          <h3 className="text-lg font-semibold mb-2">Actions</h3>
-          {/* functionality or actions for the user */}
+        <div className="name-details">
+          <h3>{user.name}</h3>
         </div>
       </div>
+
+      <div className="mid-section"></div>
+
+      <div className="right-section"></div>
     </div>
   );
 };
