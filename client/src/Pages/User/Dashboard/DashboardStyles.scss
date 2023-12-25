@@ -4,6 +4,8 @@
   background-color: $secondary-dark-grey;
   padding: 100px 0;
   display: flex;
+  align-items: stretch;
+  gap: 50px;
 
   .left-section {
     width: 20%;
@@ -54,7 +56,27 @@
   //        STATS       //
   // *******************//
 
-  .stats-component-wrapper {
-    color:$primary-white;
+  .mid-section {
+    width: 40%;
+
+    .stats-component-wrapper {
+      background-color: $primary-dark-grey;
+      color:$primary-white;
+
+      h2 {
+        text-align: center;
+        padding: 15px 0;
+        font-weight: bold;
+        font-size: 1.7em;
+      }
+
+      .stats {
+
+        .stat {
+          display: flex;
+          justify-content: space-between;
+        }
+      }
+    }
   }
 }
