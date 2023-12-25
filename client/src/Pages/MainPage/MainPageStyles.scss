@@ -34,7 +34,7 @@ $spotThree: #ff0000;
 
   .header-section {
     position: relative;
-    z-index: 2;
+    z-index: 1;
     text-align: center;
     color: white;
     width: 100%;
@@ -45,7 +45,7 @@ $spotThree: #ff0000;
     font-family: 'Gabarito', sans-serif;
     margin-top: 170px;
     position: relative;
-    z-index: 3;
+    z-index: 2;
     h1 {
       font-weight: bold;
       font-size: 4.5em;
