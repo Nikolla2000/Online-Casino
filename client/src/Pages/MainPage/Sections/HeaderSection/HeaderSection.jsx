@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import "animate.css"
 
 const HeaderSection = () => {
-  const [headerClass, setHeaderClass] = useState('');
+  const [headerClass, setHeaderClass] = useState('hidden');
   const [buttonClass, setButtonClass] = useState('hidden');
 
   useEffect(() => {
