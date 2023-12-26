@@ -15,6 +15,8 @@
     background-color: $secondary-dark-grey;
     padding: 20px 0;
     margin-left: 50px;
+    height: 75vh;
+
     .profile-image-wrapper {
       width: 140px;
       margin: 0 auto;
@@ -61,10 +63,11 @@
 
   .mid-section {
     width: 50%;
-
+    
     .stats-component-wrapper {
       background-color: $secondary-dark-grey;
       color:$yellow-text;
+      height: 75vh;
 
       h2 {
         text-align: center;
