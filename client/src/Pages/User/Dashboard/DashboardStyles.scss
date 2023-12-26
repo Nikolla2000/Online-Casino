@@ -1,7 +1,7 @@
 @import "../../../colorConstants.scss";
 
 .dashboard-wrapper {
-  background-color: $secondary-dark-grey;
+  background-color: $primary-dark-grey;
   width: 100%;
   height: 100vh;
   padding: 100px 0;
@@ -9,10 +9,10 @@
   align-items: stretch;
   gap: 50px;
   margin: 0;
-
+  
   .left-section {
     width: 20%;
-    background-color: $primary-dark-grey;
+    background-color: $secondary-dark-grey;
     padding: 20px 0;
     margin-left: 50px;
     .profile-image-wrapper {
@@ -63,7 +63,7 @@
     width: 50%;
 
     .stats-component-wrapper {
-      background-color: $primary-dark-grey;
+      background-color: $secondary-dark-grey;
       color:$yellow-text;
 
       h2 {
@@ -77,11 +77,33 @@
       }
 
       .stats {
-
+        display: flex;
+        flex-direction: column;
+        gap:20px;
+        padding: 30px 0;
         .stat {
           display: flex;
           justify-content: space-between;
           margin: 0 20px;
+          padding: 15px 10px;
+          
+          span {
+            width: 99px;
+          }
+        }
+        .stat:not(.stat:nth-of-type(1)) {
+          background: #121127;
+          color:$primary-white;
+        }
+        .stat:first-of-type {
+          span {
+            margin-right: 15px;
+          }
+        }
+        .stat:not(.stat:first-of-type){
+          span {
+            margin-left: 30px;
+          }
         }
       }
     }
