@@ -11,9 +11,9 @@ const Stats = () => {
           <div className="stat animate__animated animate__bounceInDown" key={i + 1}>
             <span>{stat.game}</span>
             <span>{stat.hoursPlayed}</span>
-            <span>{stat.creditsWon}</span>
-            <span>{stat.creditsSpend}</span>
-            <span>{stat.winRate}</span>
+            <span>{i !== 0 && '$'} {stat.creditsWon}</span>
+            <span>{i !== 0 && '$'} {stat.creditsSpend}</span>
+            <span>{stat.winRate}{i !== 0 && '%'}</span>
           </div>
         ))}
         </div>
