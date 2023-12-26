@@ -9,9 +9,9 @@ export const statsData = [
   {
     game: "Total",
     hoursPlayed: "3",
-    creditsWon: statsData[3].creditsWon + statsData[4].creditsWon,
-    creditsSpend: "",
-    winRate: "",
+    creditsWon: "1233",
+    creditsSpend: "110.00",
+    winRate: "51",
   },
   {
     game: "Slots",

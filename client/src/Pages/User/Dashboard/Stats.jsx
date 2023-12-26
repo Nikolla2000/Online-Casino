@@ -1,5 +1,6 @@
 import React from 'react';
 import { statsData } from './statsData';
+import "animate.css";
 
 const Stats = () => {
   return (
@@ -7,7 +8,7 @@ const Stats = () => {
       <h2>Stats</h2>
       <div className="stats" >
         {statsData.map((stat, i) => (
-          <div className="stat" key={i + 1}>
+          <div className="stat animate__animated animate__bounceInDown" key={i + 1}>
             <span>{stat.game}</span>
             <span>{stat.hoursPlayed}</span>
             <span>{stat.creditsWon}</span>
