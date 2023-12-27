@@ -12,7 +12,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [midSection, setMidSection] = useState('Stats')
-console.log(midSection);
+
   useEffect(() => {
     const waitForUser = async () => {
       return !!user.name;
