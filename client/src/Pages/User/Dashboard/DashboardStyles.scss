@@ -12,9 +12,9 @@
   
   .left-section {
     width: 20%;
-    background-color: $secondary-dark-grey;
+    // background-color: $secondary-dark-grey;
     padding: 20px 0;
-    margin-left: 50px;
+    margin-left: 10px;
     height: 75vh;
 
     .profile-image-wrapper {
@@ -108,6 +108,37 @@
             margin-left: 30px;
           }
         }
+      }
+    }
+  }
+
+    // *******************//
+  //        Credits       //
+  // *******************//
+
+  .right-section {
+    height: 75vh;
+
+    h3 {
+      text-align: center;
+      padding: 25px 0;
+      font-weight: bold;
+      font-size: 1.8em;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: $primary-white;
+    }
+
+    .credits-options {
+      .option {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        padding: 10px;
+        color:$primary-white;
+        background-color: rgb(14, 175, 14);
+        cursor: pointer;
+        font-weight: bold;
       }
     }
   }

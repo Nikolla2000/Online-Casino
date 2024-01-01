@@ -6,12 +6,14 @@ import Stats from './Stats';
 import AccountInfo from './AccountInfo';
 import axios from '../../../axiosConfig';
 import { useNavigate } from 'react-router';
+import 'animate.css';
 
 const Dashboard = () => {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-  const [midSection, setMidSection] = useState('Stats')
+  const [midSection, setMidSection] = useState('Stats');
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     const waitForUser = async () => {
@@ -83,9 +85,9 @@ const Dashboard = () => {
             <span>5000</span>
             <span>$45.99</span>
           </div>
-          <div className="option">
+          <div className="option best-option">
             <span>10000</span>
-            <span>$89.99</span>
+            <span>$89.99 <s>$99.99</s></span>
           </div>
         </div>
       </div>
