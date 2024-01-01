@@ -6,12 +6,14 @@ import Stats from './Stats';
 import AccountInfo from './AccountInfo';
 import axios from '../../../axiosConfig';
 import { useNavigate } from 'react-router';
+import 'animate.css';
 
 const Dashboard = () => {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-  const [midSection, setMidSection] = useState('Stats')
+  const [midSection, setMidSection] = useState('Stats');
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     const waitForUser = async () => {
@@ -68,7 +70,30 @@ const Dashboard = () => {
         {midSection == 'Stats' ? <Stats/> : <AccountInfo/>}
       </div>
 
-      <div className="right-section"></div>
+      <div className="right-section">
+        <h3>Buy Credits</h3>
+        <div 
+            className="credits-options" 
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}>
+          <div className="option">
+            <span>1000</span>
+            <span>$9.99</span>
+          </div>
+          <div className="option">
+            <span>2000</span>
+            <span>$18.99</span>
+          </div>
+          <div className="option">
+            <span>5000</span>
+            <span>$45.99</span>
+          </div>
+          <div className={`option best-option ${isHovered && 'animte__animated animate__heartBeat'}`}>
+            <span>10000</span>
+            <span>$89.99 <s>$99.99</s></span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
