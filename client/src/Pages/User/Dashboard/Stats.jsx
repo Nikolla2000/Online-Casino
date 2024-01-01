@@ -11,7 +11,7 @@ const Stats = () => {
         setTimeout(() => {
           stat.style.opacity = 1;
           stat.className = 'stat animate__animated animate__bounceInDown'
-        }, i * 150);
+        }, i * 100);
       });
     };
 
