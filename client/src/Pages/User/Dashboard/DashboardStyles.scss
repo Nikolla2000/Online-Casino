@@ -118,6 +118,7 @@
 
   .right-section {
     height: 75vh;
+    width: 18%;
 
     h3 {
       text-align: center;
@@ -136,9 +137,26 @@
         margin-bottom: 10px;
         padding: 10px;
         color:$primary-white;
-        background-color: rgb(14, 175, 14);
+        background: linear-gradient(109.6deg, rgb(0, 204, 130) 11.2%, rgb(58, 181, 46) 91.7%);
         cursor: pointer;
         font-weight: bold;
+        transition: background 0.3s ease;
+
+        &:hover { background: radial-gradient(circle at -1% 57.5%, rgb(19, 170, 82) 0%, rgb(0, 102, 43) 90%);}
+      }
+      
+      .best-option {
+        position: relative;
+
+        &::after {
+          content: 'best option!!';
+          position: absolute;
+          color:$primary-red;
+          text-transform: uppercase;
+          font-size: 12px;
+          top:100%;
+          right:30%;
+        }
       }
     }
   }
