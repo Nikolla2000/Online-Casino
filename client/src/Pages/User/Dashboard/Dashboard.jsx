@@ -48,7 +48,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className='dashboard-wrapper container'>
+    <div className='dashboard-wrapper'>
 
       <div className="left-section">
         <div className="profile-image-wrapper">
