@@ -68,7 +68,27 @@ const Dashboard = () => {
         {midSection == 'Stats' ? <Stats/> : <AccountInfo/>}
       </div>
 
-      <div className="right-section"></div>
+      <div className="right-section">
+        <h3>Buy Credits</h3>
+        <div className="credits-options">
+          <div className="option">
+            <span>1000</span>
+            <span>$9.99</span>
+          </div>
+          <div className="option">
+            <span>2000</span>
+            <span>$18.99</span>
+          </div>
+          <div className="option">
+            <span>5000</span>
+            <span>$45.99</span>
+          </div>
+          <div className="option">
+            <span>10000</span>
+            <span>$89.99</span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
