@@ -72,7 +72,10 @@ const Dashboard = () => {
 
       <div className="right-section">
         <h3>Buy Credits</h3>
-        <div className="credits-options">
+        <div 
+            className="credits-options" 
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}>
           <div className="option">
             <span>1000</span>
             <span>$9.99</span>
@@ -85,7 +88,7 @@ const Dashboard = () => {
             <span>5000</span>
             <span>$45.99</span>
           </div>
-          <div className="option best-option">
+          <div className={`option best-option ${isHovered && 'animte__animated animate__heartBeat'}`}>
             <span>10000</span>
             <span>$89.99 <s>$99.99</s></span>
           </div>
