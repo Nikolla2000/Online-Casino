@@ -5,7 +5,7 @@ const Footer = () => {
     return (
         <div className="footer-wrapper">
             <div className="technologies-used-section">
-                <h3>This Website was made by me - <span className='text-red-500'>Nikola Uzunov</span>, with the help of:</h3>
+                <h3>This Website was made from scratch by me - <span className='text-red-500'>Nikola Uzunov</span>, with the help of:</h3>
                 <div className="technologies-icons">
                     <div className="icon">
                         <img src="../../src/assets/images/technologies-icons/html-icon.svg" alt="technology-icon" />
