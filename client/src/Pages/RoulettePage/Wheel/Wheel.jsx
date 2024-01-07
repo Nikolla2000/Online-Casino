@@ -3,7 +3,7 @@ import React from 'react';
 const Wheel = () => {
   return (
     <div className='roulette-wheel'>
-      Wheel
+      <img src='../../src/assets/images/roulette/roulette-wheel.jpg' alt='wheel'/>
     </div>
   );
 };
