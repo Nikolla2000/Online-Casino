@@ -1,6 +1,7 @@
 import React from 'react';
 import Wheel from './Wheel/Wheel';
 import Board from './Board/Board';
+import "./RouletteStyles.scss";
 
 const RoulettePage = () => {
   return (
