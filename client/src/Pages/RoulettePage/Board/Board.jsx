@@ -6,26 +6,11 @@ const Board = () => {
 
     for (let i = 1; i <= 36; i += 3) {
       rows.push(
-        <div key={i} className='rowche'>
+        <div key={i} className='board-row'>
           <div>{i + 2}</div>
           <div>{i + 1}</div>
           <div>{i}</div>
         </div>
-      );
-    }
-
-    return rows;
-  };
-  const generateTable2 = () => {
-    const rows = [];
-
-    for (let i = 1; i <= 36; i += 3) {
-      rows.push(
-        <tr key={i}>
-          <td>{i + 2}</td>
-          <td>{i + 1}</td>
-          <td>{i}</td>
-        </tr>
       );
     }
 
