@@ -11,8 +11,13 @@
 .roulette-page-wrapper {
   background: url("../../assets/images/roulette/roulette-bg-1.webp") no-repeat center center;
   background-size: cover;
+
+  
+    // *******************//
+  //        Wheel      //
+  // *******************//
   .roulette-wheel {
-    width: 40%;
+    width: 100%;
     padding: 100px;
     box-sizing: border-box;
 
@@ -39,6 +44,28 @@
         box-shadow: 4px 3px 10px 2px rgba(0,0,0,0.75);
         animation: spin 1.5s linear infinite;
       }
+    }
+  }
+
+  
+    // *******************//
+  //        Table board       //
+  // *******************//
+  .roulette-board {
+    .table-board-wrapper {
+      .board {
+        display: flex;
+        flex-direction: row;
+        font-weight: bold;
+
+        .rowche {
+          display: block;
+        }
+        tr {
+          td { color: white; text-shadow: 2px 3px 4px rgba(0, 0, 0, 1); font-size: 1.5em; transform: rotate(270deg);}
+        }
+      }
+
     }
   }
 }
