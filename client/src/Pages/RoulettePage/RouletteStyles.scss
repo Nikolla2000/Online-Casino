@@ -20,7 +20,7 @@
   //        Wheel      //
   // *******************//
   .roulette-wheel {
-    width: 100%;
+    width: 110%;
     padding: 100px;
     box-sizing: border-box;
 
@@ -77,6 +77,9 @@
 
         .zero { height: 100%; width: 100%; display: flex; align-items:  center; color: white; text-shadow: 2px 3px 4px rgba(0, 0, 0, 1); font-size: 1.5em; transform: rotate(270deg);
         border:2px solid white; background: linear-gradient(110.1deg, rgb(34, 126, 34) 2.9%, rgb(168, 251, 60) 90.3%);}
+
+        .two-one { height: 100%;}
+        .bet-options { display: block;}
       }
 
     }
