@@ -28,7 +28,7 @@ const Board = () => {
     <div className='roulette-board'>
       <div className="table-board-wrapper">
         <div className='board'>
-          <div className='zero'>0</div>
+          <div className='zero'><span>0</span></div>
           {generateTable()}
           <div className='two-one'>
             <div>2:1</div>
