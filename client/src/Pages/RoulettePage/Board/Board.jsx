@@ -14,8 +14,8 @@ const Board = () => {
     for (let i = 1; i <= 36; i += 3) {
       rows.push(
         <div key={i} className='board-row'>
-          <div className={isBlackNumber(i)}>{i + 2}</div>
-          <div className={isBlackNumber(i)}>{i + 1}</div>
+          <div className={isBlackNumber(i + 2)}>{i + 2}</div>
+          <div className={isBlackNumber(i + 1)}>{i + 1}</div>
           <div className={isBlackNumber(i)}>{i}</div>
         </div>
       );

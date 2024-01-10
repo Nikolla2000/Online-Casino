@@ -11,13 +11,16 @@
 .roulette-page-wrapper {
   background: url("../../assets/images/roulette/roulette-bg-1.webp") no-repeat center center;
   background-size: cover;
+  height: 100vh;
+  display: flex;
+  align-items: center;
 
   
     // *******************//
   //        Wheel      //
   // *******************//
   .roulette-wheel {
-    width: 100%;
+    width: 110%;
     padding: 100px;
     box-sizing: border-box;
 
@@ -61,16 +64,22 @@
         display: flex;
         flex-direction: row;
         font-weight: bold;
-
+        
         .board-row {
           display: block;
           box-sizing: content-box;
 
           div { color: white; text-shadow: 2px 3px 4px rgba(0, 0, 0, 1); font-size: 1.5em; transform: rotate(270deg); 
-            padding: 15px; background-color: red; width: 50px; height: 50px;}
+            padding: 20px; background-color: red; width: 50px; height: 50px; border:2px solid white; display: flex; align-items: center; justify-content: center;}
 
           .black-number { background-color: black;}
         }
+
+        .zero { height: 100%; width: 100%; display: flex; align-items:  center; color: white; text-shadow: 2px 3px 4px rgba(0, 0, 0, 1); font-size: 1.5em; transform: rotate(270deg);
+        border:2px solid white; background: linear-gradient(110.1deg, rgb(34, 126, 34) 2.9%, rgb(168, 251, 60) 90.3%);}
+
+        .two-one { height: 100%;}
+        .bet-options { display: block;}
       }
 
     }
