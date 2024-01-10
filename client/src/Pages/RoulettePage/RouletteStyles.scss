@@ -54,37 +54,49 @@
     // *******************//
   //        Table board       //
   // *******************//
-  .roulette-board {
+  .board-and-gadgets-wrapper {
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    .table-board-wrapper {
+
       .board {
-        display: flex;
-        flex-direction: row;
-        font-weight: bold;
         
-        .board-row {
-          display: block;
-          box-sizing: content-box;
-
-          div { color: white; text-shadow: 2px 3px 4px rgba(0, 0, 0, 1); font-size: 1.5em; transform: rotate(270deg); 
-            padding: 20px; background: linear-gradient(107.2deg, rgb(150, 15, 15) 10.6%, rgb(247, 0, 0) 91.1%); width: 50px; height: 50px; border:2px solid white; 
-            display: flex; align-items: center; justify-content: center; cursor: pointer;}
-
-          .black-number { background: linear-gradient(to right, #434343 0%, black 100%); }
+        .board-top-side {
+          display: flex;
+          flex-direction: row;
+          font-weight: bold;
+          
+          .board-row {
+            display: block;
+            box-sizing: content-box;
+  
+            div { color: white; text-shadow: 2px 3px 4px rgba(0, 0, 0, 1); font-size: 1.5em; transform: rotate(270deg); 
+              padding: 20px; background: linear-gradient(107.2deg, rgb(150, 15, 15) 10.6%, rgb(247, 0, 0) 91.1%); width: 50px; height: 50px; border:2px solid white; 
+              display: flex; align-items: center; justify-content: center; cursor: pointer;}
+  
+            .black-number { background: linear-gradient(to right, #434343 0%, black 100%); }
+          }
+  
+          .zero { display: flex; align-items: center; height: 150px;color: white; text-shadow: 2px 3px 4px rgba(0, 0, 0, 1); font-size: 2em; 
+                border:2px solid white; background: linear-gradient(110.1deg, rgb(34, 126, 34) 2.9%, rgb(168, 251, 60) 90.3%); border-radius: 40% 0 0 40%; cursor: pointer;
+                span {width: 55px; height: 40px; transform: rotate(270deg); text-align: center;}
+              }
+  
+          .two-one { height: 100%; background: green; color: #fff; font-weight: bold; height: 150px; border-radius: 0 40% 40% 0; width: 55px; text-align: center;
+                    display: flex; justify-content: space-evenly; flex-direction: column; border: 2px solid white; font-size: 2em; 
+                    div  { transform: rotate(270deg);  
+                      &:not(.two-one div:last-of-type) { border-left: 3px solid white;}
+                    }
+                  }
+  
+          .bet-options { display: block; color: #fff; font-weight: bold;
+            .option {
+              div { background: green}
+            }
+          }
         }
-
-        .zero { display: flex; align-items: center; height: 150px;color: white; text-shadow: 2px 3px 4px rgba(0, 0, 0, 1); font-size: 2em; 
-        border:2px solid white; background: linear-gradient(110.1deg, rgb(34, 126, 34) 2.9%, rgb(168, 251, 60) 90.3%); border-radius: 40% 0 0 40%; cursor: pointer;
-        span {width: 55px; height: 40px; transform: rotate(270deg); text-align: center;}
-        }
-
-        .two-one { height: 100%;}
-        .bet-options { display: block;}
+        
       }
-
-    }
   }
 }

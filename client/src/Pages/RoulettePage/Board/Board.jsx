@@ -25,9 +25,10 @@ const Board = () => {
   };
 
   return (
-    <div className='roulette-board'>
-      <div className="table-board-wrapper">
-        <div className='board'>
+    <div className='board-and-gadgets-wrapper'>
+      <div className='board'>
+
+        <div className="board-top-side">
           <div className='zero'><span>0</span></div>
           {generateTable()}
           <div className='two-one'>
@@ -35,6 +36,9 @@ const Board = () => {
             <div>2:1</div>
             <div>2:1</div>
           </div>
+        </div>
+        
+        <div className="board-bottom-side">
           <div className='bet-options'>
             <div className='option'>
               <div>1<sup>st</sup> 12</div>
@@ -53,6 +57,7 @@ const Board = () => {
             </div>
           </div>
         </div>
+
       </div>
     </div>
   );
