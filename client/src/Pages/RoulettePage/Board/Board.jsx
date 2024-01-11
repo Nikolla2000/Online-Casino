@@ -63,7 +63,7 @@ const Board = () => {
       <div className="gadgets">
         <div className="place-bet-loader">
           <h4>PLACE BET</h4>
-          LOADER
+          <div className="loader">loader</div>
         </div>
         <div className="bet-amount-buttons">
           <button className='clear-bet-btn'>Clear Bet</button>
