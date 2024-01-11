@@ -115,5 +115,18 @@
         }
         
       }
+
+  // *******************//
+  //       Gadgets      //
+  // *******************//
+      .gadgets {
+        .bet-amount-buttons {
+          display: flex;
+          gap:10px;
+          img {
+            width:60px;
+          }
+        }
+      }
   }
 }
