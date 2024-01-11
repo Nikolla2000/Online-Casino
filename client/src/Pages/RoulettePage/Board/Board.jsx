@@ -47,8 +47,8 @@ const Board = () => {
             </div>
             <div className='option'>
               <div>2<sup>nd</sup> 12</div>
-              <div>red</div>
-              <div>black</div>
+              <div className='red'>black</div>
+              <div className='black'>black</div>
             </div>
             <div className='option'>
               <div>3<sup>rd</sup> 12</div>
