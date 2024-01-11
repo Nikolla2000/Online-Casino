@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from 'react-bootstrap';
 
 const Board = () => {
   const blackNumbers = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35];
@@ -26,8 +27,8 @@ const Board = () => {
 
   return (
     <div className='board-and-gadgets-wrapper'>
-      <div className='board'>
 
+      <div className='board'>
         <div className="board-top-side">
           <div className='zero'><span>0</span></div>
           {generateTable()}
@@ -57,7 +58,22 @@ const Board = () => {
             </div>
           </div>
         </div>
+      </div>
 
+      <div className="gadgets">
+        <div className="place-bet-loader">
+          <h4>PLACE BET</h4>
+          <div className="loader">loader</div>
+        </div>
+        <div className="bet-amount-buttons">
+          <button className='clear-bet-btn'>Clear Bet</button>
+          <img src='../../../src/assets/images/roulette/chip-5.png' alt='5 chip' />
+          <img src='../../src/assets/images/roulette/chip-10.png' alt='10 chip' />
+          <img src='../../src/assets/images/roulette/chip-25.png' alt='25 chip' />
+          <img src='../../src/assets/images/roulette/chip-50.png' alt='50 chip' />
+          <img src='../../src/assets/images/roulette/chip-100.png' alt='100 chip' />
+          <button className='place-bet-btn'>Place Bet</button>
+        </div>
       </div>
     </div>
   );

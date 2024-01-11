@@ -58,6 +58,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
 
       .board {
         .board-top-side {
@@ -113,6 +114,33 @@
           }
         }
         
+      }
+
+  // *******************//
+  //       Gadgets      //
+  // *******************//
+      .gadgets {
+        margin-top: 50px;
+
+        .place-bet-loader {
+
+          h4 {
+            color:white;
+            font-weight: bold;
+            text-align: center;
+            font-size: 2em;
+          }
+          .loader {
+            margin: 30px 0 40px 0;
+          }
+        }
+        .bet-amount-buttons {
+          display: flex;
+          gap:10px;
+          img {
+            width:60px;
+          }
+        }
       }
   }
 }
