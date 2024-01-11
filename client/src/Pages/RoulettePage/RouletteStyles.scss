@@ -20,8 +20,7 @@
   //        Wheel      //
   // *******************//
   .roulette-wheel {
-    width: 110%;
-    padding: 100px;
+    width: 80%;
     box-sizing: border-box;
 
     .roulette-img-wrapper {
@@ -61,7 +60,6 @@
     justify-content: center;
 
       .board {
-        
         .board-top-side {
           display: flex;
           flex-direction: row;
@@ -86,7 +84,7 @@
               }
   
           .two-one { height: 100%; background: green; color: #fff; font-weight: bold; height: 150px; border-radius: 0 40% 40% 0; width: 55px; text-align: center;
-                    display: flex; justify-content: space-evenly; flex-direction: column; border: 2px solid white; font-size: 2em; text-shadow: 2px 3px 4px rgba(0, 0, 0, 1);
+                    display: flex; justify-content: space-evenly; flex-direction: column; border: 2px solid white; font-size: 1.8em; text-shadow: 2px 3px 4px rgba(0, 0, 0, 1);
                     div  { transform: rotate(270deg);  
                       &:not(.two-one div:last-of-type) { border-left: 3px solid white;}
                     }

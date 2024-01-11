@@ -9,10 +9,10 @@ const RoulettePage = () => {
     <div className='roulette-page-wrapper'>
       <Container>
         <Row>
-          <Col>
+          <Col lg={6} md={12}>
             <Wheel/>
           </Col>
-          <Col>
+          <Col lg={6} md={12}>
             <Board/>
           </Col>
         </Row>
