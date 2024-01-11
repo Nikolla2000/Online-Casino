@@ -67,10 +67,11 @@ const Board = () => {
         </div>
         <div className="bet-amount-buttons">
           <button className='clear-bet-btn'>Clear Bet</button>
-          <img src='' alt='5 chip' />
-          <img src='' alt='10 chip' />
-          <img src='' alt='20 chip' />
-          <img src='' alt='100 chip' />
+          <img src='../../../src/assets/images/roulette/chip-5.png' alt='5 chip' />
+          <img src='../../src/assets/images/roulette/chip-10.png' alt='10 chip' />
+          <img src='../../src/assets/images/roulette/chip-25.png' alt='25 chip' />
+          <img src='../../src/assets/images/roulette/chip-50.png' alt='50 chip' />
+          <img src='../../src/assets/images/roulette/chip-100.png' alt='100 chip' />
           <button className='place-bet-btn'>Place Bet</button>
         </div>
       </div>
