@@ -42,7 +42,7 @@ const Board = () => {
           <div className='bet-options'>
             <div className='option'>
               <div>1<sup>st</sup> 12</div>
-              <div>1 to 18</div>
+              <div className='left-border'>1 to 18</div>
               <div>EVEN</div>
             </div>
             <div className='option'>
@@ -53,7 +53,7 @@ const Board = () => {
             <div className='option'>
               <div>3<sup>rd</sup> 12</div>
               <div>ODD</div>
-              <div>19 to 36</div>
+              <div className='right-border'>19 to 36</div>
             </div>
           </div>
         </div>
