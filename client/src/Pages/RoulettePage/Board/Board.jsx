@@ -16,10 +16,6 @@ const Board = () => {
         setBettingTime((prevTime) => {
           if (prevTime >= 100) {
             clearInterval(intervalId);
-            setTimeout(() => {
-              startBetting();
-            }, 15000);
-            return 0;
           } else {
             return prevTime + 5;
           }
@@ -29,9 +25,15 @@ const Board = () => {
 
     startBetting();
 
-    // Clear the interval when the component is unmounted
+    // Clear the interval and schedule the next useEffect after 15 seconds
+    const timeoutId = setTimeout(() => {
+      startBetting();
+    }, 15000);
+
+    // Clear the interval and timeout when the component is unmounted
     return () => {
       clearInterval(intervalId);
+      clearTimeout(timeoutId);
     };
   }, []);
   
