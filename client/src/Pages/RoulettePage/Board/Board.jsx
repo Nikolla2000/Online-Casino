@@ -1,8 +1,40 @@
-import React from 'react';
-import { Button } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import ProgressBar from 'react-bootstrap/ProgressBar';
 
 const Board = () => {
   const blackNumbers = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35];
+  const [bettingTime, setBettingTime] = useState(0);
+  const [hasFirstStarted, setHasFirstStarted] = useState(false);
+
+  useEffect(() => {
+    let intervalId;
+
+    const startBetting = () => {
+      setBettingTime(0);
+
+      intervalId = setInterval(() => {
+        setBettingTime((prevTime) => {
+          if (prevTime >= 100) {
+            clearInterval(intervalId);
+            setTimeout(() => {
+              startBetting();
+            }, 15000);
+            return 0;
+          } else {
+            return prevTime + 5;
+          }
+        });
+      }, 1000);
+    };
+
+    startBetting();
+
+    // Clear the interval when the component is unmounted
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
+  
 
   const isBlackNumber = (num) => {
     return blackNumbers.includes(num) ? 'black-number' : '';
@@ -63,7 +95,9 @@ const Board = () => {
       <div className="gadgets">
         <div className="place-bet-loader">
           <h4>PLACE BET</h4>
-          <div className="loader">loader</div>
+          <div className="loader">
+            <ProgressBar now={bettingTime}/>
+          </div>
         </div>
         <div className="bet-amount-buttons">
           <button className='clear-bet-btn'>Clear Bet</button>
