@@ -35,7 +35,7 @@ const GameThumbnail = ({ data }) => {
         {showLoginModal && <LoginForm/>}
       </div>
           {/* </Button> */}
-          <h4 className='game-name'>{data.gameName}</h4>
+          <h4 className={`game-name ${data.gameName == 'Roulette' && 'left'}`}>{data.gameName}</h4>
       </div>
     </div>
   );
