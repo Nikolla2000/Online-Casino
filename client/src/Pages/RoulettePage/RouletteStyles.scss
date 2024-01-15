@@ -126,12 +126,13 @@
 
         .place-bet-loader {
 
-          h4 {
+          h4, h5 {
             color:white;
             font-weight: bold;
             text-align: center;
             font-size: 2em;
           }
+          h5 { font-size: 1.2em;}
           .loader {
             margin: 30px 0 40px 0;
           }
