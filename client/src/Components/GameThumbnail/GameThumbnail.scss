@@ -25,11 +25,19 @@ text-align: center;
   position: relative;
   transition: background-color 0.3s ease;
   cursor: pointer;
+  overflow: hidden;
   
-  img{
+  video{
     width: 100%;
     height: 100%;
   }
+
+  source {
+    width: 100%;
+    height: 100%;
+  }
+
+
     &:hover {
       transition: box-shadow 0.5s ease;
       box-shadow: -1px 3px 30px 4px rgba(255,255,255,1);

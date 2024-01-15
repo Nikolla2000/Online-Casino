@@ -29,7 +29,9 @@ const GameThumbnail = ({ data }) => {
       <div onClick={handleClick}>
           {/* <Button className='play-btn'> */}
       <div className='game-thumbnail-wrapper'>
-          <img src={data.image} alt='game-image'/>
+      <video autoPlay loop muted src={data.image} style={{ width: '230px', height: '300px', objectFit: 'cover', borderRadius: '30px' }}>
+        {/* <img src="../../../src/assets/images/roulette/roulette-wheel-nobg.png" alt="game-image" /> */}
+      </video>
             
         {showLoginModal && <LoginForm/>}
       </div>

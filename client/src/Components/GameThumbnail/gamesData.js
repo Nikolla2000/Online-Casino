@@ -5,6 +5,6 @@ export const gamesData = [
   },
   {
     linkPath: '/games/roulette',
-    image: '../..//src/assets/images/roulette-thumbnail-2.png'
+    image: '../../src/assets/images/roulette/roulette-thumbnail-bg.mp4'
   }
 ]
