@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import "./GameThumbnail.scss"
-import {  Button } from 'react-bootstrap'
 import { UserContext } from '../../../context/userContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideModals, showLogin } from '../../redux/features/auth/authModalsSlice';
@@ -27,14 +26,12 @@ const GameThumbnail = ({ data }) => {
   return (
     <div className='game-wrapper'>
       <div onClick={handleClick}>
-          {/* <Button className='play-btn'> */}
       <div className='game-thumbnail-wrapper'>
       <video autoPlay loop muted src={data.image} style={{ width: '230px', height: '300px', objectFit: 'cover', borderRadius: '30px' }}>
-        <img src={data.rouletteImg} alt="game-image" />
       </video>
+        {data.rouletteImg && <img className='game-image' src={data.rouletteImg} alt="game-image" />}
         {showLoginModal && <LoginForm/>}
       </div>
-          {/* </Button> */}
           <h4 className={`game-name ${data.gameName == 'Roulette' && 'left'}`}>{data.gameName}</h4>
       </div>
     </div>
