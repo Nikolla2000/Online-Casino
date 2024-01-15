@@ -2,12 +2,7 @@
 
 .game-wrapper {
 text-align: center;
-  // a {
-  //   text-align: center;
-  //   position: absolute;
-  //   top:75%;
-  //   left: 35%;
-  // }
+ position: relative;
   button {
     border: none;
 
@@ -15,6 +10,18 @@ text-align: center;
     &:hover {
       background: transparent;
     }
+  }
+  .game-name {
+    text-transform: uppercase;
+    color:$primary-white;
+    font-weight: bold;
+    font-size: 2em;
+    position: absolute;
+    top:105%;
+    left:30%;
+    cursor: pointer;
+    &.game-name:nth-of-type(2) { left: 100%;}
+
   }
 }
 
@@ -30,16 +37,21 @@ text-align: center;
   video{
     width: 100%;
     height: 100%;
+    img {
+      position: absolute;
+      width: 1000px;
+    }
   }
-
   source {
     width: 100%;
     height: 100%;
   }
 
+  
+  
+  &:hover {
+    transition: box-shadow 0.5s ease;
+    box-shadow: -1px 3px 30px 4px rgba(255,255,255,1);
+  }
 
-    &:hover {
-      transition: box-shadow 0.5s ease;
-      box-shadow: -1px 3px 30px 4px rgba(255,255,255,1);
-    }
 }

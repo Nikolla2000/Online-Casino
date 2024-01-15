@@ -30,12 +30,12 @@ const GameThumbnail = ({ data }) => {
           {/* <Button className='play-btn'> */}
       <div className='game-thumbnail-wrapper'>
       <video autoPlay loop muted src={data.image} style={{ width: '230px', height: '300px', objectFit: 'cover', borderRadius: '30px' }}>
-        {/* <img src="../../../src/assets/images/roulette/roulette-wheel-nobg.png" alt="game-image" /> */}
+        <img src={data.rouletteImg} alt="game-image" />
       </video>
-            
         {showLoginModal && <LoginForm/>}
       </div>
           {/* </Button> */}
+          <h4 className='game-name'>{data.gameName}</h4>
       </div>
     </div>
   );

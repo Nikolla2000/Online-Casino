@@ -9,7 +9,7 @@ const GamesPage = () => {
     <div className='games-page-wrapper'>
       <video src={backgroundVideo}></video>
        <section className='games-section'>
-        <h2 className='games-page-heading'>TOP GAMES</h2>
+        <h2 className='games-page-heading'>TOP <span>GAMES</span></h2>
         <div className="games-wrapper">
           {gamesData.map((game, index) => (
             <GameThumbnail data={game} key={index + 1}/>
