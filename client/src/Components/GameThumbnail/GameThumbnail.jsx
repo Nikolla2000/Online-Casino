@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { hideModals, showLogin } from '../../redux/features/auth/authModalsSlice';
 import LoginForm from '../Authentication/Login/LoginForm';
 
-const GameThumbnail = ({ data }) => {
+const GameThumbnail = ({ data, firstAnimation, secondAnimation }) => {
   const { user } = useContext(UserContext);
 
   const dispatch = useDispatch()
@@ -24,7 +24,7 @@ const GameThumbnail = ({ data }) => {
     }
   }
   return (
-    <div className='game-wrapper'>
+    <div className={`game-wrapper ${data.gameName == 'Slots' ? firstAnimation  : secondAnimation}`}>
       <div onClick={handleClick}>
       <div className='game-thumbnail-wrapper'>
       <video autoPlay loop muted src={data.image} style={{ width: '230px', height: '300px', objectFit: 'cover', borderRadius: '30px' }}>

@@ -1,10 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { gamesData } from '../../Components/GameThumbnail/gamesData';
 import GameThumbnail from '../../Components/GameThumbnail/GameThumbnail';
 import backgroundVideo from "../../assets/images/games-page-background.mp4"
 import "./GamesPageStyles.scss"
 
 const GamesPage = () => {
+  const [gameOneAnimation, setGameOneAnimation] = useState('animate__animated animate__fadeInRight');
+  const [gameTwoAnimation, setGameTwoAnimation] = useState('');
+  
+
+  useEffect(() => {
+    const timeoitId = setTimeout(() => {
+      setGameTwoAnimation('animate__animated animate__fadeInRight')
+      
+    }, 300)
+
+    return () => clearTimeout(timeoitId);
+  }, [])
+
   return (
     <div className='games-page-wrapper'>
       <video src={backgroundVideo}></video>
@@ -12,7 +25,7 @@ const GamesPage = () => {
         <h2 className='games-page-heading'>TOP <span>GAMES</span></h2>
         <div className="games-wrapper">
           {gamesData.map((game, index) => (
-            <GameThumbnail data={game} key={index + 1}/>
+            <GameThumbnail data={game} key={index + 1} firstAnimation={gameOneAnimation} secondAnimation={gameTwoAnimation}/>
           ))}
         </div>
       </section>
