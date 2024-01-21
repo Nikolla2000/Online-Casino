@@ -1,0 +1,35 @@
+@import "../../colorConstants.scss";
+
+.email-page-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .video-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+    
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  
+  .email-page-content {
+    padding: 50px;
+    position: relative; /* Ensure relative positioning for child elements */
+    z-index: 2; /* Adjust z-index to be above the video */
+
+    h1 {
+      font-size: 3em;
+      color: $primary-white;
+      text-align: center;
+      font-weight: bold;
+    }
+  }
+}
