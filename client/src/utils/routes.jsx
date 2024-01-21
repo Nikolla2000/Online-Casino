@@ -1,5 +1,6 @@
 import AdminPage from "../Pages/AdminPage/AdminPage";
 import ContactPage from "../Pages/ContactPage/ContactPage";
+import EmailPage from "../Pages/ContactPage/EmailPage";
 import GamesPage from "../Pages/GamesPage/GamesPage";
 import MainPage from "../Pages/MainPage/MainPage";
 import RoulettePage from "../Pages/RoulettePage/RoulettePage";
@@ -42,6 +43,12 @@ const routes = {
     element: <ContactPage/>,
     name: 'contact',
     includeInNav: true
+  },
+  email: {
+    path:'/email',
+    element: <EmailPage/>,
+    name: 'email',
+    includeInNav: false
   },
   slots: {
     path: '/games/slots',
