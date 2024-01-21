@@ -13,6 +13,7 @@ const router = createBrowserRouter([
       { path: routes.admin.path, element:routes.admin.element },
       { path: routes.dashboard.path, element:routes.dashboard.element },
       { path: routes.contact.path, element:routes.contact.element },
+      { path: routes.email.path, element:routes.email.element },
       { path: routes.games.path, element:routes.games.element },
       { path: routes.slots.path, element:routes.slots.element },
       { path: routes.roulette.path, element:routes.roulette.element },
