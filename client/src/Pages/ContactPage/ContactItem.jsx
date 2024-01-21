@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const ContactItem = ({ data }) => {
   const navigate = useNavigate()
 
-  const handleClick = () => {
+  const sendToEmailPage = () => {
     data.heading === "Email" && navigate("/email");
   }
 
@@ -22,7 +22,7 @@ const ContactItem = ({ data }) => {
       </div>
       {data.button == true ? (
         <div className={`open-chat-btn mt-4 ${data.heading === "Email" && "blue"}`}>
-          <button onClick={handleClick}>
+          <button onClick={sendToEmailPage}>
             {data.heading === "Live Support" ? "CHAT NOW" : "EMAIL US"}
             </button>
         </div>
