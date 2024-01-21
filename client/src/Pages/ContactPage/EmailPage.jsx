@@ -4,11 +4,16 @@ import { faLocationDot, faEnvelope, faPhone } from '@fortawesome/free-solid-svg-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const EmailPage = () => {
+  const randomVideo = () => {
+    const videoNumber = Math.floor(Math.random() * 4) + 1;
+    return videoNumber;
+  }
+
   return (
     <div className='email-page-wrapper'>
       <div className="video-container">
         <video autoPlay loop muted className="background-video">
-          <source src="../../src/assets/images/email-page-bg/email-page-bg-1.mp4" type="video/mp4" />
+          <source src={`../../src/assets/images/email-page-bg/email-page-bg-${randomVideo()}.mp4`} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
       </div>
