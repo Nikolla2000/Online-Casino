@@ -24,7 +24,8 @@ const GameThumbnail = ({ data, firstAnimation, secondAnimation }) => {
     }
   }
   return (
-    <div className={`game-wrapper ${data.gameName == 'Slots' ? firstAnimation  : secondAnimation}`}>
+    // <div className={`game-wrapper ${data.gameName == 'Slots' ? firstAnimation  : secondAnimation}`}>
+     <div className={`game-wrapper`}>
       <div onClick={handleClick}>
       <div className='game-thumbnail-wrapper'>
       <video autoPlay loop muted src={data.image} style={{ width: '230px', height: '300px', objectFit: 'cover', borderRadius: '30px' }}>
