@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const EmailPage = () => {
   const randomVideo = () => {
-    const videoNumber = Math.floor(Math.random() * 4) + 1;
+    const videoNumber = Math.floor(Math.random() * 3) + 1;
     return videoNumber;
   }
 
