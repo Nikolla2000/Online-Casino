@@ -22,14 +22,26 @@
   
   .email-page-content {
     padding: 50px;
-    position: relative; /* Ensure relative positioning for child elements */
-    z-index: 2; /* Adjust z-index to be above the video */
+    position: relative;
+    z-index: 2;
+    color:$primary-white;
 
     h1 {
       font-size: 3em;
       color: $primary-white;
       text-align: center;
       font-weight: bold;
+      margin: 50px 0;
+    }
+
+    .contact-window {
+      background-color: rgba(18, 17, 39, 0.9);
+      border-radius: 20px;
+      display: flex;
+
+      .contact-info {
+        background: url("../../assets/images/contact-background.png") ;
+      }
     }
   }
 }
