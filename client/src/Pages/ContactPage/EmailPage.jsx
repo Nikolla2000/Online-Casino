@@ -1,11 +1,23 @@
 import React from 'react';
+import { useForm } from 'react-hook-form';
 import "./EmailPageStyles.scss";
 import { faLocationDot, faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const EmailPage = () => {
+  const { 
+    register, 
+    handleSubmit, 
+    watch,
+    formState: {errors},
+   } = useForm();
+
+  const onSubmit = (data) => {
+    console.log(data);
+  }
+
   const randomVideo = () => {
-    const videoNumber = Math.floor(Math.random() * 4) + 1;
+    const videoNumber = Math.floor(Math.random() * 3) + 1;
     return videoNumber;
   }
 
@@ -40,29 +52,61 @@ const EmailPage = () => {
             </div>
           </div>
           <div className="contact-form">
-            <form>
-              <label htmlFor="firstName">First Name</label>
-              <input 
-                type="text"
-                name='firstName'
-                id='first-name'/>
+            <form onSubmit={handleSubmit(onSubmit)} id='contact-form'>
+              <div className="first-row">
+                <div className="input">
+                  <label htmlFor="first-name">First Name</label>
+                  <input 
+                    type="text"
+                    name='firstName'
+                    id='first-name'
+                    {...register("firstName", { required: true, maxLength: 20 })}/>
+                  {errors.firstName && <span>{errors.firstName.message}</span>}
+                </div>
 
-              <label htmlFor="lastName">Last Name</label>
-              <input 
-                type="text"
-                name='lastName' />
+              <div className="input">
+                <label htmlFor="last-name">Last Name</label>
+                  <input 
+                    type="text"
+                    name='lastName' 
+                    id='last-name'
+                    {...register("lastName", { required: true, maxLength: 20 })}/>
+                  {errors.lastName && <span>{errors.lastName.message}</span>}
+              </div>
+              </div>
 
-              <label htmlFor="email">E-mail</label>
-              <input 
-                type="email"
-                name='email' />
+              <div className="second-row">
+                <div className="input">
+                  <label htmlFor="email">E-mail</label>
+                  <input 
+                    type="email"
+                    name='email' 
+                    id='email'
+                    {...register("email", { required: true, maxLength: 20 })}/>
+                  {errors.email && <span>{errors.email.message}</span>}
+                </div>
 
-              <label htmlFor="phone">Phone</label>
-              <input 
-                type="number"
-                name='phone' />
+              <div className="input">
+                <label htmlFor="phone">Phone</label>
+                  <input 
+                    type="number"
+                    name='phone' 
+                    id='phone'
+                    {...register("phone", { required: true })}/>
+                  {errors.phone && <span>{errors.phone.message}</span>}
+              </div>
+              </div>
+
+              <label htmlFor="message" className='msg-label'>Message</label>
+              <textarea 
+                name="message" 
+                id="message" 
+                cols="20" 
+                rows="8"
+                {...register("message", { required: true, maxLength: 150 })}/>
+
             </form>
-            <button>Send Message</button>
+            <button form='contact-form'>Send Message</button>
           </div>
         </div>
       </div>
