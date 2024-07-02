@@ -1,56 +1,78 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import ProgressBar from 'react-bootstrap/ProgressBar';
+import { Game } from '../game';
+import { UserContext } from '../../../../context/userContext';
+import fetchTotalCredits from '../../../lib/data';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateCredits } from '../../../redux/features/slots/slotMachineSlice';
 
 const Board = () => {
+  const { user } = useContext(UserContext);
+  const totalCredits = useSelector(state => state.slotMachine.totalCredits);
+  const dispatch = useDispatch();
+
   const blackNumbers = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35];
   const [bettingTime, setBettingTime] = useState(0);
   const [seconds, setSeconds] = useState(20)
   const [hasFirstStarted, setHasFirstStarted] = useState(false);
 
   useEffect(() => {
-    let intervalId;
-    let timeoutId;
-  
-    const startBetting = () => {
-      setBettingTime(0);
-  
-      intervalId = setInterval(() => {
-        setBettingTime((prevTime) => {
-          if (prevTime >= 100) {
-            clearInterval(intervalId);
-            // Reset the countdown after 15 seconds
-            timeoutId = setTimeout(() => {
-              startBetting();
-            }, 15000);
-            return 0;
-          } else {
-            return prevTime + 5;
-          }
-        });
-      }, 1000);
+    const fetchCredits = async () => {
+      if (user && user.id) {
+        const credits = await fetchTotalCredits(user.id);
+        dispatch(updateCredits(credits));
+        console.log(totalCredits);
+      }
     };
+
+    fetchCredits();
+  }, [user]);
+  // const game = new Game(totalCredits);
+
+  // useEffect(() => {
+  //   let intervalId;
+  //   let timeoutId;
   
-    startBetting();
+  //   const startBetting = () => {
+  //     setBettingTime(0);
   
-    // Clear the interval and timeout when the component is unmounted
-    return () => {
-      clearInterval(intervalId);
-      clearTimeout(timeoutId);
-    };
-  }, []);
+  //     intervalId = setInterval(() => {
+  //       setBettingTime((prevTime) => {
+  //         if (prevTime >= 100) {
+  //           clearInterval(intervalId);
+  //           // Reset the countdown after 15 seconds
+  //           timeoutId = setTimeout(() => {
+  //             startBetting();
+  //           }, 15000);
+  //           return 0;
+  //         } else {
+  //           return prevTime + 5;
+  //         }
+  //       });
+  //     }, 1000);
+  //   };
+  
+  //   startBetting();
+  
+  //   // Clear the interval and timeout when the component is unmounted
+  //   return () => {
+  //     clearInterval(intervalId);
+  //     clearTimeout(timeoutId);
+  //   };
+  // }, []);
   
 
-  useEffect(() => {
-    const timeout = setInterval(() => {
-      if(seconds > 0) {
-        setSeconds(prevSeconds => prevSeconds - 1)   
-      } else {
-         clearInterval(timeout)
-      }
-    }, 1000)
-    return () => clearInterval(timeout);
-  }, [seconds]
-  )
+  // useEffect(() => {
+  //   const timeout = setInterval(() => {
+  //     if(seconds > 0) {
+  //       setSeconds(prevSeconds => prevSeconds - 1)   
+  //     } else {
+  //        clearInterval(timeout)
+  //     }
+  //   }, 1000)
+  //   return () => clearInterval(timeout);
+  // }, [seconds]
+  // )
 
   
   const isBlackNumber = (num) => {
@@ -126,6 +148,11 @@ const Board = () => {
           <img src='../../src/assets/images/roulette/chip-100.png' alt='100 chip' />
           <button className='place-bet-btn'>Place Bet</button>
         </div>
+      </div>
+      <div className='credits-info'>
+        <p>Credits: {totalCredits}</p>
+        <p>Bet: 32</p>
+        <p>Win: 0</p>
       </div>
     </div>
   );
