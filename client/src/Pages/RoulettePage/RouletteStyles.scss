@@ -13,7 +13,7 @@
 .roulette-page-wrapper {
   background: url("../../assets/images/roulette/roulette-bg-1.webp") no-repeat center center;
   background-size: cover;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   align-items: center;
 
@@ -177,5 +177,20 @@
           .place-bet-btn { background: linear-gradient(110.1deg, rgb(34, 126, 34) 2.9%, rgb(168, 251, 60) 90.3%); margin-left: 20px;}
         }
       }
+
+
+      // *******************//
+    //      Credits/Bet INFO      //
+    // *******************//
+
+    .credits-info {
+      width: 100%;
+      margin: 30px 0 30px 0;
+      display: flex;
+      justify-content: space-evenly;
+      color:$primary-white;
+      font-weight: bold;
+      font-size: 1.2em;
+    }
   }
 }
