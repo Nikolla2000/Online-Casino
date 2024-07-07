@@ -7,4 +7,8 @@ export class Game {
   // function startGame() {
 
   // }
+
+  // function increaseBet() {
+
+  // }
 }

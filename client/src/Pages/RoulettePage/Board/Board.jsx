@@ -17,6 +17,7 @@ const Board = () => {
   const [hasFirstStarted, setHasFirstStarted] = useState(false);
   // const [game, setGame] = useState(null);
   const chips = [5, 10, 25, 50, 100];
+  const [bet, setBet] = useState(0);
 
   useEffect(() => {
     const fetchCredits = async () => {
@@ -30,6 +31,13 @@ const Board = () => {
     fetchCredits();
     const game = new Game(totalCredits);
   }, [user, dispatch]);
+
+  const changeBet = (amount) => {
+    setBet((oldBet) => {
+      const newBet = oldBet + amount;
+      return newBet >= 500 ? 500 : newBet;
+    })
+  }
 
 
   // useEffect(() => {
@@ -143,20 +151,25 @@ const Board = () => {
           </div>
         </div>
         <div className="bet-amount-buttons">
-          <button className='clear-bet-btn'>Clear Bet</button>
+          <button 
+            className='clear-bet-btn'
+            onClick={() => setBet(0)}>
+              Clear Bet
+            </button>
           {chips.map(chip => (
             <img 
               src={`../../src/assets/images/roulette/chip-${chip}.png`} 
               value={chip} 
               alt={`${chip} chip`}
-              key={chip}/> 
+              key={chip}
+              onClick={() => changeBet(chip)}/> 
           ))}
           <button className='place-bet-btn'>Place Bet</button>
         </div>
       </div>
       <div className='credits-info'>
         <p>Credits: {totalCredits}</p>
-        <p>Bet: 32</p>
+        <p>Bet: {bet}</p>
         <p>Win: 0</p>
       </div>
     </div>
