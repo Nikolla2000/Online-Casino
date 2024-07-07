@@ -15,7 +15,7 @@ const Board = () => {
   const [bettingTime, setBettingTime] = useState(0);
   const [seconds, setSeconds] = useState(20)
   const [hasFirstStarted, setHasFirstStarted] = useState(false);
-  // const [game, setGame] = useState(null);
+  const [game, setGame] = useState(null);
   const chips = [5, 10, 25, 50, 100];
 
   const [bet, setBet] = useState(0);
@@ -31,8 +31,8 @@ const Board = () => {
     };
 
     fetchCredits();
-    const game = new Game(totalCredits);
-    game.getResult();
+    const rouletteGame = new Game(totalCredits);
+    setGame(rouletteGame);
   }, [user, dispatch]);
 
 
@@ -44,10 +44,17 @@ const Board = () => {
     })
   }
 
-
   //Function that sets the result that you want to bet on
   const chooseOption = (option) => {
     setChosenOption(oldOption => oldOption == option ? null : option);
+  }
+
+
+  //Play round function
+  const playRound = (choice, sum) => {
+    if(bet && chosenOption) {
+      game.checkWin(choice, sum);
+    }
   }
 
 
@@ -175,7 +182,11 @@ const Board = () => {
               key={chip}
               onClick={() => increaseBet(chip)}/> 
           ))}
-          <button className='place-bet-btn'>Place Bet</button>
+          <button 
+            className='place-bet-btn'
+            onClick={() => playRound(chosenOption, bet)}>
+              Place Bet
+          </button>
         </div>
       </div>
       <div className='credits-info'>
