@@ -63,10 +63,16 @@
     flex-direction: column;
 
       .board {
+        
         .board-top-side {
           display: flex;
           flex-direction: row;
           font-weight: bold;
+          border-radius: 50px;
+
+          -webkit-box-shadow: 0px 0px 16px 0px rgba(255,255,255,1);
+          -moz-box-shadow: 0px 0px 16px 0px rgba(255,255,255,1);
+          box-shadow: 0px 0px 16px 0px rgba(255,255,255,1);
           
           .board-row {
             display: block;
@@ -83,7 +89,11 @@
   
           .zero { display: flex; align-items: center; height: 150px;color: white; text-shadow: 2px 3px 4px rgba(0, 0, 0, 1); font-size: 2em; 
                 border:2px solid white; background: linear-gradient(110.1deg, rgb(34, 126, 34) 2.9%, rgb(168, 251, 60) 90.3%); border-radius: 40% 0 0 40%; cursor: pointer;
+                
                 span {width: 55px; height: 40px; transform: rotate(270deg); text-align: center;}
+                &:hover {
+                  background: green;
+                }
               }
   
           .two-one { height: 100%; background: green; color: #fff; font-weight: bold; height: 150px; border-radius: 0 40% 40% 0; width: 55px; text-align: center;
@@ -98,17 +108,28 @@
         .board-bottom-side {
           display: flex; justify-content: center;
 
-          .bet-options { display: flex; color: #fff; font-weight: bold; 
+          
+          .bet-options { display: flex; color: #fff; font-weight: bold; border-radius: 30px;
+            
+            -webkit-box-shadow: 0px 0px 16px 0px rgba(255,255,255,1);
+            -moz-box-shadow: 0px 0px 16px 0px rgba(255,255,255,1);
+            box-shadow: 0px 0px 16px 0px rgba(255,255,255,1);
 
             .option {
               div { background: linear-gradient(90deg, rgba(10,119,13,1) 7%, rgba(43,140,46,1) 49%, rgba(7,116,10,1) 96%); border: 2px solid white; padding: 12px; 
                     display: inline; text-align: center; cursor: pointer; font-size: 1.8em; text-shadow: 2px 3px 4px rgba(0, 0, 0, 1);
+              &:hover {background: linear-gradient(90deg, rgb(8, 91, 12) 7%, rgb(29, 91, 31) 49%, rgb(5, 69, 6) 96%);}
+
               &:first-of-type {
                 display: block;
               }
+              
             }
-            .red { background: linear-gradient(107.2deg, rgb(150, 15, 15) 10.6%, rgb(247, 0, 0) 91.1%); color: transparent; text-shadow: none;}
-            .black { background: linear-gradient(to right, #434343 0%, black 100%); color: transparent; text-shadow: none;}
+            .red { background: linear-gradient(107.2deg, rgb(150, 15, 15) 10.6%, rgb(247, 0, 0) 91.1%); color: transparent; text-shadow: none;
+              &:hover { background: linear-gradient(107.2deg, rgb(101, 10, 10) 10.6%, rgb(185, 0, 0) 91.1%);}}
+
+            .black { background: linear-gradient(to right, #434343 0%, black 100%); color: transparent; text-shadow: none;
+            &:hover { background: linear-gradient(to right, #000000 0%, black 100%); }}
 
             .left-border { border-radius: 0 0 0 50%;}
             .right-border { border-radius: 0 0 50% 0;}
