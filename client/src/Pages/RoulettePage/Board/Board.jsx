@@ -5,6 +5,7 @@ import { UserContext } from '../../../../context/userContext';
 import fetchTotalCredits from '../../../lib/data';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateCredits } from '../../../redux/features/slots/slotMachineSlice';
+import toast from 'react-hot-toast';
 
 const Board = () => {
   const { user } = useContext(UserContext);
@@ -52,8 +53,16 @@ const Board = () => {
 
   //Play round function
   const playRound = (choice, sum) => {
-    if(bet && chosenOption) {
-      game.checkWin(choice, sum);
+    if(totalCredits < sum) {
+      toast.error('You donn\'t have enough credits', {
+        position: 'top-center'
+      })
+    } else if (!bet || !chosenOption) {
+      toast.error('You need to choose bet and a betting option', {
+        position: 'top-center'
+      })
+    } else {
+        game.checkWin(choice, sum);
     }
   }
 
