@@ -41,7 +41,14 @@ export class Game {
     }
     //TODO FIX LOGIC
     else if (betChoice == '1st 12' || betChoice == '2nd 12' || betChoice == '3rd 12') {
-      if(betChoice == '1st 12' && result <= 12 || betChoice == '2nd 12' && result <= 24 || betChoice == '3rd 12' && result <= 36) {
+      const ranges = {
+        '1st 12': [1, 12],
+        '2nd 12': [13, 24],
+        '3rd 12': [25, 36],
+      };
+
+      const [min, max] = ranges[betChoice];
+      if(result >= min && result <= max) {
         win = betSum * 3;
       }
     }
