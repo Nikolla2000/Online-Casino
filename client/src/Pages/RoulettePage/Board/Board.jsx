@@ -170,13 +170,13 @@ const Board = () => {
       </div>
 
       <div className="gadgets">
-        <div className="place-bet-loader">
+        {/* <div className="place-bet-loader">
           <h4>PLACE BET</h4>
           <h5>{seconds}</h5>
           <div className="loader">
             <ProgressBar now={bettingTime}/>
           </div>
-        </div>
+        </div> */}
         <div className="bet-amount-buttons">
           <button 
             className='clear-bet-btn'
@@ -202,7 +202,7 @@ const Board = () => {
         <p>Credits: {totalCredits}</p>
         <p>Bet: {bet}</p>
         {/* <p>Win: 0</p> */}
-        <p>Chosen option: {chosenOption}</p>
+        <p>Chosen option: <span className={chosenOption == 'RED' ? 'red' : chosenOption == 'BLACK' ? 'black' : ''}>{chosenOption}</span></p>
       </div>
     </div>
   );
