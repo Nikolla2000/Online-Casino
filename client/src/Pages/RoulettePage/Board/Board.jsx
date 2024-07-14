@@ -6,6 +6,7 @@ import fetchTotalCredits from '../../../lib/data';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateCredits } from '../../../redux/features/slots/slotMachineSlice';
 import toast from 'react-hot-toast';
+import { startSpinning, startWheelSpinning, stopSpinning, stopWheelSpinning } from '../../../redux/features/roulette/rouletteSlice';
 
 const Board = () => {
   const { user } = useContext(UserContext);
@@ -13,9 +14,12 @@ const Board = () => {
   const dispatch = useDispatch();
 
   const blackNumbers = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35];
-  const [bettingTime, setBettingTime] = useState(0);
-  const [seconds, setSeconds] = useState(20)
-  const [hasFirstStarted, setHasFirstStarted] = useState(false);
+  // const [bettingTime, setBettingTime] = useState(0);
+  // const [seconds, setSeconds] = useState(20)
+  // const [hasFirstStarted, setHasFirstStarted] = useState(false);
+  const isWheelSpinning = useSelector(state => state.roulette.isWheelSpinning);
+  const [wheelState, setWheelState] = useState(isWheelSpinning);
+
   const [game, setGame] = useState(null);
   const chips = [5, 10, 25, 50, 100];
 
@@ -62,9 +66,49 @@ const Board = () => {
         position: 'top-center'
       })
     } else {
-        game.checkWin(choice, sum);
+      const wheelAudio = new Audio('../../../src/assets/sounds/spin-wheel-sound.mp3');
+      const ballAudio = new Audio('../../../src/assets/sounds/roll-ball-roulette-sound.mp3');
+
+      wheelAudio.play()
+      dispatch(startWheelSpinning());
+
+      setTimeout(() => {
+        ballAudio.play();
+        dispatch(startSpinning());  
+
+        setTimeout(() => {
+          dispatch(stopWheelSpinning());
+          
+          setTimeout(() => {
+            dispatch(stopSpinning());
+            fadeOutAudio(ballAudio, 1000); // 1 sec audio fade
+          }, 2000)
+  
+        }, 6000)
+
+      }, 1500)
+      
+      game.checkWin(choice, sum);
     }
   }
+
+
+  //Fade audio volume gradually
+  const fadeOutAudio = (audio, duration) => {
+    let volume = audio.volume;
+    const step = volume / (duration / 100); // decrease per step
+
+    const fadeOut = setInterval(() => {
+      volume -= step;
+      if (volume <= 0) {
+        clearInterval(fadeOut);
+        audio.pause();
+        audio.currentTime = 0;
+      } else {
+        audio.volume = volume;
+      }
+    }, 100);
+  };
 
 
   // useEffect(() => {
@@ -136,7 +180,7 @@ const Board = () => {
 
   return (
     <div className='board-and-gadgets-wrapper'>
-
+{!isWheelSpinning ? 'false' : 'true'}
       <div className='board'>
         <div className="board-top-side">
           <div className='zero' onClick={() => chooseOption(0)}><span>0</span></div>

@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
   isBallSpinning: false,
+  isWheelSpinning: false,
   bet: 0
 }
 
@@ -9,12 +10,23 @@ export const rouletteSlice = createSlice({
   name: 'roulette',
   initialState,
   reducers: {
+    //Ball Spinning
     startSpinning(state) {
       state.isBallSpinning = true;
     },
     stopSpinning(state) {
       state.isBallSpinning = false;
     },
+
+    //Wheel Spinning,
+    startWheelSpinning(state) {
+      state.isWheelSpinning = true;
+    },
+    stopWheelSpinning(state) {
+      state.isWheelSpinning = false;
+    },
+
+    //Bet
     increaseBet(state, action) {
       state.bet += action.payload;
     },
@@ -28,6 +40,8 @@ export const rouletteSlice = createSlice({
 export const {
   startSpinning,
   stopSpinning,
+  startWheelSpinning,
+  stopWheelSpinning,
 } = rouletteSlice.actions;
 
 export default rouletteSlice.reducer;

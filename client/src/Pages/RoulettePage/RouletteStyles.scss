@@ -10,6 +10,31 @@
   }
 }
 
+@keyframes spinWheel {
+  0% {
+    transform: rotate(0deg);
+    animation-timing-function: cubic-bezier(0.2, 0.1, 0.3, 1); /* ease-in */
+  }
+  20% {
+    transform: rotate(720deg);
+    animation-timing-function: linear;
+  }
+  80% {
+    transform: rotate(1440deg);
+    animation-timing-function: cubic-bezier(0.3, 0.6, 0.9, 0.9); /* ease-out */
+  }
+  100% {
+    transform: rotate(1800deg);
+    animation-timing-function: cubic-bezier(0.1, 0.5, 1, 1); /* ease-out */
+  }
+}
+.test {
+  display:none !important;
+}
+.wheel-animation {
+  animation: spinWheel 15s forwards;
+}
+
 .roulette-page-wrapper {
   background: url("../../assets/images/roulette/roulette-bg-1.webp") no-repeat center center;
   background-size: cover;
@@ -21,6 +46,7 @@
     // *******************//
   //        Wheel      //
   // *******************//
+
   .roulette-wheel {
     width: 80%;
     box-sizing: border-box;
