@@ -1,5 +1,11 @@
 @import "../../colorConstants.scss";
 
+
+// *******************//
+//        Animations      //
+// *******************//
+
+//Ball Spin
 @keyframes spin {
   0% {
     transform: translate(-50%, -50%) rotate(0deg) translateX(800%) rotate(0deg);
@@ -10,6 +16,8 @@
   }
 }
 
+
+//Roulette Wheel Spin
 @keyframes spinWheel {
   0% {
     transform: rotate(0deg);
@@ -28,9 +36,41 @@
     animation-timing-function: cubic-bezier(0.1, 0.5, 1, 1); /* ease-out */
   }
 }
-.test {
-  display:none !important;
+
+//Result Number Showing
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: scale(0) translateY(100%);
+  }
+  25% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  75% {
+    opacity: 1;
+    transform: scale(2);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.5) translateY(-100%);
+  }
 }
+
+.result-number {
+  position: absolute;
+  color:#000;
+  top: 43%;
+  left: 45%;
+  transform: translate(-50%, -50%);
+  font-size: 3em;
+  text-shadow: rgb(255, 255, 255) 1px 0 10px;
+  font-weight: bold;
+  opacity: 0;
+  animation: fadeInOut 3s forwards;
+}
+
+
 .wheel-animation {
   animation: spinWheel 15s forwards;
 }
@@ -48,7 +88,7 @@
   // *******************//
 
   .roulette-wheel {
-    width: 80%;
+    width: 78%;
     box-sizing: border-box;
 
     .roulette-img-wrapper {
@@ -151,11 +191,37 @@
               }
               
             }
-            .red { background: linear-gradient(107.2deg, rgb(150, 15, 15) 10.6%, rgb(247, 0, 0) 91.1%); color: transparent; text-shadow: none;
-              &:hover { background: linear-gradient(107.2deg, rgb(101, 10, 10) 10.6%, rgb(185, 0, 0) 91.1%);}}
+            .red { background: linear-gradient(107.2deg, rgb(150, 15, 15) 10.6%, rgb(247, 0, 0) 91.1%); color: transparent; text-shadow: none; position: relative; transition: background 0.5s;
+              &:hover { background: linear-gradient(107.2deg, rgb(101, 10, 10) 10.6%, rgb(185, 0, 0) 91.1%);
+                &::after { opacity: 1;}
+              }
+              &::after {
+                content: 'RED';
+                color: red;
+                position: absolute;
+                left: 23%;
+                top: 20%;
+                font-size: 0.9em;
+                opacity: 0;
+                transition: opacity 0.5s, transform 0.5s;
+              }
+            }
 
-            .black { background: linear-gradient(to right, #434343 0%, black 100%); color: transparent; text-shadow: none;
-            &:hover { background: linear-gradient(to right, #000000 0%, black 100%); }}
+            .black { background: linear-gradient(to right, #434343 0%, black 100%); color: transparent; text-shadow: none; position: relative; transition: background 0.5s;
+            &:hover { background: linear-gradient(to right, #000000 0%, black 100%);
+              &::after { opacity: 1;}
+            }
+            &::after {
+              content: 'BLACK';
+              color: #616161;
+              position: absolute;
+              left: 12%;
+              top: 20%;
+              font-size: 0.8em;
+              opacity: 0;
+              transition: opacity 0.5s, transform 0.5s;
+            }
+          }
 
             .left-border { border-radius: 0 0 0 50%;}
             .right-border { border-radius: 0 0 50% 0;}

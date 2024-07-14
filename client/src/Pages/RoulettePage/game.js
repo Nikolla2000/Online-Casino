@@ -17,6 +17,7 @@ export class Game {
   isEven(number) {
     return number % 2 == 0;
   }
+  
   checkWin(betChoice, betSum) {
     const result = this.getResult();
     let win = 0;
@@ -53,7 +54,7 @@ export class Game {
       }
     }
     console.log('Result: ', result, "\n BetChoice: ", betChoice, "\n Win: ", win);
-    return win;
+    return { result, win };
   }
 
 

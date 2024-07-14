@@ -6,7 +6,7 @@ import fetchTotalCredits from '../../../lib/data';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateCredits } from '../../../redux/features/slots/slotMachineSlice';
 import toast from 'react-hot-toast';
-import { startSpinning, startWheelSpinning, stopSpinning, stopWheelSpinning } from '../../../redux/features/roulette/rouletteSlice';
+import { setResult, startSpinning, startWheelSpinning, stopSpinning, stopWheelSpinning } from '../../../redux/features/roulette/rouletteSlice';
 
 const Board = () => {
   const { user } = useContext(UserContext);
@@ -82,13 +82,19 @@ const Board = () => {
           setTimeout(() => {
             dispatch(stopSpinning());
             fadeOutAudio(ballAudio, 1000); // 1 sec audio fade
+
+            const { result, win } = game.checkWin(choice, sum);
+            dispatch(setResult(result));
+
+            setTimeout(() => {
+              dispatch(setResult(null));
+            }, 1500)
           }, 2000)
   
         }, 6000)
 
       }, 1500)
       
-      game.checkWin(choice, sum);
     }
   }
 
@@ -180,7 +186,6 @@ const Board = () => {
 
   return (
     <div className='board-and-gadgets-wrapper'>
-{!isWheelSpinning ? 'false' : 'true'}
       <div className='board'>
         <div className="board-top-side">
           <div className='zero' onClick={() => chooseOption(0)}><span>0</span></div>
