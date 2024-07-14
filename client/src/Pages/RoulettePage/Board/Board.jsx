@@ -17,8 +17,8 @@ const Board = () => {
   // const [bettingTime, setBettingTime] = useState(0);
   // const [seconds, setSeconds] = useState(20)
   // const [hasFirstStarted, setHasFirstStarted] = useState(false);
-  const isWheelSpinning = useSelector(state => state.roulette.isWheelSpinning);
-  const [wheelState, setWheelState] = useState(isWheelSpinning);
+  const result = useSelector(state => state.roulette.result);
+  const [lastResult, setLastresult] = useState(null);
 
   const [game, setGame] = useState(null);
   const chips = [5, 10, 25, 50, 100];
@@ -74,7 +74,11 @@ const Board = () => {
 
       setTimeout(() => {
         ballAudio.play();
-        dispatch(startSpinning());  
+        dispatch(startSpinning());
+
+        const interval = setInterval(() => {
+          setLastresult(Math.floor(Math.random() * 37));
+        }, 50)
 
         setTimeout(() => {
           dispatch(stopWheelSpinning());
@@ -85,6 +89,8 @@ const Board = () => {
 
             const { result, win } = game.checkWin(choice, sum);
             dispatch(setResult(result));
+            clearInterval(interval);
+            setLastresult(result);
 
             setTimeout(() => {
               dispatch(setResult(null));
@@ -115,52 +121,6 @@ const Board = () => {
       }
     }, 100);
   };
-
-
-  // useEffect(() => {
-  //   let intervalId;
-  //   let timeoutId;
-  
-  //   const startBetting = () => {
-  //     setBettingTime(0);
-  
-  //     intervalId = setInterval(() => {
-  //       setBettingTime((prevTime) => {
-  //         if (prevTime >= 100) {
-  //           clearInterval(intervalId);
-  //           // Reset the countdown after 15 seconds
-  //           timeoutId = setTimeout(() => {
-  //             startBetting();
-  //           }, 15000);
-  //           return 0;
-  //         } else {
-  //           return prevTime + 5;
-  //         }
-  //       });
-  //     }, 1000);
-  //   };
-  
-  //   startBetting();
-  
-  //   // Clear the interval and timeout when the component is unmounted
-  //   return () => {
-  //     clearInterval(intervalId);
-  //     clearTimeout(timeoutId);
-  //   };
-  // }, []);
-  
-
-  // useEffect(() => {
-  //   const timeout = setInterval(() => {
-  //     if(seconds > 0) {
-  //       setSeconds(prevSeconds => prevSeconds - 1)   
-  //     } else {
-  //        clearInterval(timeout)
-  //     }
-  //   }, 1000)
-  //   return () => clearInterval(timeout);
-  // }, [seconds]
-  // )
 
   
   const isBlackNumber = (num) => {
@@ -219,13 +179,6 @@ const Board = () => {
       </div>
 
       <div className="gadgets">
-        {/* <div className="place-bet-loader">
-          <h4>PLACE BET</h4>
-          <h5>{seconds}</h5>
-          <div className="loader">
-            <ProgressBar now={bettingTime}/>
-          </div>
-        </div> */}
         <div className="bet-amount-buttons">
           <button 
             className='clear-bet-btn'
@@ -250,9 +203,11 @@ const Board = () => {
       <div className='credits-info'>
         <p>Credits: {totalCredits}</p>
         <p>Bet: {bet}</p>
-        {/* <p>Win: 0</p> */}
         <p>Chosen option: <span className={chosenOption == 'RED' ? 'red' : chosenOption == 'BLACK' ? 'black' : ''}>{chosenOption}</span></p>
       </div>
+      <p className='result'>
+          {!result ? lastResult : result}
+      </p>
     </div>
   );
 };

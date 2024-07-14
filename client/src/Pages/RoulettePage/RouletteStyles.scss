@@ -127,6 +127,7 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    position: relative;
 
       .board {
         
@@ -317,6 +318,24 @@
 
       .red { color: red; }
       .black { color: #000; }
+    }
+
+    .result {
+      position: absolute;
+      top: 91%;
+      border:1px solid $primary-white;
+      color: $primary-white;
+      font-weight: bold;
+      text-align: center;
+      font-size: 1.4em;
+      border-radius: 10px;
+      padding: 10px;
+      width: 60px;
+      height: 50px;
+
+      -webkit-box-shadow: 0px 0px 16px 0px rgba(255,255,255,1);
+      -moz-box-shadow: 0px 0px 16px 0px rgba(255,255,255,1);
+      box-shadow: 0px 0px 16px 0px rgba(255,255,255,1);
     }
   }
 }
