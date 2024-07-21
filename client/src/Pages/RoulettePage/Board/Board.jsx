@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateCredits } from '../../../redux/features/slots/slotMachineSlice';
 import toast from 'react-hot-toast';
 import { setResult, startSpinning, startWheelSpinning, stopSpinning, stopWheelSpinning } from '../../../redux/features/roulette/rouletteSlice';
+import { incrementNumber } from '../../../lib/actions';
 
 const Board = () => {
   const { user } = useContext(UserContext);
@@ -57,17 +58,24 @@ const Board = () => {
 
   //Play round function
   const playRound = (choice, sum) => {
+    const errorAudio = new Audio('../../../src/assets/sounds/error-sound.mp3');
     if(totalCredits < sum) {
       toast.error('You donn\'t have enough credits', {
         position: 'top-center'
       })
+      errorAudio.play();
+
     } else if (!bet || !chosenOption) {
       toast.error('You need to choose bet and a betting option', {
         position: 'top-center'
       })
+      errorAudio.play();
+
     } else {
       const wheelAudio = new Audio('../../../src/assets/sounds/spin-wheel-sound.mp3');
       const ballAudio = new Audio('../../../src/assets/sounds/roll-ball-roulette-sound.mp3');
+      const winAudio = new Audio('../../../src/assets/sounds/roulette-win-sound.mp3')
+      const coinPayoutAudio = new Audio('../../../src/assets/sounds/coin-payout-sound.mp3');
 
       wheelAudio.play()
       dispatch(startWheelSpinning());
@@ -95,10 +103,26 @@ const Board = () => {
             dispatch(setResult(result));
             clearInterval(interval);
             setLastresult(result);
-
+            
             if(win) {
+              winAudio.play();
               updateTotalCredits(user.id, newCredits + win);
-              dispatch(updateCredits(newCredits + win));
+              const incrementNum = incrementNumber(sum);
+
+              setTimeout(() => {
+                let current = newCredits;
+                coinPayoutAudio.play();
+
+                const incrementInterval = setInterval(() => {
+                  if(current < newCredits + win) {
+                    dispatch(updateCredits(current + incrementNum));
+                    current += incrementNum;
+                  } else {
+                    clearInterval(incrementInterval);
+                  }
+                }, 50)
+
+              }, 1500)
             }
             
             setTimeout(async () => {
