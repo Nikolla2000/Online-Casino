@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import { Game } from '../game';
 import { UserContext } from '../../../../context/userContext';
-import fetchTotalCredits from '../../../lib/data';
+import { fetchTotalCredits, updateTotalCredits } from '../../../lib/data';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateCredits } from '../../../redux/features/slots/slotMachineSlice';
 import toast from 'react-hot-toast';
@@ -71,6 +71,10 @@ const Board = () => {
 
       wheelAudio.play()
       dispatch(startWheelSpinning());
+      dispatch(updateCredits(totalCredits - sum));
+      const newCredits = totalCredits - sum;
+      updateTotalCredits(user.id, newCredits);
+
 
       setTimeout(() => {
         ballAudio.play();
@@ -92,7 +96,12 @@ const Board = () => {
             clearInterval(interval);
             setLastresult(result);
 
-            setTimeout(() => {
+            if(win) {
+              updateTotalCredits(user.id, newCredits + win);
+              dispatch(updateCredits(newCredits + win));
+            }
+            
+            setTimeout(async () => {
               dispatch(setResult(null));
             }, 1500)
           }, 2000)
