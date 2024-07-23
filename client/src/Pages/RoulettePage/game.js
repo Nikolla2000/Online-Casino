@@ -5,7 +5,6 @@ export class Game {
   constructor() {
     this.#numbers = Array.from({ length: 37 }, (_, i) => i);
     this.blackNumbers = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35];
-    console.log(this.#numbers);
   }
 
   getResult() {
@@ -53,7 +52,7 @@ export class Game {
         win = betSum * 3;
       }
     }
-    console.log('Result: ', result, "\n BetChoice: ", betChoice, "\n Win: ", win);
+
     return { result, win };
   }
 

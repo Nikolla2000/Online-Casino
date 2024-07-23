@@ -34,7 +34,6 @@ const Board = () => {
       if (user && user.id) {
         const credits = await fetchTotalCredits(user.id);
         dispatch(updateCredits(credits));
-        console.log(totalCredits);
       }
     };
 
