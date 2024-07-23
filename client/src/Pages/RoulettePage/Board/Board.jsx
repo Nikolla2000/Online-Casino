@@ -12,23 +12,21 @@ import { incrementNumber } from '../../../lib/actions';
 
 const Board = () => {
   const { user } = useContext(UserContext);
-  const totalCredits = useSelector(state => state.slotMachine.totalCredits);
   const dispatch = useDispatch();
-
-  const blackNumbers = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35];
-  // const [bettingTime, setBettingTime] = useState(0);
-  // const [seconds, setSeconds] = useState(20)
-  // const [hasFirstStarted, setHasFirstStarted] = useState(false);
+  const totalCredits = useSelector(state => state.slotMachine.totalCredits);
   const result = useSelector(state => state.roulette.result);
+
   const [lastResult, setLastresult] = useState(null);
   const [creditsAnimation, setCreditsAnimation] = useState(false);
-
+  const [placeBetActive, setPlaceBetActive] = useState(true);
   const [game, setGame] = useState(null);
+  const [chosenOption, setChosenOption] = useState(null);
+  const [bet, setBet] = useState(0);
+  
+  const blackNumbers = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35];
   const chips = [5, 10, 25, 50, 100];
 
-  const [bet, setBet] = useState(0);
-  const [chosenOption, setChosenOption] = useState(null);
-
+  //Fetching total credits from the server and updating the state
   useEffect(() => {
     const fetchCredits = async () => {
       if (user && user.id) {
@@ -83,6 +81,7 @@ const Board = () => {
       dispatch(updateCredits(totalCredits - sum));
       const newCredits = totalCredits - sum;
       updateTotalCredits(user.id, newCredits);
+      setPlaceBetActive(false);
 
 
       setTimeout(() => {
@@ -124,11 +123,12 @@ const Board = () => {
                     setCreditsAnimation(false);
                   }
                 }, 50)
-
+                
               }, 1500)
             }
             
             setTimeout(async () => {
+              setPlaceBetActive(true);
               dispatch(setResult(null));
             }, 1500)
           }, 2000)
@@ -230,7 +230,7 @@ const Board = () => {
               onClick={() => increaseBet(chip)}/> 
           ))}
           <button 
-            className='place-bet-btn'
+            className={`place-bet-btn ${!placeBetActive ? 'place-bet-btn-inactive' : ''}`}
             onClick={() => playRound(chosenOption, bet)}>
               Place Bet
           </button>
