@@ -57,6 +57,36 @@
   }
 }
 
+//Credits shining when winning
+@keyframes shining {
+  0% {
+    color: greenyellow;
+  }
+  20% {
+    color: $primary-white;
+    transform: scale(1.3);
+  }
+  40% {
+    color: greenyellow;
+    transform: scale(1);
+
+  }
+  60% {
+    color: $primary-white;
+    transform: scale(1.3);
+
+  }
+  80% {
+    color: greenyellow;
+    transform: scale(1);
+
+  }
+  100% {
+    color: $primary-white;
+
+  }
+}
+
 .result-number {
   position: absolute;
   color:#000;
@@ -315,7 +345,18 @@
       justify-content: space-evenly;
       color:$primary-white;
       font-weight: bold;
-      font-size: 1.2em;
+      font-size: 1.3em;
+      text-shadow: 1px 2px 2px black;
+
+      .total-credits-wrapper {
+        display:flex;
+        flex-direction: row;
+        gap:5px;
+
+        .total-credits {
+          animation: shining 1.5s forwards;
+        }
+      }
 
       .red { color: red; }
       .black { color: #000; }
@@ -323,7 +364,7 @@
 
     .result {
       position: absolute;
-      top: 91%;
+      top: 97%;
       border:1px solid $primary-white;
       color: $primary-white;
       font-weight: bold;

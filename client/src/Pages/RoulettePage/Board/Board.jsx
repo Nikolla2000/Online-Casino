@@ -6,6 +6,7 @@ import { fetchTotalCredits, updateTotalCredits } from '../../../lib/data';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateCredits } from '../../../redux/features/slots/slotMachineSlice';
 import toast from 'react-hot-toast';
+import 'animate.css';
 import { setResult, startSpinning, startWheelSpinning, stopSpinning, stopWheelSpinning } from '../../../redux/features/roulette/rouletteSlice';
 import { incrementNumber } from '../../../lib/actions';
 
@@ -20,6 +21,7 @@ const Board = () => {
   // const [hasFirstStarted, setHasFirstStarted] = useState(false);
   const result = useSelector(state => state.roulette.result);
   const [lastResult, setLastresult] = useState(null);
+  const [creditsAnimation, setCreditsAnimation] = useState(false);
 
   const [game, setGame] = useState(null);
   const chips = [5, 10, 25, 50, 100];
@@ -111,6 +113,7 @@ const Board = () => {
 
               setTimeout(() => {
                 let current = newCredits;
+                setCreditsAnimation(true);
                 coinPayoutAudio.play();
 
                 const incrementInterval = setInterval(() => {
@@ -119,6 +122,7 @@ const Board = () => {
                     current += incrementNum;
                   } else {
                     clearInterval(incrementInterval);
+                    setCreditsAnimation(false);
                   }
                 }, 50)
 
@@ -234,7 +238,10 @@ const Board = () => {
         </div>
       </div>
       <div className='credits-info'>
-        <p>Credits: {totalCredits}</p>
+        <div className='total-credits-wrapper'>
+          <p>Credits:</p>
+          <p className={creditsAnimation && 'total-credits'}>{totalCredits}</p>
+        </div>
         <p>Bet: {bet}</p>
         <p>Chosen option: <span className={chosenOption == 'RED' ? 'red' : chosenOption == 'BLACK' ? 'black' : ''}>{chosenOption}</span></p>
       </div>
