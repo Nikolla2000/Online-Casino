@@ -28,7 +28,7 @@ const GameThumbnail = ({ data, firstAnimation, secondAnimation }) => {
      <div className={`game-wrapper`}>
       <div onClick={handleClick}>
       <div className='game-thumbnail-wrapper'>
-      <video autoPlay loop muted src={data.image} style={{ width: '230px', height: '300px', objectFit: 'cover', borderRadius: '30px' }}>
+      <video autoPlay loop muted src={data.image} style={{ width: '230px', height: '300px', objectFit: 'cover', borderRadius: '10px' }}>
       </video>
         {data.rouletteImg && <img className='game-image' src={data.rouletteImg} alt="game-image" />}
         {showLoginModal && <LoginForm/>}
