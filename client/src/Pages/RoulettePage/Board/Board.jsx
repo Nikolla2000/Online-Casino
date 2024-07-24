@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 import 'animate.css';
 import { setResult, startSpinning, startWheelSpinning, stopSpinning, stopWheelSpinning } from '../../../redux/features/roulette/rouletteSlice';
 import { incrementNumber } from '../../../lib/actions';
+import GoBackBtn from '../../../Components/GoBackBtn/GoBackBtn';
 
 const Board = () => {
   const { user } = useContext(UserContext);
@@ -247,6 +248,7 @@ const Board = () => {
       <p className='result'>
           {!result ? lastResult : result}
       </p>
+      <GoBackBtn path='/games'>Go Back</GoBackBtn>
     </div>
   );
 };
