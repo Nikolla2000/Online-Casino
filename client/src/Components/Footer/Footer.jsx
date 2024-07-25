@@ -6,6 +6,7 @@ const Footer = () => {
         <div className="footer-wrapper">
             <div className="technologies-used-section">
                 <h3>This Website was made from scratch by me - <span className='text-red-500'>Nikola Uzunov</span>, with the help of:</h3>
+                <h5><span>Important</span> - The games are purely simulative and the money is not real !</h5>
                 <div className="technologies-icons">
                     <div className="icon">
                         <img src="/images/technologies-icons/html-icon.svg" alt="technology-icon" />

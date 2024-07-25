@@ -7,7 +7,7 @@ const GoBackBtn = ({ children, path }) => {
    return (
     <Link to={path} className="goback-btn">
         <div className="text">{children}</div>
-        <div className="icon">
+        <div className="arrow-icon">
             <FontAwesomeIcon icon={faAngleRight} style={{color: "#f1f4f8",}} />
         </div>
     </Link>

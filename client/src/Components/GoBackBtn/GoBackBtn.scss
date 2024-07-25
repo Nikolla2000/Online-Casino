@@ -15,7 +15,7 @@
   
   }
   
-  .icon {
+  .arrow-icon {
     /* display: inline-block; */
     width: 30px;
     height: 100%;
@@ -29,7 +29,7 @@
     box-shadow: 3px 3px 7px 0px rgba(0,0,0,0.75);
   }
   
-  .icon svg {
+  .arrow-icon svg {
     color: white;
     position: relative;
     left:7px;
@@ -46,13 +46,13 @@
     transition: color 0.3s ease-in-out;
   }
   
-  .goback-btn:hover .icon{
+  .goback-btn:hover .arrow-icon{
     width:100%;
   }
   .goback-btn:hover .text{
     color:#fff;
   }
-  .goback-btn:hover .icon svg{
+  .goback-btn:hover .arrow-icon svg{
     position: relative;
     left: -10px;
     top:5px;
