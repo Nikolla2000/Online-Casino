@@ -52,7 +52,7 @@ const Dashboard = () => {
 
       <div className="left-section">
         <div className="profile-image-wrapper">
-          <img src="../../src/assets/images/user.png" alt="" />
+          <img src="/images/user.png" alt="" />
           <div className="change-pic-button">+</div>
         </div>
         <div className="name-details">

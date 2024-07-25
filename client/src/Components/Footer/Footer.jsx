@@ -8,37 +8,37 @@ const Footer = () => {
                 <h3>This Website was made from scratch by me - <span className='text-red-500'>Nikola Uzunov</span>, with the help of:</h3>
                 <div className="technologies-icons">
                     <div className="icon">
-                        <img src="../../src/assets/images/technologies-icons/html-icon.svg" alt="technology-icon" />
+                        <img src="/images/technologies-icons/html-icon.svg" alt="technology-icon" />
                         <p><span>HTML</span></p>
                     </div>
                     <div className="icon">
-                        <img src="../../src/assets/images/technologies-icons/javascript-icon.svg" alt="technology-icon" />
+                        <img src="/images/technologies-icons/javascript-icon.svg" alt="technology-icon" />
                         <p><span>Javascript</span></p>
                     </div>
                     <div className="icon">
-                        <img src="../../src/assets/images/technologies-icons/css-icon.svg" alt="technology-icon" />
+                        <img src="/images/technologies-icons/css-icon.svg" alt="technology-icon" />
                         <p><span>CSS</span></p>
                     </div>
                 </div>
                 <div className="technologies-icons row-2">
                     <div className="icon">
-                        <img src="../../src/assets/images/technologies-icons/react-icon.svg" alt="technology-icon" />
+                        <img src="/images/technologies-icons/react-icon.svg" alt="technology-icon" />
                         <p><span>ReactJS</span></p>
                     </div>
                     <div className="icon">
-                        <img src="../../src/assets/images/technologies-icons/nodejs-icon.svg" alt="technology-icon" />
+                        <img src="/images/technologies-icons/nodejs-icon.svg" alt="technology-icon" />
                         <p><span>NodeJS</span></p>
                     </div>
                     <div className="icon">
-                        <img src="../../src/assets/images/technologies-icons/sass-icon.svg" alt="technology-icon" />
+                        <img src="/images/technologies-icons/sass-icon.svg" alt="technology-icon" />
                         <p><span>SASS</span></p>
                     </div>
                     <div className="icon">
-                        <img src="../../src/assets/images/technologies-icons/mongodb-icon.svg" alt="technology-icon" />
+                        <img src="/images/technologies-icons/mongodb-icon.svg" alt="technology-icon" />
                         <p><span>MongoDB</span></p>
                     </div>
                     <div className="icon">
-                        <img src="../../src/assets/images/technologies-icons/redux-icon.svg" alt="technology-icon" />
+                        <img src="/images/technologies-icons/redux-icon.svg" alt="technology-icon" />
                         <p><span>Redux</span></p>
                     </div>
                 </div>
@@ -48,27 +48,27 @@ const Footer = () => {
                 <div className="social-media-icons">
                     <div className="social-media-icon">
                         <a href='https://www.facebook.com/nikola.uzunov.18/' target='_blank' >
-                            <img src="../../src/assets/images/social-media-icons/facebook-svgrepo-com.svg" alt="social-media-icon" />
+                            <img src="/images/social-media-icons/facebook-svgrepo-com.svg" alt="social-media-icon" />
                         </a>
                     </div>
                     <div className="social-media-icon">
                         <a href='https://instagram.com/nikola.uzunov19/' target='_blank'>
-                            <img src="../../src/assets/images/social-media-icons/instagram-svgrepo-com.svg" alt="social-media-icon" />
+                            <img src="/images/social-media-icons/instagram-svgrepo-com.svg" alt="social-media-icon" />
                         </a>
                     </div>
                     <div className="social-media-icon">
                         <a href='https://nikolauzunov.netlify.app' target='_blank'>
-                            <img src="../../src/assets/images/social-media-icons/letter-n-svgrepo-com.svg" alt="social-media-icon" />
+                            <img src="/images/social-media-icons/letter-n-svgrepo-com.svg" alt="social-media-icon" />
                         </a>
                     </div>
                     <div className="social-media-icon">
                         <a href='https://github.com/Nikolla2000' target='_blank'>
-                            <img src="../../src/assets/images/social-media-icons/github-svgrepo-com.svg" alt="social-media-icon" />
+                            <img src="/images/social-media-icons/github-svgrepo-com.svg" alt="social-media-icon" />
                         </a>
                     </div>
                     <div className="social-media-icon">
                         <a href='https://www.linkedin.com/in/nikola-uzunov/' target='_blank'>
-                            <img src="../../src/assets/images/social-media-icons/linkedin-svgrepo-com.svg" alt="social-media-icon" />
+                            <img src="/images/social-media-icons/linkedin-svgrepo-com.svg" alt="social-media-icon" />
                         </a>
                     </div>
                 </div>

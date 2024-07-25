@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import videoBackground from '../../../../assets/images/background-video4.mp4'
+import videoBackground from '/images/background-video4.mp4'
 import { Link } from 'react-router-dom';
 import "animate.css"
 

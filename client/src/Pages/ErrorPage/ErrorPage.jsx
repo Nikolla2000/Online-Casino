@@ -16,7 +16,7 @@ const ErrorPage = () => {
           </button>
         </Col>
         <Col lg={6} md={12} className="slot-machine-img">
-          <img src='../../../src/assets/images/slot-machine-img.png' alt='slots image'/>
+          <img src='/images/slot-machine-img.png' alt='slots image'/>
         </Col>
         </Row>
       </Container>

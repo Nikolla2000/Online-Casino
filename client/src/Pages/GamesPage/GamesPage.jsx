@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { gamesData } from '../../Components/GameThumbnail/gamesData';
 import GameThumbnail from '../../Components/GameThumbnail/GameThumbnail';
-import backgroundVideo from "../../assets/images/games-page-background.mp4"
+import backgroundVideo from "/images/games-page-background.mp4"
 import "./GamesPageStyles.scss"
 import LoadingSpinner from '../../Components/Spinner/Spinner';
 

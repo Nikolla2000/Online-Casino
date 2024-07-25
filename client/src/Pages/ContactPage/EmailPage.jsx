@@ -25,7 +25,7 @@ const EmailPage = () => {
     <div className='email-page-wrapper'>
       <div className="video-container">
         <video autoPlay loop muted className="background-video">
-          <source src={`../../src/assets/images/email-page-bg/email-page-bg-${randomVideo()}.mp4`} type="video/mp4" />
+          <source src={`/images/email-page-bg/email-page-bg-${randomVideo()}.mp4`} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
       </div>

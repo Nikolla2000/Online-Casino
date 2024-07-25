@@ -22,7 +22,7 @@ const SpinButton = () => {
       return;
     }
     if (totalCredits < betsValue) {
-      const audio = new Audio('../../../src/assets/sounds/error-sound.mp3');
+      const audio = new Audio('/sounds/error-sound.mp3');
       audio.play();
       toast.error('Not Enough Credits');
       return;

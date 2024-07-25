@@ -58,7 +58,7 @@ const Board = () => {
 
   //Play round function
   const playRound = (choice, sum) => {
-    const errorAudio = new Audio('../../../src/assets/sounds/error-sound.mp3');
+    const errorAudio = new Audio('/sounds/error-sound.mp3');
     if(totalCredits < sum) {
       toast.error('You donn\'t have enough credits', {
         position: 'top-center'
@@ -72,10 +72,10 @@ const Board = () => {
       errorAudio.play();
 
     } else {
-      const wheelAudio = new Audio('../../../src/assets/sounds/spin-wheel-sound.mp3');
-      const ballAudio = new Audio('../../../src/assets/sounds/roll-ball-roulette-sound.mp3');
-      const winAudio = new Audio('../../../src/assets/sounds/roulette-win-sound.mp3')
-      const coinPayoutAudio = new Audio('../../../src/assets/sounds/coin-payout-sound.mp3');
+      const wheelAudio = new Audio('/sounds/spin-wheel-sound.mp3');
+      const ballAudio = new Audio('/sounds/roll-ball-roulette-sound.mp3');
+      const winAudio = new Audio('/sounds/roulette-win-sound.mp3')
+      const coinPayoutAudio = new Audio('/sounds/coin-payout-sound.mp3');
 
       wheelAudio.play()
       dispatch(startWheelSpinning());
@@ -224,7 +224,7 @@ const Board = () => {
             </button>
           {chips.map(chip => (
             <img 
-              src={`../../src/assets/images/roulette/chip-${chip}.png`} 
+              src={`/images/roulette/chip-${chip}.png`} 
               value={chip} 
               alt={`${chip} chip`}
               key={chip}

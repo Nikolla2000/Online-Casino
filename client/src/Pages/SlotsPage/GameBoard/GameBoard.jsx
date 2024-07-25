@@ -14,7 +14,7 @@ const GameBoard = () => {
   const { user } = useContext(UserContext)
   
   const checkSlotWin = async (slots) => {
-  const audio = new Audio('../../../src/assets/sounds/slot-win-sound.mp3');
+  const audio = new Audio('/sounds/slot-win-sound.mp3');
   setIsWin(false)
 
     for (let i = 0; i < slots.length; i++) {
@@ -93,7 +93,7 @@ const GameBoard = () => {
           <div key={`row-${i}`} className='row'>
             {row.map((col, j) => (
               <div key={`col-${j}`} className='image-wrapper col'>
-                <img src={`../../../src/assets/images/slot-items/slot_item_${col.toString().padStart(3, '0')}.jpg`} alt={`slot-item-${col}`} />
+                <img src={`/images/slot-items/slot_item_${col.toString().padStart(3, '0')}.jpg`} alt={`slot-item-${col}`} />
               </div>
             ))}
           </div>
@@ -103,7 +103,7 @@ const GameBoard = () => {
           <div key={`row-${i}`} className='row'>
             {row.map((col, j) => (
               <div key={`col-${j}`} className='image-wrapper col'>
-                <img src={`../../../src/assets/images/slot-items/slot_item_${col.toString().padStart(3, '0')}.jpg`} alt={`slot-item-${col}`} />
+                <img src={`/images/slot-items/slot_item_${col.toString().padStart(3, '0')}.jpg`} alt={`slot-item-${col}`} />
               </div>
             ))}
           </div>

@@ -38,7 +38,7 @@ const UserDropdown = ({ show, play }) => {
   return (
     <div className={`user-dropdown ${!show? 'reverse' : ''}`}>
       <div className="user-dropdown-img">
-        <img src='../../../src/assets/images/user.png' alt='user-img' />
+        <img src='/images/user.png' alt='user-img' />
       </div>
       {user.name && <h3 className='text-white text-xl'>Welcome, {user.name}!</h3>}
       <div className="dropdown-buttons">

@@ -9,7 +9,7 @@ const Wheel = () => {
   return (
     <div className={`roulette-wheel ${isWheelSpinning ? 'wheel-animation' : ''}`}>
       <div className="roulette-img-wrapper">
-        <img src='../../src/assets/images/roulette/roulette-wheel-nobg.png' alt='wheel'/>
+        <img src='/images/roulette/roulette-wheel-nobg.png' alt='wheel'/>
         {isBallSpinning && <div className="ball"></div>}
         {result !== null && (
           <div className="result-number">
