@@ -10,12 +10,13 @@ import { toast } from 'react-hot-toast';
 const AdminPage = () => {
   const [users, setUsers] = useState([]);
   const {user} = useContext(UserContext)
+  const adminUser = import.meta.env.VITE_ADMIN_USER;
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
   useEffect(() => {
     const fetchUsers = async () => {
-      if(user.name && user.email === 'nikollla2000@abv.bg'){
+      if(user.name && user.email === adminUser){
       let isMounted = true;
       const controller = new AbortController();
 
@@ -55,8 +56,8 @@ const AdminPage = () => {
     }
   }
 
-  const admin = users.find(user => user.email === 'nikollla2000@abv.bg');
-  const otherUsers = users.filter(user => user.email !== 'nikollla2000@abv.bg');
+  const admin = users.find(user => user.email === adminUser);
+  const otherUsers = users.filter(user => user.email !== adminUser);
 
   return (
     <div className='admin-page-wrapper'>

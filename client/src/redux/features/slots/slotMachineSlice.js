@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import axios from "../../../axiosConfig";
 // import checkSlotWin from "../../../hooks/checkSlotWin";
 // import { twoColsWin } from "./betsSlice";
 
@@ -17,7 +18,7 @@ export const updateCreditsOnServer = createAsyncThunk(
   "slotMachine/updateCreditsOnServer",
   async(totalCredits) => {
     try {
-      const response = await axios.put("server/v1/user/updateCredits", {
+      const response = await axios.put("user/updateCredits", {
         totalCredits
       })
       return response.data
