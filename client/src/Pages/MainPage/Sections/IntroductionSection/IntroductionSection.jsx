@@ -9,7 +9,7 @@ const IntroductionSection = () => {
       <TrackVisibility>
         {({ isVisible }) => (
         <div className={`image-wrapper ${isVisible && 'animate__animated animate__fadeInLeft'}`}>
-          <img src="../../../src/assets/images/cards-and-chips.png" alt="Cards and Chips" />
+          <img src="/images/cards-and-chips.png" alt="Cards and Chips" />
         </div>
         )}
       </TrackVisibility>
