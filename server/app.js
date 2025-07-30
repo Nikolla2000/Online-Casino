@@ -23,6 +23,7 @@ app.use(cors({
 //routers
 const userRouter = require('./routes/User.router');
 const slotRouter = require('./routes/Slot.router');
+const authRouter = require('./routes/Auth.router');
 
 //middleware
 app.use(cookieParser());
@@ -33,6 +34,7 @@ app.use(express.json());
 
 //routes
 app.use('/server/v1/user', userRouter);
+app.use('/server/v1/auth', authRouter);
 app.use('/server/v1/slots', slotRouter);
 
 
