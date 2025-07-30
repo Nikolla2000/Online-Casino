@@ -16,7 +16,7 @@ const Navigation = () => {
       <div className="nav-wrapper">
       <div className={showMobileMenu ? "show-mobile-menu" : "nav-menu"}>
           {Object.values(routes)
-          .filter((element) => element.includeInNav === true)
+          .filter((element) => element.includeInNav)
           .map((element, index) => (
             <NavLink
               key={index + 1}
