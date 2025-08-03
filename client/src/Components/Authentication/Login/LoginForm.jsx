@@ -8,41 +8,39 @@ import { toast } from 'react-hot-toast'
 import { useDispatch } from 'react-redux';
 import { showRegister } from '../../../redux/features/auth/authModalsSlice';
 
+import { useForm } from "react-hook-form"
+import { login } from '../../../redux/features/auth/authSlice';
+
 const LoginForm = ({ handleClose }) => {
-  const [loginErrorMsg, setLoginErrorMsg] = useState('')
 
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  })
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    })
-  }
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setLoginErrorMsg('')
-    try {
-      axios.post('/user/login', formData)
-      .then(() => location.reload())
-      .then(() => toast.success('Login successfull'))
-    } catch (error) {
-      setLoginErrorMsg('Invalid email or password')
-      console.log(`Login error: ${error}`);
-    }
-  };
-
-  //redux
   const dispatch = useDispatch()
 
   const handleShowRegister = () => {
     dispatch(showRegister())
   }
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm()
+
+  const onSubmit = async (data) => {
+    try {
+      const res = await dispatch(login(data));
+
+      if (login.fulfilled.match(res)) {
+        toast.success('Login successful');
+      } else {
+        toast.error('Invalid username or password');
+      }
+    } catch (err) {
+      toast.error('Login failed. Please try again.');
+      console.error('Login error:', err);
+    }
+  } 
+
 
   return (
     <div className='login-modal-wrapper'>
@@ -57,15 +55,16 @@ const LoginForm = ({ handleClose }) => {
           Login
         </Typography>
         <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-         <form onSubmit={handleSubmit}>
+         <form onSubmit={handleSubmit(onSubmit)}>
         <div>
-          <label htmlFor="username">Email</label>
+          <label htmlFor="username">Username</label>
           <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
+            type="username"
+            id="username"
+            name="username"
+            // value={formData.email}
+            // onChange={handleChange}
+            {...register("username")}
             style={{ color: '#000' }}
             required
           />
@@ -76,18 +75,20 @@ const LoginForm = ({ handleClose }) => {
             type="password"
             id="password"
             name="password"
-            value={formData.password}
-            onChange={handleChange}
+            // value={formData.password}
+            // onChange={handleChange}
+            {...register("password")}
             style={{ color: '#000' }}
             required
           />
+          {errors.password && <span>This field is required</span>}
         </div>
         <div className=''>
           <button type="submit" className='text-lg border-1 px-2 mt-2'>Login</button>
         </div>
         <p className='text-xs mt-3'>Dont have an account? <br></br> 
         You can register <span className='text-red-500 cursor-pointer' onClick={handleShowRegister}>here</span></p>
-        <p>{loginErrorMsg}</p>
+        {/* <p>{loginErrorMsg}</p> */}
       </form>
         </Typography>
       </Box>

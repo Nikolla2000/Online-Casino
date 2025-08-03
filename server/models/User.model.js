@@ -43,18 +43,29 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: 'Unknown'
   },
-  phoneNumber: {
-    type: String,
-    trim: true,
-    unique: true,
-    required: [true, "You must provide a phone number"],
-    match: [/^08\d{8}$/, "Invalid phone number format"],
-  },
+  // phoneNumber: {
+  //   type: String,
+  //   trim: true,
+  //   unique: true,
+  //   required: [true, "You must provide a phone number"],
+  //   match: [/^08\d{8}$/, "Invalid phone number format"],
+  // },
   totalCredits: {
     type: Number,
     default: 10000
   }
 })
+
+UserSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
+  const salt = await bcrypt.genSalt();
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
+});
+
+// UserSchema.methods.comparePassword = function (pass) {
+//   return bcrypt.compare(pass, this.password);
+// };
 
 UserSchema.methods.createJWT = function () {
   return jwt.sign(

@@ -20,7 +20,7 @@ const UserDropdown = ({ show, play }) => {
   }
 
   const loginOrLogout = async () => {
-    if (user.name) {
+    if (user) {
       try {
         await axios.get('/user/logout');
   
@@ -40,13 +40,13 @@ const UserDropdown = ({ show, play }) => {
       <div className="user-dropdown-img">
         <img src='/images/user.png' alt='user-img' />
       </div>
-      {user.name && <h3 className='text-white text-xl'>Welcome, {user.name}!</h3>}
+      {user && <h3 className='text-white text-xl'>Welcome, {user.name}!</h3>}
       <div className="dropdown-buttons">
-        {user.name && <button><Link to='dashboard' className='text-capitalize'>Profile</Link></button>}
+        {user && <button><Link to='dashboard' className='text-capitalize'>Profile</Link></button>}
         <button onClick={loginOrLogout}>
-          {!user.name ? 'Login' : 'Logout'}
+          {!user ? 'Login' : 'Logout'}
         </button>
-        {!user.name && <button onClick={() => dispatch(showRegister())}>Register</button>}
+        {!user && <button onClick={() => dispatch(showRegister())}>Register</button>}
       </div>
       {showRegisterModal && <RegisterForm handleClose={handleClose}/>}
       {showLoginModal && <LoginForm handleClose={handleClose}/>}

@@ -2,42 +2,74 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User.model');
 const { comparePasswords } = require('../helpers/auth');
+const { generateAccessToken, generateRefreshToken } = require('../helpers/tokens');
+
 
 const login = async (req, res) => {
     const { username, password } = req.body;
+    if (!username || !password) {
+        return res.status(400).json({ error: 'Username and password are required' });
+    }
 
     const user = await User.findOne({ username });
-    if (!user) {
+
+    if (!user || !(await comparePasswords(password, user.password))) {
         return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    const match = await comparePasswords(password, user.password);
-    if (match) {
-        const token = jwt.sign({ id: user.id, username: user.username },
-            process.env.JWT_SECRET, 
-            { expiresIn: '1h' });
-            return res.json({ token });
-    } else {
-        return res.status(401).json({ error: 'Invalid credentials' });
+    const accessToken = generateAccessToken(user._id);
+    const refreshToken = generateRefreshToken(user._id);
+
+    user.refreshToken = refreshToken;
+    await user.save();
+
+    res.cookie('jwt', refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'Strict',
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    return res.json({ accessToken });
+}
+
+
+const refresh = async (req, res) => {
+    const { token } = req.body;
+    if (!token) return res.sendStatus(401);
+
+    try {
+        const payload = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
+        const user = await User.findById(payload.userId);
+        if (!user || user.refreshToken !== token) return res.sendStatus(403);
+
+        const accessToken = generateAccessToken(user._id);
+        res.json({ accessToken });
+    } catch (err) {
+        res.status(403).json({ error: err });
     }
 }
 
-const validateToken = (req, res) => {
-    const token = res.header('Authorization').replace('Bearer ', '');
 
-    if (!token) {
-        return res.status(401).json({ error: 'No token provided' });
-    }
+const logout = async (req, res) => {
+    const token = req.cookies.jwt;
+    if (!token) return res.sendStatus(204);
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        res.json({ user: { id: decoded.id, username: decoded.username } });
-    } catch (err) {
-        res.status(401).json({ error: 'Invalid token' });
-    }
+        const payload = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
+        const user = await User.findById(payload.userId);
+        if (user) {
+          user.refreshToken = null;
+          await user.save();
+        }
+    } catch {}
+
+    res.clearCookie('jwt', { httpOnly: true, sameSite: 'Strict', secure: process.env.NODE_ENV === 'production' });
+    res.sendStatus(204);
 }
 
 module.exports = {
     login,
-    validateToken,
+    refresh,
+    logout,
 }
