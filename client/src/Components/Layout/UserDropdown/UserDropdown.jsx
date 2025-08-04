@@ -7,6 +7,7 @@ import axios from '../../../axiosConfig';
 import { useSelector, useDispatch } from 'react-redux';
 import { hideModals, showLogin, showRegister } from '../../../redux/features/auth/authModalsSlice';
 import { Link, useNavigate } from 'react-router-dom';
+import { logout, logoutUser } from '../../../redux/features/auth/authSlice';
 
 const UserDropdown = ({ show, play }) => {
   const dispatch = useDispatch()
@@ -20,6 +21,7 @@ const UserDropdown = ({ show, play }) => {
   }
 
   const loginOrLogout = async () => {
+    alert("BAA");
     if (user) {
       try {
         await axios.get('/user/logout');
@@ -33,6 +35,15 @@ const UserDropdown = ({ show, play }) => {
       dispatch(showLogin());
     }
   };
+
+  const handleLogout = async () => {
+    try {
+      await dispatch(logoutUser()).unwrap();
+      navigate('/');
+    } catch (err) {
+      console.error('Logout failed:', err);
+    }
+  };
   
 
   return (
@@ -43,8 +54,9 @@ const UserDropdown = ({ show, play }) => {
       {user && <h3 className='text-white text-xl'>Welcome, {user.name}!</h3>}
       <div className="dropdown-buttons">
         {user && <button><Link to='dashboard' className='text-capitalize'>Profile</Link></button>}
-        <button onClick={loginOrLogout}>
-          {!user ? 'Login' : 'Logout'}
+        <button>
+        {/* <button onClick={user ? loginOrLogout : handleLogout}> */}
+          {!user ? <span>Login</span> : <span onClick={handleLogout}>Logout</span>}
         </button>
         {!user && <button onClick={() => dispatch(showRegister())}>Register</button>}
       </div>

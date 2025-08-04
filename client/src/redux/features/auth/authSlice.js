@@ -18,6 +18,13 @@ export const refresh = createAsyncThunk('auth/refresh', async () => {
 });
 
 
+export const logoutUser = createAsyncThunk('auth/logout', async () => {
+    await axios.get('/auth/logout', {
+      withCredentials: true,
+    });
+});
+
+
 const initialState = {
   accessToken: null,
   status: 'idle',
@@ -30,7 +37,7 @@ const authSlice = createSlice({
   reducers: {
     logout: (state) => {
       state.accessToken = null;
-      localStorage.removeItem('refreshToken');
+    //   localStorage.removeItem('refreshToken');
     }
   },
   extraReducers: (builder) => {
@@ -40,7 +47,10 @@ const authSlice = createSlice({
     })
     .addCase(refresh.fulfilled, (state, action) => {
       state.accessToken = action.payload.accessToken;
-    });
+    })
+    .addCase(logoutUser.fulfilled, (state) => {
+        state.accessToken = null;
+    })
   }
 })
 
