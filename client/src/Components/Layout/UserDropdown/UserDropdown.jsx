@@ -15,6 +15,7 @@ const UserDropdown = ({ show, play }) => {
   const { showLoginModal, showRegisterModal } = useSelector(state => state.authModals)
 
   const {user} = useContext(UserContext)
+  console.log(user);
 
   const handleClose = () => {
     dispatch(hideModals())
@@ -36,6 +37,10 @@ const UserDropdown = ({ show, play }) => {
     }
   };
 
+  const showLoginForm = () => {
+    dispatch(showLogin());
+  }
+
   const handleLogout = async () => {
     try {
       await dispatch(logoutUser()).unwrap();
@@ -51,14 +56,14 @@ const UserDropdown = ({ show, play }) => {
       <div className="user-dropdown-img">
         <img src='/images/user.png' alt='user-img' />
       </div>
-      {user && <h3 className='text-white text-xl'>Welcome, {user.name}!</h3>}
+      {user.name && <h3 className='text-white text-xl'>Welcome, {user.name}!</h3>}
       <div className="dropdown-buttons">
-        {user && <button><Link to='dashboard' className='text-capitalize'>Profile</Link></button>}
+        {user.name && <button><Link to='dashboard' className='text-capitalize'>Profile</Link></button>}
         <button>
         {/* <button onClick={user ? loginOrLogout : handleLogout}> */}
-          {!user ? <span>Login</span> : <span onClick={handleLogout}>Logout</span>}
+          {!user.name ? <span onClick={showLoginForm}>Login</span> : <span onClick={handleLogout}>Logout</span>}
         </button>
-        {!user && <button onClick={() => dispatch(showRegister())}>Register</button>}
+        {!user.name && <button onClick={() => dispatch(showRegister())}>Register</button>}
       </div>
       {showRegisterModal && <RegisterForm handleClose={handleClose}/>}
       {showLoginModal && <LoginForm handleClose={handleClose}/>}
