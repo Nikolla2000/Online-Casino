@@ -53,6 +53,10 @@ const UserSchema = new mongoose.Schema({
   totalCredits: {
     type: Number,
     default: 10000
+  },
+  refreshToken: {
+    type: String,
+    default: ""
   }
 })
 

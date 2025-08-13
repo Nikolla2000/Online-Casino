@@ -3,17 +3,19 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import '../Register/RegisterStyles.scss'
-import axios from '../../../axiosConfig';
 import { toast } from 'react-hot-toast'
 import { useDispatch } from 'react-redux';
-import { showRegister } from '../../../redux/features/auth/authModalsSlice';
+import { hideModals, showRegister } from '../../../redux/features/auth/authModalsSlice';
 
 import { useForm } from "react-hook-form"
-import { login } from '../../../redux/features/auth/authSlice';
+import { fetchCurrentUser, login } from '../../../redux/features/auth/authSlice';
+import { useNavigate } from 'react-router';
 
 const LoginForm = ({ handleClose }) => {
 
   const dispatch = useDispatch()
+
+  const navigate = useNavigate();
 
   const handleShowRegister = () => {
     dispatch(showRegister())
@@ -32,6 +34,12 @@ const LoginForm = ({ handleClose }) => {
 
       if (login.fulfilled.match(res)) {
         toast.success('Login successful');
+        const token = res.payload.accessToken;
+        await dispatch(fetchCurrentUser(token));
+        setTimeout(() => {
+          navigate("/");
+        }, 400);
+        dispatch(hideModals());
       } else {
         toast.error('Invalid username or password');
       }

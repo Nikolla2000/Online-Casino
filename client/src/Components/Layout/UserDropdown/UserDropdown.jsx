@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import './UserDropdownStyles.scss'
 import RegisterForm from '../../Authentication/Register/RegisterForm';
 import LoginForm from '../../Authentication/Login/LoginForm';
@@ -14,8 +14,12 @@ const UserDropdown = ({ show, play }) => {
   const navigate = useNavigate()
   const { showLoginModal, showRegisterModal } = useSelector(state => state.authModals)
 
-  const {user} = useContext(UserContext)
-  console.log(user);
+  // const {user} = useContext(UserContext)
+  // console.log(user);
+
+  const user = useSelector((state) => state.auth.user);
+  console.log(user)
+  const accessToken = useSelector((state) => state.auth.accessToken);
 
   const handleClose = () => {
     dispatch(hideModals())
@@ -45,6 +49,7 @@ const UserDropdown = ({ show, play }) => {
     try {
       await dispatch(logoutUser()).unwrap();
       navigate('/');
+      window.location.reload();
     } catch (err) {
       console.error('Logout failed:', err);
     }
@@ -56,14 +61,14 @@ const UserDropdown = ({ show, play }) => {
       <div className="user-dropdown-img">
         <img src='/images/user.png' alt='user-img' />
       </div>
-      {user.name && <h3 className='text-white text-xl'>Welcome, {user.name}!</h3>}
+      {user && <h3 className='text-white text-xl'>Welcome, {user.firstName}!</h3>}
       <div className="dropdown-buttons">
-        {user.name && <button><Link to='dashboard' className='text-capitalize'>Profile</Link></button>}
+        {user?.firstName && <button><Link to='dashboard' className='text-capitalize'>Profile</Link></button>}
         <button>
         {/* <button onClick={user ? loginOrLogout : handleLogout}> */}
-          {!user.name ? <span onClick={showLoginForm}>Login</span> : <span onClick={handleLogout}>Logout</span>}
+          {!user?.firstName ? <span onClick={showLoginForm}>Login</span> : <span onClick={handleLogout}>Logout</span>}
         </button>
-        {!user.name && <button onClick={() => dispatch(showRegister())}>Register</button>}
+        {!user?.firstName && <button onClick={() => dispatch(showRegister())}>Register</button>}
       </div>
       {showRegisterModal && <RegisterForm handleClose={handleClose}/>}
       {showLoginModal && <LoginForm handleClose={handleClose}/>}

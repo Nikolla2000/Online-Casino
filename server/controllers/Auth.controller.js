@@ -14,7 +14,7 @@ const login = async (req, res) => {
     const user = await User.findOne({ username });
 
     if (!user || !(await comparePasswords(password, user.password))) {
-        return res.status(401).json({ error: "Invalid credentials" });
+        return res.status(401).json({ error: "Invalid credentials", user: user });
     }
 
     const accessToken = generateAccessToken(user._id);
@@ -23,9 +23,10 @@ const login = async (req, res) => {
     user.refreshToken = refreshToken;
     await user.save();
 
-    res.cookie('jwt', refreshToken, {
+    res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        // secure: process.env.NODE_ENV === 'production',
+        secure: false,
         sameSite: 'Strict',
         maxAge: 7 * 24 * 60 * 60 * 1000,
     });
@@ -35,15 +36,15 @@ const login = async (req, res) => {
 
 
 const refresh = async (req, res) => {
-    const { token } = req.body;
-    if (!token) return res.sendStatus(401);
+    const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken) return res.sendStatus(401);
 
     try {
-        const payload = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
+        const payload = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
         const user = await User.findById(payload.userId);
-        if (!user || user.refreshToken !== token) return res.sendStatus(403);
+        if (!user || user.refreshToken !== refreshToken) return res.sendStatus(403);
 
-        const accessToken = generateAccessToken(user._id);
+        const accessToken = generateAccessToken(payload.userId);
         res.json({ accessToken });
     } catch (err) {
         res.status(403).json({ error: err });
@@ -52,7 +53,7 @@ const refresh = async (req, res) => {
 
 
 const logout = async (req, res) => {
-    const token = req.cookies.jwt;
+    const token = req.cookies.refreshToken;
     if (!token) return res.sendStatus(204);
 
     try {
@@ -64,12 +65,30 @@ const logout = async (req, res) => {
         }
     } catch {}
 
-    res.clearCookie('jwt', { httpOnly: true, sameSite: 'Strict', secure: process.env.NODE_ENV === 'production' });
+    res.clearCookie('refreshToken', { httpOnly: true, sameSite: 'Strict', secure: process.env.NODE_ENV === 'production' });
     res.sendStatus(204);
 }
+
+
+const me = async (req, res) => {
+    try {
+        const authHeader = req.headers['authorization'];
+        const token = authHeader && authHeader.split(' ')[1];
+        if (!token) return res.sendStatus(401);
+        
+        const payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+        const user = await User.findById(payload.userId).select('-password -refreshToken');
+        
+        res.json(user);
+    } catch (err) {
+        res.status(403).json({ error: err });
+    }
+}
+
 
 module.exports = {
     login,
     refresh,
     logout,
+    me,
 }

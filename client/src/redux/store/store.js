@@ -3,6 +3,7 @@ import authModalReducer from '../features/auth/authModalsSlice.js';
 import slotsReducer from "../features/slots/slotMachineSlice.js";
 import rouletteReducer from "../features/roulette/rouletteSlice.js";
 import authReducer from "../features/auth/authSlice.js";
+import { setupInterceptors } from '../../axiosConfig.js';
 
 export const store = configureStore({
   reducer: {
@@ -12,3 +13,5 @@ export const store = configureStore({
     roulette: rouletteReducer,
   },
 })
+
+setupInterceptors(store);
