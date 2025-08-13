@@ -6,7 +6,6 @@ import '../Register/RegisterStyles.scss'
 import { toast } from 'react-hot-toast'
 import { useDispatch } from 'react-redux';
 import { hideModals, showRegister } from '../../../redux/features/auth/authModalsSlice';
-
 import { useForm } from "react-hook-form"
 import { fetchCurrentUser, login } from '../../../redux/features/auth/authSlice';
 import { useNavigate } from 'react-router';
@@ -25,6 +24,7 @@ const LoginForm = ({ handleClose }) => {
     register,
     handleSubmit,
     watch,
+    setError,
     formState: { errors },
   } = useForm()
 
@@ -41,13 +41,17 @@ const LoginForm = ({ handleClose }) => {
         }, 400);
         dispatch(hideModals());
       } else {
-        toast.error('Invalid username or password');
+        setError("password", {
+          type: "manual",
+          message: "Invalid username or password"
+        });
+        // toast.error('Invalid username or password');
       }
     } catch (err) {
       toast.error('Login failed. Please try again.');
       console.error('Login error:', err);
     }
-  } 
+  }
 
 
   return (
@@ -85,11 +89,14 @@ const LoginForm = ({ handleClose }) => {
             name="password"
             // value={formData.password}
             // onChange={handleChange}
-            {...register("password")}
+            {...register("password", { required: "Password is required" })}
             style={{ color: '#000' }}
             required
           />
-          {errors.password && <span>This field is required</span>}
+          {/* {errors.password && <span className='text-red-500 text-sm block'>This field is required</span>} */}
+          {errors.password && (
+            <span className='text-red-500 text-sm block mt-3'>{errors.password.message}</span>
+          )}
         </div>
         <div className=''>
           <button type="submit" className='text-lg border-1 px-2 mt-2'>Login</button>
