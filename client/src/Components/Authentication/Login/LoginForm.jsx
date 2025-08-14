@@ -66,7 +66,7 @@ const LoginForm = ({ handleClose }) => {
         <Typography id="modal-modal-title" variant="h6" component="h2">
           Login
         </Typography>
-        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+        <Box id="modal-modal-description" sx={{ mt: 2 }}>
          <form onSubmit={handleSubmit(onSubmit)}>
         <div>
           <label htmlFor="username">Username</label>
@@ -105,7 +105,7 @@ const LoginForm = ({ handleClose }) => {
         You can register <span className='text-red-500 cursor-pointer' onClick={handleShowRegister}>here</span></p>
         {/* <p>{loginErrorMsg}</p> */}
       </form>
-        </Typography>
+      </Box>
       </Box>
     </Modal>
     </div>

@@ -20,10 +20,10 @@ const routes = {
     path: '/admin',
     element: <AdminPage/>,
     name: 'admin',
-    includeInNav: true,
+    // includeInNav: true,
     get includeInNav() {
       const { user } = useContext(UserContext);
-      return user && user.email === 'nikollla2000@abv.bg';
+      return user && user.email === import.meta.env.VITE_ADMIN_USER_EMAIL;
     },
   },
   games: {
