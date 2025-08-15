@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form"
 import { fetchCurrentUser, login } from '../../../redux/features/auth/authSlice';
 import { useNavigate } from 'react-router';
 
-const LoginForm = ({ handleClose }) => {
+const LoginForm = ({ handleClose, isFromGamesPage, gameLink }) => {
 
   const dispatch = useDispatch()
 
@@ -28,6 +28,7 @@ const LoginForm = ({ handleClose }) => {
     formState: { errors },
   } = useForm()
 
+  console.log("А:",isFromGamesPage, "B",gameLink)
   const onSubmit = async (data) => {
     try {
       const res = await dispatch(login(data));
@@ -37,7 +38,11 @@ const LoginForm = ({ handleClose }) => {
         const token = res.payload.accessToken;
         await dispatch(fetchCurrentUser(token));
         setTimeout(() => {
-          navigate("/");
+          if(isFromGamesPage) {
+          navigate(gameLink);
+        } else {
+            navigate("/");
+          }
         }, 400);
         dispatch(hideModals());
       } else {
