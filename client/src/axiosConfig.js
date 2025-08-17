@@ -37,6 +37,28 @@ export const setupInterceptors = (store) => {
       return Promise.reject(err);
     }
   );
+
+  api.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      const originalRequest = error.config;
+      
+      if (error.response?.status === 403 && !originalRequest._retry) {
+        originalRequest._retry = true;
+        try {
+          const res = await store.dispatch(refresh());
+          if (refresh.fulfilled.match(res)) {
+            const newAccessToken = res.payload.accessToken;
+            originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+            return api(originalRequest);
+          }
+        } catch (err) {
+          console.error("Refresh token failed", err);
+        }
+      }
+      return Promise.reject(error);
+    }
+  );
 };
 
 export default api
