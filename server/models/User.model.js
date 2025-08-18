@@ -72,13 +72,13 @@ UserSchema.pre('save', async function (next) {
 //   return bcrypt.compare(pass, this.password);
 // };
 
-UserSchema.methods.createJWT = function () {
-  return jwt.sign(
-    { userId: this._id, name: this.name },
-    process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_LIFETIME }
-  );
-};
+// UserSchema.methods.createJWT = function () {
+//   return jwt.sign(
+//     { userId: this._id, name: this.name },
+//     process.env.JWT_SECRET,
+//     { expiresIn: process.env.JWT_LIFETIME }
+//   );
+// };
 
 const User = mongoose.model("User", UserSchema);
 module.exports = User;

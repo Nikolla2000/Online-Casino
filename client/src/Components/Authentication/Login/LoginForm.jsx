@@ -28,7 +28,6 @@ const LoginForm = ({ handleClose, isFromGamesPage, gameLink }) => {
     formState: { errors },
   } = useForm()
 
-  console.log("А:",isFromGamesPage, "B",gameLink)
   const onSubmit = async (data) => {
     try {
       const res = await dispatch(login(data));

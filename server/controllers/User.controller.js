@@ -50,17 +50,17 @@ const registerUser = async (req, res) => {
         return res.status(409).json({ message: 'User with this username or email already exists' });
       }
 
-      const hashedPassword = await hashPassword(password)
+      // const hashedPassword = await hashPassword(password)
 
       const newUser = new User({
         firstName,
         lastName,
         username,
         email,
-        password: hashedPassword,
+        password,
         registrationDate,
         country,
-        phoneNumber,
+        // phoneNumber,
       });
 
       await newUser.save()

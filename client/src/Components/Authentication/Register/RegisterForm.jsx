@@ -6,6 +6,9 @@ import axios from '../../../axiosConfig'
 import './RegisterStyles.scss'
 import { useNavigate } from "react-router-dom"
 import { toast } from 'react-hot-toast'
+import { useDispatch } from 'react-redux';
+import { fetchCurrentUser, login } from '../../../redux/features/auth/authSlice';
+import { hideModals } from '../../../redux/features/auth/authModalsSlice';
 
 const RegisterForm = ({ handleClose}) => {
   const [formData, setFormData] = useState({
@@ -13,13 +16,14 @@ const RegisterForm = ({ handleClose}) => {
     lastName: '',
     username: '',
     email: '',
-    phoneNumber: '',
+    // phoneNumber: '',
     country: '',
     password: '',
     confirm_password: '',
   });
 
   const navigate = useNavigate()
+  const dispatch = useDispatch();
   const [errorMessages, setErrorMessages] = useState('')
 
   const handleChange = (e) => {
@@ -53,9 +57,9 @@ const RegisterForm = ({ handleClose}) => {
       errors.confirm_password = 'Passwords do not match';
     }
 
-    if (!/^08\d{8}$/.test(formData.phoneNumber)) {
-      errors.phoneNumber = 'Phone number must start with "08" and have 10 digits';
-    }
+    // if (!/^08\d{8}$/.test(formData.phoneNumber)) {
+    //   errors.phoneNumber = 'Phone number must start with "08" and have 10 digits';
+    // }
     return errors;
   };
   
@@ -68,25 +72,40 @@ const RegisterForm = ({ handleClose}) => {
     if (Object.keys(errors).length === 0) {
       try {
         const response = await axios.post('/user/register', formData);
+
+        const loginCredentials = {
+          username: formData.username,
+          password: formData.password
+        }
+
         setFormData({
           firstName: '',
           lastName: '',
           username: '',
           email: '',
-          phoneNumber: '',
+          // phoneNumber: '',
           country: '',
           password: '',
           confirm_password: '',
         })
         toast.success('Registration was successfull!')
         handleClose()
-        navigate('/')
+        const res = await dispatch(login(loginCredentials));
+        
+        if (login.fulfilled.match(res)) {
+          const token = res.payload.accessToken;
+          dispatch(fetchCurrentUser(token));
+          dispatch(hideModals());
+        } else {
+          toast.error("Error signing in.");
+        }
         
       } catch (error) {
         console.error(`Registration error: ${error}`);
 
-        if(error.message === 'Request failed with status code 409') {
-         toast.error('User with this username or email already exists');
+        if(error.response?.status === 409) {
+         errors.dublicate = 'User with this username or email already exists';
+         setErrorMessages(errors);
         } else {
           toast.error("Registration failed. Server error.");
         }
@@ -146,7 +165,7 @@ const RegisterForm = ({ handleClose}) => {
           onChange={handleChange}
           required
         />
-        <label htmlFor="phoneNumber">Phone Number</label>
+        {/* <label htmlFor="phoneNumber">Phone Number</label>
         <input
           type="number"
           id="phoneNumber"
@@ -154,7 +173,7 @@ const RegisterForm = ({ handleClose}) => {
           value={formData.phoneNumber}
           onChange={handleChange}
           required
-        />
+        /> */}
         <label htmlFor="country">Country</label>
         <select
           id="country"
@@ -189,7 +208,7 @@ const RegisterForm = ({ handleClose}) => {
           required
         />
         <input type="submit" value="Register" className='text-lg border-1 px-2 mt-2'/>
-        <p>{Object.values(errorMessages)[0]}</p>
+        <p className='err-msg'>{Object.values(errorMessages)[0]}</p>
       </form>
           </Typography>
         </Box>
