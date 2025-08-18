@@ -87,6 +87,8 @@ const RegisterForm = ({ handleClose}) => {
 
         if(error.message === 'Request failed with status code 409') {
          toast.error('User with this username or email already exists');
+        } else {
+          toast.error("Registration failed. Server error.");
         }
       }
     } else {
