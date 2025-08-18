@@ -29,7 +29,8 @@ const Navigation = () => {
           </div>
           {showDropdown && <UserDropdown 
                               show={showDropdown}
-                              play={playReverseAnimation}/>}
+                              play={playReverseAnimation}
+                              setShowDropdown={setShowDropdown}/>}
         </div>
       </div>
       <div className="mobile-menu-wrapper">

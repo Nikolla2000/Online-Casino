@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form"
 import { fetchCurrentUser, login } from '../../../redux/features/auth/authSlice';
 import { useNavigate } from 'react-router';
 
-const LoginForm = ({ handleClose, isFromGamesPage, gameLink }) => {
+const LoginForm = ({ handleClose, isFromGamesPage, gameLink, setShowDropdown }) => {
 
   const dispatch = useDispatch()
 
@@ -44,6 +44,7 @@ const LoginForm = ({ handleClose, isFromGamesPage, gameLink }) => {
           }
         }, 400);
         dispatch(hideModals());
+        setShowDropdown(false);
       } else {
         setError("password", {
           type: "manual",

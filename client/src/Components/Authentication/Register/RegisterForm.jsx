@@ -10,7 +10,7 @@ import { useDispatch } from 'react-redux';
 import { fetchCurrentUser, login } from '../../../redux/features/auth/authSlice';
 import { hideModals } from '../../../redux/features/auth/authModalsSlice';
 
-const RegisterForm = ({ handleClose}) => {
+const RegisterForm = ({ handleClose, setShowDropdown}) => {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -98,6 +98,7 @@ const RegisterForm = ({ handleClose}) => {
           const token = res.payload.accessToken;
           dispatch(fetchCurrentUser(token));
           dispatch(hideModals());
+          setShowDropdown(false);
         } else {
           toast.error("Error signing in.");
         }

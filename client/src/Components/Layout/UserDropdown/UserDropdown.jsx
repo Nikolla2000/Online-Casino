@@ -9,7 +9,7 @@ import { hideModals, showLogin, showRegister } from '../../../redux/features/aut
 import { Link, useNavigate } from 'react-router-dom';
 import { logout, logoutUser } from '../../../redux/features/auth/authSlice';
 
-const UserDropdown = ({ show, play }) => {
+const UserDropdown = ({ show, play, setShowDropdown }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { showLoginModal, showRegisterModal } = useSelector(state => state.authModals)
@@ -70,8 +70,8 @@ const UserDropdown = ({ show, play }) => {
         </button>
         {!user?.firstName && <button onClick={() => dispatch(showRegister())}>Register</button>}
       </div>
-      {showRegisterModal && <RegisterForm handleClose={handleClose}/>}
-      {showLoginModal && <LoginForm handleClose={handleClose}/>}
+      {showRegisterModal && <RegisterForm handleClose={handleClose} setShowDropdown={setShowDropdown}/>}
+      {showLoginModal && <LoginForm handleClose={handleClose} setShowDropdown={setShowDropdown}/>}
     </div>
   );
 };
