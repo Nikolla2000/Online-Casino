@@ -78,6 +78,8 @@ const RegisterForm = ({ handleClose}) => {
           password: formData.password
         }
 
+        const name = formData.firstName;
+
         setFormData({
           firstName: '',
           lastName: '',
@@ -88,7 +90,7 @@ const RegisterForm = ({ handleClose}) => {
           password: '',
           confirm_password: '',
         })
-        toast.success('Registration was successfull!')
+        toast.success(`Registration was successfull! Welcome, ${name}!`)
         handleClose()
         const res = await dispatch(login(loginCredentials));
         
