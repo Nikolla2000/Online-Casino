@@ -9,6 +9,7 @@ import { toast } from 'react-hot-toast'
 import { useDispatch } from 'react-redux';
 import { fetchCurrentUser, login } from '../../../redux/features/auth/authSlice';
 import { hideModals } from '../../../redux/features/auth/authModalsSlice';
+import { countries } from '../../../utils/countries';
 
 const RegisterForm = ({ handleClose, setShowDropdown}) => {
   const [formData, setFormData] = useState({
@@ -21,6 +22,13 @@ const RegisterForm = ({ handleClose, setShowDropdown}) => {
     password: '',
     confirm_password: '',
   });
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showCountriesDropdown, setShowCountriesDropdown] = useState(false);
+
+  const filteredCountries = countries.filter(country =>
+    country.label.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const navigate = useNavigate()
   const dispatch = useDispatch();
@@ -49,6 +57,10 @@ const RegisterForm = ({ handleClose, setShowDropdown}) => {
       errors.username = 'Username must be between 2 and 20 characters';
     }
   
+    if (!formData.country) {
+      errors.country = 'You must select a country';
+    }
+
     if (formData.password.length < 6) {
       errors.password = 'Password must be at least 6 characters';
     }
@@ -177,7 +189,7 @@ const RegisterForm = ({ handleClose, setShowDropdown}) => {
           onChange={handleChange}
           required
         /> */}
-        <label htmlFor="country">Country</label>
+        {/* <label htmlFor="country">Country</label>
         <select
           id="country"
           name="country"
@@ -191,7 +203,37 @@ const RegisterForm = ({ handleClose, setShowDropdown}) => {
           <option value="France">France</option>
           <option value="Spain">Spain</option>
           <option value="Other">Other</option>
-        </select>
+        </select> */}
+        <div className="country-selector">
+          <label htmlFor="country">Country</label>
+          <input
+            type="text"
+            placeholder="Search country..."
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setShowCountriesDropdown(true);
+            }}
+            onFocus={() => setShowCountriesDropdown(true)}
+          />
+          {showCountriesDropdown && (
+            <div className="country-dropdown">
+              {filteredCountries.map((country) => (
+                <div
+                  key={country.value}
+                  className="country-option"
+                  onClick={() => {
+                    setFormData({...formData, country: country.value});
+                    setSearchTerm(country.label);
+                    setShowCountriesDropdown(false);
+                  }}
+                >
+                  {country.label}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
         <label htmlFor="password">Password</label>
         <input
           type="password"

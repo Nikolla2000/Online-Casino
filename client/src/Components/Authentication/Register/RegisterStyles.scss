@@ -12,6 +12,8 @@
       display: block;
       margin: 0 auto;
       color:#000;
+      padding: 0.3rem;
+      margin-bottom: 0.4rem;
     }
     select {
       color:#000;
@@ -23,5 +25,36 @@
       font-size:14px;
     }
 
+  }
+}
+
+.country-selector {
+  position: relative;
+
+  input {
+    // width: 100%;
+    padding: 0.5rem;
+    // background: #333;
+    border: 1px solid #555;
+    color: rgb(0, 0, 0);
+  }
+
+  .country-dropdown {
+    position: absolute;
+    left: 10%;
+    width: 80%;
+    max-height: 200px;
+    overflow-y: auto;
+    background: #333;
+    border: 1px solid #555;
+    z-index: 10;
+
+    .country-option {
+      padding: 0.5rem;
+      cursor: pointer;
+      &:hover {
+        background: #444;
+      }
+    }
   }
 }
