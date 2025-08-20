@@ -3,6 +3,7 @@ require("express-async-errors");
 const express = require("express");
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const path = require('path')
 const app = express();
 
 //connectDB
@@ -36,6 +37,9 @@ app.use(express.json());
 app.use('/server/v1/user', userRouter);
 app.use('/server/v1/auth', authRouter);
 app.use('/server/v1/slots', slotRouter);
+
+//Serve static files
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
 
 const start = async () => {

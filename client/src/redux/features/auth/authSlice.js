@@ -63,6 +63,12 @@ const authSlice = createSlice({
     logout: (state) => {
       state.accessToken = null;
     //   localStorage.removeItem('refreshToken');
+    },
+    updateProfilePic: (state, action) => {
+      if (state.user) {
+        state.user.profileImage = action.payload;
+        console.log(state.user.profileImage)
+      }
     }
   },
   extraReducers: (builder) => {
@@ -82,5 +88,5 @@ const authSlice = createSlice({
   }
 })
 
-export const { logout } = authSlice.actions;
+export const { logout, updateProfilePic } = authSlice.actions;
 export default authSlice.reducer;

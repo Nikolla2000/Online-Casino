@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const upload = require('../helpers/fileUpload');
 
 const {
   registerUser,
@@ -8,7 +9,8 @@ const {
   getAllUsers,
   getProfile,
   updateTotalCredits,
-  getTotalCredits
+  getTotalCredits,
+  uploadPicture
 } = require('../controllers/User.controller');
 
 const { verifyJWT } = require('../middleware/authentication');
@@ -19,6 +21,7 @@ router.get('/allUsers', getAllUsers);
 router.get('/profile', getProfile);
 router.get('/getTotalCredits', getTotalCredits);
 router.get('/logout', logoutUser);
-router.put('/updateCredits', updateTotalCredits)
+router.put('/updateCredits', updateTotalCredits);
+router.post('/uploadPicture', verifyJWT, upload.single('profilePic'), uploadPicture);
 
 module.exports = router;

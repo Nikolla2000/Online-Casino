@@ -58,6 +58,10 @@ const UserSchema = new mongoose.Schema({
   refreshToken: {
     type: String,
     default: ""
+  },
+  profileImage: {
+    type: String,
+    default: '/images/user.png'
   }
 })
 

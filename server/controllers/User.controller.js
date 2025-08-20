@@ -1,6 +1,8 @@
 const User = require('../models/User.model');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
+const multer = require('multer');
+const path = require('path');
 const { hashPassword, comparePasswords} = require('../helpers/auth');
 
 
@@ -150,6 +152,7 @@ const updateTotalCredits = async (req, res) => {
   }
 }
 
+
 const getTotalCredits = async (req, res) => {
   const { id } = req.query;
 
@@ -166,6 +169,56 @@ const getTotalCredits = async (req, res) => {
   }
 }
 
+
+const uploadPicture = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file uploaded' });
+    }
+
+    if (!req.userId) {
+      return res.status(401).json({ message: 'User not authenticated' });
+    }
+
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const fileExtension = req.file.originalname.split('.').pop();
+    const filename = `${req.userId}-${uniqueSuffix}.${fileExtension}`;
+
+    const fs = require('fs');
+    const path = require('path');
+    
+    const uploadDir = path.join(__dirname, '../public/uploads/pfps');
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+
+    const sourcePath = req.file.path;
+    const destPath = path.join(uploadDir, filename);
+    
+    fs.copyFileSync(sourcePath, destPath);
+    
+    fs.unlinkSync(sourcePath);
+
+    const profilePicUrl = `/uploads/pfps/${filename}`;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.userId,
+      { profileImage: profilePicUrl },
+      { new: true }
+    );
+
+    res.json({
+      message: 'Profile picture uploaded successfully',
+      profilePic: updatedUser.profileImage
+    });
+
+  } catch (error) {
+    console.error('Upload error:', error);
+    res.status(500).json({ message: error.message });
+  }
+}
+
+
 module.exports = {
   registerUser,
   loginUser,
@@ -173,5 +226,6 @@ module.exports = {
   getAllUsers,
   getProfile,
   updateTotalCredits,
-  getTotalCredits
+  getTotalCredits,
+  uploadPicture
 }
