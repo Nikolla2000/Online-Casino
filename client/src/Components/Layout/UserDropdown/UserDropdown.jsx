@@ -18,7 +18,7 @@ const UserDropdown = ({ show, play, setShowDropdown }) => {
   // console.log(user);
 
   const user = useSelector((state) => state.auth.user);
-  console.log(user)
+  // console.log(user.profileImg)
   const accessToken = useSelector((state) => state.auth.accessToken);
 
   const handleClose = () => {
@@ -55,11 +55,15 @@ const UserDropdown = ({ show, play, setShowDropdown }) => {
     }
   };
   
-
+console.log(user)
   return (
     <div className={`user-dropdown ${!show? 'reverse' : ''}`}>
       <div className="user-dropdown-img">
-        <img src='/images/user.png' alt='user-img' />
+        {user && user.profileImage != "/images/user.png" ? (
+          <img src={`http://localhost:3000${user.profileImage}?${Date.now()}`}  alt='Image error' />
+        ) : (
+          <img src="/images/user.png" alt='Image error' />
+        )}
       </div>
       {user && <h3 className='text-white text-xl'>Welcome, {user.firstName}!</h3>}
       <div className="dropdown-buttons">

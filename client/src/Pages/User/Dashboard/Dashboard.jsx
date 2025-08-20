@@ -97,18 +97,33 @@ const Dashboard = () => {
       }
   };
 
+  console.log(user.profileImage)
 
   return (
     <div className='dashboard-wrapper'>
 
       <div className="left-section">
         <div className="profile-image-wrapper">
-          <img 
+          {/* <img 
             src={`http://localhost:3000${user.profileImage}?${Date.now()}` || "/images/user.png"} 
             alt="Profile" 
             className={isUploading ? 'uploading' : ''}
             key={user.profileImage}
-          />
+          /> */}
+          {user.profileImage != "/images/user.png" ? (
+            <img 
+              src={`http://localhost:3000${user.profileImage}?${Date.now()}`}  
+              alt='Profile' 
+              className={isUploading ? 'uploading' : ''}
+              key={user.profileImage}
+            />
+            ) : (
+            <img 
+              src="/images/user.png"
+              alt='Image error' 
+              className={isUploading ? 'uploading' : ''}
+            />
+            )}
           <div 
             className="change-pic-button"
             onClick={triggerFileInput}

@@ -67,7 +67,6 @@ const authSlice = createSlice({
     updateProfilePic: (state, action) => {
       if (state.user) {
         state.user.profileImage = action.payload;
-        console.log(state.user.profileImage)
       }
     }
   },
