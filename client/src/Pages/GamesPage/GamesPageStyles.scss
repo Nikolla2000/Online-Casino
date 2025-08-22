@@ -1,35 +1,138 @@
 @import "../../colorConstants.scss";
 
 .games-page-wrapper {
-  video {
-    object-fit: cover;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 50%, #0c0c0c 100%);
+  position: relative;
+  overflow: hidden;
+  padding: 20px;
+
+  .background-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    height: 100vh;
-    position: fixed;
-    z-index: -1;
+    height: 100%;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><rect fill="%230c0c0c" width="100" height="100"/><path fill="%231a1a1a" d="M0 0h100v100H0z" opacity=".05"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    z-index: 1;
   }
-  
+
   .games-section {
-    padding: 50px;
-    
-    .games-page-heading {
-      color:$primary-white;
-      font-size: 2.2em;
-      padding: 20px 20px;
+    position: relative;
+    z-index: 2;
+    padding: 80px 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+
+    .header-content {
       text-align: center;
-      font-weight: bold;
-      margin:20px 0;
+      margin-bottom: 80px;
 
-      span { color: rgba(183, 0, 255, 0.68) ;}
+      .games-page-heading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+
+        .gradient-text {
+          font-size: 2.5rem;
+          font-weight: 300;
+          text-transform: uppercase;
+          letter-spacing: 4px;
+          background: linear-gradient(135deg, $primary-gold, #ff6b00);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+
+        .glowing-text {
+          font-size: 4rem;
+          font-weight: 900;
+          text-transform: uppercase;
+          letter-spacing: 2px;
+          color: $primary-white;
+          text-shadow: 
+            0 0 20px rgba(255, 215, 0, 0.5),
+            0 0 40px rgba(255, 215, 0, 0.3);
+        }
+      }
+
+      .section-subtitle {
+        font-size: 1.2rem;
+        color: rgba(255, 255, 255, 0.8);
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+        font-weight: 300;
+      }
     }
-    .games-wrapper {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-      gap:120px;
-      margin-top:70px;
 
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 40px;
+      justify-content: center;
+      padding: 0 20px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .games-page-wrapper {
+    padding: 10px;
+
+    .games-section {
+      padding: 60px 10px;
+
+      .header-content {
+        margin-bottom: 60px;
+
+        .games-page-heading {
+          .gradient-text {
+            font-size: 2rem;
+          }
+
+          .glowing-text {
+            font-size: 3rem;
+          }
+        }
+
+        .section-subtitle {
+          font-size: 1.1rem;
+          padding: 0 10px;
+        }
+      }
+
+      .games-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        padding: 0 10px;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .games-page-wrapper {
+    .games-section {
+      padding: 40px 5px;
+
+      .header-content {
+        .games-page-heading {
+          .gradient-text {
+            font-size: 1.6rem;
+          }
+
+          .glowing-text {
+            font-size: 2.5rem;
+          }
+        }
+      }
+
+      .games-grid {
+        gap: 20px;
+      }
     }
   }
 }
