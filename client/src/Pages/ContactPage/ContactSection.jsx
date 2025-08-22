@@ -1,18 +1,15 @@
 import React from 'react';
 import ContactItem from './ContactItem';
 import { contactData } from './contactData';
-import { Row, Col } from "react-bootstrap";
 
 const ContactSection = () => {
   return (
     <div className='contact-section-wrapper'>
-      <Row>
+      <div className="contact-grid">
         {contactData.map((data, i) => (
-          <Col lg={4} md={12}>
-            <ContactItem data={data} key={i+1}/>
-          </Col>
+          <ContactItem data={data} key={i} />
         ))}
-      </Row>
+      </div>
     </div>
   );
 };

@@ -1,34 +1,52 @@
-import React from "react";
-import { useNavigate } from 'react-router'
+import React, { useState } from "react";
+import { useNavigate } from 'react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const ContactItem = ({ data }) => {
-  const navigate = useNavigate()
+  const [isHovered, setIsHovered] = useState(false);
+  const navigate = useNavigate();
 
   const sendToEmailPage = () => {
     data.heading === "Email" && navigate("/email");
-  }
+  };
 
   return (
-    <div className="contact-item">
-      <div className="icon mb-3">
-        <FontAwesomeIcon icon={data.icon} style={{color: "#fa16fe"}} />
-      </div>
-      <div className="section-heading">
-        <h3>{data.heading}</h3>
-      </div>
-      <div className="section-descr">
-        <p>{data.description}</p>
-      </div>
-      {data.button == true ? (
-        <div className={`open-chat-btn mt-4 ${data.heading === "Email" && "blue"}`}>
-          <button onClick={sendToEmailPage}>
-            {data.heading === "Live Support" ? "CHAT NOW" : "EMAIL US"}
-            </button>
+    <div 
+      className={`contact-item ${isHovered ? 'hovered' : ''}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className="contact-card">
+        <div className="icon-wrapper">
+          <div className="icon-circle">
+            <FontAwesomeIcon 
+              icon={data.icon} 
+              className="contact-icon" 
+            />
+          </div>
         </div>
-      ) : ''}
+        
+        <div className="content">
+          <h3 className="contact-heading">{data.heading}</h3>
+          <p className="contact-description">{data.description}</p>
+          
+          {data.button && (
+            <button 
+              className={`contact-button ${data.heading === "Email" ? "email-btn" : "chat-btn"}`}
+              onClick={sendToEmailPage}
+            >
+              <span className="button-text">
+                {data.heading === "Live Support" ? "CHAT NOW" : "EMAIL US"}
+              </span>
+              <span className="button-arrow">→</span>
+            </button>
+          )}
+        </div>
+
+        <div className="hover-effect"></div>
+      </div>
     </div>
   );
 };
 
-export default ContactItem
+export default ContactItem;
