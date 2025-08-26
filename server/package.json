@@ -20,6 +20,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.1.0",
     "multer": "^2.0.2",
+    "nodemailer": "^7.0.5",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0"
   },

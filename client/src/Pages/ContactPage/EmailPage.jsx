@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { faLocationDot, faEnvelope, faPhone, faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import "./EmailPageStyles.scss";
+import api from '../../axiosConfig';
 
 const EmailPage = () => {
   const { 
@@ -13,13 +14,23 @@ const EmailPage = () => {
   } = useForm();
 
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   const onSubmit = async (data) => {
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    console.log(data);
-    setIsSubmitted(true);
-    reset();
-    setTimeout(() => setIsSubmitted(false), 3000);
+    try {
+      setSubmitError('');
+      
+      const res = await api.post('email/sendEmail', data);
+      
+      console.log('Email sent:', res.data);
+      setIsSubmitted(true);
+      reset();
+      
+      setTimeout(() => setIsSubmitted(false), 3000);
+    } catch (error) {
+      console.error('Submission error:', error);
+      setSubmitError('Failed to send message. Please try again later.');
+    }
   };
 
   const contactInfo = [
