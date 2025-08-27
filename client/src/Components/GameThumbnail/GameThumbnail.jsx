@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
+import "./GameThumbnail.scss";
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideModals, showLogin } from '../../redux/features/auth/authModalsSlice';
 import LoginForm from '../Authentication/Login/LoginForm';
-import "./GameThumbnail.scss";
 
 const GameThumbnail = ({ data, index }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -24,7 +24,7 @@ const GameThumbnail = ({ data, index }) => {
   return (
     <div 
       className={`game-card ${isHovered ? 'hovered' : ''}`}
-      style={{ animationDelay: `${index * 0.1}s` }}
+      style={{ '--index': index }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleClick}

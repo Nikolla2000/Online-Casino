@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import "./GamesPageStyles.scss";
 import { gamesData } from '../../Components/GameThumbnail/gamesData';
 import GameThumbnail from '../../Components/GameThumbnail/GameThumbnail';
-import "./GamesPageStyles.scss";
 import LoadingSpinner from '../../Components/Spinner/Spinner';
 
 const GamesPage = () => {
