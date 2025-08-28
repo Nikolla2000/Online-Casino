@@ -14,6 +14,7 @@ import routes from '../../../utils/routes';
 import './NavigationStyles.scss';
 import UserDropdown from '../UserDropdown/UserDropdown';
 import { useSelector } from 'react-redux';
+import LiveUsersPanel from '../../LiveUsersPanel/LiveUsersPanel';
 
 const Navigation = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -22,6 +23,7 @@ const Navigation = () => {
   const [activeHover, setActiveHover] = useState(null);
   const dropdownRef = useRef(null);
   const location = useLocation();
+  const [showLiveUsers, setShowLiveUsers] = useState(false);
   
   const { user, accessToken } = useSelector(state => state.auth);
 
@@ -69,6 +71,7 @@ const Navigation = () => {
   };
 
   return (
+    <>
     <nav className={`casino-nav ${scrolled ? 'scrolled' : ''}`}>
       <div className="nav-container">
         {/* Logo */}
@@ -107,8 +110,11 @@ const Navigation = () => {
 
           <div className="nav-user-section" ref={dropdownRef}>
             {user && accessToken && (
-              <button className="active-users-btn">
-                <span className="pulse-dot"></span>
+              <button 
+                className="active-users-btn"
+                onClick={() => setShowLiveUsers(true)}
+              >
+                {/* See active users */}
                 Live Players
               </button>
             )}
@@ -171,7 +177,7 @@ const Navigation = () => {
           
           <div className="mobile-user-section">
             {user && accessToken && (
-              <button className="mobile-active-users-btn">
+              <button className="mobile-active-users-btn" onClick={() => setShowLiveUsers(true)}>
                 <span className="mobile-pulse-dot"></span>
                 Live Players
               </button>
@@ -185,6 +191,12 @@ const Navigation = () => {
         <div className="nav-shine"></div>
       </div>
     </nav>
+
+    <LiveUsersPanel 
+    isOpen={showLiveUsers}
+    onClose={() => setShowLiveUsers(false)}
+    />
+  </>
   );
 };
 
