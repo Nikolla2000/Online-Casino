@@ -1,8 +1,11 @@
-import Spinner from 'react-bootstrap/Spinner';
+import { Box } from "@mui/material";
+import "./spinner.css"
 
 const LoadingSpinner = () => {
     return (
-        <Spinner animation="border" variant="primary" />
+        <Box display="flex" justifyContent="center" alignItems="center" backgroundColor="transparent">
+            <div className="loader"></div>
+        </Box>
     )
 }
 
