@@ -53,8 +53,8 @@ $spotThree: #ff0000;
     height: 100%;
     object-fit: cover;
     transform: translate(-50%, -50%);
-    z-index: 1000;
-    filter: brightness(0.4) contrast(1.2);
+    z-index: 2;
+    filter: brightness(0.7) contrast(1.2);
     // border: 3px solid red !important;
   }
 
