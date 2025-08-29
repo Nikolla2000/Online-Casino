@@ -74,7 +74,6 @@ const Navigation = () => {
     <>
     <nav className={`casino-nav ${scrolled ? 'scrolled' : ''}`}>
       <div className="nav-container">
-        {/* Logo */}
         <div className="nav-logo">
           <NavLink to="/" className="logo-link">
             <span className="logo-icon">♠️</span>
@@ -114,7 +113,6 @@ const Navigation = () => {
                 className="active-users-btn"
                 onClick={() => setShowLiveUsers(true)}
               >
-                {/* See active users */}
                 Live Players
               </button>
             )}

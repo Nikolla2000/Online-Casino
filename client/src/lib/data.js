@@ -1,3 +1,4 @@
+import api from "../axiosConfig";
 import axios from "../axiosConfig";
 
 export async function fetchTotalCredits(userId) {
@@ -21,3 +22,12 @@ export function updateTotalCredits(userId, amount) {
   }
 }
 
+
+export async function fetchOnlineUsers() {
+  try {
+    const res = await api.get('/user/online');
+    return res.data;
+  } catch (err) {
+    console.error('Error fetching online users: ', err);
+  }
+}

@@ -228,7 +228,7 @@ const getOnlineUsers = async (req, res) => {
     .sort({ username: 1 })
     .lean();
   
-    res.status(200).json({ count: onlineUsers.length, users: onlineUsers });
+    res.status(200).json({ success: true, count: onlineUsers.length, users: onlineUsers });
   } catch (err) {
     res.status(500).json({  message: err.message })
   }

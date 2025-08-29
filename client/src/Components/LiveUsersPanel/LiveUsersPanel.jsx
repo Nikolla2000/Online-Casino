@@ -9,24 +9,40 @@ import {
   faStar
 } from "@fortawesome/free-solid-svg-icons";
 import './LiveUsersPanel.scss';
+import { useSelector } from 'react-redux';
+import { fetchOnlineUsers } from '../../lib/data';
+import LoadingSpinner from '../Spinner/Spinner';
 
 const LiveUsersPanel = ({ isOpen, onClose }) => {
   const [onlineUsers, setOnlineUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const { accessToken, user: currentUser } = useSelector(state => state.auth);
 
-  // Mock data
   useEffect(() => {
-    const mockUsers = [
-      { id: 1, username: "JohnDoe", avatar: null, status: "online", isVip: true, chips: 12500 },
-      { id: 2, username: "CasinoQueen", avatar: null, status: "playing", isVip: false, chips: 8500 },
-      { id: 3, username: "LuckyJack", avatar: null, status: "online", isVip: true, chips: 250000 },
-      { id: 4, username: "PokerKing", avatar: null, status: "away", isVip: false, chips: 17500 },
-      { id: 5, username: "DiamondBetty", avatar: null, status: "online", isVip: true, chips: 42000 },
-      { id: 6, username: "RouletteMaster", avatar: null, status: "playing", isVip: false, chips: 9500 },
-      { id: 7, username: "SlotWinner", avatar: null, status: "online", isVip: true, chips: 150000 },
-      { id: 8, username: "BlackjackPro", avatar: null, status: "online", isVip: false, chips: 28000 },
-    ];
-    setOnlineUsers(mockUsers);
-  }, []);
+    if (isOpen && accessToken) {
+      getOnlineUsers();
+    }
+  }, [isOpen]);
+
+  const getOnlineUsers = async () => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const data = await fetchOnlineUsers();
+      if (data.success) {
+        setOnlineUsers(data.users);
+      } else {
+        setError('Failed to fetch online users');
+      }
+    } catch (error) {
+      setError(err.response?.data?.message || 'Error fetching online users');
+    } finally {
+      setIsLoading(false);
+      console.log(onlineUsers);
+    }
+  }
 
   const handleStartChat = (userId) => {
     console.log("Start chat with user:", userId);
@@ -53,6 +69,14 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
     return chips.toLocaleString('en-US');
   };
 
+  const isOnlyCurrentUserOnline = onlineUsers.length === 1 && 
+                                 currentUser && 
+                                 onlineUsers[0]._id === currentUser._id;
+
+  const handleRetry = () => {
+    getOnlineUsers();
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -63,7 +87,7 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
           <h2>
             <span className="live-indicator"></span>
             Online Players
-            <span className="online-count">({onlineUsers.length})</span>
+            <span className="online-count">({isLoading ? '...' : onlineUsers.length})</span>
           </h2>
           <button className="close-btn" onClick={onClose}>
             <FontAwesomeIcon icon={faTimes} />
@@ -79,71 +103,99 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
         </div>
 
         <div className="users-list">
-          {onlineUsers.map(user => (
-            <div key={user.id} className="user-card">
-              <div className="user-info">
-                {/* <div className="avatar-container">
-                  {user.avatar ? (
-                    <img src={user.avatar} alt={user.username} className="user-avatar" />
-                  ) : (
-                    <div className="avatar-placeholder">
-                      <FontAwesomeIcon icon={faUser} />
-                    </div>
-                  )}
-                  <div 
-                    className="status-indicator"
-                    style={{ backgroundColor: getStatusColor(user.status) }}
-                  ></div>
-                </div> */}
-                
-                <div className="user-details">
-                  <div className="username-row">
-                    <span className="username">
-                      {user.username}
-                      {user.isVip && (
-                        <FontAwesomeIcon icon={faCrown} className="vip-icon" />
-                      )}
-                    </span>
-                    <span className="user-status">{user.status}</span>
-                  </div>
+          {isLoading ? (
+            // <div className="loading-state">
+            //   <div className="spinner"></div>
+            //   <p>Loading online players...</p>
+            // </div>
+            <LoadingSpinner/>
+          ) : error ? (
+            <div className="error-state">
+              <p>{error}</p>
+              <button onClick={handleRetry} className="retry-btn">
+                Retry
+              </button>
+            </div>
+          ) : isOnlyCurrentUserOnline ? (
+            <div className="empty-state">
+              <div className="empty-icon">👤</div>
+              <h3>You're the only one online</h3>
+              <p>No other active users at the moment</p>
+              <small>Invite friends to join the fun!</small>
+            </div>
+          ) : (
+            onlineUsers.map(user => (
+              <div key={user._id} className="user-card">
+                <div className="user-info">
+                  {/* <div className="avatar-container">
+                    {user.avatar ? (
+                      <img src={user.avatar} alt={user.username} className="user-avatar" />
+                    ) : (
+                      <div className="avatar-placeholder">
+                        <FontAwesomeIcon icon={faUser} />
+                      </div>
+                    )}
+                    <div 
+                      className="status-indicator"
+                      style={{ backgroundColor: getStatusColor(user.status) }}
+                    ></div>
+                  </div> */}
                   
-                  <div className="chips-info">
-                    <FontAwesomeIcon icon={faStar} className="chips-icon" />
-                    <span className="chips-amount">{formatChips(user.chips)}</span>
+                  <div className="user-details">
+                    <div className="username-row">
+                      <span className="username">
+                        {user.username}
+                        {user.isVip && (
+                          <FontAwesomeIcon icon={faCrown} className="vip-icon" />
+                        )}
+                        {currentUser && user._id === currentUser._id && (
+                          <span className="you-badge">(You)</span>
+                        )}
+                      </span>
+                      <span className="user-status">{user.status}</span>
+                    </div>
+                    
+                    <div className="chips-info">
+                      <FontAwesomeIcon icon={faStar} className="chips-icon" />
+                      <span className="chips-amount">{formatChips(user.totalCredits)}</span>
+                    </div>
                   </div>
                 </div>
+  
+                <div className="user-actions">
+                  <button 
+                    className="action-btn chat-btn"
+                    onClick={() => handleStartChat(user.id)}
+                    title="Start chat"
+                  >
+                    <FontAwesomeIcon icon={faComment} />
+                  </button>
+                  
+                  <button 
+                    className="action-btn profile-btn"
+                    onClick={() => handleViewProfile(user.id)}
+                    title="View profile"
+                  >
+                    <FontAwesomeIcon icon={faUser} />
+                  </button>
+                  
+                  <button 
+                    className="action-btn block-btn"
+                    onClick={() => handleBlockUser(user.id)}
+                    title="Block user"
+                  >
+                    <FontAwesomeIcon icon={faBan} />
+                  </button>
+                </div>
               </div>
-
-              <div className="user-actions">
-                <button 
-                  className="action-btn chat-btn"
-                  onClick={() => handleStartChat(user.id)}
-                  title="Start chat"
-                >
-                  <FontAwesomeIcon icon={faComment} />
-                </button>
-                
-                <button 
-                  className="action-btn profile-btn"
-                  onClick={() => handleViewProfile(user.id)}
-                  title="View profile"
-                >
-                  <FontAwesomeIcon icon={faUser} />
-                </button>
-                
-                <button 
-                  className="action-btn block-btn"
-                  onClick={() => handleBlockUser(user.id)}
-                  title="Block user"
-                >
-                  <FontAwesomeIcon icon={faBan} />
-                </button>
-              </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
 
         <div className="panel-footer">
+        <button onClick={getOnlineUsers} className="refresh-btn" disabled={isLoading}>
+            {isLoading ? 'Refreshing...' : 'Refresh'}
+          </button>
           <div className="legend">
             <div className="legend-item">
               <div className="status-dot online-dot"></div>
