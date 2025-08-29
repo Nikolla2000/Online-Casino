@@ -10,7 +10,8 @@ const {
   getProfile,
   updateTotalCredits,
   getTotalCredits,
-  uploadPicture
+  uploadPicture,
+  getOnlineUsers
 } = require('../controllers/User.controller');
 
 const { verifyJWT } = require('../middleware/authentication');
@@ -23,5 +24,6 @@ router.get('/getTotalCredits', getTotalCredits);
 router.get('/logout', logoutUser);
 router.put('/updateCredits', updateTotalCredits);
 router.post('/uploadPicture', verifyJWT, upload.single('profilePic'), uploadPicture);
+router.get('/online', getOnlineUsers);
 
 module.exports = router;

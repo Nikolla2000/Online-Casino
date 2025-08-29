@@ -16,7 +16,7 @@ const UserSchema = new mongoose.Schema({
   },
   username: {
     type: String,
-    required: true,
+    required: [true, 'You must provide an username'],
     minLength: 4,
     maxLength: 20
   },
@@ -62,6 +62,18 @@ const UserSchema = new mongoose.Schema({
   profileImage: {
     type: String,
     default: '/images/user.png'
+  },
+  isOnline: {
+    type: Boolean,
+    default: false
+  },
+  lastSeen: {
+    type: Date,
+    default: Date.now
+  },
+  isVip: {
+    type: Boolean,
+    default: false
   }
 })
 

@@ -21,6 +21,8 @@ const login = async (req, res) => {
     const refreshToken = generateRefreshToken(user._id);
 
     user.refreshToken = refreshToken;
+    user.isOnline = true;
+    user.lastSeen = new Date()
     await user.save();
 
     res.cookie('refreshToken', refreshToken, {
@@ -42,12 +44,34 @@ const refresh = async (req, res) => {
     try {
         const payload = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
         const user = await User.findById(payload.userId);
-        if (!user || user.refreshToken !== refreshToken) return res.sendStatus(403);
+        if (!user || user.refreshToken !== refreshToken) return res.sendStatus(403);  
+
+        user.isOnline = true;
+        user.lastSeen = new Date();
+        await user.save();
 
         const accessToken = generateAccessToken(payload.userId);
         res.json({ accessToken });
     } catch (err) {
+        if (err.name === 'JsonWebTokenError' || err.name === 'TokenExpiredError') {
+            try {
+                const decoded = jwt.decode(refreshToken);
+                if (decoded && decoded.userId) {
+                    await User.findByIdAndUpdate(
+                        decoded.userId, {
+                            $set: {
+                                isOnline: false,
+                                lastSeen: new Date()
+                            }
+                        }
+                        )
+                    }
+                } catch (decodeError) {
+                    console.error('Error decoding token during refresh failure:', decodeError);
+            }
+        }
         res.status(403).json({ error: err });
+
     }
 }
 
@@ -56,14 +80,31 @@ const logout = async (req, res) => {
     const token = req.cookies.refreshToken;
     if (!token) return res.sendStatus(204);
 
+    // try {
+    //     const payload = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
+    //     const user = await User.findById(payload.userId);
+    //     if (user) {
+    //       user.refreshToken = null;
+          
+    //       await user.save();
+    //     }
+    // } catch {}
+
     try {
-        const payload = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
-        const user = await User.findById(payload.userId);
-        if (user) {
-          user.refreshToken = null;
-          await user.save();
-        }
-    } catch {}
+        await User.findOneAndUpdate(
+            { refreshToken: token },
+            {
+                $set: {
+                    refreshToken: null,
+                    isOnline: false,
+                    lastSeen: new Date()
+                }
+            }
+        );
+
+    } catch (error) {
+        console.error('Logout error:', error);
+    }
 
     res.clearCookie('refreshToken', { httpOnly: true, sameSite: 'Strict', secure: process.env.NODE_ENV === 'production' });
     res.sendStatus(204);
