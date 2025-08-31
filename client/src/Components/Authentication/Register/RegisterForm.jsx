@@ -1,23 +1,31 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import axios from '../../../axiosConfig'
-import './RegisterStyles.scss'
-import { useNavigate } from "react-router-dom"
-import { toast } from 'react-hot-toast'
+import axios from '../../../axiosConfig';
+import './RegisterStyles.scss';
+import { useNavigate } from "react-router-dom";
+import { toast } from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import { fetchCurrentUser, login } from '../../../redux/features/auth/authSlice';
 import { hideModals } from '../../../redux/features/auth/authModalsSlice';
 import { countries } from '../../../utils/countries';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { 
+  faUser, 
+  faEnvelope, 
+  faGlobe, 
+  faLock, 
+  faXmark,
+  faCrown,
+  faIdCard
+} from "@fortawesome/free-solid-svg-icons";
 
-const RegisterForm = ({ handleClose, setShowDropdown}) => {
+const RegisterForm = ({ handleClose, setShowDropdown }) => {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     username: '',
     email: '',
-    // phoneNumber: '',
     country: '',
     password: '',
     confirm_password: '',
@@ -25,14 +33,15 @@ const RegisterForm = ({ handleClose, setShowDropdown}) => {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [showCountriesDropdown, setShowCountriesDropdown] = useState(false);
+  const [errorMessages, setErrorMessages] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const filteredCountries = countries.filter(country =>
     country.label.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [errorMessages, setErrorMessages] = useState('')
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -44,51 +53,48 @@ const RegisterForm = ({ handleClose, setShowDropdown}) => {
 
   const validateForm = () => {
     const errors = {};
-  
+
     if (formData.firstName.length < 2 || formData.firstName.length > 20) {
       errors.firstName = 'First Name must be between 2 and 20 characters';
     }
-  
+
     if (formData.lastName.length < 2 || formData.lastName.length > 20) {
       errors.lastName = 'Last Name must be between 2 and 20 characters';
     }
-  
+
     if (formData.username.length < 4 || formData.username.length > 20) {
-      errors.username = 'Username must be between 2 and 20 characters';
+      errors.username = 'Username must be between 4 and 20 characters';
     }
-  
+
     if (!formData.country) {
-      errors.country = 'You must select a country';
+      errors.country = 'Please select a country';
     }
 
     if (formData.password.length < 6) {
       errors.password = 'Password must be at least 6 characters';
     }
-  
+
     if (formData.password !== formData.confirm_password) {
       errors.confirm_password = 'Passwords do not match';
     }
 
-    // if (!/^08\d{8}$/.test(formData.phoneNumber)) {
-    //   errors.phoneNumber = 'Phone number must start with "08" and have 10 digits';
-    // }
     return errors;
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrorMessages('')
-  
+    setIsSubmitting(true);
+    setErrorMessages({});
+
     const errors = validateForm();
-  
+
     if (Object.keys(errors).length === 0) {
       try {
         const response = await axios.post('/user/register', formData);
-
         const loginCredentials = {
           username: formData.username,
           password: formData.password
-        }
+        };
 
         const name = formData.firstName;
 
@@ -97,168 +103,238 @@ const RegisterForm = ({ handleClose, setShowDropdown}) => {
           lastName: '',
           username: '',
           email: '',
-          // phoneNumber: '',
           country: '',
           password: '',
           confirm_password: '',
-        })
-        toast.success(`Registration was successfull! Welcome, ${name}!`)
-        handleClose()
+        });
+
+        toast.success(`Welcome to Elite Casino, ${name}! 🎰`);
+        
         const res = await dispatch(login(loginCredentials));
         
         if (login.fulfilled.match(res)) {
           const token = res.payload.accessToken;
-          dispatch(fetchCurrentUser(token));
+          await dispatch(fetchCurrentUser(token));
           dispatch(hideModals());
-          setShowDropdown(false);
+          if (setShowDropdown) setShowDropdown(false);
+          setTimeout(() => navigate("/"), 400);
         } else {
           toast.error("Error signing in.");
         }
         
       } catch (error) {
-        console.error(`Registration error: ${error}`);
+        console.error('Registration error:', error);
 
-        if(error.response?.status === 409) {
-         errors.dublicate = 'User with this username or email already exists';
-         setErrorMessages(errors);
+        if (error.response?.status === 409) {
+          setErrorMessages({ duplicate: 'User with this username or email already exists' });
         } else {
-          toast.error("Registration failed. Server error.");
+          toast.error("Registration failed. Please try again.");
         }
       }
     } else {
       setErrorMessages(errors);
     }
+    setIsSubmitting(false);
   };
 
   return (
-    <div className='register-modal-wrapper'>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
->
-        <Box sx={{ width: 400, color: '#fff' }}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Register
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-          <form onSubmit={handleSubmit}>
-        <label htmlFor="firstname">First Name</label>
-        <input
-          type="text"
-          id="firstname"
-          name="firstName"
-          value={formData.firstName}
-          onChange={handleChange}
-          required
-        />
-        <label htmlFor="lastname">Last Name</label>
-        <input
-          type="text"
-          id="lastname"
-          name="lastName"
-          value={formData.lastName}
-          onChange={handleChange}
-          required
-        />
-        <label htmlFor="username">Username</label>
-        <input
-          type="text"
-          id="username"
-          name="username"
-          value={formData.username}
-          onChange={handleChange}
-          required
-        />
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-        {/* <label htmlFor="phoneNumber">Phone Number</label>
-        <input
-          type="number"
-          id="phoneNumber"
-          name="phoneNumber"
-          value={formData.phoneNumber}
-          onChange={handleChange}
-          required
-        /> */}
-        {/* <label htmlFor="country">Country</label>
-        <select
-          id="country"
-          name="country"
-          value={formData.country}
-          onChange={handleChange}
-        >
-          <option value="USA/Canada">USA/Canada</option>
-          <option value="United Kindom">UK</option>
-          <option value="Germany">Germany</option>
-          <option value="Bulgaria">Bulgaria</option>
-          <option value="France">France</option>
-          <option value="Spain">Spain</option>
-          <option value="Other">Other</option>
-        </select> */}
-        <div className="country-selector">
-          <label htmlFor="country">Country</label>
-          <input
-            type="text"
-            placeholder="Search country..."
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-              setShowCountriesDropdown(true);
-            }}
-            onFocus={() => setShowCountriesDropdown(true)}
-          />
-          {showCountriesDropdown && (
-            <div className="country-dropdown">
-              {filteredCountries.map((country) => (
-                <div
-                  key={country.value}
-                  className="country-option"
-                  onClick={() => {
-                    setFormData({...formData, country: country.value});
-                    setSearchTerm(country.label);
-                    setShowCountriesDropdown(false);
-                  }}
-                >
-                  {country.label}
-                </div>
-              ))}
+    <Modal
+      open={true}
+      onClose={handleClose}
+      aria-labelledby="register-modal"
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backdropFilter: 'blur(5px)'
+      }}
+    >
+      <Box className="register-modal-container">
+        <div className="register-modal-header">
+          <div className="register-icon">
+            <FontAwesomeIcon icon={faCrown} />
+          </div>
+          <h2 className="register-title">Join Elite Casino</h2>
+          <p className="register-subtitle">Create your account and claim your bonus!</p>
+          <button className="close-button" onClick={handleClose}>
+            <FontAwesomeIcon icon={faXmark} />
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="register-form">
+          <div className="form-row">
+            <div className="input-group">
+              <div className="input-icon">
+                <FontAwesomeIcon icon={faUser} />
+              </div>
+              <input
+                type="text"
+                name="firstName"
+                placeholder="First Name"
+                value={formData.firstName}
+                onChange={handleChange}
+                className={errorMessages.firstName ? 'error' : ''}
+              />
+              {errorMessages.firstName && (
+                <span className="error-message">{errorMessages.firstName}</span>
+              )}
+            </div>
+
+            <div className="input-group">
+              <div className="input-icon">
+                <FontAwesomeIcon icon={faUser} />
+              </div>
+              <input
+                type="text"
+                name="lastName"
+                placeholder="Last Name"
+                value={formData.lastName}
+                onChange={handleChange}
+                className={errorMessages.lastName ? 'error' : ''}
+              />
+              {errorMessages.lastName && (
+                <span className="error-message">{errorMessages.lastName}</span>
+              )}
+            </div>
+          </div>
+
+          <div className="input-group">
+            <div className="input-icon">
+              <FontAwesomeIcon icon={faIdCard} />
+            </div>
+            <input
+              type="text"
+              name="username"
+              placeholder="Username"
+              value={formData.username}
+              onChange={handleChange}
+              className={errorMessages.username ? 'error' : ''}
+            />
+            {errorMessages.username && (
+              <span className="error-message">{errorMessages.username}</span>
+            )}
+          </div>
+
+          <div className="input-group">
+            <div className="input-icon">
+              <FontAwesomeIcon icon={faEnvelope} />
+            </div>
+            <input
+              type="email"
+              name="email"
+              placeholder="Email Address"
+              value={formData.email}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="input-group country-group">
+            <div className="input-icon">
+              <FontAwesomeIcon icon={faGlobe} />
+            </div>
+            <input
+              type="text"
+              placeholder="Search country..."
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setShowCountriesDropdown(true);
+              }}
+              onFocus={() => setShowCountriesDropdown(true)}
+              className={errorMessages.country ? 'error' : ''}
+            />
+            {showCountriesDropdown && (
+              <div className="country-dropdown">
+                {filteredCountries.map((country) => (
+                  <div
+                    key={country.value}
+                    className="country-option"
+                    onClick={() => {
+                      setFormData({...formData, country: country.value});
+                      setSearchTerm(country.label);
+                      setShowCountriesDropdown(false);
+                    }}
+                  >
+                    {country.label}
+                  </div>
+                ))}
+              </div>
+            )}
+            {errorMessages.country && (
+              <span className="error-message">{errorMessages.country}</span>
+            )}
+          </div>
+
+          <div className="form-row">
+            <div className="input-group">
+              <div className="input-icon">
+                <FontAwesomeIcon icon={faLock} />
+              </div>
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                className={errorMessages.password ? 'error' : ''}
+              />
+              {errorMessages.password && (
+                <span className="error-message">{errorMessages.password}</span>
+              )}
+            </div>
+
+            <div className="input-group">
+              <div className="input-icon">
+                <FontAwesomeIcon icon={faLock} />
+              </div>
+              <input
+                type="password"
+                name="confirm_password"
+                placeholder="Confirm Password"
+                value={formData.confirm_password}
+                onChange={handleChange}
+                className={errorMessages.confirm_password ? 'error' : ''}
+              />
+              {errorMessages.confirm_password && (
+                <span className="error-message">{errorMessages.confirm_password}</span>
+              )}
+            </div>
+          </div>
+
+          {errorMessages.duplicate && (
+            <div className="error-message duplicate-error">
+              {errorMessages.duplicate}
             </div>
           )}
+
+          <button 
+            type="submit" 
+            className="register-button"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <div className="spinner"></div>
+            ) : (
+              'CREATE ACCOUNT & CLAIM BONUS'
+            )}
+          </button>
+        </form>
+
+        <div className="bonus-section">
+          <div className="bonus-card">
+            <div className="bonus-icon">🎰</div>
+            <div className="bonus-content">
+              <h3>WELCOME BONUS</h3>
+              <p>1000 FREE CHIPS</p>
+              <small>Instant credit upon registration!</small>
+            </div>
+          </div>
         </div>
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-        />
-        <label htmlFor="confirm_password">Confirm Password</label>
-        <input
-          type="password"
-          id="confirm_password"
-          name="confirm_password"
-          value={formData.confirm_password}
-          onChange={handleChange}
-          required
-        />
-        <input type="submit" value="Register" className='text-lg border-1 px-2 mt-2'/>
-        <p className='err-msg'>{Object.values(errorMessages)[0]}</p>
-      </form>
-          </Typography>
-        </Box>
-      </Modal>
-    </div>
+
+        <div className="modal-glitter"></div>
+        <div className="modal-shine"></div>
+      </Box>
+    </Modal>
   );
 };
 
