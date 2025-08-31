@@ -1,82 +1,163 @@
-import React, { useContext, useEffect } from 'react';
-import './UserDropdownStyles.scss'
-import RegisterForm from '../../Authentication/Register/RegisterForm';
-import LoginForm from '../../Authentication/Login/LoginForm';
-import { UserContext } from '../../../../context/userContext';
-import axios from '../../../axiosConfig';
+import React from 'react';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { 
+  faUser, 
+  faSignOutAlt, 
+  faSignInAlt, 
+  faUserPlus,
+  faCog,
+  faCoins,
+  faCrown,
+  faIdCard,
+  faGem,
+  faWallet,
+  faHistory
+} from "@fortawesome/free-solid-svg-icons";
+import './UserDropdownStyles.scss';
 import { useSelector, useDispatch } from 'react-redux';
-import { hideModals, showLogin, showRegister } from '../../../redux/features/auth/authModalsSlice';
-import { Link, useNavigate } from 'react-router-dom';
-import { logout, logoutUser } from '../../../redux/features/auth/authSlice';
+import { showLogin, showRegister } from '../../../redux/features/auth/authModalsSlice';
+import { useNavigate } from 'react-router-dom';
+import { logoutUser } from '../../../redux/features/auth/authSlice';
 
-const UserDropdown = ({ show, play, setShowDropdown }) => {
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
-  const { showLoginModal, showRegisterModal } = useSelector(state => state.authModals)
+const UserDropdown = ({ show, setShowDropdown }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user, accessToken } = useSelector(state => state.auth);
 
-  // const {user} = useContext(UserContext)
-  // console.log(user);
-
-  const user = useSelector((state) => state.auth.user);
-  // console.log(user.profileImg)
-  const accessToken = useSelector((state) => state.auth.accessToken);
-
-  const handleClose = () => {
-    dispatch(hideModals())
-  }
-
-  const loginOrLogout = async () => {
-    alert("BAA");
-    if (user) {
-      try {
-        await axios.get('/user/logout');
-  
-        navigate('/');
-        location.reload();
-      } catch (error) {
-        console.error('Logout error:', error);
-      }
-    } else {
-      dispatch(showLogin());
-    }
+  const handleAction = (action) => {
+    action();
+    setShowDropdown(false);
   };
 
-  const showLoginForm = () => {
-    dispatch(showLogin());
-  }
+  const handleLogin = () => handleAction(() => dispatch(showLogin()));
+  const handleRegister = () => handleAction(() => dispatch(showRegister()));
+  const handleNavigate = (path) => handleAction(() => navigate(path));
 
   const handleLogout = async () => {
     try {
       await dispatch(logoutUser()).unwrap();
-      navigate('/');
-      window.location.reload();
+      setShowDropdown(false);
+      // navigate('/');
+      window.location.href = "/";
     } catch (err) {
       console.error('Logout failed:', err);
     }
   };
-  
-console.log(user)
+
+  if (!show) return null;
+
   return (
-    <div className={`user-dropdown ${!show? 'reverse' : ''}`}>
-      <div className="user-dropdown-img">
-        {user && user.profileImage != "/images/user.png" ? (
-          <img src={`http://localhost:3000${user.profileImage}?${Date.now()}`}  alt='Image error' />
-        ) : (
-          <img src="/images/user.png" alt='Image error' />
-        )}
+    <>
+      <div className="dropdown-overlay" onClick={() => setShowDropdown(false)} />
+      <div className="user-dropdown-container">
+        <div className="user-dropdown-content">
+          <div className="user-header">
+            <div className="user-avatar">
+              {user?.profileImage && user.profileImage !== "/images/user.png" ? (
+                <img 
+                  src={`http://localhost:3000${user.profileImage}?${Date.now()}`} 
+                  alt="Profile" 
+                  className="avatar-image"
+                />
+              ) : (
+                <div className="avatar-placeholder">
+                  <FontAwesomeIcon icon={faUser} />
+                </div>
+              )}
+              {user?.isVip && (
+                <div className="vip-badge">
+                  <FontAwesomeIcon icon={faCrown} />
+                </div>
+              )}
+            </div>
+            
+            <div className="user-info">
+              {user ? (
+                <>
+                  <h3 className="username">Welcome, {user.firstName}!</h3>
+                  <div className="user-stats">
+                    <div className="chip-balance">
+                      <FontAwesomeIcon icon={faCoins} className="chip-icon" />
+                      <span className="balance">{user.totalCredits?.toLocaleString() || '0'}</span>
+                    </div>
+                    {user.isVip && (
+                      <div className="vip-status">
+                        <FontAwesomeIcon icon={faGem} className="vip-icon" />
+                        <span>VIP Member</span>
+                      </div>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <h3 className="guest-title">Welcome, Guest!</h3>
+              )}
+            </div>
+          </div>
+
+          <div className="drpdown-menu">
+            {user ? (
+              // LOGGED IN
+              <>
+                <div className="menu-section">
+                  <div className="menu-item" onClick={() => handleNavigate('/dashboard')}>
+                    <FontAwesomeIcon icon={faIdCard} className="menu-icon" />
+                    <span>Profile</span>
+                  </div>
+                  
+                  <div className="menu-item" onClick={() => handleNavigate('/wallet')}>
+                    <FontAwesomeIcon icon={faWallet} className="menu-icon" />
+                    <span>Wallet</span>
+                  </div>
+                  
+                  <div className="menu-item" onClick={() => handleNavigate('/history')}>
+                    <FontAwesomeIcon icon={faHistory} className="menu-icon" />
+                    <span>Game History</span>
+                  </div>
+                  
+                  <div className="menu-item" onClick={() => handleNavigate('/settings')}>
+                    <FontAwesomeIcon icon={faCog} className="menu-icon" />
+                    <span>Settings</span>
+                  </div>
+                </div>
+
+                <div className="menu-divider"></div>
+
+                <div className="menu-item logout-item" onClick={handleLogout}>
+                  <FontAwesomeIcon icon={faSignOutAlt} className="menu-icon" />
+                  <span>Logout</span>
+                </div>
+              </>
+            ) : (
+              // NOT LOGGED IN
+              <>
+                <div className="menu-section">
+                  <div className="menu-item login-item" onClick={handleLogin}>
+                    <FontAwesomeIcon icon={faSignInAlt} className="menu-icon" />
+                    <span>Login</span>
+                  </div>
+                  
+                  <div className="menu-item register-item" onClick={handleRegister}>
+                    <FontAwesomeIcon icon={faUserPlus} className="menu-icon" />
+                    <span>Register</span>
+                  </div>
+                </div>
+
+                <div className="menu-divider"></div>
+                
+                <div className="promo-text">
+                  <p>Join now and get</p>
+                  <div className="bonus-chip">🎰 1000 FREE CHIPS</div>
+                  <p className="bonus-subtext">to start playing!</p>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+
+        <div className="dropdown-corner"></div>
+        <div className="dropdown-glitter"></div>
       </div>
-      {user && <h3 className='text-white text-xl'>Welcome, {user.firstName}!</h3>}
-      <div className="dropdown-buttons">
-        {user?.firstName && <button><Link to='dashboard' className='text-capitalize'>Profile</Link></button>}
-        <button>
-        {/* <button onClick={user ? loginOrLogout : handleLogout}> */}
-          {!user?.firstName ? <span onClick={showLoginForm}>Login</span> : <span onClick={handleLogout}>Logout</span>}
-        </button>
-        {!user?.firstName && <button onClick={() => dispatch(showRegister())}>Register</button>}
-      </div>
-      {showRegisterModal && <RegisterForm handleClose={handleClose} setShowDropdown={setShowDropdown}/>}
-      {showLoginModal && <LoginForm handleClose={handleClose} setShowDropdown={setShowDropdown}/>}
-    </div>
+    </>
   );
 };
 

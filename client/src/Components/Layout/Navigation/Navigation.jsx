@@ -13,8 +13,11 @@ import {
 import routes from '../../../utils/routes';
 import './NavigationStyles.scss';
 import UserDropdown from '../UserDropdown/UserDropdown';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import LiveUsersPanel from '../../LiveUsersPanel/LiveUsersPanel';
+import LoginForm from '../../Authentication/Login/LoginForm';
+import RegisterForm from '../../Authentication/Register/RegisterForm';
+import { hideModals } from '../../../redux/features/auth/authModalsSlice';
 
 const Navigation = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -26,6 +29,8 @@ const Navigation = () => {
   const [showLiveUsers, setShowLiveUsers] = useState(false);
   
   const { user, accessToken } = useSelector(state => state.auth);
+  const { showLoginModal, showRegisterModal } = useSelector(state => state.authModals);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -189,6 +194,20 @@ const Navigation = () => {
         <div className="nav-shine"></div>
       </div>
     </nav>
+
+    {showLoginModal && (
+        <LoginForm 
+          handleClose={() => dispatch(hideModals())}
+          setShowDropdown={setShowDropdown}
+        />
+    )}
+      
+    {showRegisterModal && (
+      <RegisterForm 
+        handleClose={() => dispatch(hideModals())}
+        setShowDropdown={setShowDropdown}
+      />
+    )}
 
     <LiveUsersPanel 
     isOpen={showLiveUsers}
