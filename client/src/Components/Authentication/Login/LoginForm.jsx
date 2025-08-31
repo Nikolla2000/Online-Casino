@@ -1,56 +1,49 @@
 import React from 'react';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import '../Register/RegisterStyles.scss'
-import { toast } from 'react-hot-toast'
+import { toast } from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import { hideModals, showRegister } from '../../../redux/features/auth/authModalsSlice';
-import { useForm } from "react-hook-form"
+import { useForm } from "react-hook-form";
 import { fetchCurrentUser, login } from '../../../redux/features/auth/authSlice';
 import { useNavigate } from 'react-router';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser, faLock, faGem, faXmark } from "@fortawesome/free-solid-svg-icons";
+import './LoginStyles.scss';
 
 const LoginForm = ({ handleClose, isFromGamesPage, gameLink, setShowDropdown }) => {
-
-  const dispatch = useDispatch()
-
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const handleShowRegister = () => {
-    dispatch(showRegister())
-  }
 
   const {
     register,
     handleSubmit,
-    watch,
-    setError,
-    formState: { errors },
-  } = useForm()
+    formState: { errors, isSubmitting },
+  } = useForm();
+
+  const handleShowRegister = () => {
+    dispatch(showRegister());
+  }
 
   const onSubmit = async (data) => {
     try {
       const res = await dispatch(login(data));
 
       if (login.fulfilled.match(res)) {
-        toast.success('Login successful');
+        toast.success('Login successful! 🎰');
         const token = res.payload.accessToken;
         await dispatch(fetchCurrentUser(token));
         setTimeout(() => {
           if(isFromGamesPage) {
-          navigate(gameLink);
-        } else {
+            navigate(gameLink);
+          } else {
             navigate("/");
           }
         }, 400);
         dispatch(hideModals());
-        setShowDropdown(false);
+        if (setShowDropdown) setShowDropdown(false);
       } else {
-        setError("password", {
-          type: "manual",
-          message: "Invalid username or password"
-        });
-        // toast.error('Invalid username or password');
+        toast.error('Invalid username or password');
       }
     } catch (err) {
       toast.error('Login failed. Please try again.');
@@ -58,62 +51,108 @@ const LoginForm = ({ handleClose, isFromGamesPage, gameLink, setShowDropdown }) 
     }
   }
 
-
   return (
-    <div className='login-modal-wrapper'>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-      <Box sx={{ width: 400, color: '#fff' }}>
-        <Typography id="modal-modal-title" variant="h6" component="h2">
-          Login
-        </Typography>
-        <Box id="modal-modal-description" sx={{ mt: 2 }}>
-         <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <label htmlFor="username">Username</label>
-          <input
-            type="username"
-            id="username"
-            name="username"
-            // value={formData.email}
-            // onChange={handleChange}
-            {...register("username")}
-            style={{ color: '#000' }}
-            required
-          />
+    <Modal
+      open={true}
+      onClose={handleClose}
+      aria-labelledby="login-modal"
+      aria-describedby="login-form"
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backdropFilter: 'blur(5px)'
+      }}
+    >
+      <Box className="login-modal-container">
+        <div className="login-modal-header">
+          <div className="login-icon">
+            <FontAwesomeIcon icon={faGem} />
+          </div>
+          <h2 className="login-title">Welcome Back!</h2>
+          <p className="login-subtitle">Sign in to continue your gaming journey</p>
+          <button className="close-button" onClick={handleClose}>
+            <FontAwesomeIcon icon={faXmark} />
+          </button>
         </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            // value={formData.password}
-            // onChange={handleChange}
-            {...register("password", { required: "Password is required" })}
-            style={{ color: '#000' }}
-            required
-          />
-          {/* {errors.password && <span className='text-red-500 text-sm block'>This field is required</span>} */}
-          {errors.password && (
-            <span className='text-red-500 text-sm block mt-3'>{errors.password.message}</span>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="login-form">
+          <div className="input-group">
+            <div className="input-icon">
+              <FontAwesomeIcon icon={faUser} />
+            </div>
+            <input
+              type="text"
+              id="username"
+              placeholder="Enter your username"
+              {...register("username", { 
+                required: "Username is required",
+                minLength: {
+                  value: 3,
+                  message: "Username must be at least 3 characters"
+                }
+              })}
+              className={errors.username ? 'error' : ''}
+            />
+            <div className="input-underline"></div>
+          </div>
+          {errors.username && (
+            <span className="error-message">{errors.username.message}</span>
           )}
+
+          <div className="input-group">
+            <div className="input-icon">
+              <FontAwesomeIcon icon={faLock} />
+            </div>
+            <input
+              type="password"
+              id="password"
+              placeholder="Enter your password"
+              {...register("password", { 
+                required: "Password is required",
+                minLength: {
+                  value: 6,
+                  message: "Password must be at least 6 characters"
+                }
+              })}
+              className={errors.password ? 'error' : ''}
+            />
+            <div className="input-underline"></div>
+          </div>
+          {errors.password && (
+            <span className="error-message">{errors.password.message}</span>
+          )}
+
+          <button 
+            type="submit" 
+            className="login-button"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <div className="spinner"></div>
+            ) : (
+              'LOGIN TO PLAY'
+            )}
+          </button>
+        </form>
+
+        <div className="login-modal-footer">
+          <p className="register-text">
+            Don't have an account?{" "}
+            <span className="register-link" onClick={handleShowRegister}>
+              Join the casino now!
+            </span>
+          </p>
+          <div className="bonus-offer">
+            <span className="bonus-chip">🎰</span>
+            <span className="bonus-text">Get 1000 FREE chips on registration!</span>
+          </div>
         </div>
-        <div className=''>
-          <button type="submit" className='text-lg border-1 px-2 mt-2'>Login</button>
-        </div>
-        <p className='text-xs mt-3'>Dont have an account? <br></br> 
-        You can register <span className='text-red-500 cursor-pointer' onClick={handleShowRegister}>here</span></p>
-        {/* <p>{loginErrorMsg}</p> */}
-      </form>
-      </Box>
+
+        <div className="modal-glitter"></div>
+        <div className="modal-shine"></div>
       </Box>
     </Modal>
-    </div>
   );
 };
 

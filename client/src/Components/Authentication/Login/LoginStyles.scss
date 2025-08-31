@@ -1,0 +1,315 @@
+@import '../../../colorConstants.scss';
+
+$gold-primary: #FFD700;
+$gold-secondary: #FFB700;
+$gold-gradient: linear-gradient(135deg, #FFD700 0%, #FFB700 50%, #FFD700 100%);
+$modal-bg: rgba(18, 18, 18, 0.95);
+$modal-border: rgba($gold-primary, 0.3);
+
+.login-modal-container {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  background: $modal-bg;
+  backdrop-filter: blur(20px);
+  border: 2px solid $modal-border;
+  border-radius: 20px;
+  padding: 0;
+  outline: none;
+  box-shadow: 
+    0 30px 60px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba($gold-primary, 0.2),
+    0 0 50px rgba($gold-primary, 0.2);
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, transparent, rgba($gold-primary, 0.1), transparent);
+    border-radius: 22px;
+    z-index: -1;
+    animation: borderGlow 3s ease-in-out infinite;
+  }
+}
+
+.login-modal-header {
+  background: linear-gradient(135deg, rgba($gold-primary, 0.1), transparent);
+  padding: 30px 30px 20px;
+  text-align: center;
+  position: relative;
+  border-bottom: 1px solid rgba($gold-primary, 0.1);
+}
+
+.login-icon {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 15px;
+  background: linear-gradient(135deg, $gold-primary, #FFB700);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #000;
+  box-shadow: 0 0 20px rgba($gold-primary, 0.5);
+}
+
+.login-title {
+  color: $gold-primary;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  text-shadow: 0 0 10px rgba($gold-primary, 0.3);
+}
+
+.login-subtitle {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.close-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: $gold-primary;
+    background: rgba($gold-primary, 0.1);
+  }
+}
+
+.login-form {
+  padding: 30px;
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 15px;
+  color: rgba(255, 255, 255, 0.6);
+  z-index: 2;
+  font-size: 1rem;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 15px 15px 15px 45px;
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  border-radius: 10px;
+  color: #FFF;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  &:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.12);
+    
+    + .input-underline {
+      width: 100%;
+      background: $gold-primary;
+    }
+  }
+
+  &.error {
+    border-color: #FF3860;
+    
+    + .input-underline {
+      background: #FF3860;
+    }
+  }
+}
+
+.input-underline {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: $gold-primary;
+  transition: all 0.3s ease;
+}
+
+.error-message {
+  color: #FF3860;
+  font-size: 0.85rem;
+  margin-top: -15px;
+  margin-bottom: 15px;
+  display: block;
+}
+
+.login-button {
+  width: 100%;
+  padding: 16px;
+  background: $gold-gradient;
+  border: none;
+  border-radius: 12px;
+  color: #000;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+  position: relative;
+  overflow: hidden;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba($gold-primary, 0.4);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top: 2px solid #000;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+.login-modal-footer {
+  padding: 20px 30px 30px;
+  text-align: center;
+  background: linear-gradient(135deg, transparent, rgba($gold-primary, 0.05));
+  border-top: 1px solid rgba($gold-primary, 0.1);
+}
+
+.register-text {
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 15px 0;
+  font-size: 0.9rem;
+}
+
+.register-link {
+  color: $gold-primary;
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: underline;
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: #FFB700;
+  }
+}
+
+.bonus-offer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: linear-gradient(135deg, rgba($gold-primary, 0.1), transparent);
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba($gold-primary, 0.2);
+}
+
+.bonus-chip {
+  font-size: 1.2rem;
+}
+
+.bonus-text {
+  color: $gold-primary;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.modal-glitter {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    $gold-primary,
+    #FF3860,
+    $gold-primary,
+    transparent
+  );
+  animation: glitter 2s infinite;
+}
+
+.modal-shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba($gold-primary, 0.1),
+    transparent
+  );
+  animation: shine 3s infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes borderGlow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+@keyframes glitter {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes shine {
+  0% { left: -100%; }
+  100% { left: 200%; }
+}
+
+@media (max-width: 480px) {
+  .login-modal-container {
+    margin: 20px;
+    max-width: none;
+  }
+  
+  .login-modal-header {
+    padding: 25px 20px 15px;
+  }
+  
+  .login-form {
+    padding: 25px 20px;
+  }
+  
+  .login-modal-footer {
+    padding: 15px 20px 25px;
+  }
+}
