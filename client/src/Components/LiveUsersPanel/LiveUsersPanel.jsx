@@ -12,12 +12,14 @@ import './LiveUsersPanel.scss';
 import { useSelector } from 'react-redux';
 import { fetchOnlineUsers } from '../../lib/data';
 import LoadingSpinner from '../Spinner/Spinner';
+import { useNavigate } from 'react-router';
 
 const LiveUsersPanel = ({ isOpen, onClose }) => {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const { accessToken, user: currentUser } = useSelector(state => state.auth);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isOpen && accessToken) {
@@ -49,7 +51,8 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
   };
 
   const handleViewProfile = (userId) => {
-    console.log("View profile of user:", userId);
+    // TODO - Navigate to user profile when ids are different
+    userId == currentUser._id ? navigate('/dashboard') : navigate('/contact');
   };
 
   const handleBlockUser = (userId) => {
@@ -163,29 +166,34 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
                 </div>
   
                 <div className="user-actions">
+
+                {user._id !== currentUser._id && (
                   <button 
                     className="action-btn chat-btn"
-                    onClick={() => handleStartChat(user.id)}
+                    onClick={() => handleStartChat(user._id)}
                     title="Start chat"
                   >
                     <FontAwesomeIcon icon={faComment} />
                   </button>
+                )}
                   
                   <button 
                     className="action-btn profile-btn"
-                    onClick={() => handleViewProfile(user.id)}
+                    onClick={() => handleViewProfile(user._id)}
                     title="View profile"
                   >
                     <FontAwesomeIcon icon={faUser} />
                   </button>
                   
-                  <button 
-                    className="action-btn block-btn"
-                    onClick={() => handleBlockUser(user.id)}
-                    title="Block user"
-                  >
-                    <FontAwesomeIcon icon={faBan} />
-                  </button>
+                  {user._id !== currentUser._id && (
+                    <button 
+                      className="action-btn block-btn"
+                      onClick={() => handleBlockUser(user._id)}
+                      title="Block user"
+                    >
+                      <FontAwesomeIcon icon={faBan} />
+                    </button>
+                  )}
                 </div>
               </div>
             ))
