@@ -6,26 +6,32 @@ import {
   faUser, 
   faBan,
   faCrown,
-  faStar
+  faStar,
+  faRefresh
 } from "@fortawesome/free-solid-svg-icons";
 import './LiveUsersPanel.scss';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { fetchOnlineUsers } from '../../lib/data';
 import LoadingSpinner from '../Spinner/Spinner';
 import { useNavigate } from 'react-router';
+import { setActiveChat } from '../../redux/features/chat/chatSlice';
+import { normalizeDates } from '../../utils/normalizeDates';
 
 const LiveUsersPanel = ({ isOpen, onClose }) => {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
   const { accessToken, user: currentUser } = useSelector(state => state.auth);
+  const { chats } = useSelector(state => state.chat);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (isOpen && accessToken) {
       getOnlineUsers();
     }
-  }, [isOpen]);
+  }, [isOpen, accessToken]);
 
   const getOnlineUsers = async () => {
     setIsLoading(true);
@@ -39,37 +45,60 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
         setError('Failed to fetch online users');
       }
     } catch (error) {
-      setError(err.response?.data?.message || 'Error fetching online users');
+      setError(error.response?.data?.message || 'Error fetching online users');
     } finally {
       setIsLoading(false);
-      console.log(onlineUsers);
     }
   }
 
-  const handleStartChat = (userId) => {
-    console.log("Start chat with user:", userId);
+  const handleStartChat = (user) => {
+    const existingChat = chats.find(chat => 
+      chat.participants.some(p => p._id === user._id)
+    );
+    
+    if (existingChat) {
+      const normalizedChat = normalizeDates(existingChat);
+      dispatch(setActiveChat(normalizedChat));
+    } else {
+      const tempChat = normalizeDates({
+        _id: `temp_${Date.now()}`,
+        participants: [
+          { 
+            _id: currentUser._id, 
+            username: currentUser.username,
+            profileImage: currentUser.profileImage
+          },
+          { 
+            _id: user._id, 
+            username: user.username,
+            profileImage: user.profileImage
+          }
+        ],
+        isTemp: true,
+        lastActivity: new Date()
+      });
+      dispatch(setActiveChat(tempChat));
+    }
+    
+    onClose();
   };
 
   const handleViewProfile = (userId) => {
-    // TODO - Navigate to user profile when ids are different
-    userId == currentUser._id ? navigate('/dashboard') : navigate('/contact');
+    if (userId === currentUser._id) {
+      navigate('/dashboard');
+    } else {
+      navigate(`/profile/${userId}`);
+    }
+    onClose();
   };
 
   const handleBlockUser = (userId) => {
     console.log("Block user:", userId);
-  };
-
-  const getStatusColor = (status) => {
-    switch(status) {
-      case "online": return "#4CAF50";
-      case "playing": return "#2196F3";
-      case "away": return "#FF9800";
-      default: return "#9E9E9E";
-    }
+    //TODO
   };
 
   const formatChips = (chips) => {
-    return chips.toLocaleString('en-US');
+    return chips?.toLocaleString('en-US') || '0';
   };
 
   const isOnlyCurrentUserOnline = onlineUsers.length === 1 && 
@@ -79,6 +108,11 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
   const handleRetry = () => {
     getOnlineUsers();
   };
+
+  const filteredUsers = onlineUsers.filter(user =>
+    user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (user.email && user.email.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
 
   if (!isOpen) return null;
 
@@ -102,21 +136,23 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
             type="text" 
             placeholder="Search players..."
             className="search-input"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
 
         <div className="users-list">
           {isLoading ? (
-            // <div className="loading-state">
-            //   <div className="spinner"></div>
-            //   <p>Loading online players...</p>
-            // </div>
-            <LoadingSpinner/>
+            <div className="loading-container">
+              <LoadingSpinner />
+              <p>Loading online players...</p>
+            </div>
           ) : error ? (
             <div className="error-state">
+              <FontAwesomeIcon icon={faTimes} className="error-icon" />
               <p>{error}</p>
               <button onClick={handleRetry} className="retry-btn">
-                Retry
+                <FontAwesomeIcon icon={faRefresh} /> Try Again
               </button>
             </div>
           ) : isOnlyCurrentUserOnline ? (
@@ -126,23 +162,33 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
               <p>No other active users at the moment</p>
               <small>Invite friends to join the fun!</small>
             </div>
+          ) : filteredUsers.length === 0 ? (
+            <div className="empty-state">
+              <div className="empty-icon">🔍</div>
+              <h3>No players found</h3>
+              <p>Try adjusting your search terms</p>
+            </div>
           ) : (
-            onlineUsers.map(user => (
+            filteredUsers.map(user => (
               <div key={user._id} className="user-card">
                 <div className="user-info">
-                  {/* <div className="avatar-container">
-                    {user.avatar ? (
-                      <img src={user.avatar} alt={user.username} className="user-avatar" />
-                    ) : (
-                      <div className="avatar-placeholder">
-                        <FontAwesomeIcon icon={faUser} />
-                      </div>
-                    )}
-                    <div 
-                      className="status-indicator"
-                      style={{ backgroundColor: getStatusColor(user.status) }}
-                    ></div>
-                  </div> */}
+                  <div className="avatar-container">
+                    {user.profileImage && user.profileImage !== "/images/user.png" ? (
+                      <img 
+                        src={`http://localhost:3000${user.profileImage}`} 
+                        alt={user.username}
+                        className="user-avatar"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.nextSibling.style.display = 'flex';
+                        }}
+                      />
+                    ) : null}
+                    <div className="avatar-placeholder">
+                      {user.username?.charAt(0).toUpperCase() || 'U'}
+                    </div>
+                    <div className={`status-indicator ${user.status || 'online'}`}></div>
+                  </div>
                   
                   <div className="user-details">
                     <div className="username-row">
@@ -155,7 +201,7 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
                           <span className="you-badge">(You)</span>
                         )}
                       </span>
-                      <span className="user-status">{user.status}</span>
+                      <span className="user-status">{user.status || 'online'}</span>
                     </div>
                     
                     <div className="chips-info">
@@ -164,18 +210,17 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
                     </div>
                   </div>
                 </div>
-  
-                <div className="user-actions">
 
-                {user._id !== currentUser._id && (
-                  <button 
-                    className="action-btn chat-btn"
-                    onClick={() => handleStartChat(user._id)}
-                    title="Start chat"
-                  >
-                    <FontAwesomeIcon icon={faComment} />
-                  </button>
-                )}
+                <div className="user-actions">
+                  {user._id !== currentUser._id && (
+                    <button 
+                      className="action-btn chat-btn"
+                      onClick={() => handleStartChat(user)}
+                      title="Start chat"
+                    >
+                      <FontAwesomeIcon icon={faComment} />
+                    </button>
+                  )}
                   
                   <button 
                     className="action-btn profile-btn"
@@ -201,8 +246,13 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
         </div>
 
         <div className="panel-footer">
-        <button onClick={getOnlineUsers} className="refresh-btn" disabled={isLoading}>
-            {isLoading ? 'Refreshing...' : 'Refresh'}
+          <button 
+            onClick={getOnlineUsers} 
+            className="refresh-btn" 
+            disabled={isLoading}
+          >
+            <FontAwesomeIcon icon={faRefresh} />
+            {isLoading ? 'Refreshing...' : 'Refresh List'}
           </button>
           <div className="legend">
             <div className="legend-item">

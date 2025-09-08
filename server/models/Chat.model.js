@@ -19,4 +19,5 @@ const chatSchema = new mongoose.Schema({
 chatSchema.index({ participants: 1 });
 chatSchema.index({ lastActivity: -1 });
 
-module.exports = mongoose.model('Chat', chatSchema);
+const Chat = mongoose.model('Chat', chatSchema);
+module.exports = Chat;

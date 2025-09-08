@@ -3,6 +3,8 @@ import authModalReducer from '../features/auth/authModalsSlice.js';
 import slotsReducer from "../features/slots/slotMachineSlice.js";
 import rouletteReducer from "../features/roulette/rouletteSlice.js";
 import authReducer from "../features/auth/authSlice.js";
+import chatReducer from '../features/chat/chatSlice.js';
+import socketReducer from '../features/socket/socketSlice.js';
 import { setupInterceptors } from '../../axiosConfig.js';
 
 export const store = configureStore({
@@ -11,7 +13,16 @@ export const store = configureStore({
     authModals: authModalReducer,
     slotMachine: slotsReducer,
     roulette: rouletteReducer,
+    socket: socketReducer,
+    chat: chatReducer,
   },
-})
+  middleware: (getDefaultMiddleware) =>
+  getDefaultMiddleware({
+    serializableCheck: {
+      ignoredActions: ['socket/initialize/fulfilled'],
+      ignoredPaths: ['socket.socket'],
+    },
+  }),
+});
 
 setupInterceptors(store);
