@@ -7,15 +7,18 @@ import router from './router/Router.jsx'
 import { UserContextProvider } from '../context/userContext.jsx'
 import { store } from './redux/store/store.js'
 import { Provider } from 'react-redux'
+import { SocketProvider } from '../context/SocketContext.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>
-      <UserContextProvider>
+      {/* <UserContextProvider> */}
+      <SocketProvider>
         <RouterProvider router={router}>
           <App />
         </RouterProvider>
-      </UserContextProvider>
+      </SocketProvider>
+      {/* </UserContextProvider> */}
     </Provider>
   </React.StrictMode>,
 )
