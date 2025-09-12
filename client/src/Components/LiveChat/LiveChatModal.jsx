@@ -119,7 +119,7 @@ const LiveChatModal = () => {
       <div className="chat-header">
         <div className="chat-user-info">
           <div className="user-avatar">
-            {/* {otherParticipant?.profileImage ? (
+            {otherParticipant?.profileImage ? (
               <img 
                 src={otherParticipant.profileImage} 
                 alt={otherParticipant.username}
@@ -128,7 +128,7 @@ const LiveChatModal = () => {
               <div className="avatar-placeholder">
                 {otherParticipant?.username?.charAt(0).toUpperCase() || 'U'}
               </div>
-            )} */}
+            )}
           </div>
           <div className="user-details">
             <h3>{otherParticipant?.username || 'Unknown User'}</h3>

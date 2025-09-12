@@ -183,11 +183,12 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
                           e.target.nextSibling.style.display = 'flex';
                         }}
                       />
-                    ) : null}
+                    ) : (
                     <div className="avatar-placeholder">
                       {user.username?.charAt(0).toUpperCase() || 'U'}
                     </div>
-                    <div className={`status-indicator ${user.status || 'online'}`}></div>
+                    )}
+                    <div className={`status-indicator ${user.isOnline || 'online'}`}></div>
                   </div>
                   
                   <div className="user-details">
