@@ -11,7 +11,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage/>,
     children: [
       { index: true, element: routes.main.element },
-      { path: routes.admin.path, element: <ProtectedRoute>{routes.admin.element}</ProtectedRoute> },
+      // { path: routes.admin.path, element: <ProtectedRoute>{routes.admin.element}</ProtectedRoute> },
       { path: routes.dashboard.path, element: <ProtectedRoute>{routes.dashboard.element}</ProtectedRoute> },
       { path: routes.contact.path, element:routes.contact.element },
       { path: routes.email.path, element:routes.email.element },

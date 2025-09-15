@@ -5,22 +5,19 @@ import {
   addMessage, 
   markMessagesAsRead 
 } from '../../redux/features/chat/chatSlice';
-import { useSocket } from "../../hooks/useSocket";
+import { useSocket } from "../../../context/SocketContext";
 import './LiveChatStyles.scss';
-import { denormalizeDates } from '../../utils/normalizeDates';
 
 const LiveChatModal = () => {
   const [messageInput, setMessageInput] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const [typingUser, setTypingUser] = useState('');
   const messagesEndRef = useRef(null);
   
   const dispatch = useDispatch();
-  const { messages } = useSelector(state => state.chat);
+  const { activeChat, messages } = useSelector(state => state.chat);
   const { user: currentUser } = useSelector(state => state.auth);
   const { socket, isConnected, emit, on, off } = useSocket();
-
-  const activeChat = useSelector(state => 
-    state.chat.activeChat ? denormalizeDates(state.chat.activeChat) : null
-  );
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -31,31 +28,81 @@ const LiveChatModal = () => {
   }, [messages, activeChat]);
 
   useEffect(() => {
-    if (socket && isConnected && activeChat) {
-      emit('join_chat', activeChat._id);
+    if (!socket || !activeChat) return;
 
-      const handleNewMessage = (messageData) => {
-        if (messageData.chatId === activeChat._id) {
-          dispatch(addMessage({
-            chatId: activeChat._id,
-            message: messageData
-          }));
+    emit('join_chat', activeChat._id);
+
+    const handleNewMessage = (messageData) => {
+      if (messageData.chatId === activeChat._id) {
+        const normalizedMessage = {
+          ...messageData,
+          timestamp: messageData.timestamp ? 
+            (typeof messageData.timestamp === 'string' ? 
+             messageData.timestamp : 
+             new Date(messageData.timestamp).toISOString()) : 
+            new Date().toISOString()
+        };
+  
+        dispatch(addMessage({
+          chatId: activeChat._id,
+          message: normalizedMessage
+        }));
+      }
+    };
+
+    const handleTyping = (data) => {
+      if (data.chatId === activeChat._id && data.userId !== currentUser._id) {
+        setIsTyping(data.isTyping);
+        setTypingUser(data.isTyping ? data.username : '');
+        
+        if (data.isTyping) {
+          setTimeout(() => {
+            setIsTyping(false);
+            setTypingUser('');
+          }, 3000);
         }
-      };
+      }
+    };
 
-      const handleTyping = (data) => {
-        console.log('User typing:', data);
-      };
+    const handleMessagesRead = (data) => {
+      if (data.chatId === activeChat._id) {
+        dispatch(markMessagesAsRead(data));
+      }
+    };
 
-      on('private_message', handleNewMessage);
-      on('user_typing_private', handleTyping);
+    on('private_message', handleNewMessage);
+    on('user_typing_private', handleTyping);
+    on('messages_read', handleMessagesRead);
 
-      return () => {
-        off('private_message', handleNewMessage);
-        off('user_typing_private', handleTyping);
-      };
-    }
-  }, [socket, isConnected, activeChat, dispatch, on, off]);
+    // Cleanup
+    return () => {
+      off('private_message', handleNewMessage);
+      off('user_typing_private', handleTyping);
+      off('messages_read', handleMessagesRead);
+    };
+  }, [socket, activeChat, currentUser, dispatch, emit, on, off]);
+
+
+  useEffect(() => {
+    if (!socket) return;
+  
+    const handleChatCreated = (data) => {
+      if (data.tempChatId === activeChat?._id) {
+        dispatch(setActiveChat({
+          ...activeChat,
+          _id: data.realChatId,
+          isTemp: false
+        }));
+      }
+    };
+  
+    on('chat_created', handleChatCreated);
+  
+    return () => {
+      off('chat_created', handleChatCreated);
+    };
+  }, [socket, activeChat, dispatch, on, off]);
+
 
   const handleSendMessage = () => {
     if (messageInput.trim() && isConnected && activeChat) {
@@ -67,19 +114,42 @@ const LiveChatModal = () => {
           content: messageInput.trim(),
           chatId: activeChat._id
         });
-
+  
+        const tempMessage = {
+          _id: `temp_${Date.now()}`,
+          senderId: currentUser._id,
+          content: messageInput.trim(),
+          timestamp: new Date().toISOString(),
+          isOptimistic: true
+        };
+  
         dispatch(addMessage({
           chatId: activeChat._id,
-          message: {
-            _id: Date.now().toString(),
-            senderId: currentUser._id,
-            content: messageInput.trim(),
-            timestamp: new Date(),
-            isOptimistic: true
-          }
+          message: tempMessage
         }));
-
+  
         setMessageInput('');
+        
+        emit('typing_private', {
+          chatId: activeChat._id,
+          receiverId: otherParticipant._id,
+          isTyping: false
+        });
+      }
+    }
+  };
+
+  const handleTypingChange = (text) => {
+    setMessageInput(text);
+    
+    if (activeChat) {
+      const otherParticipant = getOtherParticipant();
+      if (otherParticipant) {
+        emit('typing_private', {
+          chatId: activeChat._id,
+          receiverId: otherParticipant._id,
+          isTyping: text.length > 0
+        });
       }
     }
   };
@@ -108,7 +178,6 @@ const LiveChatModal = () => {
     });
   };
 
-
   if (!activeChat) return null;
 
   const otherParticipant = getOtherParticipant();
@@ -121,19 +190,24 @@ const LiveChatModal = () => {
           <div className="user-avatar">
             {otherParticipant?.profileImage ? (
               <img 
-                src={otherParticipant.profileImage} 
+                src={`http://localhost:3000${otherParticipant.profileImage}`} 
                 alt={otherParticipant.username}
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  e.target.nextSibling.style.display = 'flex';
+                }}
               />
-            ) : (
-              <div className="avatar-placeholder">
-                {otherParticipant?.username?.charAt(0).toUpperCase() || 'U'}
-              </div>
-            )}
+            ) : null}
+            <div className="avatar-placeholder">
+              {otherParticipant?.username?.charAt(0).toUpperCase() || 'U'}
+            </div>
+            <div className={`status-indicator ${isConnected ? 'online' : 'offline'}`}></div>
           </div>
           <div className="user-details">
             <h3>{otherParticipant?.username || 'Unknown User'}</h3>
             <span className="user-status">
               {isConnected ? 'Online' : 'Offline'}
+              {isTyping && typingUser && ` • ${typingUser} is typing...`}
             </span>
           </div>
         </div>
@@ -145,6 +219,7 @@ const LiveChatModal = () => {
       <div className="chat-messages">
         {currentMessages.length === 0 ? (
           <div className="no-messages">
+            <div className="empty-icon">💬</div>
             <p>No messages yet</p>
             <span>Start a conversation with {otherParticipant?.username}</span>
           </div>
@@ -159,11 +234,24 @@ const LiveChatModal = () => {
                 <span className="message-time">
                   {formatTime(msg.timestamp)}
                   {msg.isOptimistic && ' • Sending...'}
+                  {msg.read && ' • Read'}
                 </span>
               </div>
             </div>
           ))
         )}
+        
+        {isTyping && typingUser && (
+          <div className="typing-indicator">
+            <div className="typing-dots">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <span>{typingUser} is typing...</span>
+          </div>
+        )}
+        
         <div ref={messagesEndRef} />
       </div>
 
@@ -172,7 +260,7 @@ const LiveChatModal = () => {
           <input
             type="text"
             value={messageInput}
-            onChange={(e) => setMessageInput(e.target.value)}
+            onChange={(e) => handleTypingChange(e.target.value)}
             onKeyPress={handleKeyPress}
             placeholder="Type your message..."
             disabled={!isConnected}

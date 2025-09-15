@@ -16,16 +16,16 @@ const routes = {
     name: 'home',
     includeInNav:true,
   },
-  admin: {
-    path: '/admin',
-    element: <AdminPage/>,
-    name: 'admin',
-    // includeInNav: true,
-    get includeInNav() {
-      const { user } = useContext(UserContext);
-      return user && user.email === import.meta.env.VITE_ADMIN_USER_EMAIL;
-    },
-  },
+  // admin: {
+  //   path: '/admin',
+  //   element: <AdminPage/>,
+  //   name: 'admin',
+  //   // includeInNav: true,
+  //   get includeInNav() {
+  //     const { user } = useContext(UserContext);
+  //     return user && user.email === import.meta.env.VITE_ADMIN_USER_EMAIL;
+  //   },
+  // },
   games: {
     path: '/games',
     element: <GamesPage/>,

@@ -11,6 +11,11 @@ const setupSocket = (io) => {
 
         socket.on('join_chat', async (chatId) => {
             try {
+              if(chatId.startsWith('temp_')) {
+                console.log('Temporary chat detected, skipping database lookup');
+                socket.join(`chat_${chatId}`);
+                return;
+              }
                 const chat = await Chat.findById(chatId).populate('participants');
                 if (chat && chat.participants.some((p) => p._id.toString() === socket.userId)) {
                     socket.join(`chat_${chatId}`);
@@ -36,66 +41,65 @@ const setupSocket = (io) => {
 
 
         socket.on('private_message', async (data) => {
-            try {
-              const { receiverId, content, chatId } = data;
-              
-              // Намиране или създаване на чат
-              let chat;
-              if (chatId) {
-                chat = await Chat.findById(chatId);
-              } else {
-                // Създаване на нов чат
-                chat = new Chat({
-                  participants: [socket.userId, receiverId]
-                });
-                await chat.save();
-              }
-      
-              // Запазване на съобщението
-              const message = new Message({
-                chatId: chat._id,
-                senderId: socket.userId,
-                content: content.trim()
+          try {
+            const { receiverId, content, chatId } = data;
+            
+            let chat;
+            
+            if (chatId && chatId.startsWith('temp_')) {
+              chat = new Chat({
+                participants: [socket.userId, receiverId]
               });
-              await message.save();
-      
-              // Актуализиране на последното съобщение в чата
-              chat.lastMessage = message._id;
-              chat.lastActivity = new Date();
               await chat.save();
-      
-              // Изпращане на съобщението до получателя
-              const messageData = {
-                _id: message._id,
-                chatId: chat._id,
-                senderId: socket.userId,
-                content: message.content,
-                createdAt: message.createdAt,
-                read: false
-              };
-      
-              // Изпращане до получателя
-              socket.to(`user_${receiverId}`).emit('private_message', messageData);
+              await chat.populate('participants', 'username email profileImage');
               
-              // Изпращане обратно до изпращача (за confirmation)
-              socket.emit('private_message_sent', messageData);
-      
-              // Актуализиране на последната активност за всички участници
-              io.to(`chat_${chat._id}`).emit('chat_updated', {
-                chatId: chat._id,
-                lastMessage: messageData,
-                lastActivity: chat.lastActivity
+              socket.emit('chat_created', {
+                tempChatId: chatId,
+                realChatId: chat._id
               });
-      
-            } catch (error) {
-              console.error('Error sending private message:', error);
-              socket.emit('message_error', {
-                error: 'Failed to send message'
+              socket.to(`user_${receiverId}`).emit('chat_created', {
+                tempChatId: chatId,
+                realChatId: chat._id
               });
+            } else {
+              chat = await Chat.findById(chatId);
+              if (!chat) {
+                return socket.emit('message_error', { error: 'Chat not found' });
+              }
             }
-          });
+        
+            if (!chat.participants.map(p => p._id.toString()).includes(socket.userId)) {
+              return socket.emit('message_error', { error: 'Access denied' });
+            }
+        
+            const message = new Message({
+              chatId: chat._id,
+              senderId: socket.userId,
+              content: content.trim()
+            });
+            await message.save();
+        
+            chat.lastMessage = message._id;
+            chat.lastActivity = new Date();
+            await chat.save();
+        
+            const messageData = {
+              _id: message._id,
+              chatId: chat._id,
+              senderId: socket.userId,
+              content: message.content,
+              createdAt: message.createdAt,
+              read: false
+            };
+        
+            io.to(`chat_${chat._id}`).emit('private_message', messageData);
+        
+          } catch (error) {
+            console.error('Error sending private message:', error);
+            socket.emit('message_error', { error: 'Failed to send message' });
+          }
+        });
       
-          // Typing indicators for private chat
           socket.on('typing_private', (data) => {
             const { chatId, receiverId, isTyping } = data;
             socket.to(`user_${receiverId}`).emit('user_typing_private', {
@@ -105,7 +109,6 @@ const setupSocket = (io) => {
             });
           });
       
-          // Mark messages as read
           socket.on('mark_as_read', async (data) => {
             try {
               const { chatId, messageIds } = data;
@@ -122,7 +125,6 @@ const setupSocket = (io) => {
                 }
               );
       
-              // Уведомяване на изпращача, че съобщенията са прочетени
               const messages = await Message.find({ _id: { $in: messageIds } });
               const senderIds = [...new Set(messages.map(m => m.senderId.toString()))];
               
