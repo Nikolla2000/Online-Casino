@@ -18,11 +18,15 @@ export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
   const { user, accessToken } = useSelector(state => state.auth);
+  // if (user) {
+  //   console.log(user.id)
+  // }
 
   useEffect(() => {
     if (accessToken && user) {
       const newSocket = io('http://localhost:3000', {
         auth: {
+          userId: user._id,
           token: accessToken,
           user: {
             id: user._id,

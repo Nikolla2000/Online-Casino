@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { 
   setActiveChat, 
   addMessage, 
-  markMessagesAsRead 
+  markMessagesAsRead, 
+  fetchChatMessages
 } from '../../redux/features/chat/chatSlice';
 import { useSocket } from "../../../context/SocketContext";
 import './LiveChatStyles.scss';
@@ -26,6 +27,12 @@ const LiveChatModal = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages, activeChat]);
+
+  // useEffect(() => {
+  //   if (activeChat && !activeChat.isTemp) {
+  //     dispatch(fetchChatMessages(activeChat._id));
+  //   }
+  // }, [activeChat, dispatch]);
 
   useEffect(() => {
     if (!socket || !activeChat) return;
@@ -182,6 +189,8 @@ const LiveChatModal = () => {
 
   const otherParticipant = getOtherParticipant();
   const currentMessages = messages[activeChat._id] || [];
+
+  console.log("messages: ", messages)
 
   return (
     <div className="livechat-modal-wrapper">

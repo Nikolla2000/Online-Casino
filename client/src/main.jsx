@@ -12,13 +12,13 @@ import { SocketProvider } from '../context/SocketContext.jsx'
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>
-      {/* <UserContextProvider> */}
+      <UserContextProvider>
       <SocketProvider>
         <RouterProvider router={router}>
           <App />
         </RouterProvider>
       </SocketProvider>
-      {/* </UserContextProvider> */}
+      </UserContextProvider>
     </Provider>
   </React.StrictMode>,
 )

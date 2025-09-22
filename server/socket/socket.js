@@ -1,8 +1,17 @@
+const { default: mongoose } = require("mongoose");
 const Chat = require("../models/Chat.model");
+const Message = require("../models/Message.model");
 
 const setupSocket = (io) => {
     io.on('connection', (socket) => {
-        console.log(`User connected to chat: ${socket.id} ${socket.userId}`);
+        const userId = socket.handshake.auth.userId;
+        const userData = socket.handshake.auth.user;
+        
+        if (userId) {
+          socket.userId = userId;
+          socket.userData = userData;
+          console.log(`User connected: ${socket.id}, User ID: ${socket.userId}`);
+        }
 
         socket.on('join_user_room', (userId) => {
             socket.join(`user_${userId}`);
@@ -43,12 +52,19 @@ const setupSocket = (io) => {
         socket.on('private_message', async (data) => {
           try {
             const { receiverId, content, chatId } = data;
+            console.log("data:", data);
             
             let chat;
+
+          //   if (!mongoose.Types.ObjectId.isValid(socket.userId) || 
+          //   !mongoose.Types.ObjectId.isValid(receiverId)) {
+          // throw new Error('Invalid user IDs');
+          // }
             
             if (chatId && chatId.startsWith('temp_')) {
               chat = new Chat({
-                participants: [socket.userId, receiverId]
+                participants: [new mongoose.Types.ObjectId(socket.userId), 
+                               new mongoose.Types.ObjectId(receiverId)]
               });
               await chat.save();
               await chat.populate('participants', 'username email profileImage');
@@ -67,11 +83,11 @@ const setupSocket = (io) => {
                 return socket.emit('message_error', { error: 'Chat not found' });
               }
             }
-        
-            if (!chat.participants.map(p => p._id.toString()).includes(socket.userId)) {
+            
+            if (!chat || !socket.userId || !chat.participants.some((p) => p._id.toString() === socket.userId)) {
+              console.log("PAK VLIZA")
               return socket.emit('message_error', { error: 'Access denied' });
             }
-        
             const message = new Message({
               chatId: chat._id,
               senderId: socket.userId,
