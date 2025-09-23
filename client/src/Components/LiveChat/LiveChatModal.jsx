@@ -28,11 +28,11 @@ const LiveChatModal = () => {
     scrollToBottom();
   }, [messages, activeChat]);
 
-  // useEffect(() => {
-  //   if (activeChat && !activeChat.isTemp) {
-  //     dispatch(fetchChatMessages(activeChat._id));
-  //   }
-  // }, [activeChat, dispatch]);
+  useEffect(() => {
+    if (activeChat && !activeChat.isTemp) {
+      dispatch(fetchChatMessages(activeChat._id));
+    }
+  }, [activeChat, dispatch]);
 
   useEffect(() => {
     if (!socket || !activeChat) return;
@@ -101,6 +101,7 @@ const LiveChatModal = () => {
           isTemp: false
         }));
       }
+      console.log(activeChat);
     };
   
     on('chat_created', handleChatCreated);
