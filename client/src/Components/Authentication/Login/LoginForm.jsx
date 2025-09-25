@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faLock, faGem, faXmark } from "@fortawesome/free-solid-svg-icons";
 import './LoginStyles.scss';
+import LoginGoogleBtn from '../../Oauth/LoginGoogleBtn';
 
 const LoginForm = ({ handleClose, isFromGamesPage, gameLink, setShowDropdown }) => {
   const dispatch = useDispatch();
@@ -116,25 +117,27 @@ const LoginForm = ({ handleClose, isFromGamesPage, gameLink, setShowDropdown }) 
                 }
               })}
               className={errors.password ? 'error' : ''}
-            />
+              />
             <div className="input-underline"></div>
           </div>
           {errors.password && (
             <span className="error-message">{errors.password.message}</span>
-          )}
+            )}
 
           <button 
             type="submit" 
             className="login-button"
             disabled={isSubmitting}
-          >
+            >
             {isSubmitting ? (
               <div className="spinner"></div>
-            ) : (
-              'LOGIN TO PLAY'
-            )}
+              ) : (
+                'LOGIN TO PLAY'
+                )}
           </button>
         </form>
+        
+        <LoginGoogleBtn/>
 
         <div className="login-modal-footer">
           <p className="register-text">

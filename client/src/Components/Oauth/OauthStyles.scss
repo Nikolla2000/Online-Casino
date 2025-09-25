@@ -1,0 +1,139 @@
+.oauth-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  max-width: 320px;
+  margin: 0 auto 30px auto;
+  // padding: 1rem;
+}
+
+.oauth-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+  text-align: center;
+}
+
+.oauth-button-container {
+  width: 100%;
+}
+
+.oauth-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  background-color: #fff;
+  color: #333;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  position: relative;
+
+  &:hover {
+    background-color: #f8f9fa;
+    border-color: #d1d9e0;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #4285f4;
+    box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.1);
+  }
+}
+
+.oauth-button-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+}
+
+.oauth-button-text {
+  font-weight: 500;
+}
+
+.google-button {
+  border-color: #dadce0;
+
+  &:hover {
+    border-color: #c6c9ce;
+    background-color: #f8f9fa;
+  }
+
+  &:focus {
+    border-color: #4285f4;
+  }
+}
+
+.facebook-button {
+  border-color: #1877f2;
+  background-color: #1877f2;
+  color: white;
+
+  &:hover {
+    background-color: #166fe5;
+    border-color: #166fe5;
+  }
+}
+
+.github-button {
+  border-color: #333;
+  background-color: #333;
+  color: white;
+
+  &:hover {
+    background-color: #24292e;
+    border-color: #24292e;
+  }
+}
+
+@media (max-width: 480px) {
+  .oauth-wrapper {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .oauth-title {
+    font-size: 1.25rem;
+  }
+
+  .oauth-button {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .oauth-wrapper {
+    .oauth-title {
+      color: #f0f0f0;
+    }
+
+    .oauth-button {
+      background-color: #2d3748;
+      border-color: #4a5568;
+      color: #f0f0f0;
+
+      &:hover {
+        background-color: #374151;
+        border-color: #6b7280;
+      }
+    }
+  }
+}
