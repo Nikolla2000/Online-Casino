@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import LiveUsersPanel from '../../LiveUsersPanel/LiveUsersPanel';
 import LoginForm from '../../Authentication/Login/LoginForm';
 import RegisterForm from '../../Authentication/Register/RegisterForm';
-import { hideModals } from '../../../redux/features/auth/authModalsSlice';
+import { hideModals, unsetGamesPage } from '../../../redux/features/auth/authModalsSlice';
 
 const Navigation = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -63,6 +63,7 @@ const Navigation = () => {
 
   const handleUserIconClick = () => {
     setShowDropdown(!showDropdown);
+    dispatch(unsetGamesPage());
   };
 
   const getNavIcon = (routeName) => {

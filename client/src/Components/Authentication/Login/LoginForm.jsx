@@ -2,7 +2,7 @@ import React from 'react';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { toast } from 'react-hot-toast';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { hideModals, showRegister } from '../../../redux/features/auth/authModalsSlice';
 import { useForm } from "react-hook-form";
 import { fetchCurrentUser, login } from '../../../redux/features/auth/authSlice';
@@ -12,9 +12,11 @@ import { faUser, faLock, faGem, faXmark } from "@fortawesome/free-solid-svg-icon
 import './LoginStyles.scss';
 import LoginGoogleBtn from '../../Oauth/LoginGoogleBtn';
 
-const LoginForm = ({ handleClose, isFromGamesPage, gameLink, setShowDropdown }) => {
+const LoginForm = ({ handleClose, setShowDropdown }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { isFromGamesPage, gameLink } = useSelector(state => state.authModals);
 
   const {
     register,

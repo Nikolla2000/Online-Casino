@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import "./GameThumbnail.scss";
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { hideModals, showLogin } from '../../redux/features/auth/authModalsSlice';
+import { hideModals, setFromGamesPage, showLogin } from '../../redux/features/auth/authModalsSlice';
 import LoginForm from '../Authentication/Login/LoginForm';
 
 const GameThumbnail = ({ data, index }) => {
@@ -15,6 +15,7 @@ const GameThumbnail = ({ data, index }) => {
   const handleClick = () => {
     if (!user || !accessToken) {
       dispatch(showLogin());
+      dispatch(setFromGamesPage(data.linkPath));
     } else {
       dispatch(hideModals());
       navigate(data.linkPath);
@@ -58,7 +59,10 @@ const GameThumbnail = ({ data, index }) => {
         </div>
       </div>
 
-      {showLoginModal && <LoginForm isFromGamesPage={true} gameLink={data.linkPath} />}
+      {/* {showLoginModal && <LoginForm 
+                              handleClose={() => dispatch(hideModals())} 
+                              isFromGamesPage={true} 
+                              gameLink={data.linkPath} />} */}
     </div>
   );
 };
