@@ -8,6 +8,7 @@ import SlotsPage from "../Pages/SlotsPage/SlotsPage";
 import Dashboard from "../Pages/User/Dashboard/Dashboard";
 import React, { useContext } from "react";
 import { UserContext } from "../../context/userContext";
+import OAuthCallback from "../Components/Oauth/OauthCallback";
 
 const routes = {
   main: {
@@ -61,6 +62,12 @@ const routes = {
     element: <RoulettePage/>,
     name: 'roulette',
     includeInNav:false,
+  },
+  oauth: {
+    path: '/oauth/callback',
+    element: <OAuthCallback/>,
+    name: 'oauth-callback',
+    includeInNav: false,
   }
 }
 

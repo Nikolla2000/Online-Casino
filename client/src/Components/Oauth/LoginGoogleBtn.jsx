@@ -1,9 +1,25 @@
+import { useNavigate } from 'react-router';
 import './OauthStyles.scss';
+import { GOOGLE_AUTH_URL } from '../../lib/oauth';
 
 const LoginGoogleBtn = () => {
+  const navigate = useNavigate();
+
   const handleClick = () => {
-    //TODO
+    // const callbackUrl = `${window.location.origin}`;
+    // const googleClientId = meta.env.GOOGLE_CLIENT_ID;
+    // const targetUrl = `https://accounts.google.com/o/oauth2/auth?redirect_uri=${encodeURIComponent(
+    //   callbackUrl
+    // )}&response_type=token&client_id=${googleClientId}&scope=openid%20email%20profile`;
+    // window.location.href = targetUrl;
+
+    const currentPath = window.location.pathname + window.location.search;
+    localStorage.setItem('preAuthPath', currentPath);
+
+    window.location.href = GOOGLE_AUTH_URL;
   }
+
+  console.log(window.location.origin)
 
   return (
     <div className='oauth-wrapper'>
