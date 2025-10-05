@@ -127,9 +127,41 @@ const me = async (req, res) => {
 }
 
 
+const oauthLogin = async (req, res) => {
+    const { email, first_name, last_name, provider } = req.body;
+
+    if (!email) return res.status(400).json({ error: 'Email is required' });
+
+    let user = await User.findOne({ email });
+
+    if (!user) {
+        
+    };
+
+    // const accessToken = generateAccessToken(user._id);
+    // const refreshToken = generateRefreshToken(user._id);
+
+    // user.refreshToken = refreshToken;
+    // user.isOnline = true;
+    // user.lastSeen = new Date()
+    // await user.save();
+
+    // res.cookie('refreshToken', refreshToken, {
+    //     httpOnly: true,
+    //     // secure: process.env.NODE_ENV === 'production',
+    //     secure: false,
+    //     sameSite: 'Strict',
+    //     maxAge: 7 * 24 * 60 * 60 * 1000,
+    // });
+
+    // return res.json({ accessToken });
+}
+
+
 module.exports = {
     login,
     refresh,
     logout,
     me,
+    oauthLogin,
 }

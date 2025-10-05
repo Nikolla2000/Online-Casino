@@ -30,11 +30,26 @@ const UserSchema = new mongoose.Schema({
       "You must provide a valid email",
     ]
   },
+  oauthProvider: {
+    type: String,
+    default: null //google, github, facebook
+  },
+  oauthId: {
+    type: String,
+    default: null,
+  },
+  hasPassword: {
+    type: Boolean,
+    default: true,
+  },
   password: {
     type: String,
     bcrypt: true,
     minLength: 6,
-    required: [true, 'Password can\'t be empty'],
+    // required: [true, 'Password can\'t be empty'],
+    required: function() {
+      return !this.oauthProvider;
+    },
   },
   registrationDate: {
     type: Date,

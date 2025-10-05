@@ -2,6 +2,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { GOOGLE_CONFIG } from "../../lib/oauth";
+import './OauthStyles.scss';
+import api from "../../axiosConfig";
 
 const OauthCallback = () => {
     const [status, setStatus] = useState('loading');
@@ -36,7 +38,22 @@ const OauthCallback = () => {
                     redirect_uri: GOOGLE_CONFIG.redirectUri,
                   });
 
-                  console.log(tokenResponse);
+                  const { access_token, id_token } = tokenResponse.data;
+
+                  const userInfoResponse = await axios.get('https://www.googleapis.com/oauth2/v2/userinfo', {
+                    headers: {
+                      Authorization: `Bearer ${access_token}`,
+                    },
+                  });
+
+                  console.log(userInfoResponse);
+
+                  await api.post('/auth/oauth', {
+                    email: userInfoResponse.data.email,
+                    first_name: userInfoResponse.data.given_name,
+                    last_name: userInfoResponse.data.family_name,
+                    provider: 'google',
+                  });
                 
             } catch (err) {
                 console.error("Oauth callback error: ", err);
