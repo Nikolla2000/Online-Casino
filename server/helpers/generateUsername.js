@@ -13,4 +13,4 @@ function generateUsername(email, firstName, lastName) {
     }
 }
 
-console.log(generateUsername('nikolla.uzunov@gmail.com', 'Nikola'));
+module.exports = generateUsername;

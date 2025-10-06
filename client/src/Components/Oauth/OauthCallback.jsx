@@ -46,14 +46,15 @@ const OauthCallback = () => {
                     },
                   });
 
-                  console.log(userInfoResponse);
-
                   await api.post('/auth/oauth', {
                     email: userInfoResponse.data.email,
-                    first_name: userInfoResponse.data.given_name,
-                    last_name: userInfoResponse.data.family_name,
-                    provider: 'google',
+                    firstName: userInfoResponse.data.given_name,
+                    lastName: userInfoResponse.data.family_name,
+                    oauthId: userInfoResponse.data.id,
+                    oauthProvider: 'google',
                   });
+
+                  window.location.href = "/";
                 
             } catch (err) {
                 console.error("Oauth callback error: ", err);

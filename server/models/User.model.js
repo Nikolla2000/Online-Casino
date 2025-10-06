@@ -89,6 +89,10 @@ const UserSchema = new mongoose.Schema({
   isVip: {
     type: Boolean,
     default: false
+  },
+  isVerified: {
+    type: Boolean,
+    default: false
   }
 })
 
