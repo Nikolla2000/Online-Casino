@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import AIChatWidget from "../../Components/AIChatSupport/AIChatWidget";
 
 const ContactItem = ({ data }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [showAIChat, setShowAIChat] = useState(false);
   const navigate = useNavigate();
 
   const sendToEmailPage = () => {
     data.heading === "Email" && navigate("/email");
+    data.heading === "Live Support" && setShowAIChat(true);
   };
 
   return (
@@ -45,6 +48,7 @@ const ContactItem = ({ data }) => {
 
         <div className="hover-effect"></div>
       </div>
+      {showAIChat && <AIChatWidget/>}
     </div>
   );
 };

@@ -11,7 +11,7 @@ export const contactData = [
   {
     icon: faEnvelope,
     heading: "Email",
-    description: "For all customer queries, please email us at hausmantel@gmail.com with your details and message.",
+    description: "For all customer queries, please email us at nikolla.uzunov@gmail.com with your details and message.",
     button: true,
   },
   {

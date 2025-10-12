@@ -82,6 +82,7 @@ const slotRouter = require('./routes/Slot.router');
 const authRouter = require('./routes/Auth.router');
 const emailRouter = require('./routes/Email.router');
 const chatRouter = require('./routes/Chat.router');
+const chatBotRouter = require('./routes/ChatBot.router');
 
 //middleware
 app.use(cookieParser());
@@ -96,6 +97,7 @@ app.use('/server/v1/auth', authRouter);
 app.use('/server/v1/slots', slotRouter);
 app.use('/server/v1/email', emailRouter);
 app.use('/server/v1/chats', chatRouter);
+app.use('/server/v1/chatbot', chatBotRouter);
 
 //Serve static files
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
