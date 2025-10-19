@@ -1,8 +1,11 @@
 import { useState } from "react"
 import "./AIChatStyles.scss";
 import { promptChatBot } from "../../services/api/chatBotAPI";
+import { useSelector } from "react-redux";
 
 const AIChatWidget = () => {
+  const { user } = useSelector(state => state.auth);
+
   const [formData, setFormData] = useState({
     message: '',
   });
@@ -13,14 +16,22 @@ const AIChatWidget = () => {
     })
   }
 
+  //Message submit function
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-    setFormData({
-      message: ''
-    });
 
-    promptChatBot(formData);
+    const userId = user?._id || null;
+
+    try {
+      const res = await promptChatBot({
+        message: formData.message,
+        userId: userId,
+      });
+    } catch (err) {
+      console.error('Message submission failed:', error);
+    } finally {
+      setFormData({ message: '' });
+    }
   }
 
   return (

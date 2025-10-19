@@ -1,5 +1,6 @@
 const Groq = require("groq-sdk");
 const User = require("../models/User.model");
+const ChatbotMessage = require("../models/ChatbotMessage.model");
 
 const groq = new Groq({ apiKey: process.env.GROQ_AI_API_KEY });
 
@@ -41,6 +42,19 @@ const promptChatBot = async (req, res)  => {
     });
   
     const aiResponse = chatCompletion.choices[0]?.message?.content || "Sorry, I couldn't process that.";
+
+    if (!guestMode) {
+      try {
+        await ChatbotMessage.create({
+          userId: userId,
+          userMessage: message,
+          aiResponse: aiResponse,
+          timeStamp: new Date()
+        });
+      } catch (err) {
+        console.error("Failed to save chat history:", err);
+      }
+    }
 
     res.json({
       response: aiResponse,
