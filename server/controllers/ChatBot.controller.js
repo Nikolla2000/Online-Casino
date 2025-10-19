@@ -1,4 +1,5 @@
 const Groq = require("groq-sdk");
+const User = require("../models/User.model");
 
 const groq = new Groq({ apiKey: process.env.GROQ_AI_API_KEY });
 
@@ -9,8 +10,15 @@ const promptChatBot = async (req, res)  => {
   if (!message) return res.status(400).json({ message: "Message is required" });
   let guestMode = true;
 
-  if (!userId) {
-    guestMode = false;
+  if (userId) {
+    try {
+      const user = await User.findById(userId);
+      if (user) {
+        guestMode = false;
+      }
+    } catch (err) {
+      console.error("Database error:", err);
+    }
   }
 
   const systemPrompt = guestMode 

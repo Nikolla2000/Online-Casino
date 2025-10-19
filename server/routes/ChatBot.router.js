@@ -9,4 +9,4 @@ const router = express.Router();
 // @returns {aiResponse: string}
 router.post('/', promptChatBot);
 
-module.export = router;
+module.exports = router;
