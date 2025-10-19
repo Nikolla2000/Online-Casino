@@ -28,7 +28,7 @@ const AIChatWidget = () => {
         userId: userId,
       });
     } catch (err) {
-      console.error('Message submission failed:', error);
+      console.error('Message submission failed:', err);
     } finally {
       setFormData({ message: '' });
     }

@@ -10,12 +10,14 @@ const promptChatBot = async (req, res)  => {
 
   if (!message) return res.status(400).json({ message: "Message is required" });
   let guestMode = true;
+  let username = null;
 
   if (userId) {
     try {
       const user = await User.findById(userId);
       if (user) {
         guestMode = false;
+        username = user.firstName;
       }
     } catch (err) {
       console.error("Database error:", err);
@@ -24,7 +26,7 @@ const promptChatBot = async (req, res)  => {
 
   const systemPrompt = guestMode 
   ? process.env.GROQ_AI_GUEST_PROMPT
-  : process.env.GROQ_AI_LOGGED_IN_PROMPT;
+  : `${process.env.GROQ_AI_LOGGED_IN_PROMPT}\n\nThe user's name is ${username}. Use their name occasionally to make the conversation more personal.`;
 
   try {
     const chatCompletion = await groq.chat.completions.create({
