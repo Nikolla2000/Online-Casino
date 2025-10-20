@@ -4,6 +4,7 @@ import Navigation from '../Components/Layout/Navigation/Navigation';
 import { Toaster } from 'react-hot-toast'
 import LiveChatModal from '../Components/LiveChat/LiveChatModal';
 import { useSelector } from 'react-redux';
+import FloatingChatButton from '../Components/AIChatSupport/FloatingChatButton';
 
 const RootLayout = () => {
   const navigation = useNavigation();
@@ -19,6 +20,7 @@ const RootLayout = () => {
         )}
         <Outlet />
         {activeChat && <LiveChatModal />}
+        <FloatingChatButton/>
       </main>
     </>
   );
