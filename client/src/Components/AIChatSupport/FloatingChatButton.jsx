@@ -1,12 +1,20 @@
+import { useDispatch } from 'react-redux';
 import './AIChatStyles.scss';
+import { showChat } from '../../redux/features/aiChatbot/aiChatbotSlice';
 
 const FloatingChatButton = () => {
+    const dispatch = useDispatch();
+
+    const showAiChat = () => {
+        dispatch(showChat());
+    }
+
     return (
         <div className="floating-ai-assistant">
         <button 
         //   className={`ai-button ${isOpen ? 'active' : ''}`}
           className={`ai-button`}
-        //   onClick={}
+          onClick={showAiChat}
           aria-label="AI Assistant"
         >
           <div className="ai-robot">

@@ -1,10 +1,13 @@
 import { useState } from "react"
 import "./AIChatStyles.scss";
 import { promptChatBot } from "../../services/api/chatBotAPI";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { hideChat } from "../../redux/features/aiChatbot/aiChatbotSlice";
 
 const AIChatWidget = () => {
   const { user } = useSelector(state => state.auth);
+
+  const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
     message: '',
@@ -14,6 +17,10 @@ const AIChatWidget = () => {
     setFormData({
       message: e.target.value
     })
+  }
+
+  const handleClose = () => {
+    dispatch(hideChat());
   }
 
   //Message submit function
@@ -36,6 +43,7 @@ const AIChatWidget = () => {
 
   return (
     <div className="ai-chat-wrapper">
+      <button onClick={handleClose}>X</button>
       <form id="ai-support-form" onSubmit={handleSubmit}>
         <input type="text" name="message" id="message" value={formData.message} onChange={handleChange} required/>
         <button type="submit">Enter</button>

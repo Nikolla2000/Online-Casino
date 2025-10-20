@@ -2,15 +2,19 @@ import React, { useState } from "react";
 import { useNavigate } from 'react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AIChatWidget from "../../Components/AIChatSupport/AIChatWidget";
+import { useDispatch, useSelector } from "react-redux";
+import { showChat } from "../../redux/features/aiChatbot/aiChatbotSlice";
 
 const ContactItem = ({ data }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [showAIChat, setShowAIChat] = useState(false);
+  // const [showAIChat, setShowAIChat] = useState(false);
   const navigate = useNavigate();
 
-  const sendToEmailPage = () => {
+  const dispatch = useDispatch();
+
+  const handleClick = () => {
     data.heading === "Email" && navigate("/email");
-    data.heading === "Live Support" && setShowAIChat(true);
+    data.heading === "Live Support" && dispatch(showChat());
   };
 
   return (
@@ -36,7 +40,7 @@ const ContactItem = ({ data }) => {
           {data.button && (
             <button 
               className={`contact-button ${data.heading === "Email" ? "email-btn" : "chat-btn"}`}
-              onClick={sendToEmailPage}
+              onClick={handleClick}
             >
               <span className="button-text">
                 {data.heading === "Live Support" ? "CHAT NOW" : "EMAIL US"}
@@ -48,7 +52,6 @@ const ContactItem = ({ data }) => {
 
         <div className="hover-effect"></div>
       </div>
-      {showAIChat && <AIChatWidget/>}
     </div>
   );
 };

@@ -5,10 +5,12 @@ import { Toaster } from 'react-hot-toast'
 import LiveChatModal from '../Components/LiveChat/LiveChatModal';
 import { useSelector } from 'react-redux';
 import FloatingChatButton from '../Components/AIChatSupport/FloatingChatButton';
+import AIChatWidget from '../Components/AIChatSupport/AIChatWidget';
 
 const RootLayout = () => {
   const navigation = useNavigation();
   const { activeChat } = useSelector(state => state.chat);
+  const { showAiChatWidget } = useSelector(state => state.aiChatbot);
 
   return (
     <>
@@ -20,7 +22,8 @@ const RootLayout = () => {
         )}
         <Outlet />
         {activeChat && <LiveChatModal />}
-        <FloatingChatButton/>
+        {!showAiChatWidget && <FloatingChatButton/>}
+        {showAiChatWidget && <AIChatWidget/>}
       </main>
     </>
   );
