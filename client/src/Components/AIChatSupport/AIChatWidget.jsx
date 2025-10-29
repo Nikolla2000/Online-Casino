@@ -1,17 +1,28 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import "./AIChatStyles.scss";
-import { promptChatBot } from "../../services/api/chatBotAPI";
+import { fetchConversationHistory, promptChatBot } from "../../services/api/chatBotAPI";
 import { useDispatch, useSelector } from "react-redux";
 import { hideChat } from "../../redux/features/aiChatbot/aiChatbotSlice";
 
 const AIChatWidget = () => {
-  const { user } = useSelector(state => state.auth);
+  const { user, accessToken } = useSelector(state => state.auth);
 
   const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
     message: '',
   });
+
+  useEffect(() => {
+    const getConversationHistory = async () => {
+      const data = await fetchConversationHistory();
+      console.log(data);
+    }
+
+    if(user && accessToken) {
+      getConversationHistory();
+    }
+  }, [user, accessToken]);
 
   const handleChange = (e) => {
     setFormData({

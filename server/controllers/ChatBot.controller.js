@@ -71,6 +71,22 @@ const promptChatBot = async (req, res)  => {
 
 }
 
+
+const getConversationHistory = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const conversationHistory = await ChatbotMessage.find({ userId })
+      .select('userMessage aiResponse timeStamp')
+      .limit(100)
+
+    res.status(200).json(conversationHistory);
+  } catch (err) {
+    console.error("Error retrieving conversation history: ", err);
+  }
+}
+
 module.exports = {
   promptChatBot,
+  getConversationHistory,
 }
