@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState =  {
     showAiChatWidget: false,
+    conversationHistory: [],
 }
 
 const aiChatbotSlice = createSlice({
@@ -13,6 +14,12 @@ const aiChatbotSlice = createSlice({
         },
         hideChat: (state) => {
             state.showAiChatWidget = false;
+        },
+        setConversationHistory: (state, action) => {
+            state.conversationHistory = action.payload;
+        },
+        addMessage: (state, action) => {
+            state.conversationHistory.push(action.payload);
         }
     }
 
@@ -21,5 +28,7 @@ const aiChatbotSlice = createSlice({
 export const {
     showChat,
     hideChat,
+    addMessage,
+    setConversationHistory,
 } = aiChatbotSlice.actions;
 export default aiChatbotSlice.reducer;

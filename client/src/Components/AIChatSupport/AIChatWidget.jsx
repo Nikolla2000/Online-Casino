@@ -2,10 +2,11 @@ import { useEffect, useState } from "react"
 import "./AIChatStyles.scss";
 import { fetchConversationHistory, promptChatBot } from "../../services/api/chatBotAPI";
 import { useDispatch, useSelector } from "react-redux";
-import { hideChat } from "../../redux/features/aiChatbot/aiChatbotSlice";
+import { hideChat, setConversationHistory } from "../../redux/features/aiChatbot/aiChatbotSlice";
 
 const AIChatWidget = () => {
   const { user, accessToken } = useSelector(state => state.auth);
+  const { conversationHistory } = useSelector(state => state.aiChatbot);
 
   const dispatch = useDispatch();
 
@@ -16,11 +17,12 @@ const AIChatWidget = () => {
   useEffect(() => {
     const getConversationHistory = async () => {
       const data = await fetchConversationHistory();
-      console.log(data);
+      dispatch(setConversationHistory(data));
     }
 
     if(user && accessToken) {
       getConversationHistory();
+      console.log(conversationHistory);
     }
   }, [user, accessToken]);
 
