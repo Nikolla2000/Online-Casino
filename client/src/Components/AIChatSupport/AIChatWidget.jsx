@@ -58,17 +58,14 @@ const AIChatWidget = () => {
     dispatch(hideQuickQuestions());
   }
 
-  const handleSubmit = async (e, message) => {
-    e.preventDefault();
-    
-    if (!formData.message.trim()) return;
+  const submitMessage = async (messageText) => {
+    if (!messageText.trim()) return;
 
     const userId = user?._id || null;
-    const userMessage = formData.message;
 
     const tempUserMessage = {
       _id: Date.now().toString(),
-      userMessage: userMessage,
+      userMessage: messageText,
       aiResponse: "",
       timeStamp: new Date().toISOString(),
       isTemp: true
@@ -82,14 +79,14 @@ const AIChatWidget = () => {
       dispatch(startChatbotTyping());
       
       const res = await promptChatBot({
-        message: userMessage,
+        message: messageText,
         userId: userId,
       });
 
       dispatch(setConversationHistory([
         ...conversationHistory,
         {
-          userMessage: userMessage,
+          userMessage: messageText,
           aiResponse: res.response,
           timeStamp: new Date().toISOString()
         }
@@ -103,43 +100,13 @@ const AIChatWidget = () => {
     }
   }
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    submitMessage(formData.message)
+  }
+
   const handleQuickQuestionClick = async (question) => {
-    const userId = user?._id || null;
-    
-    const tempUserMessage = {
-      _id: Date.now().toString(),
-      userMessage: question,
-      aiResponse: "",
-      timeStamp: new Date().toISOString(),
-      isTemp: true
-    };
-    
-    dispatch(addMessage(tempUserMessage));
-    dispatch(hideQuickQuestions());
-  
-    try {
-      dispatch(startChatbotTyping());
-      
-      const res = await promptChatBot({
-        message: question,
-        userId: userId,
-      });
-  
-      dispatch(setConversationHistory([
-        ...conversationHistory,
-        {
-          userMessage: question,
-          aiResponse: res.response,
-          timeStamp: new Date().toISOString()
-        }
-      ]));
-  
-    } catch (err) {
-      console.error('Quick question submission failed:', err);
-      dispatch(setConversationHistory(conversationHistory.filter(msg => !msg.isTemp)));
-    } finally {
-      dispatch(stopChatbotTyping());
-    }
+    submitMessage(question);
   }
 
   const handleKeyPress = (e) => {
