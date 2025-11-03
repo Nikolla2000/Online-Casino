@@ -4,6 +4,7 @@ const initialState =  {
     showAiChatWidget: false,
     conversationHistory: [],
     isChatbotTyping: false,
+    showQuickQuestions: false,
 }
 
 const aiChatbotSlice = createSlice({
@@ -28,6 +29,12 @@ const aiChatbotSlice = createSlice({
         stopChatbotTyping: (state) => {
             state.isChatbotTyping = false;
         },
+        setShowQuickQuestions: (state) => {
+            state.showQuickQuestions = true;
+        },
+        hideQuickQuestions: (state) => {
+            state.showQuickQuestions = false;
+        }
     }
 
 });
@@ -39,5 +46,7 @@ export const {
     setConversationHistory,
     startChatbotTyping,
     stopChatbotTyping,
+    setShowQuickQuestions,
+    hideQuickQuestions,
 } = aiChatbotSlice.actions;
 export default aiChatbotSlice.reducer;

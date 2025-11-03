@@ -2,18 +2,27 @@ import { useEffect, useState, useRef } from "react"
 import "./AIChatStyles.scss";
 import { fetchConversationHistory, promptChatBot } from "../../services/api/chatBotAPI";
 import { useDispatch, useSelector } from "react-redux";
-import { hideChat, setConversationHistory, addMessage, startChatbotTyping, stopChatbotTyping } from "../../redux/features/aiChatbot/aiChatbotSlice";
+import { hideChat, setConversationHistory, addMessage, startChatbotTyping, stopChatbotTyping, hideQuickQuestions, setShowQuickQuestions } from "../../redux/features/aiChatbot/aiChatbotSlice";
 import ConversationHistory from "./ConversationHistory";
 
 const AIChatWidget = () => {
   const { user, accessToken } = useSelector(state => state.auth);
-  const { conversationHistory, isChatbotTyping } = useSelector(state => state.aiChatbot);
+  const { conversationHistory, isChatbotTyping, showQuickQuestions } = useSelector(state => state.aiChatbot);
   const dispatch = useDispatch();
   const messagesEndRef = useRef(null);
 
   const [formData, setFormData] = useState({
     message: '',
   });
+
+  const quickQuestions = [
+    "How many credits do I have?",
+    "How was this website created?",
+    "Are the games real?",
+    "How is this AI created?",
+    "What are the roulette odds?",
+    "How to manage my bankroll?",
+  ];
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -46,10 +55,12 @@ const AIChatWidget = () => {
 
   const handleClose = () => {
     dispatch(hideChat());
+    dispatch(hideQuickQuestions());
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e, message) => {
     e.preventDefault();
+    
     if (!formData.message.trim()) return;
 
     const userId = user?._id || null;
@@ -65,6 +76,7 @@ const AIChatWidget = () => {
     
     dispatch(addMessage(tempUserMessage));
     setFormData({ message: '' });
+    dispatch(hideQuickQuestions());
 
     try {
       dispatch(startChatbotTyping());
@@ -91,6 +103,45 @@ const AIChatWidget = () => {
     }
   }
 
+  const handleQuickQuestionClick = async (question) => {
+    const userId = user?._id || null;
+    
+    const tempUserMessage = {
+      _id: Date.now().toString(),
+      userMessage: question,
+      aiResponse: "",
+      timeStamp: new Date().toISOString(),
+      isTemp: true
+    };
+    
+    dispatch(addMessage(tempUserMessage));
+    dispatch(hideQuickQuestions());
+  
+    try {
+      dispatch(startChatbotTyping());
+      
+      const res = await promptChatBot({
+        message: question,
+        userId: userId,
+      });
+  
+      dispatch(setConversationHistory([
+        ...conversationHistory,
+        {
+          userMessage: question,
+          aiResponse: res.response,
+          timeStamp: new Date().toISOString()
+        }
+      ]));
+  
+    } catch (err) {
+      console.error('Quick question submission failed:', err);
+      dispatch(setConversationHistory(conversationHistory.filter(msg => !msg.isTemp)));
+    } finally {
+      dispatch(stopChatbotTyping());
+    }
+  }
+
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -109,9 +160,29 @@ const AIChatWidget = () => {
             <span className="status-text">Online</span>
           </div>
         </div>
-        <button className="close-btn" onClick={handleClose}>
-          <span>×</span>
-        </button>
+        
+        <div className="header-actions">
+          <div className="quick-questions-toggle">
+            <button 
+              className={`menu-toggle-btn ${showQuickQuestions ? 'active' : ''}`}
+              onClick={() => {
+                if (showQuickQuestions) {
+                  dispatch(hideQuickQuestions());
+                } else {
+                  dispatch(setShowQuickQuestions());
+                }
+              }}
+              title="View frequently asked questions"
+            >
+              <span className="menu-icon">☰</span>
+            </button>
+            <div className="tooltip">View frequently asked questions</div>
+          </div>
+          
+          <button className="close-btn" onClick={handleClose}>
+            <span>×</span>
+          </button>
+        </div>
       </div>
 
       <ConversationHistory />
@@ -124,6 +195,25 @@ const AIChatWidget = () => {
             <span></span>
           </div>
           <span>AI is typing...</span>
+        </div>
+      )}
+
+      {showQuickQuestions && (
+        <div className="quick-questions-panel">
+          <div className="quick-questions-header">
+            <h4>Frequently Asked Questions</h4>
+          </div>
+          <div className="quick-questions-grid">
+            {quickQuestions.map((question, index) => (
+              <button
+                key={index}
+                className="question-chip"
+                onClick={() => handleQuickQuestionClick(question)}
+              >
+                {question}
+              </button>
+            ))}
+          </div>
         </div>
       )}
       
