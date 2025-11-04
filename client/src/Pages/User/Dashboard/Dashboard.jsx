@@ -1,47 +1,23 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { UserContext } from '../../../../context/userContext';
-import CircularProgress from '@mui/material/CircularProgress';
-import "./DashboardStyles.scss";
-import Stats from './Stats';
-import AccountInfo from './AccountInfo';
+import React, { useState, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { logoutUser, updateProfilePic } from '../../../redux/features/auth/authSlice';
 import axios from '../../../axiosConfig';
-import { useNavigate } from 'react-router';
-import 'animate.css';
 import toast from 'react-hot-toast';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateProfilePic } from '../../../redux/features/auth/authSlice';
+import './DashboardStyles.scss';
 
 const Dashboard = () => {
   const user = useSelector((state) => state.auth.user);
-  
-  const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
-  const [midSection, setMidSection] = useState('Stats');
-  const [isHovered, setIsHovered] = useState(false);
-
-  const [isUploading, setIsUploading] = useState(false);
-  const fileInputRef = useRef(null);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    const waitForUser = async () => {
-      return !!user.name;
-    };
-
-    const fetchData = async () => {
-      const userAvailable = await waitForUser();
-      setIsLoading(false);
-    };
-
-    fetchData();
-  }, [user]);
-
+  
+  const [activeSection, setActiveSection] = useState('stats');
+  const [isUploading, setIsUploading] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const fileInputRef = useRef(null);
 
   const handleFileUpload = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
 
-    // Валидация на файла
     if (!file.type.startsWith('image/')) {
       toast.error('Please select an image file');
       return;
@@ -58,16 +34,11 @@ const Dashboard = () => {
     try {
       setIsUploading(true);
       const res = await axios.post('/user/uploadPicture', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+        headers: { 'Content-Type': 'multipart/form-data' },
         withCredentials: true
       });
 
       dispatch(updateProfilePic(res.data.profilePic));
-
-      const imgElement = document.querySelector('.profile-image-wrapper img');
-
       toast.success('Profile picture updated successfully!');
     } catch (error) {
       console.error('Upload error:', error);
@@ -82,99 +53,254 @@ const Dashboard = () => {
     fileInputRef.current?.click();
   };
 
-  const changeSection = (event) => {
-    event.stopPropagation();
-    setMidSection(event.target.innerText);
-  }
-
-  const logout = async () => {
-      try {
-        await axios.get('/user/logout');
-        navigate('/');
-        location.reload();
-      } catch (error) {
-        console.error('Logout error:', error);
-      }
+  const handleLogout = async () => {
+    try {
+      await dispatch(logoutUser()).unwrap();
+      window.location.href = "/";
+    } catch (err) {
+      console.error('Logout failed:', err);
+    }
   };
 
-  console.log(user.profileImage)
+  // Mock data
+  const userStats = {
+    totalWagered: 12500,
+    totalWins: 8450,
+    gamesPlayed: 324,
+    favoriteGame: "Book of Dead",
+    memberSince: "2023",
+    vipLevel: "Gold"
+  };
+
+  const creditPackages = [
+    { credits: 1000, price: 9.99, originalPrice: null, popular: false },
+    { credits: 2000, price: 18.99, originalPrice: null, popular: false },
+    { credits: 5000, price: 45.99, originalPrice: null, popular: false },
+    { credits: 10000, price: 89.99, originalPrice: 99.99, popular: true }
+  ];
 
   return (
-    <div className='dashboard-wrapper'>
+    <div className='casino-dashboard'>
 
-      <div className="left-section">
-        <div className="profile-image-wrapper">
-          {/* <img 
-            src={`http://localhost:3000${user.profileImage}?${Date.now()}` || "/images/user.png"} 
-            alt="Profile" 
-            className={isUploading ? 'uploading' : ''}
-            key={user.profileImage}
-          /> */}
-          {user.profileImage != "/images/user.png" ? (
-            <img 
-              src={`http://localhost:3000${user.profileImage}?${Date.now()}`}  
-              alt='Profile' 
-              className={isUploading ? 'uploading' : ''}
-              key={user.profileImage}
-            />
-            ) : (
-            <img 
-              src="/images/user.png"
-              alt='Image error' 
-              className={isUploading ? 'uploading' : ''}
-            />
-            )}
-          <div 
-            className="change-pic-button"
-            onClick={triggerFileInput}
-            disabled={isUploading}
-          >
-            {isUploading ? '⏳' : '+'}
+      <div className="dashboard-header">
+        <div className="header-content">
+          <h1>Player Dashboard</h1>
+          <div className="vip-badge">
+            <span className="vip-icon">👑</span>
+            {userStats.vipLevel} Member
           </div>
-          <input
-            type="file"
-            ref={fileInputRef}
-            onChange={handleFileUpload}
-            accept="image/*"
-            style={{ display: 'none' }}
-          />
-        </div>
-        <div className="name-details">
-          <h3>{user.name}</h3>
-          <h5>Master of the slots</h5>
-        </div>
-        <div className="profile-nav">
-          <p className={`${midSection == "Stats" ? 'current' : ''}`} onClick={changeSection}>Stats</p>
-          <p className={`${midSection == "Account Info" ? 'current' : ''}`} onClick={changeSection}>Account Info</p>
-          <p onClick={logout}>Logout</p>
         </div>
       </div>
 
-      <div className="mid-section">
-        {midSection == 'Stats' ? <Stats/> : <AccountInfo/>}
-      </div>
+      <div className="dashboard-content">
+        <div className="profile-sidebar">
+          <div className="profile-card">
+            <div className="profile-image-section">
+              <div className="profile-image-wrapper">
+                {user.profileImage !== "/images/user.png" ? (
+                  <img 
+                    src={`http://localhost:3000${user.profileImage}?${Date.now()}`}  
+                    alt='Profile' 
+                    className={isUploading ? 'uploading' : ''}
+                  />
+                ) : (
+                  <img 
+                    src="/images/user.png"
+                    alt='Default' 
+                    className={isUploading ? 'uploading' : ''}
+                  />
+                )}
+                <div 
+                  className={`change-pic-button ${isUploading ? 'uploading' : ''}`}
+                  onClick={triggerFileInput}
+                >
+                  {isUploading ? <div className="spinner"></div> : '+'}
+                </div>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileUpload}
+                  accept="image/*"
+                  style={{ display: 'none' }}
+                />
+              </div>
+              
+              <div className="user-info">
+                <h2>{user.name}</h2>
+                <p className="user-title">High Roller</p>
+                <div className="member-since">
+                  Member since {userStats.memberSince}
+                </div>
+              </div>
+            </div>
 
-      <div className="right-section">
-        <h3>Buy Credits</h3>
-        <div 
-            className="credits-options" 
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}>
-          <div className="option">
-            <span>1000</span>
-            <span>$9.99</span>
+            <div className="quick-stats">
+              <div className="stat-item">
+                <span className="stat-value">${userStats.totalWagered.toLocaleString()}</span>
+                <span className="stat-label">Total Wagered</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-value">{userStats.gamesPlayed}</span>
+                <span className="stat-label">Games Played</span>
+              </div>
+            </div>
           </div>
-          <div className="option">
-            <span>2000</span>
-            <span>$18.99</span>
+
+          <nav className="profile-nav">
+            <button 
+              className={`nav-item ${activeSection === 'stats' ? 'active' : ''}`}
+              onClick={() => setActiveSection('stats')}
+            >
+              📊 Game Stats
+            </button>
+            <button 
+              className={`nav-item ${activeSection === 'account' ? 'active' : ''}`}
+              onClick={() => setActiveSection('account')}
+            >
+              ⚙️ Account Settings
+            </button>
+            <button 
+              className={`nav-item ${activeSection === 'history' ? 'active' : ''}`}
+              onClick={() => setActiveSection('history')}
+            >
+              📜 Game History
+            </button>
+            <button 
+              className={`nav-item ${activeSection === 'vip' ? 'active' : ''}`}
+              onClick={() => setActiveSection('vip')}
+            >
+              🏆 VIP Benefits
+            </button>
+            <button className="nav-item logout" onClick={handleLogout}>
+              🚪 Logout
+            </button>
+          </nav>
+        </div>
+
+        <div className="main-content">
+          {activeSection === 'stats' && (
+            <div className="content-section">
+              <h3>Game Statistics</h3>
+              <div className="stats-grid">
+                <div className="stat-card">
+                  <div className="stat-icon">💰</div>
+                  <div className="stat-content">
+                    <h4>Total Wagered</h4>
+                    <p className="stat-number">${userStats.totalWagered.toLocaleString()}</p>
+                  </div>
+                </div>
+                <div className="stat-card">
+                  <div className="stat-icon">🏆</div>
+                  <div className="stat-content">
+                    <h4>Total Wins</h4>
+                    <p className="stat-number">${userStats.totalWins.toLocaleString()}</p>
+                  </div>
+                </div>
+                <div className="stat-card">
+                  <div className="stat-icon">🎮</div>
+                  <div className="stat-content">
+                    <h4>Games Played</h4>
+                    <p className="stat-number">{userStats.gamesPlayed}</p>
+                  </div>
+                </div>
+                <div className="stat-card">
+                  <div className="stat-icon">⭐</div>
+                  <div className="stat-content">
+                    <h4>Favorite Game</h4>
+                    <p className="stat-text">{userStats.favoriteGame}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="recent-activity">
+                <h4>Recent Activity</h4>
+                <div className="activity-list">
+                  <div className="activity-item">
+                    <span className="activity-game">Book of Dead</span>
+                    <span className="activity-result win">+$250</span>
+                    <span className="activity-time">2 hours ago</span>
+                  </div>
+                  <div className="activity-item">
+                    <span className="activity-game">Mega Moolah</span>
+                    <span className="activity-result loss">-$50</span>
+                    <span className="activity-time">5 hours ago</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeSection === 'account' && (
+            <div className="content-section">
+              <h3>Account Settings</h3>
+              <div className="settings-form">
+                <div className="form-group">
+                  <label>Email Address</label>
+                  <input type="email" value={user.email || "user@example.com"} readOnly />
+                </div>
+                <div className="form-group">
+                  <label>Phone Number</label>
+                  <input type="tel" placeholder="Add phone number" />
+                </div>
+                <div className="form-group">
+                  <label>Notification Preferences</label>
+                  <div className="checkboxes">
+                    <label><input type="checkbox" defaultChecked /> Bonus Offers</label>
+                    <label><input type="checkbox" defaultChecked /> Game Updates</label>
+                    <label><input type="checkbox" /> VIP Events</label>
+                  </div>
+                </div>
+                <button className="save-button">Save Changes</button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="credits-sidebar">
+          <div className="credits-card">
+            <h3>💰 Buy Credits</h3>
+            <p className="credits-subtitle">Instant deposit • Best value</p>
+            
+            <div className="credit-packages">
+              {creditPackages.map((pkg, index) => (
+                <div 
+                  key={index}
+                  className={`credit-package ${pkg.popular ? 'popular' : ''} ${isHovered && pkg.popular ? 'pulse' : ''}`}
+                  onMouseEnter={() => pkg.popular && setIsHovered(true)}
+                  onMouseLeave={() => pkg.popular && setIsHovered(false)}
+                >
+                  {pkg.popular && <div className="popular-badge">MOST POPULAR</div>}
+                  <div className="package-content">
+                    <div className="credits-amount">{pkg.credits.toLocaleString()} credits</div>
+                    <div className="price">
+                      ${pkg.price}
+                      {pkg.originalPrice && <s>${pkg.originalPrice}</s>}
+                    </div>
+                    <button className="buy-button">
+                      Buy Now
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="current-balance">
+              <h4>Current Balance</h4>
+              <div className="balance-amount">{user.totalCredits} credits</div>
+              <button className="quick-deposit">Quick Deposit +</button>
+            </div>
           </div>
-          <div className="option">
-            <span>5000</span>
-            <span>$45.99</span>
-          </div>
-          <div className={`option best-option ${isHovered && 'animte__animated animate__heartBeat'}`}>
-            <span>10000</span>
-            <span>$89.99 <s>$99.99</s></span>
+
+          <div className="promotions-card">
+            <h4>🎁 Active Promotions</h4>
+            <div className="promotion-item">
+              <strong>Welcome Bonus</strong>
+              <p>Get 100% bonus on first deposit</p>
+            </div>
+            <div className="promotion-item">
+              <strong>Weekly Free Spins</strong>
+              <p>Claim 10 free spins every Monday</p>
+            </div>
           </div>
         </div>
       </div>
