@@ -59,7 +59,7 @@ const ConversationHistory = () => {
             <div className="welcome-avatar">🎰</div>
             <div className="welcome-text">
               <TypeAnimation 
-                sequence={["Hello fellow traveler! 👋 I'm your AI casino assistant, ready to help you with games, strategies, and tips!"]}
+                sequence={["Hello fellow traveler! 👋 I'm your AI casino assistant, ready to help you with games, strategies, and tips! You can sign in to get even more advanced features!"]}
                 speed={70}
                 wrapper="span"
                 cursor={true}
