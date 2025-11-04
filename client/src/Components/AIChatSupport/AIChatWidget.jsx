@@ -106,6 +106,7 @@ const AIChatWidget = () => {
   }
 
   const handleQuickQuestionClick = async (question) => {
+    if (!user && !accessToken) return;
     submitMessage(question);
   }
 
@@ -129,22 +130,24 @@ const AIChatWidget = () => {
         </div>
         
         <div className="header-actions">
-          <div className="quick-questions-toggle">
-            <button 
-              className={`menu-toggle-btn ${showQuickQuestions ? 'active' : ''}`}
-              onClick={() => {
-                if (showQuickQuestions) {
-                  dispatch(hideQuickQuestions());
-                } else {
-                  dispatch(setShowQuickQuestions());
-                }
-              }}
-              title="View frequently asked questions"
-            >
-              <span className="menu-icon">☰</span>
-            </button>
-            <div className="tooltip">View frequently asked questions</div>
-          </div>
+          {user && (
+            <div className="quick-questions-toggle">
+              <button 
+                className={`menu-toggle-btn ${showQuickQuestions ? 'active' : ''}`}
+                onClick={() => {
+                  if (showQuickQuestions) {
+                    dispatch(hideQuickQuestions());
+                  } else {
+                    dispatch(setShowQuickQuestions());
+                  }
+                }}
+                title="View frequently asked questions"
+              >
+                <span className="menu-icon">☰</span>
+              </button>
+              <div className="tooltip">View frequently asked questions</div>
+            </div>
+          )}
           
           <button className="close-btn" onClick={handleClose}>
             <span>×</span>

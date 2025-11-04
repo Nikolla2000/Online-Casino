@@ -11,6 +11,7 @@ const promptChatBot = async (req, res)  => {
   if (!message) return res.status(400).json({ message: "Message is required" });
   let guestMode = true;
   let username = null;
+  let totalCredits = null;
 
   if (userId) {
     try {
@@ -18,6 +19,7 @@ const promptChatBot = async (req, res)  => {
       if (user) {
         guestMode = false;
         username = user.firstName;
+        totalCredits = user.totalCredits;
       }
     } catch (err) {
       console.error("Database error:", err);
@@ -25,8 +27,8 @@ const promptChatBot = async (req, res)  => {
   }
 
   const systemPrompt = guestMode 
-  ? process.env.GROQ_AI_GUEST_PROMPT
-  : `${process.env.GROQ_AI_LOGGED_IN_PROMPT}\n\nThe user's name is ${username}. Use their name occasionally to make the conversation more personal.`;
+  ? `${process.env.GROQ_AI_GUEST_PROMPT}\n\n${process.env.ADDITIONAL_INFO}`
+  : `${process.env.GROQ_AI_LOGGED_IN_PROMPT}\n\nThe user's name is ${username}. Use their name occasionally to make the conversation more personal. The user could ask how much total credits he has. He has ${totalCredits} credits\n\n${process.env.ADDITIONAL_INFO}`;
 
   try {
     const chatCompletion = await groq.chat.completions.create({
