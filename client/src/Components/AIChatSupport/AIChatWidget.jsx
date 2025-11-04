@@ -1,13 +1,14 @@
 import { useEffect, useState, useRef } from "react"
 import "./AIChatStyles.scss";
-import { fetchConversationHistory, promptChatBot } from "../../services/api/chatBotAPI";
+import { deleteConversationHistory, fetchConversationHistory, promptChatBot } from "../../services/api/chatBotAPI";
 import { useDispatch, useSelector } from "react-redux";
-import { hideChat, setConversationHistory, addMessage, startChatbotTyping, stopChatbotTyping, hideQuickQuestions, setShowQuickQuestions } from "../../redux/features/aiChatbot/aiChatbotSlice";
+import { hideChat, setConversationHistory, addMessage, startChatbotTyping, stopChatbotTyping, hideQuickQuestions, setShowQuickQuestions, showDelete, hideDelete, startLoading, stopLoading } from "../../redux/features/aiChatbot/aiChatbotSlice";
 import ConversationHistory from "./ConversationHistory";
+import LoadingSpinner from "../Spinner/Spinner";
 
 const AIChatWidget = () => {
   const { user, accessToken } = useSelector(state => state.auth);
-  const { conversationHistory, isChatbotTyping, showQuickQuestions } = useSelector(state => state.aiChatbot);
+  const { conversationHistory, isChatbotTyping, showQuickQuestions, showDeleteConfirm, isLoading } = useSelector(state => state.aiChatbot);
   const dispatch = useDispatch();
   const messagesEndRef = useRef(null);
 
@@ -117,6 +118,34 @@ const AIChatWidget = () => {
     }
   }
 
+  const handleOpenDelete = () => {
+    dispatch(showDelete());
+  }
+
+  const handleConfirmDelete = async () => {
+    try {
+      dispatch(hideDelete());
+      dispatch(startLoading());
+  
+      if (user && accessToken) {
+        await deleteConversationHistory(user._id);
+        dispatch(setConversationHistory([]));
+      } else {
+        dispatch(setConversationHistory([]));
+      }
+      
+    } catch (error) {
+      console.error('Failed to delete conversation:', error);
+
+    } finally {
+      dispatch(stopLoading());
+    }
+  };
+
+  const handleCancelDelete = () => {
+    dispatch(hideDelete());
+  }
+
   return (
     <div className="ai-chat-widget">
       <div className="chat-header">
@@ -130,6 +159,11 @@ const AIChatWidget = () => {
         </div>
         
         <div className="header-actions">
+
+          <button className="delete-btn" onClick={handleOpenDelete} title="Delete conversation">
+            <span className="delete-icon">🗑️</span>
+          </button>
+
           {user && (
             <div className="quick-questions-toggle">
               <button 
@@ -155,7 +189,27 @@ const AIChatWidget = () => {
         </div>
       </div>
 
-      <ConversationHistory />
+      {showDeleteConfirm && (
+        <div className="confirmation-overlay">
+          <div className="confirmation-modal">
+            <h4>Delete Conversation</h4>
+            <p>Are you sure you want to delete this conversation? This action cannot be undone.</p>
+            <div className="confirmation-actions">
+              <button className="confirm-btn" onClick={handleConfirmDelete}>
+                Yes
+              </button>
+              <button className="cancel-btn" onClick={handleCancelDelete}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {!isLoading && <ConversationHistory />}
+      {isLoading && <div style={{height: '100%', background: 'lightgray', display: 'flex', justifyContent: 'center'}}>
+                        <LoadingSpinner/>
+                      </div>}
       
       {isChatbotTyping && (
         <div className="typing-indicator">

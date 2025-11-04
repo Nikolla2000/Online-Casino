@@ -18,3 +18,13 @@ export async function fetchConversationHistory() {
     console.log("Error fetching conversation history: ", err);
   }
 }
+
+
+export async function deleteConversationHistory(userId) {
+  try {
+    const res = await api.delete(`/chatbot/${userId}`);
+    return res.data;
+  } catch (err) {
+    console.log("Error requesting a delete of conversation history", err);
+  }
+}

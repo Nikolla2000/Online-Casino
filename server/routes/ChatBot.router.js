@@ -1,5 +1,5 @@
 const express = require('express');
-const { promptChatBot, getConversationHistory } = require('../controllers/ChatBot.controller');
+const { promptChatBot, getConversationHistory, deleteConversationHistory } = require('../controllers/ChatBot.controller');
 const { auth } = require('../middleware/authentication');
 const router = express.Router();
 
@@ -21,6 +21,13 @@ router.post('/', promptChatBot);
                                     //  timeStamp: date  }}
 router.get('/', auth, getConversationHistory);
 
+
+// @route   DELETE /chatbot/:userId
+// @desc    Delete the conversation history of the user with the chatbot
+// @access  Public
+// @body    {}
+// @returns { message: string }
+router.delete('/:userId', deleteConversationHistory);
 
 
 module.exports = router;

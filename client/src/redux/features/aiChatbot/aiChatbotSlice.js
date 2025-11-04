@@ -5,6 +5,8 @@ const initialState =  {
     conversationHistory: [],
     isChatbotTyping: false,
     showQuickQuestions: false,
+    showDeleteConfirm: false,
+    isLoading: false,
 }
 
 const aiChatbotSlice = createSlice({
@@ -34,6 +36,18 @@ const aiChatbotSlice = createSlice({
         },
         hideQuickQuestions: (state) => {
             state.showQuickQuestions = false;
+        },
+        showDelete: (state) => {
+            state.showDeleteConfirm = true;
+        },
+        hideDelete: (state) => {
+            state.showDeleteConfirm = false;
+        },
+        startLoading: (state) => {
+            state.isLoading = true;
+        },
+        stopLoading: (state) => {
+            state.isLoading = false;
         }
     }
 
@@ -48,5 +62,9 @@ export const {
     stopChatbotTyping,
     setShowQuickQuestions,
     hideQuickQuestions,
+    showDelete,
+    hideDelete,
+    startLoading,
+    stopLoading,
 } = aiChatbotSlice.actions;
 export default aiChatbotSlice.reducer;
