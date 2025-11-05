@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { hideChat, setConversationHistory, addMessage, startChatbotTyping, stopChatbotTyping, hideQuickQuestions, setShowQuickQuestions, showDelete, hideDelete, startLoading, stopLoading } from "../../redux/features/aiChatbot/aiChatbotSlice";
 import ConversationHistory from "./ConversationHistory";
 import LoadingSpinner from "../Spinner/Spinner";
+import toast from "react-hot-toast";
 
 const AIChatWidget = () => {
   const { user, accessToken } = useSelector(state => state.auth);
@@ -119,6 +120,7 @@ const AIChatWidget = () => {
   }
 
   const handleOpenDelete = () => {
+    if (!conversationHistory.length) return;
     dispatch(showDelete());
   }
 
@@ -139,6 +141,7 @@ const AIChatWidget = () => {
 
     } finally {
       dispatch(stopLoading());
+      toast.success('Conversation history deleted sucessfully');
     }
   };
 
