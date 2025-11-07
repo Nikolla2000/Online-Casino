@@ -85,9 +85,9 @@ const Dashboard = () => {
       <div className="dashboard-header">
         <div className="header-content">
           <h1>Player Dashboard</h1>
-          <div className="vip-badge">
-            <span className="vip-icon">👑</span>
-            {userStats.vipLevel} Member
+          <div className={`vip-badge ${user.isVip ? 'vip' : 'regular'}`}>
+            <span className="vip-icon">{user.isVip ? '👑' : '👤'}</span>
+            {user.isVip ? 'VIP Member' : 'Regular Player'}
           </div>
         </div>
       </div>
@@ -127,7 +127,7 @@ const Dashboard = () => {
               
               <div className="user-info">
                 <h2>{user.name}</h2>
-                <p className="user-title">High Roller</p>
+                <p className="user-title">@{user.username}</p>
                 <div className="member-since">
                   Member since {userStats.memberSince}
                 </div>
@@ -136,7 +136,7 @@ const Dashboard = () => {
 
             <div className="quick-stats">
               <div className="stat-item">
-                <span className="stat-value">${userStats.totalWagered.toLocaleString()}</span>
+                <span className="stat-value">{userStats.totalWagered.toLocaleString()}</span>
                 <span className="stat-label">Total Wagered</span>
               </div>
               <div className="stat-item">
@@ -185,15 +185,15 @@ const Dashboard = () => {
                 <div className="stat-card">
                   <div className="stat-icon">💰</div>
                   <div className="stat-content">
-                    <h4>Total Wagered</h4>
-                    <p className="stat-number">${userStats.totalWagered.toLocaleString()}</p>
+                    <h4>Total Credits Wagered</h4>
+                    <p className="stat-number">{userStats.totalWagered.toLocaleString()} <img src='/images/casino-chips.png' className='chips-img'/></p>
                   </div>
                 </div>
                 <div className="stat-card">
                   <div className="stat-icon">🏆</div>
                   <div className="stat-content">
                     <h4>Total Wins</h4>
-                    <p className="stat-number">${userStats.totalWins.toLocaleString()}</p>
+                    <p className="stat-number">{userStats.totalWins.toLocaleString()} <img src='/images/casino-chips.png' className='chips-img'/></p>
                   </div>
                 </div>
                 <div className="stat-card">

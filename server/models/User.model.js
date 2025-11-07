@@ -93,7 +93,27 @@ const UserSchema = new mongoose.Schema({
   isVerified: {
     type: Boolean,
     default: false
-  }
+  },
+  totalWagered: {
+    type: Number,
+    default: 0,
+  },
+  totalWins: {
+    type: Number,
+    default: 0,
+  },
+  bonusOffers: {
+    type: Boolean,
+    default: false,
+  },
+  gameUpdates: {
+    type: Boolean,
+    default: false,
+  },
+  vipEvents: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 UserSchema.pre('save', async function (next) {

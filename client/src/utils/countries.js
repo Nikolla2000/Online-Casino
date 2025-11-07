@@ -178,3 +178,16 @@ export const countries = [
     { value: 'UM', label: 'United States Minor Outlying Islands' },
     { value: 'VI', label: 'U.S. Virgin Islands' }
   ];
+
+
+
+export const getCountryFlag = (countryCode) => {
+  if (!countryCode || countryCode === 'unknown') return 'BG';
+  
+  const flagEmojis = {
+    'US': '🇺🇸', 'UK': '🇬🇧', 'BG': '🇧🇬', 'DE': '🇩🇪', 'FR': '🇫🇷',
+    'IT': '🇮🇹', 'ES': '🇪🇸', 'CA': '🇨🇦', 'AU': '🇦🇺', 'BR': '🇧🇷'
+  };
+  
+  return flagEmojis[countryCode.toUpperCase()] || '🌎';
+};
