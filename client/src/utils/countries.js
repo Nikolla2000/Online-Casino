@@ -181,13 +181,8 @@ export const countries = [
 
 
 
-export const getCountryFlag = (countryCode) => {
-  if (!countryCode || countryCode === 'unknown') return 'BG';
-  
-  const flagEmojis = {
-    'US': '🇺🇸', 'UK': '🇬🇧', 'BG': '🇧🇬', 'DE': '🇩🇪', 'FR': '🇫🇷',
-    'IT': '🇮🇹', 'ES': '🇪🇸', 'CA': '🇨🇦', 'AU': '🇦🇺', 'BR': '🇧🇷'
-  };
-  
-  return flagEmojis[countryCode.toUpperCase()] || '🌎';
+export const getCountryFlag = (countryName) => {
+  if (!countryName || countryName.toUpperCase() === 'UNKNOWN') return '🌎';
+
+  return countries.find(country => country.label == countryName).value || '🌎';
 };

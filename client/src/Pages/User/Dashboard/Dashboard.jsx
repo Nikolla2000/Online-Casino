@@ -4,6 +4,7 @@ import { logoutUser, updateProfilePic } from '../../../redux/features/auth/authS
 import axios from '../../../axiosConfig';
 import toast from 'react-hot-toast';
 import './DashboardStyles.scss';
+import { getCountryFlag } from '../../../utils/countries';
 
 const Dashboard = () => {
   const user = useSelector((state) => state.auth.user);
@@ -126,11 +127,22 @@ const Dashboard = () => {
               </div>
               
               <div className="user-info">
-                <h2>{user.name}</h2>
+                <h2>{user.firstName} {user.lastName}</h2>
+
                 <p className="user-title">@{user.username}</p>
+
                 <div className="member-since">
                   Member since {userStats.memberSince}
                 </div>
+
+                {user.country && user.country.toUpperCase() !== 'Unknown'.toUpperCase() && (
+                  <div className='user-country'>
+                    <span className="country-name">From {user.country}</span>
+                    <span className="country-flag">
+                        {getCountryFlag(user.country)}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -186,14 +198,14 @@ const Dashboard = () => {
                   <div className="stat-icon">💰</div>
                   <div className="stat-content">
                     <h4>Total Credits Wagered</h4>
-                    <p className="stat-number">{userStats.totalWagered.toLocaleString()} <img src='/images/casino-chips.png' className='chips-img'/></p>
+                    <p className="stat-number">{userStats.totalWagered.toLocaleString()}<img src='/images/casino-chips.png' className='chips-img'/></p>
                   </div>
                 </div>
                 <div className="stat-card">
                   <div className="stat-icon">🏆</div>
                   <div className="stat-content">
                     <h4>Total Wins</h4>
-                    <p className="stat-number">{userStats.totalWins.toLocaleString()} <img src='/images/casino-chips.png' className='chips-img'/></p>
+                    <p className="stat-number">{userStats.totalWins.toLocaleString()}<img src='/images/casino-chips.png' className='chips-img'/></p>
                   </div>
                 </div>
                 <div className="stat-card">
@@ -217,12 +229,12 @@ const Dashboard = () => {
                 <div className="activity-list">
                   <div className="activity-item">
                     <span className="activity-game">Book of Dead</span>
-                    <span className="activity-result win">+$250</span>
+                    <div className="activity-result win">+250<img src='/images/casino-chips.png' className='chips-img'/></div>
                     <span className="activity-time">2 hours ago</span>
                   </div>
                   <div className="activity-item">
                     <span className="activity-game">Mega Moolah</span>
-                    <span className="activity-result loss">-$50</span>
+                    <div className="activity-result loss">-50<img src='/images/casino-chips.png' className='chips-img'/></div>
                     <span className="activity-time">5 hours ago</span>
                   </div>
                 </div>
