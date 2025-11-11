@@ -244,29 +244,53 @@ const Dashboard = () => {
 
           {activeSection === 'account' && (
             <div className="content-section">
-              <h3>Account Settings</h3>
-              <div className="settings-form">
-                <div className="form-group">
-                  <label>Email Address</label>
-                  <input type="email" value={user.email || "user@example.com"} readOnly />
-                </div>
-                <div className="form-group">
-                  <label>Phone Number</label>
-                  <input type="tel" placeholder="Add phone number" />
-                </div>
-                <div className="form-group">
-                  <label>Notification Preferences</label>
-                  <div className="checkboxes">
-                    <label><input type="checkbox" defaultChecked /> Bonus Offers</label>
-                    <label><input type="checkbox" defaultChecked /> Game Updates</label>
-                    <label><input type="checkbox" /> VIP Events</label>
-                  </div>
-                </div>
-                <button className="save-button">Save Changes</button>
+            <h3>Account Settings</h3>
+            <div className="settings-form">
+              <div className="form-group">
+                <label>Full Name</label>
+                <input 
+                  type="text" 
+                  value={`${user.firstName} ${user.lastName}`} 
+                  readOnly 
+                />
               </div>
+              <div className="form-group">
+                <label>Username</label>
+                <input 
+                  type="text" 
+                  value={`@${user.username}`} 
+                  readOnly 
+                />
+              </div>
+              <div className="form-group">
+                <label>Email Address</label>
+                <input type="email" value={user.email || "user@example.com"} readOnly />
+              </div>
+              <div className="form-group">
+                <label>Country</label>
+                <input 
+                  type="text" 
+                  value={user.country && user.country !== 'unknown' ? user.country : 'Not specified'} 
+                  readOnly 
+                />
+              </div>
+              <div className="form-group">
+                <label>Phone Number</label>
+                <input type="tel" placeholder="Add phone number" />
+              </div>
+              <div className="form-group">
+                <label>Notification Preferences</label>
+                <div className="checkboxes">
+                  <label><input type="checkbox" defaultChecked /> Bonus Offers</label>
+                  <label><input type="checkbox" defaultChecked /> Game Updates</label>
+                  <label><input type="checkbox" /> VIP Events</label>
+                </div>
+              </div>
+              <button className="save-button">Save Changes</button>
             </div>
-          )}
-        </div>
+          </div>
+        )}
+      </div>
 
         <div className="credits-sidebar">
           <div className="credits-card">
