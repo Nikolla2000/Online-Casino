@@ -71,7 +71,7 @@ const port = process.env.PORT || 3000;
 app.use(cors({
   origin: 'http://localhost:5173',  //for local development, comment for production
   // origin: 'https://uzu-online-casino.netlify.app', // uncomment for production
-  methods: 'GET,POST,PUT,DELETE',
+  methods: 'GET,POST,PUT,PATCH,DELETE',
   allowedHeaders: 'Content-Type,Authorization',
   credentials: true
 }));

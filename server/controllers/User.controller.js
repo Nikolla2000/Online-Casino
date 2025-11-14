@@ -235,6 +235,38 @@ const getOnlineUsers = async (req, res) => {
 }
 
 
+const updatePreferences = async (req, res) => {
+  try {
+    const { bonusOffers, gameUpdates, vipEvents } = req.body;
+    const userId = req.user.id;
+
+    if (
+      (bonusOffers !== undefined && typeof bonusOffers !== 'boolean') ||
+      (gameUpdates !== undefined && typeof gameUpdates !== 'boolean') ||
+      (vipEvents !== undefined && typeof vipEvents !== 'boolean')
+    ) {
+      return res.status(400).json({ message: 'Invalid data format' });
+    }
+
+    const updateFields = {};
+    if (bonusOffers !== undefined) updateFields.bonusOffers = bonusOffers;
+    if (gameUpdates !== undefined) updateFields.gameUpdates = gameUpdates;
+    if (vipEvents !== undefined) updateFields.vipEvents = vipEvents;
+
+    await User.findByIdAndUpdate(userId, updateFields)
+      
+    res.json({ 
+      success: true, 
+      message: 'Notifications updated successfully',
+    });
+
+  } catch (err) {
+    console.error('Notifications update error:', err);
+    res.status(500).json({ message: 'Failed to update notifications settings. Please try again.' });
+  }
+}
+
+
 module.exports = {
   registerUser,
   loginUser,
@@ -245,4 +277,5 @@ module.exports = {
   getTotalCredits,
   uploadPicture,
   getOnlineUsers,
+  updatePreferences,
 }

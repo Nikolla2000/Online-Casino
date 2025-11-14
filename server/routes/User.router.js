@@ -11,7 +11,8 @@ const {
   updateTotalCredits,
   getTotalCredits,
   uploadPicture,
-  getOnlineUsers
+  getOnlineUsers,
+  updatePreferences
 } = require('../controllers/User.controller');
 
 const { verifyJWT } = require('../middleware/authentication');
@@ -25,5 +26,6 @@ router.get('/logout', logoutUser);
 router.put('/updateCredits', updateTotalCredits);
 router.post('/uploadPicture', verifyJWT, upload.single('profilePic'), uploadPicture);
 router.get('/online', getOnlineUsers);
+router.patch('/notification-preferences', verifyJWT, updatePreferences);
 
 module.exports = router;
