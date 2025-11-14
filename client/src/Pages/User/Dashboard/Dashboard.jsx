@@ -5,6 +5,7 @@ import axios from '../../../axiosConfig';
 import toast from 'react-hot-toast';
 import './DashboardStyles.scss';
 import { getCountryFlag } from '../../../utils/countries';
+import { updatePreferences } from '../../../services/api/userAPI';
 
 const Dashboard = () => {
   const user = useSelector((state) => state.auth.user);
@@ -14,6 +15,15 @@ const Dashboard = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const fileInputRef = useRef(null);
+
+  const [isSaving, setIsSaving] = useState(false);
+  const [noChangesMessage, setNoChangesMessage] = useState('');
+
+  const [notificationsPrefs, setNotificationsPrefs] = useState({
+    bonusOffers: user.bonusOffers || false,
+    gameUpdates: user.gameUpdates || false,
+    vipEvents: user.vipEvents || false
+  });
 
   const handleFileUpload = async (event) => {
     const file = event.target.files[0];
@@ -62,6 +72,57 @@ const Dashboard = () => {
       console.error('Logout failed:', err);
     }
   };
+
+  const handleNotificationChange = (field) => {
+    setNotificationsPrefs(prev => ({
+      ...prev,
+      [field]: !prev[field]
+    }));
+    if (noChangesMessage) {
+      setNoChangesMessage('');
+    }
+  };
+
+  const handleSaveNotifications = async () => {
+    const hasChanges = 
+    notificationsPrefs.bonusOffers !== user.bonusOffers ||
+    notificationsPrefs.gameUpdates !== user.gameUpdates ||
+    notificationsPrefs.vipEvents !== user.vipEvents;
+
+    if (!hasChanges) {
+      setNoChangesMessage('No changes were made');
+      setTimeout(() => setNoChangesMessage(''), 3000);
+      return;
+    }
+
+    try {
+      setIsSaving(true);
+      setNoChangesMessage('');
+
+      const updatedFields = {};
+
+      if (notificationsPrefs.bonusOffers !== user.bonusOffers) {
+        updatedFields.bonusOffers = notificationsPrefs.bonusOffers;
+      }
+      if (notificationsPrefs.gameUpdates !== user.gameUpdates) {
+        updatedFields.gameUpdates = notificationsPrefs.gameUpdates;
+      }
+      if (notificationsPrefs.vipEvents !== user.vipEvents) {
+        updatedFields.vipEvents = notificationsPrefs.vipEvents;
+      }
+
+      const res = await updatePreferences(updatedFields);
+      console.log(res);
+      toast.success('Fields updated successfully');
+
+    } catch (err) {
+      console.error('Error saving notifications prefs');
+      toast.error(err.response?.data?.message || 'Error saving the fields');
+    } finally {
+      setIsSaving(false);
+      setNoChangesMessage('');
+    }
+  }
 
   // Mock data
   const userStats = {
@@ -281,12 +342,21 @@ const Dashboard = () => {
               <div className="form-group">
                 <label>Notification Preferences</label>
                 <div className="checkboxes">
-                  <label><input type="checkbox" defaultChecked /> Bonus Offers</label>
-                  <label><input type="checkbox" defaultChecked /> Game Updates</label>
-                  <label><input type="checkbox" /> VIP Events</label>
+                  <label><input type="checkbox" checked={notificationsPrefs.bonusOffers} onChange={() => handleNotificationChange('bonusOffers')}/> Bonus Offers</label>
+                  <label><input type="checkbox" checked={notificationsPrefs.gameUpdates} onChange={() => handleNotificationChange('gameUpdates')}/> Game Updates</label>
+                  <label><input type="checkbox" checked={notificationsPrefs.vipEvents} onChange={() => handleNotificationChange('vipEvents')}/> VIP Events</label>
                 </div>
               </div>
-              <button className="save-button">Save Changes</button>
+              <button className="save-button" disabled={isSaving} onClick={handleSaveNotifications}>{isSaving ? 'Saving...' : 'Save Changes'}</button>
+              {noChangesMessage && (
+                <p style={{ 
+                  color: '#ff9800', 
+                  marginTop: '10px', 
+                  fontSize: '14px', 
+                }}>
+                  {noChangesMessage}
+                </p>
+              )}
             </div>
           </div>
         )}
