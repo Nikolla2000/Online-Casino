@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "../../../axiosConfig";
+import { userAPI } from "../../../services/api/userAPI";
 // import checkSlotWin from "../../../hooks/checkSlotWin";
 // import { twoColsWin } from "./betsSlice";
 
@@ -25,6 +26,14 @@ export const updateCreditsOnServer = createAsyncThunk(
     } catch (error) {
       throw error
     }
+  }
+)
+
+export const fetchTotalCredits = createAsyncThunk(
+  'slots/totalCredits',
+  async () => {
+    const res = await userAPI.getTotalCredits();
+    return res.data.totalCredits;
   }
 )
 
@@ -91,6 +100,12 @@ export const slotMachineSlice = createSlice({
       state.totalCredits += state.bet * 200
     },
   },
+  extraReducers: (builder) => {
+    builder
+    .addCase(fetchTotalCredits.fulfilled, (state, action) => {
+      state.totalCredits = action.payload;
+    })
+  }
 });
 
 //DA NAPRAVQ CREATE ASYNC THUNK ZA UPDATE REQUEST
