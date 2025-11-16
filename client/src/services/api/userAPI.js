@@ -1,12 +1,23 @@
 import api from "../../axiosConfig";
 
-export async function updatePreferences(data) {
-    try {
-        const res = api.patch('/user/notification-preferences', data, {
-            withCredentials: true,
-        });
-        return res;
-    } catch (err) {
-        console.error('Error on request for updating preferences', err);
+export const userAPI = {
+    updatePreferences: async (data) => {
+        try {
+            const res = await api.patch('/user/notification-preferences', data, {
+                withCredentials: true,
+            });
+            return res;
+        } catch (err) {
+            console.error('Error on request for updating preferences', err);
+        }
+    },
+
+    getTotalCredits: async () => {
+        try {
+            const res = await api.get('/user/totalCredits');
+            return res;      
+        } catch (err) {
+            console.error('Error on request for fetching total credits: ', err);
+        }
     }
-}
+};
