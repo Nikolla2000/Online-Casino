@@ -23,7 +23,14 @@ const getFinalCombination = (req, res) => {
   res.json({ finalCombination });
 };
 
+
+const playSlotsRound = (req, res) => {
+  const { betAmount } = req.body;
+  const userId = req.userId;
+}
+
 module.exports = {
   spin,
   getFinalCombination,
+  playSlotsRound,
 };
