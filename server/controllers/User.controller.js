@@ -154,18 +154,19 @@ const updateTotalCredits = async (req, res) => {
 
 
 const getTotalCredits = async (req, res) => {
-  const { id } = req.query;
-
   try {
-    const user = await User.findOne({ _id: id }, 'totalCredits');
+    const userId = req.userId;
+
+    const user = await User.findOne({ _id: userId }, 'totalCredits');
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    res.status(200).json({ totalCredits: user.totalCredits });r
-  } catch (error) {
-    res.status(500).json({ message: error.message })
+    res.status(200).json({ totalCredits: user.totalCredits });
+  } catch (err) {
+    console.error('Error on getting total credits: ', err);
+    res.status(500).json({ message: 'Failed to get total credits' });
   }
 }
 
@@ -238,7 +239,7 @@ const getOnlineUsers = async (req, res) => {
 const updatePreferences = async (req, res) => {
   try {
     const { bonusOffers, gameUpdates, vipEvents } = req.body;
-    const userId = req.user.id;
+    const userId = req.userId;
 
     if (
       (bonusOffers !== undefined && typeof bonusOffers !== 'boolean') ||
