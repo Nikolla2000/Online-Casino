@@ -1,7 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTotalCredits, updateCredits } from '../../../redux/features/slots/slotMachineSlice';
-import axios from "../../../axiosConfig";
 
 const TotalCredits = () => {
   const totalCredits = useSelector(state => state.slotMachine.totalCredits)

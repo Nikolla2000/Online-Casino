@@ -8,13 +8,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faVolumeHigh, faVolumeXmark } from '@fortawesome/free-solid-svg-icons';
 import TotalCredits from './TotalCredits';
 import { useDispatch } from 'react-redux';
-import { maxBet } from '../../../redux/features/slots/slotMachineSlice';
+import { doubleBet, maxBet } from '../../../redux/features/slots/slotMachineSlice';
 
 const GadgetsBar = () => {
   const dispatch = useDispatch()
   
   const maxBets = () => {
     dispatch(maxBet())
+  }
+
+  const handleDoubleBet = () => {
+    dispatch(doubleBet());
   }
 
   return (
@@ -30,7 +34,7 @@ const GadgetsBar = () => {
           </button>
         </div>
         <div className='double-btn'>
-          <button className='text-uppercase text-white font-bold'>Double</button>
+          <button className='text-uppercase text-white font-bold' onClick={handleDoubleBet}>Double</button>
         </div>
       </div>
       {/* <ChooseCardColor/> */}

@@ -75,6 +75,14 @@ export const slotMachineSlice = createSlice({
     maxBet(state) {
       state.bet = 1000;
     },
+    doubleBet(state) {
+      if (state.bet * 2 > 1000) {
+        state.bet = 1000;
+        return;
+      } else {
+        state.bet = state.bet * 2;
+      }
+    },
     maxCredits(state) {
       state.totalCredits = 10000;
     },
@@ -148,7 +156,8 @@ export const {startSpinning,
               twoColsWin,
               threeColsWin,
               fourColsWin,
-              fiveColsWin
+              fiveColsWin,
+              doubleBet,
             } = slotMachineSlice.actions;
 
 export default slotMachineSlice.reducer
