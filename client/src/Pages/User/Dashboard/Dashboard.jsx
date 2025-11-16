@@ -5,7 +5,7 @@ import axios from '../../../axiosConfig';
 import toast from 'react-hot-toast';
 import './DashboardStyles.scss';
 import { getCountryFlag } from '../../../utils/countries';
-import { updatePreferences } from '../../../services/api/userAPI';
+import { userAPI } from '../../../services/api/userAPI';
 
 const Dashboard = () => {
   const user = useSelector((state) => state.auth.user);
@@ -111,7 +111,7 @@ const Dashboard = () => {
         updatedFields.vipEvents = notificationsPrefs.vipEvents;
       }
 
-      const res = await updatePreferences(updatedFields);
+      const res = await userAPI.updatePreferences(updatedFields);
       console.log(res);
       toast.success('Fields updated successfully');
 
@@ -209,7 +209,10 @@ const Dashboard = () => {
 
             <div className="quick-stats">
               <div className="stat-item">
-                <span className="stat-value">{userStats.totalWagered.toLocaleString()}</span>
+                <div className='stat-value-img-wrapper'>
+                  <span className="stat-value">{user.totalWagered.toLocaleString()}</span>
+                  <img src='/images/casino-chips.png' className='chips-img'/>
+                </div>
                 <span className="stat-label">Total Wagered</span>
               </div>
               <div className="stat-item">
@@ -259,7 +262,7 @@ const Dashboard = () => {
                   <div className="stat-icon">💰</div>
                   <div className="stat-content">
                     <h4>Total Credits Wagered</h4>
-                    <p className="stat-number">{userStats.totalWagered.toLocaleString()}<img src='/images/casino-chips.png' className='chips-img'/></p>
+                    <p className="stat-number">{user.totalWagered.toLocaleString()}<img src='/images/casino-chips.png' className='chips-img'/></p>
                   </div>
                 </div>
                 <div className="stat-card">

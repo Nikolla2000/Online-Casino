@@ -153,14 +153,27 @@
           background: rgba(255, 255, 255, 0.05);
           border-radius: 10px;
 
-          .stat-value {
-            display: block;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #ffd700;
+          .stat-value-img-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            .stat-value {
+              display: inline;
+              font-size: 1.2rem;
+              font-weight: bold;
+              color: #ffd700;
+            }
+            
+            img {
+              display: inline;
+              margin-bottom: 2px;
+              width: 16px;
+            }
           }
 
           .stat-label {
+            display: block;
             font-size: 0.8rem;
             color: #ccc;
           }
@@ -259,6 +272,7 @@
             .chips-img {
               width: 20px;
               display: inline;
+              margin-bottom: 2px;
             }
 
             .stat-number {
