@@ -1,28 +1,17 @@
 import React, { useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateCredits } from '../../../redux/features/slots/slotMachineSlice';
+import { fetchTotalCredits, updateCredits } from '../../../redux/features/slots/slotMachineSlice';
 import axios from "../../../axiosConfig";
-import { UserContext } from "../../../../context/userContext" 
 
 const TotalCredits = () => {
   const totalCredits = useSelector(state => state.slotMachine.totalCredits)
   const dispatch = useDispatch();
-  const { user } = useContext(UserContext)
+  const { user, accessToken } = useSelector(state => state.auth)
   
   useEffect(() => {
-    const getTotalCredits = async () => {
-      if (user && user.id) {
-        try {
-          const { data } = await axios.get('/user/getTotalCredits', { params: { id: user.id } });
-          dispatch(updateCredits(data.totalCredits));
-          console.log(totalCredits);
-        } catch (error) {
-          console.error('Error fetching total credits:', error);
-        }
-      }
+    if (user && accessToken) {
+      dispatch(fetchTotalCredits());
     };
-
-    getTotalCredits();
   }, [user, dispatch]);
 
   return (
