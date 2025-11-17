@@ -1,5 +1,8 @@
+const User = require("../models/User.model");
+
+
 class SlotsService {
- 
+
   /**
    * @param {string} userId - User ID from JWT middleware
    * @param {number} betAmount - Amount to bet
@@ -8,9 +11,32 @@ class SlotsService {
 
   async playRound(userId, betAmount) {
     
-    this
+    this.validateBet(betAmount);
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      const error = new Error('User not found');
+      error.statusCode = 404;
+      throw error;
+    }
+
+    if (user.totalCredits < betAmount) {
+      const error = new Error('Not enough credits');
+      error.statusCode = 400;
+      throw error;
+    }
+
+    const reels = this.generateSlotReels();
+
+    const { winAmount, winningLines, multiplier } = this.calculateWin(reels, betAmount);
   }
 
+  /**
+   * Validate bet amount
+   * @param {number} betAmount
+   * @returns {void}
+   */
   validateBet(betAmount) {
     if (!betAmount || typeof betAmount !== 'number') {
       const error = new Error('Invalid bet amount');
@@ -33,4 +59,169 @@ class SlotsService {
       throw error;
     }
   }
+
+  /**
+   * Generate 3x5 slot reels (numbers 1-12)
+   * @returns {number[][]} 2D array of slot symbols
+   */
+  generateSlotReels() {
+    const rows = [];
+
+    for (let row = 0; row < 3; row++) {
+      const cols = [];
+
+      for (let col = 0; col < 5; col++) {
+        const symbol = Math.floor(Math.random() * 12) + 1;
+        cols.push(symbol);
+      }
+
+      rows.push(cols);
+    }
+
+    return rows;
+  }
+
+  /** Calculate win amount and identify winning linies
+   * @param {number[][]} reels - the generated 3x5 array of symbols
+   * @param {number} betAmount - Bet amount
+   * @returns {object} Win details
+   */
+  calculateWin(reels, betAmount) {
+    const winningLines = [];
+    let totalMultiplier = 0;
+
+    const paylines = this.getPaylines();
+
+    for (let i = 0; i < paylines.length; i++) {
+      const payline = paylines[i];
+      const lineMultiplier = this.checkPayLine(reels, payline);
+
+      if (lineMultiplier > 0) {
+        winningLines.push({
+          lineNumber: i + 1,
+          pattern: payline.name,
+          multiplier: lineMultiplier,
+          symbols: this.getLineSymbols(reels, payline.positions)
+        });
+        totalMultiplier += lineMultiplier;
+      }
+    }
+
+    const winAmount = Math.floor(betAmount * totalMultiplier);
+
+    return {
+      winAmount,
+      winningLines,
+      multiplier: totalMultiplier
+    };
+  }
+
+  /**
+   * Get all winning patterns
+   */
+  getPaylines() {
+    return [
+      {
+        name: 'Top Row',
+        positions: [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4]]
+      },
+      {
+        name: 'Middle Row',
+        positions: [[1, 0], [1, 1], [1, 2], [1, 3], [1, 4]]
+      },
+      {
+        name: 'Bottom Row',
+        positions: [[2, 0], [2, 1], [2, 2], [2, 3], [2, 4]]
+      },
+      {
+        name: 'Diagonal Down',
+        positions: [[0, 0], [1, 1], [2, 2], [1, 3], [0, 4]]
+      },
+      {
+        name: 'Diagonal Up',
+        positions: [[2, 0], [1, 1], [0, 2], [1, 3], [2, 4]]
+      },
+      {
+        name: 'V Pattern',
+        positions: [[0, 0], [1, 1], [2, 2], [1, 3], [0, 4]]
+      },
+      {
+        name: 'Inverted V',
+        positions: [[2, 0], [1, 1], [0, 2], [1, 3], [2, 4]]
+      },
+      {
+        name: 'Zigzag 1',
+        positions: [[1, 0], [0, 1], [1, 2], [2, 3], [1, 4]]
+      },
+      {
+        name: 'Zigzag 2',
+        positions: [[1, 0], [2, 1], [1, 2], [0, 3], [1, 4]]
+      }
+    ];
+  }
+
+  /**
+   * Check if a payline has matching symbols
+   * @param {number[][]} reels
+   * @param {number[][]} positions - Array of [row, col] positions
+   * @returns {number} Multiplier (0 if no win)
+   */
+  checkPayLine(reels, positions) {
+    const symbols = positions.map(([row, col]) => reels[rol][col]);
+
+    const firstSymbol = symbols[0];
+    let matchCount = 1;
+
+    for (let i = 1; i < symbols.length; i++) {
+      if (symbols[i] === firstSymbol) {
+        matchCount++;
+      } else {
+        break;
+      }
+    }
+
+    return this.getMultiplier(firstSymbol, matchCount);
+  }
+
+  /**
+   * Get symbols on a specific line
+   */
+  getLineSymbols(reels, positions) {
+    return positions.map(([row, col]) => reels[row][col]);
+  }
+
+  /**
+   * Get win multiplier based on symbol and match count
+   * @param {number} symbol - Symbol number (1-12)
+   * @param {number} matchCount - Number of matching symbols
+   * @returns {number} Multiplier
+   */
+  getMultiplier(symbol, matchCount) {
+    // Symbol values (higher symbols = better payout)
+    const symbolValues = {
+      12: { 5: 100, 4: 20, 3: 5 },   // Diamond (highest)
+      11: { 5: 80, 4: 15, 3: 4 },    // Seven
+      10: { 5: 60, 4: 12, 3: 3 },    // Star
+      9: { 5: 40, 4: 10, 3: 2.5 },   // Bell
+      8: { 5: 30, 4: 8, 3: 2 },      // Watermelon
+      7: { 5: 25, 4: 6, 3: 1.5 },    // Grapes
+      6: { 5: 20, 4: 5, 3: 1.2 },    // Orange
+      5: { 5: 15, 4: 4, 3: 1 },      // Lemon
+      4: { 5: 12, 4: 3, 3: 0.8 },    // Cherry
+      3: { 5: 10, 4: 2.5, 3: 0.6 },  // Plum
+      2: { 5: 8, 4: 2, 3: 0.5 },     // Ace
+      1: { 5: 5, 4: 1.5, 3: 0.3 }    // King (lowest)
+    };
+
+    // Get multiplier for this symbol and match count
+    const symbolPayouts = symbolValues[symbol] || symbolValues[1];
+    
+    if (matchCount >= 5) return symbolPayouts[5] || 0;
+    if (matchCount >= 4) return symbolPayouts[4] || 0;
+    if (matchCount >= 3) return symbolPayouts[3] || 0;
+    
+    return 0; // No win
+  }
 }
+
+module.exports = new SlotsService();
