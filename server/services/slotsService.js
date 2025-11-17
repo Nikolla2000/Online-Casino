@@ -8,7 +8,6 @@ class SlotsService {
    * @param {number} betAmount - Amount to bet
    * @returns {object} Game result
    */
-
   async playRound(userId, betAmount) {
     
     this.validateBet(betAmount);
@@ -30,6 +29,13 @@ class SlotsService {
     const reels = this.generateSlotReels();
 
     const { winAmount, winningLines, multiplier } = this.calculateWin(reels, betAmount);
+
+    const balanceBefore = user.totalCredits;
+    const balanceAfter = balanceBefore - betAmount + winAmount;
+    const netProfit = winAmount - betAmount;
+    
+    user.totalCredits = balanceAfter;
+    await user.save();
   }
 
   /**
