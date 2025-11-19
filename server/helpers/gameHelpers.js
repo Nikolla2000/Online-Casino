@@ -11,7 +11,7 @@ const saveTransaction = async (data) => {
             amount: data.amount,
             balanceBefore: data.balanceBefore,
             balanceAfter: data.balanceAfter,
-            gameType: 'slots',
+            gameType: data.gameType,
             gameId: data.gameId,
             timestamp: new Date()
         })       

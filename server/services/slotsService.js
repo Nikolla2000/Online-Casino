@@ -1,3 +1,5 @@
+const { saveTransaction } = require("../helpers/gameHelpers");
+const GameHistory = require("../models/GameHistory.model");
 const User = require("../models/User.model");
 
 
@@ -36,6 +38,57 @@ class SlotsService {
     
     user.totalCredits = balanceAfter;
     await user.save();
+
+    const gameHistory = await GameHistory.create({
+      userId,
+      gameType: 'slots',
+      betAmount,
+      winAmount,
+      netProfit,
+      result: {
+        reels,
+        winningLines,
+        multiplier
+      },
+      balanceBefore,
+      balanceAfter,
+      timestamp: new Date()
+    });
+
+    await saveTransaction({
+      userId,
+      type: 'slots_bet',
+      amount: -betAmount,
+      balanceBefore,
+      balanceAfter: balanceBefore - betAmount,
+      gameType: 'slots',
+      gameId: gameHistory._id
+    });
+
+    if (winAmount > 0) {
+      await saveTransaction({
+        userId,
+        type: 'slots_win',
+        amount: winAmount,
+        balanceBefore: balanceBefore - betAmount,
+        balanceAfter,
+        gameType: 'slots',
+        gameId: gameHistory._id
+      });
+    }
+
+    return {
+      success: true,
+      betAmount,
+      winAmount,
+      netProfit,
+      multiplier,
+      winningLines,
+      balanceBefore,
+      balanceAfter,
+      isWin: winAmount > 0,
+      gameId: gameHistory._id
+    };
   }
 
   /**
