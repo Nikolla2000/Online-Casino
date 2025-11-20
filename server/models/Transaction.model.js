@@ -15,7 +15,6 @@ const transactionSchema = new mongoose.Schema({
     amount: {
         type: Number,
         required: true,
-        min: 0,
     },
     balanceBefore: {
         type: Number,
@@ -37,6 +36,7 @@ const transactionSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
         index: true,
+        expires: 2592000, //30 days
     }
 });
 
