@@ -7,6 +7,7 @@ import axios from '../../../axiosConfig'
 import { Switch } from '@mui/material';
 import { FormLabel } from 'react-bootstrap';
 import { toast } from 'react-hot-toast'
+import { slotsAPI } from '../../../services/api/slotsAPI';
 
 const SpinButton = () => {
   const dispatch = useDispatch()
@@ -16,6 +17,18 @@ const SpinButton = () => {
   const betsValue = useSelector(state => state.slotMachine.bet)
   const totalCredits = useSelector(state => state.slotMachine.totalCredits)
   const { user } = useContext(UserContext)
+
+  const handlePlaySlotsRound = async () => {
+    try {
+      const res = await slotsAPI.fetchPlaySlotsRound({
+        betAmount: betsValue
+      });
+      console.log(res);
+    } catch (err) {
+      console.error('Slots game error:', err);
+      toast.error(err.response?.data?.message ||'Error on playing game. Please, try again later.');
+    }
+  }
 
   const handleSpin = async () => {
     if (isSpinning) {
@@ -79,7 +92,7 @@ const SpinButton = () => {
 
   return (
     <div className='spin-btn'>
-      <button onClick={handleSpin} style={{'display' : 'block'}}>
+      <button onClick={handlePlaySlotsRound} style={{'display' : 'block'}}>
         Spin
       </button>
       <div className="text-center">
