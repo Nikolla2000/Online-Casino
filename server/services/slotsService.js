@@ -2,7 +2,6 @@ const { saveTransaction } = require("../helpers/gameHelpers");
 const GameHistory = require("../models/GameHistory.model");
 const User = require("../models/User.model");
 
-
 class SlotsService {
 
   /**

@@ -11,7 +11,7 @@ const { verifyJWT } = require('../middleware/authentication');
 
 router.get('/spin', spin);
 router.get('/finalCombination', getFinalCombination);
-router.post('/play-slots-round', verifyJWT, playSlotsRound);
+router.post('/', verifyJWT, playSlotsRound);
 
 module.exports = router;
  

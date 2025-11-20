@@ -1,3 +1,5 @@
+const slotsService = require("../services/slotsService");
+
 const slotItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
 const spin = (req, res) => {
@@ -24,9 +26,28 @@ const getFinalCombination = (req, res) => {
 };
 
 
-const playSlotsRound = (req, res) => {
-  const { betAmount } = req.body;
-  const userId = req.userId;
+/**
+ * Play slots round 
+ * POST /server/v1/slots
+ */
+const playSlotsRound = async (req, res) => {  
+  try {
+    const { betAmount } = req.body;
+    const userId = req.userId;
+
+    const result = await slotsService.playRound(userId, betAmount);
+
+    res.status(200).json(result);
+    
+  } catch (err) {
+    console.error('Slots game error:', err);
+
+    const statusCode = err.statusCode || 500;
+    res.status(statusCode).json({
+      success: false,
+      message: 'Error on playing slots round'
+    });
+  }
 }
 
 module.exports = {
