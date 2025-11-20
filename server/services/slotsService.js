@@ -38,42 +38,47 @@ class SlotsService {
     user.totalCredits = balanceAfter;
     await user.save();
 
-    const gameHistory = await GameHistory.create({
-      userId,
-      gameType: 'slots',
-      betAmount,
-      winAmount,
-      netProfit,
-      result: {
-        reels,
-        winningLines,
-        multiplier
-      },
-      balanceBefore,
-      balanceAfter,
-      timestamp: new Date()
-    });
+    const SAVE_HISTORY = process.env.NODE_ENV == 'production';
+    let gameHistory = null;
 
-    await saveTransaction({
-      userId,
-      type: 'slots_bet',
-      amount: -betAmount,
-      balanceBefore,
-      balanceAfter: balanceBefore - betAmount,
-      gameType: 'slots',
-      gameId: gameHistory._id
-    });
-
-    if (winAmount > 0) {
+    if (SAVE_HISTORY) {
+      gameHistory = await GameHistory.create({
+        userId,
+        gameType: 'slots',
+        betAmount,
+        winAmount,
+        netProfit,
+        result: {
+          reels,
+          winningLines,
+          multiplier
+        },
+        balanceBefore,
+        balanceAfter,
+        timestamp: new Date()
+      });
+  
       await saveTransaction({
         userId,
-        type: 'slots_win',
-        amount: winAmount,
-        balanceBefore: balanceBefore - betAmount,
-        balanceAfter,
+        type: 'slots_bet',
+        amount: -betAmount,
+        balanceBefore,
+        balanceAfter: balanceBefore - betAmount,
         gameType: 'slots',
         gameId: gameHistory._id
       });
+  
+      if (winAmount > 0) {
+        await saveTransaction({
+          userId,
+          type: 'slots_win',
+          amount: winAmount,
+          balanceBefore: balanceBefore - betAmount,
+          balanceAfter,
+          gameType: 'slots',
+          gameId: gameHistory._id
+        });
+      }
     }
 
     return {
@@ -86,7 +91,7 @@ class SlotsService {
       balanceBefore,
       balanceAfter,
       isWin: winAmount > 0,
-      gameId: gameHistory._id
+      gameId: gameHistory?._id || null
     };
   }
 
@@ -152,7 +157,7 @@ class SlotsService {
 
     for (let i = 0; i < paylines.length; i++) {
       const payline = paylines[i];
-      const lineMultiplier = this.checkPayLine(reels, payline);
+      const lineMultiplier = this.checkPayLine(reels, payline.positions);
 
       if (lineMultiplier > 0) {
         winningLines.push({
@@ -225,7 +230,7 @@ class SlotsService {
    * @returns {number} Multiplier (0 if no win)
    */
   checkPayLine(reels, positions) {
-    const symbols = positions.map(([row, col]) => reels[rol][col]);
+    const symbols = positions.map(([row, col]) => reels[row][col]);
 
     const firstSymbol = symbols[0];
     let matchCount = 1;
