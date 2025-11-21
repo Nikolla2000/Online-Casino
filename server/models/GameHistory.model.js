@@ -43,6 +43,7 @@ const gameHistorySchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
         index: true,
+        expires: 90 * 24 * 60 * 60 // 90 Days
     }
 });
 
