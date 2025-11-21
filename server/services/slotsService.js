@@ -32,12 +32,23 @@ class SlotsService {
     const { winAmount, winningLines, multiplier } = this.calculateWin(reels, betAmount);
 
     const balanceBefore = user.totalCredits;
-    const balanceAfter = balanceBefore - betAmount + winAmount;
     const netProfit = winAmount - betAmount;
     
-    user.totalCredits = balanceAfter;
-    await user.save();
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        $inc: {
+          totalCredits: netProfit,
+          totalWagered: betAmount,
+          totalWon: winAmount,
+          
+        }
+      },
+      { new: true }
+      );
 
+    const balanceAfter = updatedUser.totalCredits;
+      
     const SAVE_HISTORY = process.env.NODE_ENV == 'production';
     let gameHistory = null;
 

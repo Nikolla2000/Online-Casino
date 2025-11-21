@@ -36,7 +36,7 @@ const transactionSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
         index: true,
-        expires: 2592000, //30 days
+        expires: 30 * 24 * 60 * 60, //30 days
     }
 });
 
