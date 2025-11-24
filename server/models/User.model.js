@@ -98,7 +98,7 @@ const UserSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  totalWins: {
+  totalWon: {
     type: Number,
     default: 0,
   },
@@ -134,6 +134,10 @@ UserSchema.pre('save', async function (next) {
 //     { expiresIn: process.env.JWT_LIFETIME }
 //   );
 // };
+
+UserSchema.virtual('winRate').get(function() {
+  if (this.gamePlayed === 0) return 0;
+})
 
 const User = mongoose.model("User", UserSchema);
 module.exports = User;
