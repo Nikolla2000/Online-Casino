@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef } from 'react';
 import './GadgetsStyles.scss'
 import { useDispatch, useSelector } from 'react-redux';
 import { UserContext } from "../../../../context/userContext"
-import { startSpinning, stopSpinning, toggleAutoPlay, spendCredits, setSlots } from '../../../redux/features/slots/slotMachineSlice';
+import { startSpinning, stopSpinning, toggleAutoPlay, spendCredits, setSlots, updateCredits } from '../../../redux/features/slots/slotMachineSlice';
 import axios from '../../../axiosConfig'
 import { Switch } from '@mui/material';
 import { FormLabel } from 'react-bootstrap';
@@ -15,14 +15,16 @@ const SpinButton = () => {
   const isSpinning = useSelector(state => state.slotMachine.isSpinning)
   const autoPlay = useSelector(state => state.slotMachine.autoPlay)
   const slots = useSelector(state => state.slotMachine.slots)
-  const betsValue = useSelector(state => state.slotMachine.bet)
+  // const betsValue = useSelector(state => state.slotMachine.bet)
   const totalCredits = useSelector(state => state.slotMachine.totalCredits)
   const { user } = useContext(UserContext)
+
+  const { bet } = useSelector(state => state.slotMachine);
 
   const handlePlaySlotsRound = async () => {
     if (isSpinning) return;
 
-    if (totalCredits < betsValue) {
+    if (totalCredits < bet) {
       const audio = new Audio('/sounds/error-sound.mp3');
       audio.play();
       toast.error('Not Enough Credits');
@@ -30,19 +32,21 @@ const SpinButton = () => {
     }
     
     dispatch(startSpinning());
+    dispatch(updateCredits(totalCredits - bet));
     const spinInterval = setInterval(() => {
       dispatch(setSlots(generateRandomSlots(slots)));
     }, 50) // generating random slot reels every 50 ms - simulating a slots spin
 
     try {
       const res = await slotsAPI.fetchPlaySlotsRound({
-        betAmount: betsValue
+        betAmount: bet
       });
       console.log(res);
       setTimeout(()=> {
         clearInterval(spinInterval);
-        dispatch(setSlots(res.data.reels));
         dispatch(stopSpinning());
+        dispatch(setSlots(res.data.reels));
+        dispatch(updateCredits(res.data.balanceAfter));
       }, 2000)
 
     } catch (err) {
