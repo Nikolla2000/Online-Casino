@@ -2,12 +2,13 @@ import React, { useContext, useEffect, useRef } from 'react';
 import './GadgetsStyles.scss'
 import { useDispatch, useSelector } from 'react-redux';
 import { UserContext } from "../../../../context/userContext"
-import { startSpinning, stopSpinning, toggleAutoPlay, spendCredits } from '../../../redux/features/slots/slotMachineSlice';
+import { startSpinning, stopSpinning, toggleAutoPlay, spendCredits, setSlots } from '../../../redux/features/slots/slotMachineSlice';
 import axios from '../../../axiosConfig'
 import { Switch } from '@mui/material';
 import { FormLabel } from 'react-bootstrap';
 import { toast } from 'react-hot-toast'
 import { slotsAPI } from '../../../services/api/slotsAPI';
+import { generateRandomSlots } from '../../../utils/slotsUtils';
 
 const SpinButton = () => {
   const dispatch = useDispatch()
@@ -19,46 +20,69 @@ const SpinButton = () => {
   const { user } = useContext(UserContext)
 
   const handlePlaySlotsRound = async () => {
-    try {
-      const res = await slotsAPI.fetchPlaySlotsRound({
-        betAmount: betsValue
-      });
-      console.log(res);
-    } catch (err) {
-      console.error('Slots game error:', err);
-      toast.error(err.response?.data?.message ||'Error on playing game. Please, try again later.');
-    }
-  }
+    if (isSpinning) return;
 
-  const handleSpin = async () => {
-    if (isSpinning) {
-      return;
-    }
     if (totalCredits < betsValue) {
       const audio = new Audio('/sounds/error-sound.mp3');
       audio.play();
       toast.error('Not Enough Credits');
       return;
     }
-  
+    
     dispatch(startSpinning());
-  
-    try {
-      await axios.get('/slots/spin');
-      dispatch(spendCredits());
+    const spinInterval = setInterval(() => {
+      dispatch(setSlots(generateRandomSlots(slots)));
+    }, 50) // generating random slot reels every 50 ms - simulating a slots spin
 
-      await axios.put('/user/updateCredits', { userId: user.id, totalCredits: totalCredits - betsValue })
-        .then(response => {
-          // console.log('Update Credits Response:', response);
-        })
-        .catch(error => {
-          console.error('Error updating credits:', error);
-        });
-    } catch (error) {
-      console.error('Error spinning the slots:', error);
-      dispatch(stopSpinning([]));
-    }
-  };
+    try {
+      const res = await slotsAPI.fetchPlaySlotsRound({
+        betAmount: betsValue
+      });
+      console.log(res);
+      setTimeout(()=> {
+        clearInterval(spinInterval);
+        dispatch(setSlots(res.data.reels));
+        dispatch(stopSpinning());
+      }, 2000)
+
+    } catch (err) {
+      console.error('Slots game error:', err);
+      toast.error(err.response?.data?.message ||'Error on playing game. Please, try again later.');
+    } 
+    // finally {
+    //   dispatch(stopSpinning());
+    // }
+  }
+
+  // const handleSpin = async () => {
+  //   if (isSpinning) {
+  //     return;
+  //   }
+  //   if (totalCredits < betsValue) {
+  //     const audio = new Audio('/sounds/error-sound.mp3');
+  //     audio.play();
+  //     toast.error('Not Enough Credits');
+  //     return;
+  //   }
+  
+  //   dispatch(startSpinning());
+  
+  //   try {
+  //     await axios.get('/slots/spin');
+  //     dispatch(spendCredits());
+
+  //     await axios.put('/user/updateCredits', { userId: user.id, totalCredits: totalCredits - betsValue })
+  //       .then(response => {
+  //         // console.log('Update Credits Response:', response);
+  //       })
+  //       .catch(error => {
+  //         console.error('Error updating credits:', error);
+  //       });
+  //   } catch (error) {
+  //     console.error('Error spinning the slots:', error);
+  //     dispatch(stopSpinning([]));
+  //   }
+  // };
   
 
   const toggle = () => {
@@ -68,27 +92,27 @@ const SpinButton = () => {
   const autoSpinIntervalRef = useRef(null)
 
   //Auto Play Function
-  useEffect(() => {
-    const startAutoSpin = () => {
-      autoSpinIntervalRef.current = setInterval(() => {
-        handleSpin();
-      }, 3000);
-    };
+  // useEffect(() => {
+  //   const startAutoSpin = () => {
+  //     autoSpinIntervalRef.current = setInterval(() => {
+  //       handleSpin();
+  //     }, 3000);
+  //   };
 
-    const stopAutoSpin = () => {
-      clearInterval(autoSpinIntervalRef.current);
-    };
+  //   const stopAutoSpin = () => {
+  //     clearInterval(autoSpinIntervalRef.current);
+  //   };
 
-    if (autoPlay) {
-      startAutoSpin();
-    } else {
-      stopAutoSpin();
-    }
+  //   if (autoPlay) {
+  //     startAutoSpin();
+  //   } else {
+  //     stopAutoSpin();
+  //   }
 
-    return () => {
-      stopAutoSpin();
-    };
-  }, [autoPlay, handleSpin]);
+  //   return () => {
+  //     stopAutoSpin();
+  //   };
+  // }, [autoPlay, handleSpin]);
 
   return (
     <div className='spin-btn'>

@@ -45,11 +45,8 @@ export const slotMachineSlice = createSlice({
     startSpinning(state) {
       state.isSpinning = true;
     },
-    stopSpinning(state, action) {
+    stopSpinning(state) {
       state.isSpinning = false;
-      state.slots = action.payload;
-      
-      // checkSlotWin(state.slots, twoColsWin)
     },
     toggleAutoPlay(state) {
       state.autoPlay = !state.autoPlay;
@@ -61,14 +58,14 @@ export const slotMachineSlice = createSlice({
     //Bets Reducers
     increaseBet(state) {
       if(state.bet === 1000) {
-        return
+        return;
       } else {
         state.bet += 100
       }
     },
     decreaseBet(state) {
       if(state.bet === 100) {
-        return
+        return;
       } else {
         state.bet -= 100
       }
@@ -108,6 +105,9 @@ export const slotMachineSlice = createSlice({
     fiveColsWin(state) {
       state.totalCredits += state.bet * 200
     },
+    setSlots(state, action) {
+      state.slots = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -116,34 +116,6 @@ export const slotMachineSlice = createSlice({
     })
   }
 });
-
-//DA NAPRAVQ CREATE ASYNC THUNK ZA UPDATE REQUEST
-
-const checkSlotWin = (slots, callback) => {
-
-  for (let i = 0; i < slots.length; i++) {
-    if (
-      slots[i][0] === slots[i][1] &&
-      slots[i][1] === slots[i][2] &&
-      slots[i][2] === slots[i][3] &&
-      slots[i][3] === slots[i][4]
-    ) {
-      alert("5 cols");
-    } 
-    else if (
-      slots[i][0] === slots[i][1] &&
-      slots[i][1] === slots[i][2] &&
-      slots[i][2] === slots[i][3]
-    ) {
-      alert("4 cols");
-    } 
-    else if (slots[i][0] === slots[i][1] && slots[i][1] === slots[i][2]) {
-      alert("3 cols");
-    } 
-    else if (slots[i][0] === slots[i][1]) {
-    }
-  }
-};
 
 export const {startSpinning, 
               stopSpinning, 
@@ -159,6 +131,7 @@ export const {startSpinning,
               fourColsWin,
               fiveColsWin,
               doubleBet,
+              setSlots,
             } = slotMachineSlice.actions;
 
 export default slotMachineSlice.reducer

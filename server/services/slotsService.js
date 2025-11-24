@@ -98,6 +98,7 @@ class SlotsService {
       winAmount,
       netProfit,
       multiplier,
+      reels,
       winningLines,
       balanceBefore,
       balanceAfter,

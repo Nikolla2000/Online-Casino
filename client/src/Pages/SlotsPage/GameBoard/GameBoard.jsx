@@ -59,56 +59,44 @@ const GameBoard = () => {
     }
   };
 
-  useEffect(() => {
-    if (isSpinning) {
-      const spinInterval = setInterval(() => {
-        setSpinningSlots(generateRandomSlots());
-      }, 50);
+  // useEffect(() => {
+  //   if (isSpinning) {
+  //     const spinInterval = setInterval(() => {
+  //       setSpinningSlots(generateRandomSlots());
+  //     }, 50);
 
-      setTimeout(() => {
-        clearInterval(spinInterval);
-        const finalSlots = generateFinalSlots()
-        dispatch(stopSpinning(finalSlots));
-        checkSlotWin(finalSlots)
-      }, 2000);
+  //     setTimeout(() => {
+  //       clearInterval(spinInterval);
+  //       const finalSlots = generateFinalSlots()
+  //       dispatch(stopSpinning(finalSlots));
+  //       checkSlotWin(finalSlots)
+  //     }, 2000);
 
-      return () => {
-        clearInterval(spinInterval);
-      };
-    }
-  }, [isSpinning, dispatch]);
+  //     return () => {
+  //       clearInterval(spinInterval);
+  //     };
+  //   }
+  // }, [isSpinning, dispatch]);
 
-  const generateRandomSlots = () => {
-    return slots.map(row => row.map(() => Math.floor(Math.random() * 12 + 1)));
-  };
+  // const generateRandomSlots = () => {
+  //   return slots.map(row => row.map(() => Math.floor(Math.random() * 12 + 1)));
+  // };
 
-  const generateFinalSlots = () => {
-    return slots.map(row => row.map(() => Math.floor(Math.random() * 12 + 1)));
-  };
-
+  // const generateFinalSlots = () => {
+  //   return slots.map(row => row.map(() => Math.floor(Math.random() * 12 + 1)));
+  // };
+  if (!slots) return;
   return (
     <div className='gameboard-wrapper'>
-      {isSpinning ?
-        spinningSlots.map((row, i) => (
-          <div key={`row-${i}`} className='row'>
-            {row.map((col, j) => (
-              <div key={`col-${j}`} className='image-wrapper col'>
-                <img src={`/images/slot-items/slot_item_${col.toString().padStart(3, '0')}.jpg`} alt={`slot-item-${col}`} />
-              </div>
-            ))}
-          </div>
-        ))
-        :
-        slots.map((row, i) => (
-          <div key={`row-${i}`} className='row'>
-            {row.map((col, j) => (
-              <div key={`col-${j}`} className='image-wrapper col'>
-                <img src={`/images/slot-items/slot_item_${col.toString().padStart(3, '0')}.jpg`} alt={`slot-item-${col}`} />
-              </div>
-            ))}
-          </div>
-        ))
-      }
+      {slots.map((row, i) => (
+        <div key={`row-${i}`} className='row'>
+          {row.map((col, j) => (
+            <div key={`col-${j}`} className='image-wrapper col'>
+              <img src={`/images/slot-items/slot_item_${col.toString().padStart(3, '0')}.jpg`} alt={`slot-item-${col}`} />
+            </div>
+          ))}
+        </div>
+      ))}
     </div>
   );
   
