@@ -41,7 +41,7 @@ class SlotsService {
           totalCredits: netProfit,
           totalWagered: betAmount,
           totalWon: winAmount,
-          
+          gamesPlayed: 1,
         }
       },
       { new: true }

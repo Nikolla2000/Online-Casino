@@ -114,6 +114,10 @@ const UserSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  gamesPlayed: {
+    type: Number,
+    default: 0,
+  },
 })
 
 UserSchema.pre('save', async function (next) {
