@@ -6,7 +6,8 @@ import { userAPI } from "../../../services/api/userAPI";
 
 
 const initialState = {
-  slots: Array.from({ length: 3 }, () => Array(5).fill(Math.floor(Math.random() * 12 + 1))),
+  slots: Array.from({ length: 3 }, () => 
+          Array.from({ length: 5 }, () => Math.floor(Math.random() * 12 + 1))),
   isSpinning: false,
   isWin: false,
   winType: null,
