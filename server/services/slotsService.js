@@ -153,7 +153,8 @@ class SlotsService {
       rows.push(cols);
     }
 
-    return rows;
+    // return rows;
+    return [[10,10,10,1,2],[8,8,8,4,2],[1,2,3,4,5]];
   }
 
   /** Calculate win amount and identify winning linies

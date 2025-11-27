@@ -1,7 +1,7 @@
-@import '../../colorConstants.scss';
-
 .slots-page-wrapper {
   background: url("/images/slot-items/background.jpg");
+  background-size: cover;
+  background-position: center;
 
   .total-credits-wrapper {
     background-color: blue;
@@ -10,32 +10,85 @@
   .gameboard-wrapper {
     width: 85vw;
     height: 85vh;
-    padding-top:55px;
+    padding-top: 55px;
     margin: 0 auto;
 
     .row {
       height: 32.5%;
+      display: flex;
     }
 
     .image-wrapper {
-      // height: 150px;
       padding: 0;
+      position: relative;
+      transition: all 0.3s ease;
+
       img {
         width: 95%;
         height: 100%;
+        display: block;
+        transition: all 0.3s ease;
+      }
+
+      // Winning cell animation
+      &.winning-cell {
+        animation: highlight-cell 0.6s ease-in-out infinite;
+        z-index: 10;
+
+        img {
+          filter: brightness(1.3) saturate(1.5);
+          transform: scale(1.05);
+        }
+
+        // Overlay glow effect
+        .win-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 95%;
+          height: 100%;
+          pointer-events: none;
+          border: 3px solid transparent;
+          border-radius: 8px;
+          animation: 
+            glow-border 0.6s ease-in-out infinite,
+            pulse-overlay 0.6s ease-in-out infinite;
+        }
       }
     }
   }
 }
 
-// @media (max-width: 800px) {
-//   .slots-page-wrapper {
-//     transform: rotate(90deg);
-//     // width: 100vw;
-    
-//     .gameboard-wrapper {
-//       height: 80vw;
-//       width: 100vh;
-//     }
-//   }
-// }
+// Winning cell keyframes
+@keyframes highlight-cell {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes glow-border {
+  0%, 100% {
+    border-color: #0fd850;
+    box-shadow: 
+      0 0 10px 2px rgba(15, 216, 80, 0.8),
+      inset 0 0 10px 2px rgba(15, 216, 80, 0.5);
+  }
+  50% {
+    border-color: #f9f047;
+    box-shadow: 
+      0 0 20px 4px rgba(249, 240, 71, 0.9),
+      inset 0 0 15px 3px rgba(249, 240, 71, 0.6);
+  }
+}
+
+@keyframes pulse-overlay {
+  0%, 100% {
+    background-color: rgba(15, 216, 80, 0.2);
+  }
+  50% {
+    background-color: rgba(249, 240, 71, 0.3);
+  }
+}

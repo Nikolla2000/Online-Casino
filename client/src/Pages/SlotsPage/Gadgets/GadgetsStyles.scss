@@ -141,3 +141,252 @@
     }
   }
 }
+
+
+@font-face {
+  font-family: 'Digital Numbers Regular';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Digital Numbers Regular'), url('/fonts/DigitalNumbers-Regular.woff') format('woff');
+}
+
+// Keyframe animations
+@keyframes pulse-win {
+  0%, 100% {
+    transform: scale(1);
+    color: purple;
+  }
+  25% {
+    transform: scale(1.2);
+    color: #0fd850;
+  }
+  50% {
+    transform: scale(1.1);
+    color: #f9f047;
+  }
+  75% {
+    transform: scale(1.15);
+    color: #0fd850;
+  }
+}
+
+@keyframes glow-green {
+  0%, 100% {
+    text-shadow: 
+      0 0 5px #0fd850,
+      0 0 10px #0fd850,
+      0 0 20px #0fd850;
+  }
+  50% {
+    text-shadow: 
+      0 0 10px #0fd850,
+      0 0 20px #0fd850,
+      0 0 30px #0fd850,
+      0 0 40px #0fd850;
+  }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+@keyframes highlight-line {
+  0%, 100% {
+    box-shadow: 
+      0 0 10px 2px rgba(15, 216, 80, 0.8),
+      inset 0 0 10px 2px rgba(15, 216, 80, 0.5);
+    border-color: #0fd850;
+  }
+  50% {
+    box-shadow: 
+      0 0 20px 4px rgba(249, 240, 71, 0.9),
+      inset 0 0 15px 3px rgba(249, 240, 71, 0.6);
+    border-color: #f9f047;
+  }
+}
+
+.gadgets-bar {
+  background: linear-gradient(181deg, rgb(2, 0, 97) 15%, rgb(97, 149, 219) 158.5%);
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 20px 0;
+
+  .spin-btn {
+    button {
+      background: linear-gradient(to top, #0fd850 0%, #f9f047 100%);
+      color: #fff;
+      font-weight: bold;
+      padding: 15px 50px;
+      font-size: 1.5em;
+      border-radius: 30px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      box-shadow: 0px 2px 15px 4px rgba(0, 0, 0, 0.75);
+      transition: transform 0.2s, box-shadow 0.2s;
+
+      &:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0px 4px 20px 6px rgba(15, 216, 80, 0.6);
+      }
+
+      &:active:not(:disabled) {
+        transform: translateY(0);
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  .total-credits-wrapper {
+    box-shadow: 0px 2px 15px 4px rgba(0, 0, 0, 0.75);
+    border: 2px solid blue;
+    padding: 5px 20px;
+    text-align: center;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+
+    .credits-value {
+      font-family: 'Digital Numbers Regular';
+      font-size: 1.5em;
+      color: purple;
+      transition: all 0.3s ease;
+
+      // Winning animation
+      &.winning {
+        animation: 
+          pulse-win 0.6s ease-in-out infinite,
+          glow-green 0.6s ease-in-out infinite;
+        font-weight: bold;
+      }
+    }
+
+    // Wrapper glow when winning
+    &:has(.winning) {
+      border-color: #0fd850;
+      box-shadow: 
+        0px 2px 15px 4px rgba(0, 0, 0, 0.75),
+        0 0 20px 5px rgba(15, 216, 80, 0.6);
+      animation: shake 0.5s ease-in-out;
+    }
+  }
+
+  .sound-btn {
+    height: 52px;
+    border-radius: 50px;
+    padding: 10px;
+    box-shadow: 0px 2px 15px 4px rgba(0, 0, 0, 0.75);
+    cursor: pointer;
+
+    svg {
+      font-size: 1.5em;
+    }
+  }
+
+  .double-btn {
+    background: linear-gradient(to top, #0fd850 0%, #f9f047 100%);
+    height: 30px;
+    text-align: center;
+    padding: 5px 30px;
+    border-radius: 20px;
+    box-shadow: 0px 2px 15px 4px rgba(0, 0, 0, 0.75);
+    display: flex;
+    align-items: center;
+  }
+
+  .card-color-wrapper {
+    display: flex;
+    gap: 2px;
+    border-radius: 20px;
+    box-shadow: 0px 2px 15px 4px rgba(0, 0, 0, 0.75);
+
+    .heart-symbol, .spade-symbol {
+      cursor: pointer;
+      border: 2px solid black;
+      padding: 5px 20px;
+      
+      img {
+        width: 40px;
+      }
+    }
+
+    .heart-symbol {
+      border-radius: 20px 0 0 20px;
+      background: radial-gradient(849px at 0.9% 2.8%, rgb(255, 157, 255) 0%, rgb(255, 102, 142) 43.4%, rgb(255, 31, 56) 83.1%);
+
+      &:hover {
+        background: radial-gradient(422px at -10.3% 110.7%, rgb(219, 76, 180) 9.5%, rgb(231, 119, 209) 50.8%, rgb(255, 180, 241) 88.5%);
+      }
+    }
+
+    .spade-symbol {
+      border-radius: 0 20px 20px 0;
+      background: linear-gradient(-225deg, #5D9FFF 0%, #B8DCFF 48%, #6BBBFF 100%);
+
+      &:hover {
+        background: linear-gradient(89deg, rgb(21, 74, 189) 0.1%, rgb(26, 138, 211) 51.5%, rgb(72, 177, 234) 100.2%);
+      }
+    }
+
+    img {
+      width: 50px;
+    }
+  }
+
+  .max-bets-btn {
+    border: 2px solid black;
+    box-shadow: 0px 2px 15px 4px rgba(0, 0, 0, 0.75);
+    border-radius: 30px;
+    font-weight: bold;
+    height: 30px;
+    padding: 5px 30px;
+    display: flex;
+    align-items: center;
+    background: blue;
+  }
+
+  .bets-wrapper {
+    box-shadow: 0px 2px 15px 4px rgba(0, 0, 0, 0.75);
+    border-radius: 20px;
+
+    .plus, .minus {
+      background-color: blue;
+      font-size: 2.2em;
+      border: 2px solid black;
+      padding: 4px 20px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover {
+        background-color: rgb(30, 30, 255);
+        transform: scale(1.05);
+      }
+
+      &:active {
+        transform: scale(0.95);
+      }
+    }
+
+    .plus {
+      border-radius: 0 20px 20px 0;
+    }
+
+    .minus {
+      border-radius: 20px 0 0 20px;
+    }
+
+    .bet-value {
+      font-family: 'Digital Numbers Regular';
+      font-size: 1.5em;
+      color: purple;
+      width: 76px;
+      text-align: center;
+    }
+  }
+}

@@ -2,13 +2,13 @@ import React, { useContext, useEffect, useRef } from 'react';
 import './GadgetsStyles.scss'
 import { useDispatch, useSelector } from 'react-redux';
 import { UserContext } from "../../../../context/userContext"
-import { startSpinning, stopSpinning, toggleAutoPlay, spendCredits, setSlots, updateCredits } from '../../../redux/features/slots/slotMachineSlice';
+import { startSpinning, stopSpinning, toggleAutoPlay, spendCredits, setSlots, updateCredits, setWinningLines, setIsWinning } from '../../../redux/features/slots/slotMachineSlice';
 import axios from '../../../axiosConfig'
 import { Switch } from '@mui/material';
 import { FormLabel } from 'react-bootstrap';
 import { toast } from 'react-hot-toast'
 import { slotsAPI } from '../../../services/api/slotsAPI';
-import { generateRandomSlots } from '../../../utils/slotsUtils';
+import { animateCreditsIncrement, generateRandomSlots } from '../../../utils/slotsUtils';
 
 const SpinButton = () => {
   const dispatch = useDispatch()
@@ -46,27 +46,23 @@ const SpinButton = () => {
         clearInterval(spinInterval);
         dispatch(stopSpinning());
         dispatch(setSlots(res.data.reels));
+        dispatch(setWinningLines(res.data.winningLines || []));
 
         if(res.data.isWin) {
           console.log("WIN");
+          dispatch(setIsWinning(true));
           setTimeout(() => {
-            // const incrementInterval = setInterval(() => {
-            //   console.log('interval count');
-            //   if (totalCredits >= res.data.balanceAfter) {
-            //     dispatch(updateCredits(res.data.balanceAfter));
-            //     clearInterval(incrementInterval);
-            //   }
-            //   else if (totalCredits < res.data.balanceAfter) {
-            //     dispatch(updateCredits(totalCredits + 50));
-            //   }
-            // }, 200)
+
             animateCreditsIncrement(
               res.data.balanceBefore - bet, 
               res.data.balanceAfter, 
               dispatch
             );
-
           }, 1000)
+
+          setTimeout(() => {
+            dispatch(setIsWinning(false));
+          }, 4000);
         } else {
           dispatch(updateCredits(res.data.balanceAfter));
         }

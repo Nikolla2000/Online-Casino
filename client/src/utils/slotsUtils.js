@@ -1,3 +1,5 @@
+import { updateCredits } from "../redux/features/slots/slotMachineSlice";
+
 /**
  * Function that generates a pseudo-random slots board and is used when simulatiing slots spinning.
  * Each cell is replaced with a random integer from 1 to 12.
@@ -21,7 +23,6 @@ export const generateRandomSlots = (slotsArray) => {
 export const animateCreditsIncrement = (startValue, endValue, dispatch, duration=2000) => {
     const startTime = Date.now();
     const difference = endValue - startValue;
-    const step = difference - (duration / 50);
 
     const interval = setInterval(() => {
       const elapsed = Date.now() - startTime;

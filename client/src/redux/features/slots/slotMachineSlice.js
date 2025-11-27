@@ -13,7 +13,9 @@ const initialState = {
   winType: null,
   autoPlay: false,
   bet: 100,
-  totalCredits: null
+  totalCredits: null,
+  isWinning: false,
+  winningLines: [],
 }
 
 export const updateCreditsOnServer = createAsyncThunk(
@@ -107,7 +109,14 @@ export const slotMachineSlice = createSlice({
     },
     setSlots(state, action) {
       state.slots = action.payload;
-    }
+    },
+    setIsWinning: (state, action) => {
+      state.isWinning = action.payload;
+    },
+    
+    setWinningLines: (state, action) => {
+      state.winningLines = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -132,6 +141,8 @@ export const {startSpinning,
               fiveColsWin,
               doubleBet,
               setSlots,
+              setIsWinning, 
+              setWinningLines,
             } = slotMachineSlice.actions;
 
 export default slotMachineSlice.reducer
