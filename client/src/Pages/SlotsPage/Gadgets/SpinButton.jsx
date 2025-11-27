@@ -46,7 +46,30 @@ const SpinButton = () => {
         clearInterval(spinInterval);
         dispatch(stopSpinning());
         dispatch(setSlots(res.data.reels));
-        dispatch(updateCredits(res.data.balanceAfter));
+
+        if(res.data.isWin) {
+          console.log("WIN");
+          setTimeout(() => {
+            // const incrementInterval = setInterval(() => {
+            //   console.log('interval count');
+            //   if (totalCredits >= res.data.balanceAfter) {
+            //     dispatch(updateCredits(res.data.balanceAfter));
+            //     clearInterval(incrementInterval);
+            //   }
+            //   else if (totalCredits < res.data.balanceAfter) {
+            //     dispatch(updateCredits(totalCredits + 50));
+            //   }
+            // }, 200)
+            animateCreditsIncrement(
+              res.data.balanceBefore - bet, 
+              res.data.balanceAfter, 
+              dispatch
+            );
+
+          }, 1000)
+        } else {
+          dispatch(updateCredits(res.data.balanceAfter));
+        }
       }, 2000)
 
     } catch (err) {
@@ -57,6 +80,7 @@ const SpinButton = () => {
     //   dispatch(stopSpinning());
     // }
   }
+
 
   // const handleSpin = async () => {
   //   if (isSpinning) {
