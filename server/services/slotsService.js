@@ -153,8 +153,8 @@ class SlotsService {
       rows.push(cols);
     }
 
-    // return rows;
-    return [[10,10,10,1,2],[8,8,8,4,2],[1,2,3,4,5]];
+    return rows;
+    // return [[10,10,10,1,2],[8,8,8,4,2],[1,2,3,4,5]];
   }
 
   /** Calculate win amount and identify winning linies
@@ -275,18 +275,18 @@ class SlotsService {
   getMultiplier(symbol, matchCount) {
     // Symbol values (higher symbols = better payout)
     const symbolValues = {
-      12: { 5: 100, 4: 20, 3: 5 },   // Diamond (highest)
-      11: { 5: 80, 4: 15, 3: 4 },    // Seven
-      10: { 5: 60, 4: 12, 3: 3 },    // Star
-      9: { 5: 40, 4: 10, 3: 2.5 },   // Bell
-      8: { 5: 30, 4: 8, 3: 2 },      // Watermelon
-      7: { 5: 25, 4: 6, 3: 1.5 },    // Grapes
-      6: { 5: 20, 4: 5, 3: 1.2 },    // Orange
-      5: { 5: 15, 4: 4, 3: 1 },      // Lemon
-      4: { 5: 12, 4: 3, 3: 0.8 },    // Cherry
-      3: { 5: 10, 4: 2.5, 3: 0.6 },  // Plum
-      2: { 5: 8, 4: 2, 3: 0.5 },     // Ace
-      1: { 5: 5, 4: 1.5, 3: 0.3 }    // King (lowest)
+      12: { 5: 100, 4: 20, 3: 5, 2: 1.5 },   // Diamond (highest)
+      11: { 5: 80, 4: 15, 3: 4, 2: 1.2 },    // Seven
+      10: { 5: 60, 4: 12, 3: 3, 2: 1 },      // Star
+      9: { 5: 40, 4: 10, 3: 2.5, 2: 0.8 },   // Bell
+      8: { 5: 30, 4: 8, 3: 2, 2: 0.6 },      // Watermelon
+      7: { 5: 25, 4: 6, 3: 1.5, 2: 0.5 },    // Grapes
+      6: { 5: 20, 4: 5, 3: 1.2, 2: 0.4 },    // Orange
+      5: { 5: 15, 4: 4, 3: 1, 2: 0.3 },      // Lemon
+      4: { 5: 12, 4: 3, 3: 0.8, 2: 0.25 },   // Cherry
+      3: { 5: 10, 4: 2.5, 3: 0.6, 2: 0.2 },  // Plum
+      2: { 5: 8, 4: 2, 3: 0.5, 2: 0.15 },    // Ace
+      1: { 5: 5, 4: 1.5, 3: 0.3, 2: 0.1 }    // King (lowest)
     };
 
     // Get multiplier for this symbol and match count
@@ -295,6 +295,7 @@ class SlotsService {
     if (matchCount >= 5) return symbolPayouts[5] || 0;
     if (matchCount >= 4) return symbolPayouts[4] || 0;
     if (matchCount >= 3) return symbolPayouts[3] || 0;
+    if (matchCount >= 2) return symbolPayouts[2] || 0;
     
     return 0; // No win
   }
