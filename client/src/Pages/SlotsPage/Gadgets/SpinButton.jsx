@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef } from 'react';
 import './GadgetsStyles.scss'
 import { useDispatch, useSelector } from 'react-redux';
 import { UserContext } from "../../../../context/userContext"
-import { startSpinning, stopSpinning, toggleAutoPlay, spendCredits, setSlots, updateCredits, setWinningLines, setIsWinning } from '../../../redux/features/slots/slotMachineSlice';
+import { startSpinning, stopSpinning, toggleAutoPlay, spendCredits, setSlots, updateCredits, setWinningLines, setIsWinning, setLastWinAmount } from '../../../redux/features/slots/slotMachineSlice';
 import axios from '../../../axiosConfig'
 import { Switch } from '@mui/material';
 import { FormLabel } from 'react-bootstrap';
@@ -52,6 +52,9 @@ const SpinButton = () => {
         if(res.data.isWin) {
           console.log("WIN");
           dispatch(setIsWinning(true));
+
+          dispatch(setLastWinAmount(res.data.winAmount));
+
           setTimeout(() => {
 
             animateCreditsIncrement(

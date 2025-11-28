@@ -148,3 +148,129 @@ $primary-green: #0fd850;
     }
   }
 }
+
+
+.coin-rain-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.coin {
+  position: absolute;
+  top: -100px;
+  animation: fall linear forwards, swing ease-in-out infinite;
+  transform-style: preserve-3d;
+  filter: drop-shadow(0 5px 15px rgba(255, 215, 0, 0.6));
+
+  .coin-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    animation: spin 1s linear infinite;
+  }
+
+  .coin-front,
+  .coin-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5em;
+    font-weight: bold;
+    backface-visibility: hidden;
+    background: radial-gradient(circle at 30% 30%, 
+      #ffd700 0%, 
+      #ffed4e 40%, 
+      #ffa500 80%,
+      #ff8c00 100%
+    );
+    border: 3px solid #ff8c00;
+    box-shadow: 
+      inset 0 2px 5px rgba(255, 255, 255, 0.6),
+      inset 0 -2px 5px rgba(0, 0, 0, 0.3),
+      0 0 20px rgba(255, 215, 0, 0.8);
+    color: #8b4513;
+    text-shadow: 
+      0 1px 2px rgba(255, 255, 255, 0.5),
+      0 -1px 2px rgba(0, 0, 0, 0.5);
+  }
+
+  .coin-back {
+    transform: rotateY(180deg);
+  }
+}
+
+@keyframes fall {
+  from {
+    top: -100px;
+  }
+  to {
+    top: 110vh;
+  }
+}
+
+@keyframes swing {
+  0%, 100% {
+    transform: translateX(0) rotate(var(--rotation));
+  }
+  25% {
+    transform: translateX(calc(var(--swing-direction) * 30px)) rotate(calc(var(--rotation) + 90deg));
+  }
+  50% {
+    transform: translateX(0) rotate(calc(var(--rotation) + 180deg));
+  }
+  75% {
+    transform: translateX(calc(var(--swing-direction) * -30px)) rotate(calc(var(--rotation) + 270deg));
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
+}
+
+.big-win-text {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 5em;
+  font-weight: 900;
+  color: #ffd700;
+  text-shadow: 
+    0 0 20px rgba(255, 215, 0, 0.8),
+    0 0 40px rgba(255, 215, 0, 0.6),
+    0 5px 10px rgba(0, 0, 0, 0.5);
+  animation: big-win-pulse 0.5s ease-in-out infinite;
+  text-align: center;
+  z-index: 10000;
+
+  .win-amount {
+    font-size: 0.6em;
+    margin-top: 10px;
+    color: #fff;
+  }
+}
+
+@keyframes big-win-pulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}

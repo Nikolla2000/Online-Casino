@@ -17,6 +17,7 @@ const initialState = {
   isWinning: false,
   winningLines: [],
   soundOn: true,
+  lastWinAmount: 0,
 }
 
 export const updateCreditsOnServer = createAsyncThunk(
@@ -114,13 +115,15 @@ export const slotMachineSlice = createSlice({
     setIsWinning: (state, action) => {
       state.isWinning = action.payload;
     },
-    
     setWinningLines: (state, action) => {
       state.winningLines = action.payload;
     },
     toggleSound: (state) => {
       state.soundOn = !state.soundOn;
     },
+    setLastWinAmount: (state, action) => {
+      state.lastWinAmount = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -148,6 +151,7 @@ export const {startSpinning,
               setIsWinning, 
               setWinningLines,
               toggleSound,
+              setLastWinAmount,
             } = slotMachineSlice.actions;
 
 export default slotMachineSlice.reducer
