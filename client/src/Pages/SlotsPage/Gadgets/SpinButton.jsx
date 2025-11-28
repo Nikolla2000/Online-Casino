@@ -2,8 +2,7 @@ import React, { useContext, useEffect, useRef } from 'react';
 import './GadgetsStyles.scss'
 import { useDispatch, useSelector } from 'react-redux';
 import { UserContext } from "../../../../context/userContext"
-import { startSpinning, stopSpinning, toggleAutoPlay, spendCredits, setSlots, updateCredits, setWinningLines, setIsWinning, setLastWinAmount } from '../../../redux/features/slots/slotMachineSlice';
-import axios from '../../../axiosConfig'
+import { startSpinning, stopSpinning, toggleAutoPlay, setSlots, updateCredits, setWinningLines, setIsWinning, setLastWinAmount } from '../../../redux/features/slots/slotMachineSlice';
 import { Switch } from '@mui/material';
 import { FormLabel } from 'react-bootstrap';
 import { toast } from 'react-hot-toast'
@@ -80,37 +79,6 @@ const SpinButton = () => {
     //   dispatch(stopSpinning());
     // }
   }
-
-
-  // const handleSpin = async () => {
-  //   if (isSpinning) {
-  //     return;
-  //   }
-  //   if (totalCredits < betsValue) {
-  //     const audio = new Audio('/sounds/error-sound.mp3');
-  //     audio.play();
-  //     toast.error('Not Enough Credits');
-  //     return;
-  //   }
-  
-  //   dispatch(startSpinning());
-  
-  //   try {
-  //     await axios.get('/slots/spin');
-  //     dispatch(spendCredits());
-
-  //     await axios.put('/user/updateCredits', { userId: user.id, totalCredits: totalCredits - betsValue })
-  //       .then(response => {
-  //         // console.log('Update Credits Response:', response);
-  //       })
-  //       .catch(error => {
-  //         console.error('Error updating credits:', error);
-  //       });
-  //   } catch (error) {
-  //     console.error('Error spinning the slots:', error);
-  //     dispatch(stopSpinning([]));
-  //   }
-  // };
   
 
   const toggle = () => {
