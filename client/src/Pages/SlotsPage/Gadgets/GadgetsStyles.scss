@@ -3,261 +3,252 @@
   font-style: normal;
   font-weight: normal;
   src: local('Digital Numbers Regular'), url('/fonts/DigitalNumbers-Regular.woff') format('woff');
-  }
-
-.gadgets-bar {
-  background: linear-gradient(181deg, rgb(2, 0, 97) 15%, rgb(97, 149, 219) 158.5%);
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  padding: 20px 0;
-
-  .spin-btn {
-    button {
-      background: linear-gradient(to top, #0fd850 0%, #f9f047 100%);
-      color:#fff;
-      font-weight: bold;
-      padding: 15px 50px;
-      font-size: 1.5em;
-      border-radius: 30px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      box-shadow: 0px 2px 15px 4px rgba(0,0,0,0.75);
-    }
-  }
-
-  .total-credits-wrapper {
-    box-shadow: 0px 2px 15px 4px rgba(0,0,0,0.75);
-    border:2px solid blue;
-    padding: 5px 20px;
-    text-align: center;
-    border-radius: 20px;
-
-    .credits-value {
-      font-family: 'Digital Numbers Regular';
-      font-size: 1.5em;
-      color: purple;
-    }
-  }
-
-  .sound-btn {
-    height: 52px;
-    border-radius: 50px;
-    padding: 10px;
-    box-shadow: 0px 2px 15px 4px rgba(0,0,0,0.75);
-    cursor: pointer;
-
-    svg {
-      font-size: 1.5em;
-    }
-  }
-  .double-btn {
-    background: linear-gradient(to top, #0fd850 0%, #f9f047 100%);
-    height: 30px;
-    text-align: center;
-    padding: 5px 30px;
-    border-radius: 20px;
-    box-shadow: 0px 2px 15px 4px rgba(0,0,0,0.75);
-    display: flex;
-    align-items: center;
-
-
-  }
-
-  .card-color-wrapper {
-    display: flex;
-    gap:2px;
-    border-radius: 20px;
-    box-shadow: 0px 2px 15px 4px rgba(0,0,0,0.75);
-
-
-    .heart-symbol, .spade-symbol {
-      cursor: pointer;
-      border: 2px solid black;
-      padding: 5px 20px;
-      
-      img {
-        width: 40px;
-      }
-    }
-    .heart-symbol {
-      border-radius: 20px 0 0 20px;
-      background: radial-gradient(849px at 0.9% 2.8%, rgb(255, 157, 255) 0%, rgb(255, 102, 142) 43.4%, rgb(255, 31, 56) 83.1%);
-
-      &:hover {
-        background: radial-gradient(422px at -10.3% 110.7%, rgb(219, 76, 180) 9.5%, rgb(231, 119, 209) 50.8%, rgb(255, 180, 241) 88.5%);
-      }
-    }
-    .spade-symbol {
-      border-radius: 0 20px 20px 0;
-      background: linear-gradient(-225deg, #5D9FFF 0%, #B8DCFF 48%, #6BBBFF 100%);
-
-      &:hover {
-        background: linear-gradient(89deg, rgb(21, 74, 189) 0.1%, rgb(26, 138, 211) 51.5%, rgb(72, 177, 234) 100.2%);
-      }
-    }
-    img {
-      width: 50px;
-    }
-  }
-
-  .max-bets-btn {
-    border: 2px solid black;
-    box-shadow: 0px 2px 15px 4px rgba(0,0,0,0.75);
-    border-radius: 30px;
-    font-weight: bold;
-    height: 30px;
-    padding: 5px 30px;
-    display: flex;
-    align-items: center;
-    background: blue;
-  }
-
-  .bets-wrapper {
-    box-shadow: 0px 2px 15px 4px rgba(0,0,0,0.75);
-    border-radius: 20px;
-    .plus, .minus {
-      background-color: blue;
-      font-size: 2.2em;
-      border:2px solid black;
-      padding: 4px 20px;
-      font-weight: bold;
-    }
-
-    .plus {
-      border-radius: 0 20px 20px 0;
-    }
-    .minus {
-      border-radius: 20px 0 0 20px;
-    }
-
-    .bet-value {
-      font-family: 'Digital Numbers Regular';
-      font-size: 1.5em;
-      color: purple;
-      width: 76px;
-      text-align: center;
-
-    }
-  }
 }
 
+$primary-gold: #FFD700;
+$primary-green: #0fd850;
+$primary-yellow: #f9f047;
+$primary-blue: #5D9FFF;
+$dark-bg: #0a0e27;
+$dark-card: #1a1f3a;
+$accent-purple: #9D4EDD;
+$text-light: #ffffff;
+$text-dim: #b8c1ec;
 
-@font-face {
-  font-family: 'Digital Numbers Regular';
-  font-style: normal;
-  font-weight: normal;
-  src: local('Digital Numbers Regular'), url('/fonts/DigitalNumbers-Regular.woff') format('woff');
-}
-
-// Keyframe animations
 @keyframes pulse-win {
   0%, 100% {
     transform: scale(1);
-    color: purple;
+    color: $accent-purple;
+    filter: brightness(1);
   }
   25% {
-    transform: scale(1.2);
-    color: #0fd850;
+    transform: scale(1.15);
+    color: $primary-green;
+    filter: brightness(1.3);
   }
   50% {
     transform: scale(1.1);
-    color: #f9f047;
+    color: $primary-yellow;
+    filter: brightness(1.5);
   }
   75% {
     transform: scale(1.15);
-    color: #0fd850;
+    color: $primary-green;
+    filter: brightness(1.3);
   }
 }
 
 @keyframes glow-green {
   0%, 100% {
     text-shadow: 
-      0 0 5px #0fd850,
-      0 0 10px #0fd850,
-      0 0 20px #0fd850;
+      0 0 10px rgba(15, 216, 80, 0.6),
+      0 0 20px rgba(15, 216, 80, 0.4),
+      0 0 30px rgba(15, 216, 80, 0.2);
   }
   50% {
     text-shadow: 
-      0 0 10px #0fd850,
-      0 0 20px #0fd850,
-      0 0 30px #0fd850,
-      0 0 40px #0fd850;
+      0 0 20px rgba(15, 216, 80, 0.9),
+      0 0 30px rgba(15, 216, 80, 0.6),
+      0 0 40px rgba(15, 216, 80, 0.4),
+      0 0 50px rgba(249, 240, 71, 0.3);
   }
 }
 
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-  20%, 40%, 60%, 80% { transform: translateX(5px); }
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-3px) rotate(-1deg); }
+  20%, 40%, 60%, 80% { transform: translateX(3px) rotate(1deg); }
 }
 
-@keyframes highlight-line {
+@keyframes glow-border {
   0%, 100% {
     box-shadow: 
-      0 0 10px 2px rgba(15, 216, 80, 0.8),
-      inset 0 0 10px 2px rgba(15, 216, 80, 0.5);
-    border-color: #0fd850;
+      0 0 15px rgba(15, 216, 80, 0.4),
+      0 0 30px rgba(15, 216, 80, 0.2),
+      inset 0 0 15px rgba(15, 216, 80, 0.1);
   }
   50% {
     box-shadow: 
-      0 0 20px 4px rgba(249, 240, 71, 0.9),
-      inset 0 0 15px 3px rgba(249, 240, 71, 0.6);
-    border-color: #f9f047;
+      0 0 25px rgba(249, 240, 71, 0.6),
+      0 0 40px rgba(249, 240, 71, 0.3),
+      inset 0 0 20px rgba(249, 240, 71, 0.2);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
   }
 }
 
 .gadgets-bar {
-  background: linear-gradient(181deg, rgb(2, 0, 97) 15%, rgb(97, 149, 219) 158.5%);
+  background: linear-gradient(135deg, 
+    rgba(10, 14, 39, 0.95) 0%, 
+    rgba(26, 31, 58, 0.95) 50%,
+    rgba(10, 14, 39, 0.95) 100%
+  );
+  backdrop-filter: blur(10px);
+  border-top: 2px solid rgba(93, 159, 255, 0.3);
+  box-shadow: 
+    0 -5px 30px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  padding: 20px 0;
+  padding: 25px 20px;
+  gap: 15px;
+  position: relative;
+  overflow: hidden;
 
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(93, 159, 255, 0.05),
+      transparent
+    );
+    animation: shimmer 3s infinite;
+  }
+
+  // Spin Button
   .spin-btn {
+    position: relative;
+    z-index: 2;
+
     button {
-      background: linear-gradient(to top, #0fd850 0%, #f9f047 100%);
-      color: #fff;
-      font-weight: bold;
-      padding: 15px 50px;
-      font-size: 1.5em;
-      border-radius: 30px;
-      letter-spacing: 1.5px;
+      background: linear-gradient(135deg, $primary-green 0%, $primary-yellow 100%);
+      color: $dark-bg;
+      font-weight: 900;
+      padding: 18px 60px;
+      font-size: 1.6em;
+      border: none;
+      border-radius: 50px;
+      letter-spacing: 2px;
       text-transform: uppercase;
-      box-shadow: 0px 2px 15px 4px rgba(0, 0, 0, 0.75);
-      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 
+        0 8px 25px rgba(15, 216, 80, 0.4),
+        0 3px 10px rgba(0, 0, 0, 0.3),
+        inset 0 -2px 5px rgba(0, 0, 0, 0.2),
+        inset 0 2px 5px rgba(255, 255, 255, 0.3);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+
+      // Shine effect
+      &::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+          45deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        transform: rotate(45deg);
+        transition: all 0.5s;
+      }
 
       &:hover:not(:disabled) {
-        transform: translateY(-2px);
-        box-shadow: 0px 4px 20px 6px rgba(15, 216, 80, 0.6);
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 
+          0 12px 35px rgba(15, 216, 80, 0.6),
+          0 5px 15px rgba(0, 0, 0, 0.3),
+          inset 0 -2px 5px rgba(0, 0, 0, 0.2),
+          inset 0 2px 5px rgba(255, 255, 255, 0.4);
+
+        &::before {
+          left: 100%;
+        }
       }
 
       &:active:not(:disabled) {
-        transform: translateY(0);
+        transform: translateY(0) scale(0.98);
+        box-shadow: 
+          0 5px 15px rgba(15, 216, 80, 0.4),
+          inset 0 2px 5px rgba(0, 0, 0, 0.3);
       }
 
       &:disabled {
         opacity: 0.6;
         cursor: not-allowed;
+        filter: grayscale(0.5);
+        animation: none;
       }
     }
   }
 
+  // Total Credits
   .total-credits-wrapper {
-    box-shadow: 0px 2px 15px 4px rgba(0, 0, 0, 0.75);
-    border: 2px solid blue;
-    padding: 5px 20px;
+    background: linear-gradient(135deg, $dark-card 0%, lighten($dark-card, 5%) 100%);
+    border: 2px solid rgba(93, 159, 255, 0.4);
+    box-shadow: 
+      0 8px 25px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.5);
+    padding: 12px 30px;
     text-align: center;
     border-radius: 20px;
+    position: relative;
+    overflow: hidden;
     transition: all 0.3s ease;
+    min-width: 200px;
+
+    // Subtle gradient overlay
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 50%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, transparent 100%);
+      pointer-events: none;
+    }
+
+    p:first-child {
+      color: $text-dim;
+      text-transform: uppercase;
+      font-size: 0.75em;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      margin: 0 0 5px 0;
+    }
 
     .credits-value {
-      font-family: 'Digital Numbers Regular';
-      font-size: 1.5em;
-      color: purple;
+      font-family: 'Digital Numbers Regular', monospace;
+      font-size: 2em;
+      color: $accent-purple;
+      margin: 0;
       transition: all 0.3s ease;
+      text-shadow: 
+        0 0 10px rgba(157, 78, 221, 0.5),
+        0 2px 4px rgba(0, 0, 0, 0.5);
+      position: relative;
+      z-index: 1;
 
-      // Winning animation
+      span {
+        font-family: inherit;
+      }
+
       &.winning {
         animation: 
           pulse-win 0.6s ease-in-out infinite,
@@ -266,127 +257,356 @@
       }
     }
 
-    // Wrapper glow when winning
     &:has(.winning) {
-      border-color: #0fd850;
-      box-shadow: 
-        0px 2px 15px 4px rgba(0, 0, 0, 0.75),
-        0 0 20px 5px rgba(15, 216, 80, 0.6);
-      animation: shake 0.5s ease-in-out;
+      border-color: $primary-green;
+      animation: 
+        shake 0.5s ease-in-out,
+        glow-border 0.6s ease-in-out infinite;
+      background: linear-gradient(135deg, 
+        lighten($dark-card, 8%) 0%, 
+        lighten($dark-card, 12%) 100%
+      );
     }
   }
 
-  .sound-btn {
-    height: 52px;
-    border-radius: 50px;
-    padding: 10px;
-    box-shadow: 0px 2px 15px 4px rgba(0, 0, 0, 0.75);
-    cursor: pointer;
-
-    svg {
-      font-size: 1.5em;
-    }
-  }
-
-  .double-btn {
-    background: linear-gradient(to top, #0fd850 0%, #f9f047 100%);
-    height: 30px;
-    text-align: center;
-    padding: 5px 30px;
-    border-radius: 20px;
-    box-shadow: 0px 2px 15px 4px rgba(0, 0, 0, 0.75);
-    display: flex;
-    align-items: center;
-  }
-
-  .card-color-wrapper {
-    display: flex;
-    gap: 2px;
-    border-radius: 20px;
-    box-shadow: 0px 2px 15px 4px rgba(0, 0, 0, 0.75);
-
-    .heart-symbol, .spade-symbol {
-      cursor: pointer;
-      border: 2px solid black;
-      padding: 5px 20px;
-      
-      img {
-        width: 40px;
-      }
-    }
-
-    .heart-symbol {
-      border-radius: 20px 0 0 20px;
-      background: radial-gradient(849px at 0.9% 2.8%, rgb(255, 157, 255) 0%, rgb(255, 102, 142) 43.4%, rgb(255, 31, 56) 83.1%);
-
-      &:hover {
-        background: radial-gradient(422px at -10.3% 110.7%, rgb(219, 76, 180) 9.5%, rgb(231, 119, 209) 50.8%, rgb(255, 180, 241) 88.5%);
-      }
-    }
-
-    .spade-symbol {
-      border-radius: 0 20px 20px 0;
-      background: linear-gradient(-225deg, #5D9FFF 0%, #B8DCFF 48%, #6BBBFF 100%);
-
-      &:hover {
-        background: linear-gradient(89deg, rgb(21, 74, 189) 0.1%, rgb(26, 138, 211) 51.5%, rgb(72, 177, 234) 100.2%);
-      }
-    }
-
-    img {
-      width: 50px;
-    }
-  }
-
-  .max-bets-btn {
-    border: 2px solid black;
-    box-shadow: 0px 2px 15px 4px rgba(0, 0, 0, 0.75);
-    border-radius: 30px;
-    font-weight: bold;
-    height: 30px;
-    padding: 5px 30px;
-    display: flex;
-    align-items: center;
-    background: blue;
-  }
-
+  // Bets Wrapper
   .bets-wrapper {
-    box-shadow: 0px 2px 15px 4px rgba(0, 0, 0, 0.75);
-    border-radius: 20px;
+    background: linear-gradient(135deg, $dark-card 0%, lighten($dark-card, 5%) 100%);
+    border: 2px solid rgba(93, 159, 255, 0.3);
+    box-shadow: 
+      0 5px 20px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
 
-    .plus, .minus {
-      background-color: blue;
-      font-size: 2.2em;
-      border: 2px solid black;
-      padding: 4px 20px;
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 50%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, transparent 100%);
+      pointer-events: none;
+    }
+
+    .minus, .plus {
+      background: linear-gradient(135deg, $primary-blue 0%, lighten($primary-blue, 10%) 100%);
+      color: white;
+      font-size: 2em;
       font-weight: bold;
+      border: none;
+      padding: 8px 25px;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.2s ease;
+      position: relative;
+      box-shadow: inset 0 -2px 5px rgba(0, 0, 0, 0.2);
 
       &:hover {
-        background-color: rgb(30, 30, 255);
-        transform: scale(1.05);
+        background: linear-gradient(135deg, lighten($primary-blue, 10%) 0%, lighten($primary-blue, 15%) 100%);
+        box-shadow: 
+          inset 0 -2px 5px rgba(0, 0, 0, 0.2),
+          0 0 15px rgba(93, 159, 255, 0.5);
       }
 
       &:active {
         transform: scale(0.95);
+        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3);
       }
     }
 
     .plus {
-      border-radius: 0 20px 20px 0;
+      border-radius: 0 25px 25px 0;
     }
 
     .minus {
-      border-radius: 20px 0 0 20px;
+      border-radius: 25px 0 0 25px;
     }
 
     .bet-value {
-      font-family: 'Digital Numbers Regular';
-      font-size: 1.5em;
-      color: purple;
-      width: 76px;
+      font-family: 'Digital Numbers Regular', monospace;
+      font-size: 1.6em;
+      color: $primary-yellow;
+      min-width: 100px;
       text-align: center;
+      padding: 0 15px;
+      text-shadow: 
+        0 0 10px rgba(249, 240, 71, 0.5),
+        0 2px 4px rgba(0, 0, 0, 0.5);
+      position: relative;
+
+      p:first-child {
+        font-size: 0.5em;
+        color: $text-dim;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin: 0 0 2px 0;
+        text-shadow: none;
+      }
+
+      p:last-child {
+        margin: 0;
+      }
+    }
+  }
+
+  .max-bets-btn {
+    background: linear-gradient(135deg, $accent-purple 0%, lighten($accent-purple, 10%) 100%);
+    color: white;
+    border: 2px solid rgba(157, 78, 221, 0.6);
+    box-shadow: 
+      0 5px 20px rgba(157, 78, 221, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      inset 0 -2px 5px rgba(0, 0, 0, 0.2);
+    border-radius: 30px;
+    font-weight: 800;
+    font-size: 0.95em;
+    padding: 12px 30px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        45deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+      );
+      transform: rotate(45deg);
+      transition: all 0.5s;
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 
+        0 8px 25px rgba(157, 78, 221, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+
+      &::before {
+        left: 100%;
+      }
+    }
+
+    &:active {
+      transform: translateY(0);
+      box-shadow: 
+        0 3px 10px rgba(157, 78, 221, 0.4),
+        inset 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  .double-btn {
+    background: linear-gradient(135deg, darken($primary-green, 10%) 0%, $primary-green 100%);
+    color: white;
+    border: 2px solid rgba(15, 216, 80, 0.6);
+    box-shadow: 
+      0 5px 20px rgba(15, 216, 80, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      inset 0 -2px 5px rgba(0, 0, 0, 0.2);
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-weight: 800;
+    font-size: 0.95em;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        45deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+      );
+      transform: rotate(45deg);
+      transition: all 0.5s;
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 
+        0 8px 25px rgba(15, 216, 80, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+
+      &::before {
+        left: 100%;
+      }
+    }
+
+    &:active {
+      transform: translateY(0);
+      box-shadow: 
+        0 3px 10px rgba(15, 216, 80, 0.4),
+        inset 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  .sound-btn {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, $dark-card 0%, lighten($dark-card, 8%) 100%);
+    border: 2px solid rgba(93, 159, 255, 0.3);
+    box-shadow: 
+      0 5px 20px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+      pointer-events: none;
+    }
+
+    svg {
+      font-size: 1.5em;
+      color: $primary-yellow;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+      transition: all 0.3s ease;
+    }
+
+    &:hover {
+      transform: translateY(-2px) scale(1.05);
+      border-color: rgba(93, 159, 255, 0.6);
+      box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.5),
+        0 0 20px rgba(249, 240, 71, 0.3);
+
+      svg {
+        color: lighten($primary-yellow, 10%);
+        transform: scale(1.1);
+      }
+    }
+
+    &:active {
+      transform: translateY(0) scale(1);
+      box-shadow: 
+        0 3px 10px rgba(0, 0, 0, 0.4),
+        inset 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  .card-color-wrapper {
+    display: flex;
+    gap: 0;
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+    border: 2px solid rgba(0, 0, 0, 0.3);
+
+    .heart-symbol, .spade-symbol {
+      cursor: pointer;
+      padding: 10px 25px;
+      transition: all 0.3s ease;
+      border: none;
+      position: relative;
+
+      img {
+        width: 40px;
+        height: 40px;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+        transition: transform 0.3s ease;
+      }
+
+      &:hover img {
+        transform: scale(1.1) rotate(5deg);
+      }
+    }
+
+    .heart-symbol {
+      background: radial-gradient(circle at 30% 30%, 
+        rgb(255, 157, 255) 0%, 
+        rgb(255, 102, 142) 50%, 
+        rgb(255, 31, 56) 100%
+      );
+
+      &:hover {
+        background: radial-gradient(circle at 30% 30%, 
+          lighten(rgb(255, 157, 255), 5%) 0%, 
+          lighten(rgb(255, 102, 142), 5%) 50%, 
+          lighten(rgb(255, 31, 56), 5%) 100%
+        );
+      }
+    }
+
+    .spade-symbol {
+      background: linear-gradient(135deg, 
+        #5D9FFF 0%, 
+        #B8DCFF 50%, 
+        #6BBBFF 100%
+      );
+
+      &:hover {
+        background: linear-gradient(135deg, 
+          lighten(#5D9FFF, 5%) 0%, 
+          lighten(#B8DCFF, 5%) 50%, 
+          lighten(#6BBBFF, 5%) 100%
+        );
+      }
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  .gadgets-bar {
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 20px 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .gadgets-bar {
+    .spin-btn button {
+      padding: 15px 40px;
+      font-size: 1.3em;
+    }
+
+    .total-credits-wrapper {
+      min-width: 150px;
+      padding: 10px 20px;
+
+      .credits-value {
+        font-size: 1.5em;
+      }
+    }
+
+    .bets-wrapper .bet-value {
+      min-width: 80px;
+      font-size: 1.4em;
     }
   }
 }
