@@ -269,7 +269,6 @@ $text-dim: #b8c1ec;
     }
   }
 
-  // Bets Wrapper
   .bets-wrapper {
     background: linear-gradient(135deg, $dark-card 0%, lighten($dark-card, 5%) 100%);
     border: 2px solid rgba(93, 159, 255, 0.3);
@@ -496,7 +495,37 @@ $text-dim: #b8c1ec;
       color: $primary-yellow;
       filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
       transition: all 0.3s ease;
+      z-index: 2;
     }
+
+    .mute-indicator {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2.5em;
+      font-weight: bold;
+      color: #ff4444;
+      text-shadow: 
+        0 0 10px rgba(255, 68, 68, 0.8),
+        0 2px 4px rgba(0, 0, 0, 0.8);
+      z-index: 3;
+      animation: pulse-mute 1s ease-in-out infinite;
+      pointer-events: none;
+    }
+  
+    &.muted {
+      border-color: rgba(255, 68, 68, 0.4);
+      background: linear-gradient(135deg, 
+        darken($dark-card, 5%) 0%, 
+        $dark-card 100%
+      );
+  
+      svg {
+        color: #999;
+        opacity: 0.5;
+      }
+    
 
     &:hover {
       transform: translateY(-2px) scale(1.05);
@@ -509,6 +538,13 @@ $text-dim: #b8c1ec;
         color: lighten($primary-yellow, 10%);
         transform: scale(1.1);
       }
+
+      &.muted {
+        border-color: rgba(255, 68, 68, 0.6);
+        box-shadow: 
+          0 8px 25px rgba(0, 0, 0, 0.5),
+          0 0 20px rgba(255, 68, 68, 0.3);
+      }
     }
 
     &:active {
@@ -517,6 +553,18 @@ $text-dim: #b8c1ec;
         0 3px 10px rgba(0, 0, 0, 0.4),
         inset 0 2px 5px rgba(0, 0, 0, 0.3);
     }
+  }
+
+  @keyframes pulse-mute {
+    0%, 100% {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 0.9;
+    }
+    50% {
+      transform: translate(-50%, -50%) scale(1.1);
+      opacity: 1;
+    }
+  }
   }
 
   .card-color-wrapper {

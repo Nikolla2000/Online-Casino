@@ -12,14 +12,15 @@ import { animateCreditsIncrement, generateRandomSlots } from '../../../utils/slo
 
 const SpinButton = () => {
   const dispatch = useDispatch()
-  const isSpinning = useSelector(state => state.slotMachine.isSpinning)
-  const autoPlay = useSelector(state => state.slotMachine.autoPlay)
-  const slots = useSelector(state => state.slotMachine.slots)
-  // const betsValue = useSelector(state => state.slotMachine.bet)
-  const totalCredits = useSelector(state => state.slotMachine.totalCredits)
-  const { user } = useContext(UserContext)
+  const { isSpinning, autoPlay, slots, totalCredits, bet, soundOn } = useSelector(state => state.slotMachine);
+  const { user } = useContext(UserContext);
 
-  const { bet } = useSelector(state => state.slotMachine);
+  const playSound = (soundFile) => {
+    if (soundOn) {
+      const audio = new Audio(soundFile);
+      audio.play();
+    }
+  };
 
   const handlePlaySlotsRound = async () => {
     if (isSpinning) return;

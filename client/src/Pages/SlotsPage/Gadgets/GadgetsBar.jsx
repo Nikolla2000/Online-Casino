@@ -7,11 +7,16 @@ import ChooseCardColor from './ChooseCardColor';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faVolumeHigh, faVolumeXmark } from '@fortawesome/free-solid-svg-icons';
 import TotalCredits from './TotalCredits';
-import { useDispatch } from 'react-redux';
-import { doubleBet, maxBet } from '../../../redux/features/slots/slotMachineSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { doubleBet, maxBet, toggleSound } from '../../../redux/features/slots/slotMachineSlice';
 
 const GadgetsBar = () => {
   const dispatch = useDispatch()
+  const { soundOn } = useSelector(state => state.slotMachine);
+
+  const handleToggleSound = () => {
+    dispatch(toggleSound());
+  }
   
   const maxBets = () => {
     dispatch(maxBet())
@@ -23,8 +28,12 @@ const GadgetsBar = () => {
 
   return (
     <div className='gadgets-bar flex flex-row'>
-      <div className='sound-btn border-2 border-white font-bold'>
-        <FontAwesomeIcon icon={faVolumeHigh} style={{color: "#ffffff",}} />
+      {/* <div className='sound-btn border-2 border-white font-bold'> */}
+      <div 
+        className={`sound-btn ${soundOn ? '' : 'muted'}`}
+        onClick={handleToggleSound}>
+        <FontAwesomeIcon icon={soundOn ? faVolumeHigh : faVolumeXmark} />
+        {/* {!soundOn && <div className="mute-indicator">✕</div>} */}
         {/* <FontAwesomeIcon icon={faVolumeXmark} style={{color: "#ffffff",}} /> */}
       </div>
       <div className='flex flex-col gap-2'>
