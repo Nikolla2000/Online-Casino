@@ -97,27 +97,27 @@ const SpinButton = () => {
   const autoSpinIntervalRef = useRef(null)
 
   //Auto Play Function
-  // useEffect(() => {
-  //   const startAutoSpin = () => {
-  //     autoSpinIntervalRef.current = setInterval(() => {
-  //       handleSpin();
-  //     }, 3000);
-  //   };
+  useEffect(() => {
+    const startAutoSpin = () => {
+      autoSpinIntervalRef.current = setInterval(() => {
+        handlePlaySlotsRound();
+      }, 1000);
+    };
 
-  //   const stopAutoSpin = () => {
-  //     clearInterval(autoSpinIntervalRef.current);
-  //   };
+    const stopAutoSpin = () => {
+      clearInterval(autoSpinIntervalRef.current);
+    };
 
-  //   if (autoPlay) {
-  //     startAutoSpin();
-  //   } else {
-  //     stopAutoSpin();
-  //   }
+    if (autoPlay) {
+      startAutoSpin();
+    } else {
+      stopAutoSpin();
+    }
 
-  //   return () => {
-  //     stopAutoSpin();
-  //   };
-  // }, [autoPlay, handleSpin]);
+    return () => {
+      stopAutoSpin();
+    };
+  }, [autoPlay, handlePlaySlotsRound]);
 
   return (
     <div className='spin-btn'>
