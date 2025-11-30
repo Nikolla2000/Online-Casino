@@ -6,15 +6,17 @@ const CoinRain = ({ isActive, winAmount }) => {
 
   useEffect(() => {
     if (isActive && winAmount > 0) {
-      const coinCount = Math.min(Math.floor(winAmount / 50), 30);
+      const baseCoinCount = 15;
+      const bonusCoins = Math.floor(winAmount / 20);
+      const coinCount = Math.min(baseCoinCount + bonusCoins, 50);
       const newCoins = [];
 
       for (let i = 0; i < coinCount; i++) {
         newCoins.push({
           id: i,
           left: Math.random() * 100,
-          delay: Math.random() * 0.5,
-          duration: 2 + Math.random() * 1,
+          delay: Math.random() * 1.5,
+          duration: 1.5 + Math.random() * 1,
           rotation: Math.random() * 360,
           size: 40 + Math.random() * 20,
           swingDirection: Math.random() > 0.5 ? 1 : -1
