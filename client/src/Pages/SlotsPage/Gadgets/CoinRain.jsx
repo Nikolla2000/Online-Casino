@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 const CoinRain = ({ isActive, winAmount }) => {
   const [coins, setCoins] = useState([]);
-  const isBigWin = winAmount > 1000;
+  const isBigWin = winAmount >= 500;
 
   useEffect(() => {
     if (isActive && winAmount > 0) {

@@ -14,9 +14,9 @@ const SpinButton = () => {
   const { isSpinning, autoPlay, slots, totalCredits, bet, soundOn } = useSelector(state => state.slotMachine);
   const { user } = useContext(UserContext);
 
-  const playSound = (soundFile) => {
+  const playSound = (soundFilePath) => {
     if (soundOn) {
-      const audio = new Audio(soundFile);
+      const audio = new Audio(soundFilePath);
       audio.play();
     }
   };
@@ -25,14 +25,16 @@ const SpinButton = () => {
     if (isSpinning) return;
 
     if (totalCredits < bet) {
-      const audio = new Audio('/sounds/error-sound.mp3');
-      audio.play();
+      playSound('/sounds/error-sound.mp3');
       toast.error('Not Enough Credits');
       return;
     }
     
     dispatch(startSpinning());
     dispatch(updateCredits(totalCredits - bet));
+
+    playSound('/sounds/slots-spin.mp3');
+
     const spinInterval = setInterval(() => {
       dispatch(setSlots(generateRandomSlots(slots)));
     }, 50) // generating random slot reels every 50 ms - simulating a slots spin
@@ -44,30 +46,37 @@ const SpinButton = () => {
       console.log(res);
       setTimeout(()=> {
         clearInterval(spinInterval);
-        dispatch(stopSpinning());
         dispatch(setSlots(res.data.reels));
         dispatch(setWinningLines(res.data.winningLines || []));
 
         if(res.data.isWin) {
-          console.log("WIN");
           dispatch(setIsWinning(true));
 
           dispatch(setLastWinAmount(res.data.winAmount));
 
-          setTimeout(() => {
+          if(res.data.winAmount >= 500) {
+            playSound('/sounds/jackpot-sound.mp3');
+          } else {
+            playSound('/sounds/slot-win-round2.mp3');
+          }
 
+          setTimeout(() => {
+            playSound('/sounds/slot-win-round.mp3');
+            
             animateCreditsIncrement(
               res.data.balanceBefore - bet, 
               res.data.balanceAfter, 
               dispatch
-            );
-          }, 1000)
-
-          setTimeout(() => {
+              );
+            }, 3000)
+            
+            setTimeout(() => {
+            dispatch(stopSpinning());
             dispatch(setIsWinning(false));
           }, 4000);
         } else {
           dispatch(updateCredits(res.data.balanceAfter));
+          dispatch(stopSpinning());
         }
       }, 2000)
 
