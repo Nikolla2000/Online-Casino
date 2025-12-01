@@ -1,9 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "../../../axiosConfig";
 import { userAPI } from "../../../services/api/userAPI";
-// import checkSlotWin from "../../../hooks/checkSlotWin";
-// import { twoColsWin } from "./betsSlice";
-
 
 const initialState = {
   slots: Array.from({ length: 3 }, () => 
@@ -97,18 +94,6 @@ export const slotMachineSlice = createSlice({
     updateCredits(state, action) {
       state.totalCredits = action.payload
     },
-    twoColsWin(state) {
-      state.totalCredits += state.bet * 2
-    },
-    threeColsWin(state) {
-      state.totalCredits += state.bet * 10
-    },
-    fourColsWin(state) {
-      state.totalCredits += state.bet * 100
-    },
-    fiveColsWin(state) {
-      state.totalCredits += state.bet * 200
-    },
     setSlots(state, action) {
       state.slots = action.payload;
     },
@@ -142,10 +127,6 @@ export const {startSpinning,
               maxCredits, 
               spendCredits, 
               updateCredits,
-              twoColsWin,
-              threeColsWin,
-              fourColsWin,
-              fiveColsWin,
               doubleBet,
               setSlots,
               setIsWinning, 

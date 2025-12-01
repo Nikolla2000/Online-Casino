@@ -1,25 +1,17 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import './GadgetsStyles.scss'
 import { useDispatch, useSelector } from 'react-redux';
-import { UserContext } from "../../../../context/userContext"
 import { startSpinning, stopSpinning, toggleAutoPlay, setSlots, updateCredits, setWinningLines, setIsWinning, setLastWinAmount } from '../../../redux/features/slots/slotMachineSlice';
 import { Switch } from '@mui/material';
 import { FormLabel } from 'react-bootstrap';
 import { toast } from 'react-hot-toast'
 import { slotsAPI } from '../../../services/api/slotsAPI';
 import { animateCreditsIncrement, generateRandomSlots } from '../../../utils/slotsUtils';
+import { playSound } from '../../../utils/generalActions';
 
 const SpinButton = () => {
   const dispatch = useDispatch()
   const { isSpinning, autoPlay, slots, totalCredits, bet, soundOn } = useSelector(state => state.slotMachine);
-  const { user } = useContext(UserContext);
-
-  const playSound = (soundFilePath) => {
-    if (soundOn) {
-      const audio = new Audio(soundFilePath);
-      audio.play();
-    }
-  };
 
   const handlePlaySlotsRound = async () => {
     if (isSpinning) return;
@@ -83,10 +75,7 @@ const SpinButton = () => {
     } catch (err) {
       console.error('Slots game error:', err);
       toast.error(err.response?.data?.message ||'Error on playing game. Please, try again later.');
-    } 
-    // finally {
-    //   dispatch(stopSpinning());
-    // }
+    }
   }
   
 
