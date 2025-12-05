@@ -1,11 +1,21 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { userAPI } from "../../../services/api/userAPI";
 
 const initialState = {
+  totalCredits: null,
   isBallSpinning: false,
   isWheelSpinning: false,
   result: null,
   bet: 0
 }
+
+export const fetchTotalCredits = createAsyncThunk(
+  'roulette/totalCredits',
+  async () => {
+    const res = await userAPI.getTotalCredits();
+    return res.data.totalCredits;
+  }
+)
 
 export const rouletteSlice = createSlice({
   name: 'roulette',
@@ -40,6 +50,12 @@ export const rouletteSlice = createSlice({
     setResult(state, action) {
       state.result = action.payload;
     }
+  },
+  extraReducers: (builder) => {
+    builder
+    .addCase(fetchTotalCredits.fulfilled, (state, action) => {
+      state.totalCredits = action.payload;
+    })
   }
 })
 
