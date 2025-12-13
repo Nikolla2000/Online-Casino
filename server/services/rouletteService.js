@@ -1,6 +1,7 @@
 const GameService = require("./gameService");
 const User = require('../models/User.model');
-const { validateUserAndCredits } = require("../helpers/gameHelpers");
+const { validateUserAndCredits, isValidChipValue, saveTransaction } = require("../helpers/gameHelpers");
+const GameHistory = require("../models/GameHistory.model");
 
 class RouletteService extends GameService{
 
@@ -57,9 +58,128 @@ class RouletteService extends GameService{
         const user = await validateUserAndCredits(userId, betAmount, User);
 
         const spinResult = this.generateResult();
+
+        const { isWin, winAmount, multiplier } = this.calculateWin(
+            spinResult,
+            betType,
+            betValue,
+            betAmount
+        );
+
+        const balanceBefore = user.totalCredits;
+        const netProfit = winAmount - betAmount;
+        
+        const updatedUser = await User.findByIdAndUpdate(
+            userId, {
+                $inc: {
+                    totalCredits: netProfit,
+                    totalWagered: betAmount,
+                    totalWon: winAmount,
+                    gamesPlayed: 1.
+                },
+            },
+            { new: true }
+        );
+        
+        const balanceAfter = updatedUser.totalCredits;
+
+        const SAVE_HISTORY = process.env.NODE_ENV == 'production';
+        let gameHistory = null;
+
+        if (SAVE_HISTORY) {
+            gameHistory = await GameHistory.create({
+                userId,
+                gameType: 'roulette',
+                winAmount,
+                netProfit,
+                result: {
+                    spinResult,
+                    betType,
+                    betValue,
+                    multiplier
+                },
+                balanceBefore,
+                balanceAfter,
+                timestamp: new Date()
+            });
+
+            await saveTransaction({
+                userId,
+                type: 'roulette_bet',
+                amount: -betAmount,
+                balanceBefore,
+                balanceAfter: balanceBefore - betAmount,
+                gameType: 'roulette',
+                gameId: gameHistory._id
+            });
+
+            if (winAmount > 0) {
+                await saveTransaction({
+                    userId,
+                    type: 'roulette_bet',
+                    amount: winAmount,
+                    balanceBefore: balanceBefore - betAmount,
+                    balanceAfter,
+                    gameType: 'roulette',
+                    gameId: gameHistory._id
+                });
+            }
+        }
+
+        return {
+            success: true,
+            spinResult,
+            betAmount,
+            betType,
+            betValue,
+            isWin,
+            winAmount,
+            multiplier,
+            netProfit,
+            balanceBefore,
+            balanceAfter,
+            gameId: gameHistory?._id || null
+        };
     }
 
+    /**
+     * Validate bet parameters
+     * @param {number} betAmount
+     * @param {string} betType
+     * @param {number|null} betValue
+     */
+    validateBet(betAmount, betType, betValue) {
+        if (!isValidChipValue(betAmount)) {
+            const error = new Error('Invalid bet amount. Bet should be 5, 10, 25, 50 or 100');
+            error.statusCode = 400;
+            throw error;
+        }
 
+        if (!this.VALID_BET_TYPES.includes(betType)) {
+            const error = new Error('Invalid bet type');
+            error.statusCode = 400;
+            throw error;
+        }
+
+        if (betType === 'number') {
+            if (betValue === null || betValue === undefined) {
+                const error = new Error('Bet value is required for number bets');
+                error.statusCode = 400;
+                throw error;
+            }
+
+            if (!Number.isInteger(betValue) || betValue < 0 || betValue > 36) {
+                const error = new Error('Bet value must be between 0 and 36');
+                error.statusCode = 400;
+                throw error;
+            }
+        }
+    }
+
+    /**
+     * Spin the roulette wheel and generate result
+     * @returns {object} Spin result with number and color
+     */
     generateResult() {
         const randNumber = Math.floor(Math.random() * 37);
     
