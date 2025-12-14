@@ -7,3 +7,5 @@ const router = express.Router();
 router.post('/slots', verifyJWT, playSlotsRound);
 
 router.post('/roulette', verifyJWT, playRouletteRound);
+
+module.exports = router;

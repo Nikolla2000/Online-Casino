@@ -10,9 +10,11 @@ import 'animate.css';
 import { setResult, startSpinning, startWheelSpinning, stopSpinning, stopWheelSpinning } from '../../../redux/features/roulette/rouletteSlice';
 import { incrementNumber } from '../../../lib/actions';
 import GoBackBtn from '../../../Components/GoBackBtn/GoBackBtn';
+import api from '../../../axiosConfig';
 
 const Board = () => {
-  const { user } = useContext(UserContext);
+  // const { user } = useContext(UserContext);
+  const { user } = useSelector(state => state.auth);
   const dispatch = useDispatch();
   const totalCredits = useSelector(state => state.slotMachine.totalCredits);
   const result = useSelector(state => state.roulette.result);
@@ -55,6 +57,18 @@ const Board = () => {
     setChosenOption(oldOption => oldOption == option ? null : option);
   }
 
+
+  const handlePlayRouletteRound = async () => {
+    try {
+      const res = await api.post('/games/roulette', {
+        betAmount: 5,
+        betType: 'even',
+      });
+      console.log(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   //Play round function
   const playRound = (choice, sum) => {
@@ -232,7 +246,7 @@ const Board = () => {
           ))}
           <button 
             className={`place-bet-btn ${!placeBetActive ? 'place-bet-btn-inactive' : ''}`}
-            onClick={() => playRound(chosenOption, bet)}>
+            onClick={() => handlePlayRouletteRound(chosenOption, bet)}>
               Place Bet
           </button>
         </div>

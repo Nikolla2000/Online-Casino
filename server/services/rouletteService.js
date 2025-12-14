@@ -1,9 +1,8 @@
-const GameService = require("./gameService");
 const User = require('../models/User.model');
 const { validateUserAndCredits, isValidChipValue, saveTransaction } = require("../helpers/gameHelpers");
 const GameHistory = require("../models/GameHistory.model");
 
-class RouletteService extends GameService{
+class RouletteService {
 
     constructor(){
         this.BLACK_NUMBERS = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35];
@@ -207,12 +206,12 @@ class RouletteService extends GameService{
      * @returns {object} Win details
      */
     calculateWin(spinResult, betType, betValue, betAmount) {
-        const { number, color } = spinResult;
+        const { randNumber, color } = spinResult;
         let isWin = false;
 
         switch (betType) {
             case 'number':
-                isWin = number === betValue;
+                isWin = randNumber === betValue;
                 break;
             
             case 'red':
@@ -224,31 +223,31 @@ class RouletteService extends GameService{
                 break;
 
             case 'even':
-                isWin = number !== 0 && number != 2 === 0;
+                isWin = randNumber !== 0 && randNumber % 2 === 0;
                 break;
 
             case 'odd':
-                isWin = number !== 0 && number != 2 !== 0;
+                isWin = randNumber !== 0 && randNumber % 2 !== 0;
                 break;
 
             case 'low':
-                isWin = number >= 1 && number <= 18;
+                isWin = randNumber >= 1 && randNumber <= 18;
                 break;
 
             case 'high':
-                isWin = number >= 19 && number <= 36;
+                isWin = randNumber >= 19 && randNumber <= 36;
                 break;
 
             case 'first_dozen':
-                isWin = number >= 1 && number <= 12;
+                isWin = randNumber >= 1 && randNumber <= 12;
                 break;
         
             case 'second_dozen':
-                isWin = number >= 13 && number <= 24;
+                isWin = randNumber >= 13 && randNumber <= 24;
                 break;
     
             case 'third_dozen':
-                isWin = number >= 25 && number <= 36;
+                isWin = randNumber >= 25 && randNumber <= 36;
                 break;
 
             default:
