@@ -148,11 +148,11 @@ class RouletteService {
      * @param {number|null} betValue
      */
     validateBet(betAmount, betType, betValue) {
-        if (!isValidChipValue(betAmount)) {
-            const error = new Error('Invalid bet amount. Bet should be 5, 10, 25, 50 or 100');
-            error.statusCode = 400;
-            throw error;
-        }
+        // if (!isValidChipValue(betAmount)) {
+        //     const error = new Error('Invalid bet amount. Bet should be 5, 10, 25, 50 or 100');
+        //     error.statusCode = 400;
+        //     throw error;
+        // }
 
         if (!this.VALID_BET_TYPES.includes(betType)) {
             const error = new Error('Invalid bet type');

@@ -15,18 +15,18 @@ import {
   setResult,
   setWinState,
   clearWinState,
-  clearResult
+  clearResult,
+  fetchTotalCredits,
+  updateCredits,
 } from '../../../redux/features/roulette/rouletteSlice';
-import { updateCredits } from '../../../redux/features/slots/slotMachineSlice';
-import { rouletteAPI } from '../../../services/api/rouletteAPI';
 import { animateCreditsIncrement } from '../../../utils/slotsUtils';
 import CoinRain from '../../SlotsPage/Gadgets/CoinRain'
 import { playSound } from '../../../utils/generalActions';
+import { gameAPI } from '../../../services/api/gameAPI.JS';
 
 const Board = () => {
   const dispatch = useDispatch();
   
-  const { user } = useSelector(state => state.auth);
   const {
     totalCredits,
     soundOn,
@@ -40,9 +40,17 @@ const Board = () => {
     winAmount
   } = useSelector(state => state.roulette);
 
+  const { user, accessToken } = useSelector(state => state.auth);
+
   const blackNumbers = [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35];
   const redNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
   const chips = [5, 10, 25, 50, 100];
+
+  useEffect(() => {
+    if (user && accessToken) {
+      dispatch(fetchTotalCredits());
+    }
+  }, [user, dispatch]);
 
   // Choose bet option
   const chooseBetOption = (type, value = null) => {
@@ -61,7 +69,7 @@ const Board = () => {
     if (isSpinning) return;
     
     if (totalCredits < bet + amount) {
-      playSound('/sounds/error-sound.mp3');
+      playSound('/sounds/error-sound.mp3', soundOn);
       toast.error('Not enough credits');
       return;
     }
@@ -81,25 +89,25 @@ const Board = () => {
     if (isSpinning) return;
 
     if (totalCredits < bet) {
-      playSound('/sounds/error-sound.mp3');
+      playSound('/sounds/error-sound.mp3', soundOn);
       toast.error('Not enough credits');
       return;
     }
 
     if (bet === 0) {
-      playSound('/sounds/error-sound.mp3');
+      playSound('/sounds/error-sound.mp3', soundOn);
       toast.error('Please place a bet');
       return;
     }
 
     if (!betType) {
-      playSound('/sounds/error-sound.mp3');
+      playSound('/sounds/error-sound.mp3', soundOn);
       toast.error('Please choose a betting option');
       return;
     }
 
     // Start animations
-    const wheelAudio = playSound('/sounds/spin-wheel-sound.mp3');
+    playSound('/sounds/spin-wheel-sound.mp3', soundOn);
     dispatch(startWheelSpinning());
 
     // Deduct bet from credits immediately (visual feedback)
@@ -107,17 +115,17 @@ const Board = () => {
 
     try {
       // Call backend
-      const response = await rouletteAPI.playRouletteRound({
+      const res = await gameAPI.fetchPlayRouletteRound({
         betAmount: bet,
         betType: betType,
         betValue: betValue
       });
 
-      const gameResult = response.data;
+      const gameResult = res.data;
 
       // After 1.5s, start ball spinning
       setTimeout(() => {
-        const ballAudio = playSound('/sounds/roll-ball-roulette-sound.mp3');
+        const ballAudio = playSound('/sounds/roll-ball-roulette-sound.mp3', soundOn);
         dispatch(startBallSpinning());
 
         // Stop wheel after 6s
@@ -142,10 +150,10 @@ const Board = () => {
 
             // Handle win
             if (gameResult.isWin) {
-              playSound('/sounds/roulette-win-sound.mp3');
+              playSound('/sounds/roulette-win-sound.mp3', soundOn);
 
               setTimeout(() => {
-                playSound('/sounds/coin-payout-sound.mp3');
+                playSound('/sounds/coin-payout-sound.mp3', soundOn);
                 
                 // Animate credits
                 animateCreditsIncrement(
@@ -305,10 +313,10 @@ const Board = () => {
                 1-18
               </div>
               <div 
-                className={`bet-option ${isBetActive('even') ? 'active' : ''}`}
-                onClick={() => chooseBetOption('even')}
+                className={`bet-option ${isBetActive('high') ? 'active' : ''}`}
+                onClick={() => chooseBetOption('high')}
               >
-                EVEN
+                19-36
               </div>
             </div>
 
@@ -349,10 +357,10 @@ const Board = () => {
                 ODD
               </div>
               <div 
-                className={`bet-option ${isBetActive('high') ? 'active' : ''}`}
-                onClick={() => chooseBetOption('high')}
+                className={`bet-option ${isBetActive('even') ? 'active' : ''}`}
+                onClick={() => chooseBetOption('even')}
               >
-                19-36
+                EVEN
               </div>
             </div>
           </div>
@@ -380,7 +388,7 @@ const Board = () => {
                 src={`/images/roulette/chip-${chip}.png`} 
                 alt={`${chip} chip`}
               />
-              <span className="chip-value">{chip}</span>
+              {/* <span className="chip-value">{chip}</span> */}
             </div>
           ))}
         </div>

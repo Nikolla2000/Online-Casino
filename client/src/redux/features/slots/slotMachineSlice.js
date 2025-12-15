@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import axios from "../../../axiosConfig";
 import { userAPI } from "../../../services/api/userAPI";
 
 const initialState = {
@@ -17,22 +16,8 @@ const initialState = {
   lastWinAmount: 0,
 }
 
-export const updateCreditsOnServer = createAsyncThunk(
-  "slotMachine/updateCreditsOnServer",
-  async(totalCredits) => {
-    try {
-      const response = await axios.put("user/updateCredits", {
-        totalCredits
-      })
-      return response.data
-    } catch (error) {
-      throw error
-    }
-  }
-)
-
 export const fetchTotalCredits = createAsyncThunk(
-  'slots/totalCredits',
+  'user/totalCredits',
   async () => {
     const res = await userAPI.getTotalCredits();
     return res.data.totalCredits;

@@ -5,9 +5,9 @@ import { startSpinning, stopSpinning, toggleAutoPlay, setSlots, updateCredits, s
 import { Switch } from '@mui/material';
 import { FormLabel } from 'react-bootstrap';
 import { toast } from 'react-hot-toast'
-import { slotsAPI } from '../../../services/api/slotsAPI';
 import { animateCreditsIncrement, generateRandomSlots } from '../../../utils/slotsUtils';
 import { playSound } from '../../../utils/generalActions';
+import { gameAPI } from '../../../services/api/gameAPI.JS';
 
 const SpinButton = () => {
   const dispatch = useDispatch()
@@ -32,10 +32,10 @@ const SpinButton = () => {
     }, 50) // generating random slot reels every 50 ms - simulating a slots spin
 
     try {
-      const res = await slotsAPI.fetchPlaySlotsRound({
+      const res = await gameAPI.fetchPlaySlotsRound({
         betAmount: bet
       });
-      console.log(res);
+      
       setTimeout(()=> {
         clearInterval(spinInterval);
         dispatch(setSlots(res.data.reels));

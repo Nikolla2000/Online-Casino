@@ -1,28 +1,33 @@
-// redux/features/roulette/rouletteSlice.js
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { userAPI } from "../../../services/api/userAPI";
 
 const initialState = {
   totalCredits: null,
   soundOn: true,
-  // Spinning states
+
   isBallSpinning: false,
   isWheelSpinning: false,
-  isSpinning: false, // Overall spinning state
+  isSpinning: false,
   
-  // Bet states
   bet: 0,
-  betType: null,      // 'number', 'red', 'black', etc.
-  betValue: null,     // Specific number if betType === 'number'
+  betType: null,
+  betValue: null,
   
-  // Result states
-  result: null,       // { number: 17, color: 'black' }
+  result: null,
   isWin: false,
   winAmount: 0,
   
-  // UI states
-  lastResults: [],    // History of last 10 spins
-  isWinning: false,   // For win animation
+  lastResults: [],
+  isWinning: false,
 };
+
+export const fetchTotalCredits = createAsyncThunk(
+  'user/totalCredits',
+  async () => {
+    const res = await userAPI.getTotalCredits();
+    return res.data.totalCredits;
+  }
+)
 
 export const rouletteSlice = createSlice({
   name: 'roulette',
@@ -44,6 +49,9 @@ export const rouletteSlice = createSlice({
     },
     stopWheelSpinning(state) {
       state.isWheelSpinning = false;
+    },
+    updateCredits(state, action) {
+      state.totalCredits = action.payload;
     },
 
     // Stop all spinning
@@ -108,6 +116,12 @@ export const rouletteSlice = createSlice({
       state.isWheelSpinning = false;
       state.isWinning = false;
     }
+  },
+  extraReducers: (builder) => {
+    builder
+    .addCase(fetchTotalCredits.fulfilled, (state, action) => {
+      state.totalCredits = action.payload;
+    })
   }
 });
 
@@ -125,7 +139,8 @@ export const {
   clearResult,
   setWinState,
   clearWinState,
-  resetGame
+  resetGame,
+  updateCredits,
 } = rouletteSlice.actions;
 
 export default rouletteSlice.reducer;
