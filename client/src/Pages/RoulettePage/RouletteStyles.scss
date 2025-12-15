@@ -1,43 +1,46 @@
+// RouletteStyles.scss
 @import "../../colorConstants.scss";
 
+// Modern color palette
+$roulette-gold: #FFD700;
+$roulette-green: #0a8a0a;
+$roulette-red: #dc143c;
+$roulette-black: #1a1a1a;
+$roulette-dark-bg: #0a0e27;
+$roulette-card-bg: #1a1f3a;
+$glow-green: rgba(10, 138, 10, 0.6);
+$glow-red: rgba(220, 20, 60, 0.6);
+$glow-gold: rgba(255, 215, 0, 0.6);
 
-// *******************//
-//        Animations      //
-// *******************//
-
-//Ball Spin
+// Animations
 @keyframes spin {
   0% {
     transform: translate(-50%, -50%) rotate(0deg) translateX(800%) rotate(0deg);
   }
-
   100% {
     transform: translate(-50%, -50%) rotate(360deg) translateX(800%) rotate(-360deg);
   }
 }
 
-
-//Roulette Wheel Spin
 @keyframes spinWheel {
   0% {
     transform: rotate(0deg);
-    animation-timing-function: cubic-bezier(0.2, 0.1, 0.3, 1); /* ease-in */
+    animation-timing-function: cubic-bezier(0.2, 0.1, 0.3, 1);
   }
   20% {
     transform: rotate(720deg);
     animation-timing-function: linear;
   }
   80% {
-    transform: rotate(1440deg);
-    animation-timing-function: cubic-bezier(0.3, 0.6, 0.9, 0.9); /* ease-out */
+    transform: rotate(1800deg);
+    animation-timing-function: cubic-bezier(0.3, 0.6, 0.9, 0.9);
   }
   100% {
-    transform: rotate(1800deg);
-    animation-timing-function: cubic-bezier(0.1, 0.5, 1, 1); /* ease-out */
+    transform: rotate(2520deg); // 7 full rotations
+    animation-timing-function: cubic-bezier(0.1, 0.5, 1, 1);
   }
 }
 
-//Result Number Showing
 @keyframes fadeInOut {
   0% {
     opacity: 0;
@@ -45,373 +48,806 @@
   }
   25% {
     opacity: 1;
-    transform: scale(1) translateY(0);
+    transform: scale(1.2) translateY(0);
   }
   75% {
     opacity: 1;
-    transform: scale(2);
+    transform: scale(1.5);
   }
   100% {
     opacity: 0;
-    transform: scale(2.5) translateY(-100%);
+    transform: scale(2) translateY(-50%);
   }
 }
 
-//Credits shining when winning
-@keyframes shining {
-  0% {
-    color: greenyellow;
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 
+      0 0 20px $glow-gold,
+      0 0 40px $glow-gold,
+      inset 0 0 20px rgba(255, 215, 0, 0.3);
   }
-  20% {
-    color: $primary-white;
-    transform: scale(1.3);
-  }
-  40% {
-    color: greenyellow;
-    transform: scale(1);
-
-  }
-  60% {
-    color: $primary-white;
-    transform: scale(1.3);
-
-  }
-  80% {
-    color: greenyellow;
-    transform: scale(1);
-
-  }
-  100% {
-    color: $primary-white;
-
+  50% {
+    box-shadow: 
+      0 0 30px $glow-gold,
+      0 0 60px $glow-gold,
+      inset 0 0 30px rgba(255, 215, 0, 0.5);
   }
 }
 
-.result-number {
-  position: absolute;
-  color:#000;
-  top: 43%;
-  left: 45%;
-  transform: translate(-50%, -50%);
-  font-size: 3em;
-  text-shadow: rgb(255, 255, 255) 1px 0 10px;
-  text-shadow: 2px 2px 5px red;
-  font-weight: bold;
-  opacity: 0;
-  animation: fadeInOut 3s forwards;
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
 }
 
-
-.wheel-animation {
-  animation: spinWheel 15s forwards;
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
 }
 
+// Main wrapper
 .roulette-page-wrapper {
-  background: url("/images/roulette/roulette-bg-1.webp") no-repeat center center;
-  background-size: cover;
   min-height: 100vh;
-  display: flex;
-  align-items: center;
+  background: 
+    linear-gradient(135deg, 
+      rgba(10, 14, 39, 0.95) 0%, 
+      rgba(26, 31, 58, 0.95) 50%,
+      rgba(10, 14, 39, 0.95) 100%
+    ),
+    url("/images/roulette/roulette-bg-1.webp") no-repeat center center;
+  background-size: cover;
+  background-attachment: fixed;
+  padding: 40px 20px;
+  position: relative;
+  overflow: hidden;
 
-  
-    // *******************//
-  //        Wheel      //
-  // *******************//
+  // Animated overlay
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(circle at 20% 50%, rgba(220, 20, 60, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(10, 138, 10, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    animation: float 8s ease-in-out infinite;
+  }
 
+  // Wheel Section
   .roulette-wheel {
-    width: 78%;
-    box-sizing: border-box;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    padding: 20px;
 
     .roulette-img-wrapper {
       position: relative;
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      padding: 20px;
+      background: 
+        radial-gradient(circle at 50% 50%, 
+          rgba(255, 215, 0, 0.1) 0%,
+          transparent 70%
+        );
+      box-shadow: 
+        0 0 40px rgba(0, 0, 0, 0.8),
+        inset 0 0 40px rgba(255, 215, 0, 0.2);
+
       img {
         width: 100%;
-        -webkit-box-shadow: 0px -1px 18px -2px rgba(255,255,255,1);
-        -moz-box-shadow: 0px -1px 18px -2px rgba(255,255,255,1);
-        box-shadow: 0px -1px 18px -2px rgba(255,255,255,1);
+        height: 100%;
         border-radius: 50%;
+        box-shadow: 
+          0 10px 50px rgba(0, 0, 0, 0.9),
+          0 0 30px rgba(255, 215, 0, 0.3),
+          inset 0 0 20px rgba(0, 0, 0, 0.5);
+        filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.4));
+        transition: transform 0.1s ease-out;
       }
+
       .ball {
-        background: radial-gradient(circle at 18.7% 37.8%, rgb(250, 250, 250) 0%, rgb(225, 234, 238) 90%);
-        height: 4%;
-        width: 4%;
+        background: radial-gradient(circle at 30% 30%, 
+          rgb(255, 255, 255) 0%, 
+          rgb(220, 220, 220) 50%,
+          rgb(180, 180, 180) 100%
+        );
+        width: 5%;
+        height: 5%;
         border-radius: 50%;
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        -webkit-box-shadow: 4px 3px 10px 2px rgba(0,0,0,0.75);
-        -moz-box-shadow: 4px 3px 10px 2px rgba(0,0,0,0.75);
-        box-shadow: 4px 3px 10px 2px rgba(0,0,0,0.75);
+        box-shadow: 
+          0 5px 15px rgba(0, 0, 0, 0.8),
+          inset -2px -2px 5px rgba(0, 0, 0, 0.3),
+          inset 2px 2px 5px rgba(255, 255, 255, 0.8);
         animation: spin 1.5s linear infinite;
+        z-index: 10;
+      }
+
+      .result-number {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 5em;
+        font-weight: 900;
+        color: $roulette-gold;
+        text-shadow: 
+          0 0 20px rgba(255, 215, 0, 0.8),
+          0 0 40px rgba(255, 215, 0, 0.6),
+          0 5px 10px rgba(0, 0, 0, 0.8);
+        z-index: 20;
+        animation: fadeInOut 3s forwards;
+        pointer-events: none;
+      }
+    }
+
+    &.wheel-animation {
+      .roulette-img-wrapper img {
+        animation: spinWheel 8s cubic-bezier(0.17, 0.67, 0.35, 0.96) forwards;
       }
     }
   }
 
-  
-    // *******************//
-  //        Table board       //
-  // *******************//
-  .board-and-gadgets-wrapper {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+  // Board Wrapper
+  .board-wrapper {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
     position: relative;
 
-      .board {
-        
-        .board-top-side {
-          display: flex;
-          flex-direction: row;
-          font-weight: bold;
-          border-radius: 50px;
+    // Main Board
+    .roulette-board {
+      background: linear-gradient(135deg, 
+        $roulette-card-bg 0%, 
+        lighten($roulette-card-bg, 5%) 100%
+      );
+      border: 3px solid rgba(255, 215, 0, 0.3);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 
+        0 10px 40px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
 
-          -webkit-box-shadow: 0px 0px 16px 0px rgba(255,255,255,1);
-          -moz-box-shadow: 0px 0px 16px 0px rgba(255,255,255,1);
-          box-shadow: 0px 0px 16px 0px rgba(255,255,255,1);
-          
-          .board-row {
-            display: block;
-            box-sizing: content-box;
-  
-            div { color: white; text-shadow: 2px 3px 4px rgba(0, 0, 0, 1); font-size: 1.5em; transform: rotate(270deg); 
-              padding: 20px; background: linear-gradient(107.2deg, rgb(150, 15, 15) 10.6%, rgb(247, 0, 0) 91.1%); width: 50px; height: 50px; border:2px solid white; 
-              display: flex; align-items: center; justify-content: center; cursor: pointer; 
-              &:hover { opacity: 0.7; }
-            }
-  
-            .black-number { background: linear-gradient(to right, #434343 0%, black 100%); }
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 200%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 215, 0, 0.05),
+          transparent
+        );
+        animation: shimmer 3s infinite;
+      }
+
+      // Top Section - Numbers
+      .board-top {
+        display: flex;
+        gap: 2px;
+        margin-bottom: 10px;
+
+        .zero-cell {
+          writing-mode: vertical-rl;
+          text-orientation: mixed;
+          background: linear-gradient(135deg, 
+            darken($roulette-green, 10%) 0%, 
+            $roulette-green 50%,
+            darken($roulette-green, 10%) 100%
+          );
+          color: white;
+          font-size: 2em;
+          font-weight: 900;
+          padding: 20px 10px;
+          border-radius: 15px 0 0 15px;
+          border: 2px solid rgba(255, 255, 255, 0.2);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+          box-shadow: 
+            inset 0 -2px 5px rgba(0, 0, 0, 0.3),
+            inset 0 2px 5px rgba(255, 255, 255, 0.2);
+
+          &:hover {
+            background: lighten($roulette-green, 10%);
+            box-shadow: 
+              0 0 20px $glow-green,
+              inset 0 -2px 5px rgba(0, 0, 0, 0.3);
+            transform: scale(1.02);
           }
-  
-          .zero { display: flex; align-items: center; height: 150px;color: white; text-shadow: 2px 3px 4px rgba(0, 0, 0, 1); font-size: 2em; 
-                border:2px solid white; background: linear-gradient(110.1deg, rgb(34, 126, 34) 2.9%, rgb(168, 251, 60) 90.3%); border-radius: 40% 0 0 40%; cursor: pointer;
-                
-                span {width: 55px; height: 40px; transform: rotate(270deg); text-align: center;}
+
+          &.active {
+            animation: pulse-glow 1s ease-in-out infinite;
+            border-color: $roulette-gold;
+          }
+
+          span {
+            transform: rotate(180deg);
+          }
+        }
+
+        .board-row {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+          flex: 1;
+
+          .number-cell {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+            font-weight: 800;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+            position: relative;
+            overflow: hidden;
+
+            &::before {
+              content: '';
+              position: absolute;
+              inset: 0;
+              background: linear-gradient(
+                135deg,
+                rgba(255, 255, 255, 0.1) 0%,
+                transparent 50%,
+                rgba(0, 0, 0, 0.1) 100%
+              );
+              opacity: 0;
+              transition: opacity 0.3s;
+            }
+
+            &:hover::before {
+              opacity: 1;
+            }
+
+            &:hover {
+              transform: scale(1.05);
+              box-shadow: 0 0 15px currentColor;
+              z-index: 2;
+            }
+
+            &.active {
+              animation: pulse-glow 1s ease-in-out infinite;
+              border-color: $roulette-gold;
+              box-shadow: 
+                0 0 20px $glow-gold,
+                inset 0 0 15px rgba(255, 215, 0, 0.3);
+              transform: scale(1.05);
+            }
+
+            &.red-number {
+              background: linear-gradient(135deg, 
+                darken($roulette-red, 15%) 0%, 
+                $roulette-red 50%,
+                darken($roulette-red, 15%) 100%
+              );
+              box-shadow: inset 0 -2px 5px rgba(0, 0, 0, 0.4);
+
+              &:hover {
+                box-shadow: 0 0 15px $glow-red;
+              }
+            }
+
+            &.black-number {
+              background: linear-gradient(135deg, 
+                $roulette-black 0%, 
+                lighten($roulette-black, 10%) 50%,
+                $roulette-black 100%
+              );
+              box-shadow: inset 0 -2px 5px rgba(0, 0, 0, 0.6);
+
+              &:hover {
+                box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+              }
+            }
+          }
+        }
+
+        .columns {
+          writing-mode: vertical-rl;
+          display: flex;
+          gap: 2px;
+          padding-left: 5px;
+
+          div {
+            background: linear-gradient(135deg, 
+              darken($roulette-green, 10%) 0%, 
+              $roulette-green 100%
+            );
+            color: white;
+            font-weight: 800;
+            padding: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0 15px 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            box-shadow: inset 0 -2px 5px rgba(0, 0, 0, 0.3);
+            flex: 1;
+
+            &:hover {
+              background: lighten($roulette-green, 10%);
+              box-shadow: 0 0 15px $glow-green;
+            }
+
+            &.active {
+              animation: pulse-glow 1s ease-in-out infinite;
+              border-color: $roulette-gold;
+            }
+
+            &:first-child {
+              border-radius: 0 15px 0 0;
+            }
+
+            &:last-child {
+              border-radius: 0 0 15px 0;
+            }
+
+            &:only-child {
+              border-radius: 0 15px 15px 0;
+            }
+          }
+        }
+      }
+
+      // Bottom Section - Outside Bets
+      .board-bottom {
+        .outside-bets {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+
+          .bet-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+
+            .bet-option {
+              background: linear-gradient(135deg, 
+                darken($roulette-green, 10%) 0%, 
+                $roulette-green 100%
+              );
+              color: white;
+              font-weight: 800;
+              font-size: 1.1em;
+              padding: 15px 10px;
+              border: 2px solid rgba(255, 255, 255, 0.2);
+              text-align: center;
+              cursor: pointer;
+              transition: all 0.3s ease;
+              text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+              box-shadow: inset 0 -2px 5px rgba(0, 0, 0, 0.3);
+              position: relative;
+              overflow: hidden;
+
+              &::before {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(
+                  135deg,
+                  rgba(255, 255, 255, 0.1) 0%,
+                  transparent 100%
+                );
+              }
+
+              sup {
+                font-size: 0.7em;
+              }
+
+              &:hover {
+                background: lighten($roulette-green, 10%);
+                box-shadow: 0 0 15px $glow-green;
+                transform: translateY(-2px);
+              }
+
+              &.active {
+                animation: pulse-glow 1s ease-in-out infinite;
+                border-color: $roulette-gold;
+                box-shadow: 
+                  0 0 20px $glow-gold,
+                  inset 0 0 15px rgba(255, 215, 0, 0.3);
+              }
+
+              &.red-bet {
+                background: linear-gradient(135deg, 
+                  darken($roulette-red, 15%) 0%, 
+                  $roulette-red 100%
+                );
+                position: relative;
+
+                .bet-label {
+                  position: relative;
+                  z-index: 2;
+                }
+
                 &:hover {
-                  background: green;
+                  background: lighten($roulette-red, 5%);
+                  box-shadow: 0 0 15px $glow-red;
                 }
               }
-  
-          .two-one { height: 100%; background: green; color: #fff; font-weight: bold; height: 150px; border-radius: 0 40% 40% 0; width: 55px; text-align: center;
-                    display: flex; justify-content: space-evenly; flex-direction: column; border: 2px solid white; font-size: 1.8em; text-shadow: 2px 3px 4px rgba(0, 0, 0, 1);
-                    div  { transform: rotate(270deg);  
-                      &:not(.two-one div:last-of-type) { border-left: 3px solid white;}
-                    }
-                  }
-        }
 
+              &.black-bet {
+                background: linear-gradient(135deg, 
+                  $roulette-black 0%, 
+                  lighten($roulette-black, 10%) 100%
+                );
+                position: relative;
 
-        .board-bottom-side {
-          display: flex; justify-content: center;
+                .bet-label {
+                  position: relative;
+                  z-index: 2;
+                  color: #aaa;
+                }
 
-          
-          .bet-options { display: flex; color: #fff; font-weight: bold; border-radius: 30px;
-            
-            -webkit-box-shadow: 0px 0px 16px 0px rgba(255,255,255,1);
-            -moz-box-shadow: 0px 0px 16px 0px rgba(255,255,255,1);
-            box-shadow: 0px 0px 16px 0px rgba(255,255,255,1);
-
-            .option {
-              div { background: linear-gradient(90deg, rgba(10,119,13,1) 7%, rgba(43,140,46,1) 49%, rgba(7,116,10,1) 96%); border: 2px solid white; padding: 12px; 
-                    display: inline; text-align: center; cursor: pointer; font-size: 1.8em; text-shadow: 2px 3px 4px rgba(0, 0, 0, 1);
-              &:hover {background: linear-gradient(90deg, rgb(8, 91, 12) 7%, rgb(29, 91, 31) 49%, rgb(5, 69, 6) 96%);}
-
-              &:first-of-type {
-                display: block;
-              }
-              
-            }
-            .red { background: linear-gradient(107.2deg, rgb(150, 15, 15) 10.6%, rgb(247, 0, 0) 91.1%); color: transparent; text-shadow: none; position: relative; transition: background 0.5s;
-              &:hover { background: linear-gradient(107.2deg, rgb(101, 10, 10) 10.6%, rgb(185, 0, 0) 91.1%);
-                &::after { opacity: 1;}
-              }
-              &::after {
-                content: 'RED';
-                color: red;
-                position: absolute;
-                left: 23%;
-                top: 20%;
-                font-size: 0.9em;
-                opacity: 0;
-                transition: opacity 0.5s, transform 0.5s;
+                &:hover {
+                  background: lighten($roulette-black, 15%);
+                  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+                }
               }
             }
 
-            .black { background: linear-gradient(to right, #434343 0%, black 100%); color: transparent; text-shadow: none; position: relative; transition: background 0.5s;
-            &:hover { background: linear-gradient(to right, #000000 0%, black 100%);
-              &::after { opacity: 1;}
+            // Border radius for corners
+            &:first-child .bet-option:first-child {
+              border-radius: 0 0 0 15px;
             }
-            &::after {
-              content: 'BLACK';
-              color: #616161;
-              position: absolute;
-              left: 12%;
-              top: 20%;
-              font-size: 0.8em;
-              opacity: 0;
-              transition: opacity 0.5s, transform 0.5s;
-            }
-          }
 
-            .left-border { border-radius: 0 0 0 50%;}
-            .right-border { border-radius: 0 0 50% 0;}
+            &:first-child .bet-option:last-child {
+              border-radius: 0 0 0 0;
+            }
+
+            &:last-child .bet-option:first-child {
+              border-radius: 0 0 0 0;
+            }
+
+            &:last-child .bet-option:last-child {
+              border-radius: 0 0 15px 0;
             }
           }
-        }
-        
-      }
-
-  // *******************//
-  //       Gadgets      //
-  // *******************//
-      .gadgets {
-        margin-top: 50px;
-
-        .place-bet-loader {
-
-          h4, h5 {
-            color:white;
-            font-weight: bold;
-            text-align: center;
-            font-size: 2em;
-          }
-          h5 { font-size: 1.2em;}
-          .loader {
-            margin: 30px 0 40px 0;
-          }
-        }
-        .bet-amount-buttons {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          gap:10px;
-
-          img {
-            width:60px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: box-shadow 0.3s;
-            -webkit-box-shadow: 0px 0px 12px -2px rgba(0,0,0,0.75);
-            -moz-box-shadow: 0px 0px 12px -2px rgba(0,0,0,0.75);
-            box-shadow: 0px 0px 12px -2px rgba(0,0,0,0.75);
-            &:hover { 
-              -webkit-box-shadow: 0px -1px 18px -2px rgba(255,255,255,1);
-              -moz-box-shadow: 0px -1px 18px -2px rgba(255,255,255,1);
-              box-shadow: 0px -1px 18px -2px rgba(255,255,255,1);
-            }
-          }
-
-          button {
-            padding: 12px 22px;
-            color: $primary-white;
-            font-weight: bold;
-            // border: 1px solid black; 
-            transition: box-shadow 0.3s;
-            &:hover { 
-              -webkit-box-shadow: 0px -1px 18px -2px rgb(168, 251, 60);
-              -moz-box-shadow: 0px -1px 18px -2px rgb(168, 251, 60);
-              box-shadow: 0px -1px 18px -2px rgb(168, 251, 60);
-            }
-          }
-          .clear-bet-btn { background: linear-gradient(107.2deg, rgb(150, 15, 15) 10.6%, rgb(247, 0, 0) 91.1%) ; margin-right: 20px; border-radius: 5%;
-            -webkit-box-shadow: 0px 0px 12px -2px rgba(0,0,0,0.75);
-            -moz-box-shadow: 0px 0px 12px -2px rgba(0,0,0,0.75);
-            box-shadow: 0px 0px 12px -2px rgba(0,0,0,0.75);
-            &:hover {
-              -webkit-box-shadow: 0px -1px 18px -2px rgb(247, 0, 0);
-              -moz-box-shadow: 0px -1px 18px -2px rgb(247, 0, 0);
-              box-shadow: 0px -1px 18px -2px rgb(247, 0, 0);
-            }
-          }
-          .place-bet-btn { background: linear-gradient(110.1deg, rgb(34, 126, 34) 2.9%, rgb(168, 251, 60) 90.3%); margin-left: 20px; border-radius: 5%;
-            -webkit-box-shadow: 0px 0px 12px -2px rgba(0,0,0,0.75);
-            -moz-box-shadow: 0px 0px 12px -2px rgba(0,0,0,0.75);
-            box-shadow: 0px 0px 12px -2px rgba(0,0,0,0.75);
-          }
-          .place-bet-btn-inactive { pointer-events: none; background: gray;}
         }
       }
-
-
-      // *******************//
-    //      Credits/Bet INFO      //
-    // *******************//
-
-    .credits-info {
-      width: 100%;
-      margin: 30px 0 30px 0;
-      display: flex;
-      justify-content: space-evenly;
-      color:$primary-white;
-      font-weight: bold;
-      font-size: 1.3em;
-      text-shadow: 1px 2px 2px black;
-
-      .total-credits-wrapper {
-        display:flex;
-        flex-direction: row;
-        gap:5px;
-
-        .total-credits {
-          animation: shining 1.5s forwards;
-        }
-      }
-
-      .red { color: red; }
-      .black { color: #000; }
     }
 
-    .result {
-      position: absolute;
-      top: 97%;
-      border:1px solid $primary-white;
-      color: $primary-white;
-      font-weight: bold;
-      text-align: center;
-      font-size: 1.4em;
-      border-radius: 10px;
-      padding: 10px;
-      width: 60px;
-      height: 50px;
+    // Controls Section
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 30px;
+      flex-wrap: wrap;
 
-      -webkit-box-shadow: 0px 0px 16px 0px rgba(255,255,255,1);
-      -moz-box-shadow: 0px 0px 16px 0px rgba(255,255,255,1);
-      box-shadow: 0px 0px 16px 0px rgba(255,255,255,1);
+      button {
+        padding: 15px 35px;
+        font-weight: 800;
+        font-size: 1.1em;
+        border: none;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        position: relative;
+        overflow: hidden;
+
+        &::before {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -50%;
+          width: 200%;
+          height: 200%;
+          background: linear-gradient(
+            45deg,
+            transparent,
+            rgba(255, 255, 255, 0.2),
+            transparent
+          );
+          transform: rotate(45deg);
+          transition: all 0.5s;
+        }
+
+        &:hover::before {
+          left: 100%;
+        }
+
+        &:hover:not(:disabled) {
+          transform: translateY(-3px);
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        &:active:not(:disabled) {
+          transform: translateY(0);
+        }
+
+        &:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+      }
+
+      .clear-bet-btn {
+        background: linear-gradient(135deg, 
+          darken($roulette-red, 10%) 0%, 
+          $roulette-red 100%
+        );
+        color: white;
+        box-shadow: 
+          0 5px 20px rgba(220, 20, 60, 0.3),
+          inset 0 1px 0 rgba(255, 255, 255, 0.2);
+
+        &:hover:not(:disabled) {
+          box-shadow: 0 8px 30px rgba(220, 20, 60, 0.5);
+        }
+      }
+
+      .place-bet-btn {
+        background: linear-gradient(135deg, 
+          darken($roulette-green, 10%) 0%, 
+          $roulette-green 100%
+        );
+        color: white;
+        box-shadow: 
+          0 5px 20px rgba(10, 138, 10, 0.3),
+          inset 0 1px 0 rgba(255, 255, 255, 0.2);
+
+        &:hover:not(:disabled) {
+          box-shadow: 0 8px 30px rgba(10, 138, 10, 0.5);
+        }
+
+        &.spinning {
+          animation: pulse-glow 1s ease-in-out infinite;
+        }
+      }
+
+      .chips {
+        display: flex;
+        gap: 10px;
+
+        .chip {
+          position: relative;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          filter: grayscale(0.5);
+
+          &.affordable {
+            filter: grayscale(0);
+          }
+
+          img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            box-shadow: 
+              0 5px 15px rgba(0, 0, 0, 0.5),
+              inset 0 -2px 5px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+          }
+
+          .chip-value {
+            position: absolute;
+            bottom: -5px;
+            right: -5px;
+            background: $roulette-gold;
+            color: $roulette-dark-bg;
+            font-weight: 800;
+            font-size: 0.8em;
+            padding: 2px 6px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+          }
+
+          &:hover {
+            transform: translateY(-5px) scale(1.1);
+            
+            img {
+              box-shadow: 
+                0 10px 25px rgba(255, 215, 0, 0.4),
+                inset 0 -2px 5px rgba(0, 0, 0, 0.3);
+            }
+          }
+        }
+      }
+    }
+
+    // Game Info
+    .game-info {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 30px;
+      padding: 20px;
+      background: rgba(26, 31, 58, 0.8);
+      border-radius: 15px;
+      border: 2px solid rgba(255, 215, 0, 0.2);
+      box-shadow: 
+        0 5px 20px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+      .info-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+
+        .label {
+          font-size: 0.9em;
+          color: #aaa;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+        }
+
+        .value {
+          font-size: 1.5em;
+          font-weight: 800;
+          color: $roulette-gold;
+          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+
+          &.winning {
+            animation: pulse-glow 0.6s ease-in-out infinite;
+          }
+
+          &.choice {
+            &.red {
+              color: $roulette-red;
+            }
+
+            &.black {
+              color: #fff;
+            }
+          }
+        }
+      }
+    }
+
+    // Last Results
+    .last-results {
+      margin-top: 20px;
+      padding: 15px;
+      background: rgba(26, 31, 58, 0.6);
+      border-radius: 15px;
+      border: 2px solid rgba(255, 215, 0, 0.2);
+
+      .label {
+        color: #aaa;
+        font-size: 0.9em;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+        display: block;
+      }
+
+      .results-list {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: center;
+
+        .result-bubble {
+          width: 35px;
+          height: 35px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 800;
+          color: white;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+          box-shadow: 
+            0 3px 10px rgba(0, 0, 0, 0.5),
+            inset 0 -2px 3px rgba(0, 0, 0, 0.3);
+          font-size: 0.9em;
+
+          &.red {
+            background: linear-gradient(135deg, 
+              darken($roulette-red, 10%) 0%, 
+              $roulette-red 100%
+            );
+          }
+
+          &.black {
+            background: linear-gradient(135deg, 
+              $roulette-black 0%, 
+              lighten($roulette-black, 10%) 100%
+            );
+          }
+
+          &.green {
+            background: linear-gradient(135deg, 
+              darken($roulette-green, 10%) 0%, 
+              $roulette-green 100%
+            );
+          }
+        }
+      }
     }
   }
 }
 
-
-@media only screen and (max-width: 1300px) {
-  .board-and-gadgets-wrapper {
-    height: 110% !important;
-    .board {
-      .board-top-side {
-        .board-row {
-          div {
-            font-size: 1.3em !important;
-            width: 40px !important;
-            height: 40px !important;
-          }
-        }
-        .zero {
-          height: 132px !important;
-        }
-        .two-one {
-          height: 132px !important;
+// Responsive
+@media (max-width: 1200px) {
+  .roulette-page-wrapper {
+    .board-wrapper .roulette-board {
+      .board-top {
+        .board-row .number-cell {
+          font-size: 1.1em;
         }
       }
 
-      .board-bottom-side {
-        .bet-options {
-          .option {
-            div {
-              font-size: 1.5em !important;
-            }
+      .board-bottom {
+        .outside-bets .bet-row .bet-option {
+          font-size: 1em;
+          padding: 12px 8px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .roulette-page-wrapper {
+    padding: 20px 10px;
+
+    .roulette-wheel {
+      max-width: 400px;
+    }
+
+    .board-wrapper {
+      .roulette-board {
+        padding: 15px;
+
+        .board-top {
+          .board-row .number-cell {
+            font-size: 0.9em;
           }
         }
+
+        .board-bottom {
+          .outside-bets .bet-row .bet-option {
+            font-size: 0.85em;
+            padding: 10px 5px;
+          }
+        }
+      }
+
+      .controls {
+        gap: 10px;
+
+        button {
+          padding: 12px 25px;
+          font-size: 1em;
+        }
+
+        .chips .chip img {
+          width: 50px;
+          height: 50px;
+        }
+      }
+
+      .game-info {
+        flex-direction: column;
+        gap: 15px;
       }
     }
   }

@@ -17,7 +17,7 @@ const SpinButton = () => {
     if (isSpinning) return;
 
     if (totalCredits < bet) {
-      playSound('/sounds/error-sound.mp3');
+      playSound('/sounds/error-sound.mp3', soundOn);
       toast.error('Not Enough Credits');
       return;
     }
@@ -25,7 +25,7 @@ const SpinButton = () => {
     dispatch(startSpinning());
     dispatch(updateCredits(totalCredits - bet));
 
-    playSound('/sounds/slots-spin.mp3');
+    playSound('/sounds/slots-spin.mp3', soundOn);
 
     const spinInterval = setInterval(() => {
       dispatch(setSlots(generateRandomSlots(slots)));
@@ -47,13 +47,13 @@ const SpinButton = () => {
           dispatch(setLastWinAmount(res.data.winAmount));
 
           if(res.data.winAmount >= 500) {
-            playSound('/sounds/jackpot-sound.mp3');
+            playSound('/sounds/jackpot-sound.mp3', soundOn);
           } else {
-            playSound('/sounds/slot-win-round2.mp3');
+            playSound('/sounds/slot-win-round2.mp3', soundOn);
           }
 
           setTimeout(() => {
-            playSound('/sounds/slot-win-round.mp3');
+            playSound('/sounds/slot-win-round.mp3', soundOn);
             
             animateCreditsIncrement(
               res.data.balanceBefore - bet, 

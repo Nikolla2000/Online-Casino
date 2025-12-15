@@ -99,7 +99,7 @@ app.use('/server/v1/slots', slotRouter);
 app.use('/server/v1/email', emailRouter);
 app.use('/server/v1/chats', chatRouter);
 app.use('/server/v1/chatbot', chatBotRouter);
-app.use('/server/v1/games', gameRouter);
+app.use('/server/v1/game', gameRouter);
 
 //Serve static files
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
