@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 const path = require('path')
 const { Server, Socket } = require('socket.io');
 const { createServer } = require('node:http');
+const { AppError, errorHandler } = require("./middleware/errorHandler");
 const app = express();
 const server = createServer(app);
 const setupSocket = require("./socket/socket");
@@ -110,6 +111,12 @@ app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 //   windowMs: 15 * 60 * 1000, // 15 min
 //   max: 100 // limit each IP to 100 requests per 15 min 
 // });
+
+app.all('*', (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server`, 401));
+});
+
+app.use(errorHandler);
 
 
 const start = async () => {
