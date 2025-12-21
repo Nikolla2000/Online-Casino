@@ -1,3 +1,5 @@
+const logger = require("../helpers/logger");
+
 class AppError extends Error {
 
   constructor(message, statusCode, isOperational = true) {
@@ -14,6 +16,16 @@ const errorHandler = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
 
+  logger.error('Error occurred:', {
+    message: err.message,
+    statusCode: err.statusCode,
+    stack: err.stack,
+    url: req.originalUrl,
+    method: req.method,
+    ip: req.ip,
+    userId: req.userId
+  });
+
   if (process.env.NODE_ENV === 'development') {
     res.status(err.statusCode).json({
       status: err.status,
@@ -28,6 +40,16 @@ const errorHandler = (err, req, res, next) => {
         status: 'error',
         message: 'Something went wrong'
       })
+    } else {
+      logger.error('CRITICAL ERROR', {
+        error: err,
+        stack: err.stack
+      });
+      
+      res.status(500).json({
+        status: 'error',
+        message: 'Something went wrong'
+      });
     }
   }
 };

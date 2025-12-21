@@ -1,4 +1,5 @@
 const rouletteService = require('../services/rouletteService');
+const asyncHandler = require('../helpers/asyncHandler');
 
 /**
  * Play roulette round
@@ -6,30 +7,19 @@ const rouletteService = require('../services/rouletteService');
  * ACCESS: Private
  * Body: { betAmount: number, betType: string, betValue?: number }
  */
-const playRouletteRound = async (req, res) => {
-    try {
-        const { betAmount, betType, betValue } = req.body;
-        const userId = req.userId;
+const playRouletteRound =  asyncHandler(async (req, res) => {
+    const { betAmount, betType, betValue } = req.body;
+    const userId = req.userId;
 
-        const result = await rouletteService.playRound(
-            userId,
-            betAmount,
-            betType,
-            betValue
-        );
+    const result = await rouletteService.playRound(
+        userId,
+        betAmount,
+        betType,
+        betValue
+    );
 
-        res.status(200).json(result);
-        
-    } catch (err) {
-        console.error('Roulette game error:', err);
-
-        const statusCode = err.statusCode || 500;
-        res.status(statusCode).json({
-            success: false,
-            message: 'Error on playing roulette round'
-        });
-    }
-}
+    res.status(200).json(result);
+});
 
 module.exports = {
     playRouletteRound,

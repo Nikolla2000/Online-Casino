@@ -9,6 +9,7 @@ const path = require('path')
 const { Server, Socket } = require('socket.io');
 const { createServer } = require('node:http');
 const { AppError, errorHandler } = require("./middleware/errorHandler");
+const logger = require('./helpers/logger');
 const app = express();
 const server = createServer(app);
 const setupSocket = require("./socket/socket");
@@ -62,13 +63,11 @@ const io = new Server(server, {
 
 setupSocket(io);
 
-//connectDB
 const connectDB = require("./db/connect");
 
-//Port
 const port = process.env.PORT || 3000;
 
-//cors
+//CORS
 app.use(cors({
   origin: 'http://localhost:5173',  //for local development, comment for production
   // origin: 'https://uzu-online-casino.netlify.app', // uncomment for production
@@ -77,7 +76,18 @@ app.use(cors({
   credentials: true
 }));
 
-//routers
+// Logger middleware
+app.use((req, res, next) => {
+  logger.info('Incoming request', {
+    method: req.method,
+    url: req.originalUrl,
+    ip: req.ip,
+    userAgent: req.get('user-agent')
+  });
+  next();
+});
+
+//Routers
 const userRouter = require('./routes/User.router');
 const authRouter = require('./routes/Auth.router');
 const emailRouter = require('./routes/Email.router');
@@ -85,7 +95,7 @@ const chatRouter = require('./routes/Chat.router');
 const chatBotRouter = require('./routes/ChatBot.router');
 const gameRouter = require('./routes/Game.router');
 
-//middleware
+//Middleware
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 
@@ -118,6 +128,28 @@ app.all('*', (req, res, next) => {
 
 app.use(errorHandler);
 
+process.on('unhandledRejection', (err) => {
+  logger.error('UNHANDLED REJECTION! Shutting down...', {
+    name: err.name,
+    message: err.message,
+    stack: err.stack
+  });
+  
+  server.close(() => {
+    process.exit(1);
+  });
+});
+
+// Uncaught Exceptions
+process.on('uncaughtException', (err) => {
+  logger.error('UNCAUGHT EXCEPTION! Shutting down...', {
+    name: err.name,
+    message: err.message,
+    stack: err.stack
+  });
+  
+  process.exit(1);
+});
 
 const start = async () => {
   try {

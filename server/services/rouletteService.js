@@ -1,6 +1,7 @@
 const User = require('../models/User.model');
 const { validateUserAndCredits, isValidChipValue, saveTransaction } = require("../helpers/gameHelpers");
 const GameHistory = require("../models/GameHistory.model");
+const logger = require('../helpers/logger');
 
 class RouletteService {
 
@@ -51,6 +52,13 @@ class RouletteService {
      * @returns {object} Game result
      */
     async playRound(userId, betAmount, betType, betValue = null) {
+
+        logger.info('Roulette round started', {
+            userId,
+            betAmount,
+            betType,
+            betValue
+        });
 
         this.validateBet(betAmount, betType, betValue);
 
@@ -124,6 +132,13 @@ class RouletteService {
                 });
             }
         }
+
+        logger.info('Roulette round completed', {
+            userId,
+            won,
+            winAmount,
+            spinResult
+        });
 
         return {
             success: true,
