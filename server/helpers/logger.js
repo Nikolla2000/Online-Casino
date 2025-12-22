@@ -14,7 +14,7 @@ const errorFileRotateTransport = new winston.transports.DailyRotateFile({
     datePattern: 'YYYY-MM-DD',
     level: 'error',
     maxSize: '20m',
-    maxFiles: '30d',
+    maxFiles: '14d',
     zippedArchive: true
 });
 
