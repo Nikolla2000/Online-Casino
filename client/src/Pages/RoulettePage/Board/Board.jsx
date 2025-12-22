@@ -21,7 +21,7 @@ import {
 } from '../../../redux/features/roulette/rouletteSlice';
 import { animateCreditsIncrement } from '../../../utils/slotsUtils';
 import CoinRain from '../../SlotsPage/Gadgets/CoinRain'
-import { playSound } from '../../../utils/generalActions';
+import { fadeOutAudio, playSound } from '../../../utils/generalActions';
 import { gameAPI } from '../../../services/api/gameAPI.JS';
 
 const Board = () => {
@@ -52,11 +52,9 @@ const Board = () => {
     }
   }, [user, dispatch]);
 
-  // Choose bet option
   const chooseBetOption = (type, value = null) => {
     if (isSpinning) return;
     
-    // Toggle off if clicking same option
     if (betType === type && betValue === value) {
       dispatch(setBetChoice({ betType: null, betValue: null }));
     } else {
@@ -64,7 +62,6 @@ const Board = () => {
     }
   };
 
-  // Increase bet
   const handleIncreaseBet = (amount) => {
     if (isSpinning) return;
     
@@ -77,7 +74,6 @@ const Board = () => {
     dispatch(increaseBet(amount));
   };
 
-  // Clear bet
   const handleClearBet = () => {
     if (isSpinning) return;
     dispatch(clearBet());
@@ -85,7 +81,7 @@ const Board = () => {
 
   // Main game logic
   const handlePlaceBet = async () => {
-    // Validation
+
     if (isSpinning) return;
 
     if (totalCredits < bet) {
@@ -106,15 +102,12 @@ const Board = () => {
       return;
     }
 
-    // Start animations
     playSound('/sounds/spin-wheel-sound.mp3', soundOn);
     dispatch(startWheelSpinning());
 
-    // Deduct bet from credits immediately (visual feedback)
     dispatch(updateCredits(totalCredits - bet));
 
     try {
-      // Call backend
       const res = await gameAPI.fetchPlayRouletteRound({
         betAmount: bet,
         betType: betType,
@@ -123,39 +116,35 @@ const Board = () => {
 
       const gameResult = res.data;
 
-      // After 1.5s, start ball spinning
       setTimeout(() => {
         const ballAudio = playSound('/sounds/roll-ball-roulette-sound.mp3', soundOn);
         dispatch(startBallSpinning());
 
-        // Stop wheel after 6s
         setTimeout(() => {
           dispatch(stopWheelSpinning());
 
-          // Stop ball after 2s more
           setTimeout(() => {
             dispatch(stopBallSpinning());
             
-            // Fade out ball audio
             if (ballAudio) {
               fadeOutAudio(ballAudio, 1000);
+              console.log("adwawd")
             }
+            ballAudio.pause();
 
-            // Set result
+
             dispatch(setResult(gameResult.spinResult));
             dispatch(setWinState({
               isWin: gameResult.isWin,
               winAmount: gameResult.winAmount
             }));
 
-            // Handle win
             if (gameResult.isWin) {
               playSound('/sounds/roulette-win-sound.mp3', soundOn);
 
               setTimeout(() => {
                 playSound('/sounds/coin-payout-sound.mp3', soundOn);
                 
-                // Animate credits
                 animateCreditsIncrement(
                   gameResult.balanceBefore - bet,
                   gameResult.balanceAfter,
@@ -164,16 +153,13 @@ const Board = () => {
                 );
               }, 1500);
 
-              // Clear win state after animation
               setTimeout(() => {
                 dispatch(clearWinState());
               }, 4000);
             } else {
-              // Update to exact balance (already deducted)
               dispatch(updateCredits(gameResult.balanceAfter));
             }
 
-            // Clear result after 3s
             setTimeout(() => {
               dispatch(clearResult());
               dispatch(stopSpinning());
@@ -186,7 +172,6 @@ const Board = () => {
     } catch (error) {
       console.error('Roulette error:', error);
       
-      // Refund bet on error
       dispatch(updateCredits(totalCredits));
       dispatch(stopSpinning());
       
@@ -195,37 +180,15 @@ const Board = () => {
     }
   };
 
-  // Fade audio helper
-  const fadeOutAudio = (audio, duration) => {
-    if (!audio) return;
-    
-    let volume = audio.volume;
-    const step = volume / (duration / 100);
-
-    const fadeOut = setInterval(() => {
-      volume -= step;
-      if (volume <= 0) {
-        clearInterval(fadeOut);
-        audio.pause();
-        audio.currentTime = 0;
-      } else {
-        audio.volume = volume;
-      }
-    }, 100);
-  };
-
-  // Get number color class
   const getNumberClass = (num) => {
     if (num === 0) return 'green-number';
     return blackNumbers.includes(num) ? 'black-number' : 'red-number';
   };
 
-  // Check if bet option is active
   const isBetActive = (type, value = null) => {
     return betType === type && betValue === value;
   };
 
-  // Generate number grid
   const generateNumberGrid = () => {
     const rows = [];
     for (let i = 1; i <= 36; i += 3) {
@@ -257,12 +220,9 @@ const Board = () => {
 
   return (
     <div className='board-wrapper'>
-      {/* Coin Rain on win */}
       <CoinRain isActive={isWinning} winAmount={winAmount} />
 
-      {/* Main Board */}
       <div className='roulette-board'>
-        {/* Top Section - Numbers */}
         <div className="board-top">
           <div 
             className={`zero-cell ${isBetActive('number', 0) ? 'active' : ''}`}
@@ -295,10 +255,10 @@ const Board = () => {
           </div>
         </div>
 
-        {/* Bottom Section - Outside Bets */}
+
         <div className="board-bottom">
           <div className='outside-bets'>
-            {/* Row 1 */}
+
             <div className='bet-row'>
               <div 
                 className={`bet-option ${isBetActive('first_dozen') ? 'active' : ''}`}
@@ -320,7 +280,6 @@ const Board = () => {
               </div>
             </div>
 
-            {/* Row 2 */}
             <div className='bet-row'>
               <div 
                 className={`bet-option ${isBetActive('second_dozen') ? 'active' : ''}`}
@@ -342,7 +301,6 @@ const Board = () => {
               </div>
             </div>
 
-            {/* Row 3 */}
             <div className='bet-row'>
               <div 
                 className={`bet-option ${isBetActive('third_dozen') ? 'active' : ''}`}
@@ -367,7 +325,6 @@ const Board = () => {
         </div>
       </div>
 
-      {/* Chips and Controls */}
       <div className="controls">
         <button 
           className='clear-bet-btn'
@@ -402,7 +359,6 @@ const Board = () => {
         </button>
       </div>
 
-      {/* Game Info */}
       <div className='game-info'>
         <div className='info-item'>
           <span className="label">Credits:</span>
@@ -426,7 +382,6 @@ const Board = () => {
         </div>
       </div>
 
-      {/* Last Results */}
       <div className='last-results'>
         <span className="label">Last Results:</span>
         <div className="results-list">
@@ -434,11 +389,11 @@ const Board = () => {
             <div 
               key={idx} 
               className={`result-bubble ${
-                res.number === 0 ? 'green' :
-                blackNumbers.includes(res.number) ? 'black' : 'red'
+                res.randNumber === 0 ? 'green' :
+                blackNumbers.includes(res.randNumber) ? 'black' : 'red'
               }`}
             >
-              {res.number}
+              {res.randNumber}
             </div>
           ))}
         </div>

@@ -135,7 +135,7 @@ class RouletteService {
 
         logger.info('Roulette round completed', {
             userId,
-            won,
+            isWin,
             winAmount,
             spinResult
         });
