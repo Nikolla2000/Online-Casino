@@ -126,15 +126,14 @@ const Dashboard = () => {
     }
   }
 
-  // Mock data
-  const userStatsMock = {
-    totalWagered: 12500,
-    totalWins: 8450,
-    gamesPlayed: 324,
-    favoriteGame: "Book of Dead",
-    memberSince: "2023",
-    vipLevel: "Gold"
-  };
+  const recentActivityMock = [
+    {
+      game: 'Roulette',
+      isWin: true,
+      amount: 250,
+      time: 'Less than an hour ago'
+    }
+  ]
 
   const { data: userStats, isLoading, error } = useUserStats();
   console.log(userStats)
@@ -198,7 +197,7 @@ const Dashboard = () => {
                 <p className="user-title">@{user.username}</p>
 
                 <div className="member-since">
-                  Member since {userStatsMock.memberSince}
+                  Member since {new Date(user.registrationDate).getFullYear()}
                 </div>
 
                 {user.country && user.country.toUpperCase() !== 'Unknown'.toUpperCase() && (
