@@ -7,6 +7,7 @@ import './DashboardStyles.scss';
 import { getCountryFlag } from '../../../utils/countries';
 import { userAPI } from '../../../services/api/userAPI';
 import { useUserStats } from '../../../hooks/userUserStats';
+import { LoadingSpinnerSmall } from '../../../Components/Spinner/Spinner';
 
 const Dashboard = () => {
   const user = useSelector((state) => state.auth.user);
@@ -220,7 +221,9 @@ const Dashboard = () => {
                 <span className="stat-label">Total Wagered</span>
               </div>
               <div className="stat-item">
-                <span className="stat-value">{userStats.stats.totalRoundsPlayed}</span>
+                {isLoading ? <div style={{marginTop:'10px'}}><LoadingSpinnerSmall/></div> : (
+                  <span className="stat-value">{userStats.stats.totalRoundsPlayed}</span>
+                )}
                 <span className="stat-label">Rounds Played</span>
               </div>
             </div>
@@ -280,14 +283,16 @@ const Dashboard = () => {
                   <div className="stat-icon">🎮</div>
                   <div className="stat-content">
                     <h4>Total Rounds Played</h4>
-                    <p className="stat-number">{userStats.stats.totalRoundsPlayed}</p>
+                    {isLoading ? <div style={{marginTop:'10px'}}><LoadingSpinnerSmall/></div> : (
+                      <p className="stat-number">{userStats.stats.totalRoundsPlayed}</p>
+                    )}
                   </div>
                 </div>
                 <div className="stat-card">
                   <div className="stat-icon">⭐</div>
                   <div className="stat-content">
                     <h4>Favorite Game</h4>
-                    {isLoading ? <p>test</p> : (
+                    {isLoading ? <div style={{marginTop:'10px'}}><LoadingSpinnerSmall/></div> : (
                       <p className="stat-text">{userStats.favoriteGame.charAt(0).toUpperCase() + userStats.favoriteGame.slice(1)}</p>
                     )}
                   </div>
