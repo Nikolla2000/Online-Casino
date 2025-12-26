@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import './DashboardStyles.scss';
 import { getCountryFlag } from '../../../utils/countries';
 import { userAPI } from '../../../services/api/userAPI';
+import { useUserStats } from '../../../hooks/userUserStats';
 
 const Dashboard = () => {
   const user = useSelector((state) => state.auth.user);
@@ -125,7 +126,7 @@ const Dashboard = () => {
   }
 
   // Mock data
-  const userStats = {
+  const userStatsMock = {
     totalWagered: 12500,
     totalWins: 8450,
     gamesPlayed: 324,
@@ -133,6 +134,9 @@ const Dashboard = () => {
     memberSince: "2023",
     vipLevel: "Gold"
   };
+
+  const { data: userStats, isLoading, error } = useUserStats();
+  console.log(userStats)
 
   const creditPackages = [
     { credits: 1000, price: 9.99, originalPrice: null, popular: false },
@@ -193,7 +197,7 @@ const Dashboard = () => {
                 <p className="user-title">@{user.username}</p>
 
                 <div className="member-since">
-                  Member since {userStats.memberSince}
+                  Member since {userStatsMock.memberSince}
                 </div>
 
                 {user.country && user.country.toUpperCase() !== 'Unknown'.toUpperCase() && (
@@ -216,8 +220,8 @@ const Dashboard = () => {
                 <span className="stat-label">Total Wagered</span>
               </div>
               <div className="stat-item">
-                <span className="stat-value">{userStats.gamesPlayed}</span>
-                <span className="stat-label">Games Played</span>
+                <span className="stat-value">{userStats.stats.totalRoundsPlayed}</span>
+                <span className="stat-label">Rounds Played</span>
               </div>
             </div>
           </div>
@@ -269,21 +273,23 @@ const Dashboard = () => {
                   <div className="stat-icon">🏆</div>
                   <div className="stat-content">
                     <h4>Total Wins</h4>
-                    <p className="stat-number">{userStats.totalWins.toLocaleString()}<img src='/images/casino-chips.png' className='chips-img'/></p>
+                    <p className="stat-number">{user.totalWon.toLocaleString()}<img src='/images/casino-chips.png' className='chips-img'/></p>
                   </div>
                 </div>
                 <div className="stat-card">
                   <div className="stat-icon">🎮</div>
                   <div className="stat-content">
-                    <h4>Games Played</h4>
-                    <p className="stat-number">{userStats.gamesPlayed}</p>
+                    <h4>Total Rounds Played</h4>
+                    <p className="stat-number">{userStats.stats.totalRoundsPlayed}</p>
                   </div>
                 </div>
                 <div className="stat-card">
                   <div className="stat-icon">⭐</div>
                   <div className="stat-content">
                     <h4>Favorite Game</h4>
-                    <p className="stat-text">{userStats.favoriteGame}</p>
+                    {isLoading ? <p>test</p> : (
+                      <p className="stat-text">{userStats.favoriteGame.charAt(0).toUpperCase() + userStats.favoriteGame.slice(1)}</p>
+                    )}
                   </div>
                 </div>
               </div>

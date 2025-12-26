@@ -19,5 +19,10 @@ export const userAPI = {
         } catch (err) {
             console.error('Error on request for fetching total credits: ', err);
         }
+    },
+
+    getUserStats: async () => {
+        const res = await api.get('/user/stats');
+        return res.data;
     }
 };
