@@ -4,6 +4,9 @@ const passport = require('passport');
 const multer = require('multer');
 const path = require('path');
 const { hashPassword, comparePasswords} = require('../helpers/auth');
+const asyncHandler = require('../helpers/asyncHandler');
+const GameHistory = require('../models/GameHistory.model');
+const { default: mongoose } = require('mongoose');
 
 
 //List all registered users
@@ -268,6 +271,45 @@ const updatePreferences = async (req, res) => {
 }
 
 
+/**
+ * Get user stats
+ * POST /server/v1/user/stats
+ * ACCESS: Private
+ * Body: {}
+ * Returns { favoriteGame: string }
+ */
+const getUserStats =  asyncHandler(async (req, res) => {
+  const userId = req.userId;
+
+  const [ gameStats, favoriteGame ] = await Promise.all([
+    GameHistory.aggregate([
+      { $match: { userId: mongoose.Types.ObjectId.createFromHexString(userId) } },
+      {
+        $group: {
+          _id: null,
+          totalWagered: { $sum: '$betAmount' },
+          totalWins: { $sum: '$winAmount' },
+          totalRoundsPlayed: { $sum: 1 },
+          // netProfit: { $sum: '$netProfit' }
+        }
+      }
+    ]),
+
+    GameHistory.aggregate([
+      { $match: { userId: mongoose.Types.ObjectId.createFromHexString(userId) } },
+      { $group: { _id: '$gameType', count: { $sum: 1 } }},
+      { $sort: { count: -1 } },
+      { $limit: 1 }
+    ]),
+  ]);
+
+  res.status(200).json({
+    stats: gameStats[0] || { totalWagered: 0, totalWins: 0, totalRoundsPlayed: 0 },
+    favoriteGame: favoriteGame[0]?._id || 'None yet'
+  });
+})
+
+
 module.exports = {
   registerUser,
   loginUser,
@@ -279,4 +321,5 @@ module.exports = {
   uploadPicture,
   getOnlineUsers,
   updatePreferences,
+  getUserStats,
 }

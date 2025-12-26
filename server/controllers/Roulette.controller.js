@@ -3,7 +3,7 @@ const asyncHandler = require('../helpers/asyncHandler');
 
 /**
  * Play roulette round
- * POST /serv er/v1/roulette
+ * POST /server/v1/roulette
  * ACCESS: Private
  * Body: { betAmount: number, betType: string, betValue?: number }
  */

@@ -97,6 +97,7 @@ class RouletteService {
             gameHistory = await GameHistory.create({
                 userId,
                 gameType: 'roulette',
+                betAmount,
                 winAmount,
                 netProfit,
                 result: {

@@ -14,6 +14,7 @@ export const playSound = (soundFilePath, isSoundOn) => {
   return audio;
 }
 
+
 /**
  * Function that gradually fades out a playing audio effect.
  * @param {object} audio - Audio thats already playing.
