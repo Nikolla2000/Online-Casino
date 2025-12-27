@@ -38,3 +38,12 @@ export const fadeOutAudio = (audio, duration) => {
     }
   }, 100);
 };
+
+/**
+ * Function that capitalizes strings (Makes the first letter uppercase).
+ * @param {string} someString - String to be capitalized.
+ * @returns {string} The capitalized string;
+ */
+export const capitalize = (someString) => {
+  return someString.charAt(0).toUpperCase() + someString.slice(1);
+}
