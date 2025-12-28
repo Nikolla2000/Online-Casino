@@ -58,7 +58,9 @@ const SpinButton = () => {
             animateCreditsIncrement(
               res.data.balanceBefore - bet, 
               res.data.balanceAfter, 
-              dispatch
+              dispatch,
+              2000,
+              'slots'
               );
             }, 3000)
             

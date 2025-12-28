@@ -149,7 +149,8 @@ const Board = () => {
                   gameResult.balanceBefore - bet,
                   gameResult.balanceAfter,
                   dispatch,
-                  2000
+                  2000,
+                  'roulette'
                 );
               }, 1500);
 
