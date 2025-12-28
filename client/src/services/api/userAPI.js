@@ -24,5 +24,10 @@ export const userAPI = {
     getUserStats: async () => {
         const res = await api.get('/user/stats');
         return res.data;
+    },
+
+    getRecentActivity: async () => {
+        const res = await api.get('/user/recent-activity');
+        return res.data.recentActivity;
     }
 };
