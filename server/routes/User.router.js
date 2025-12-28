@@ -13,7 +13,8 @@ const {
   uploadPicture,
   getOnlineUsers,
   updatePreferences,
-  getUserStats
+  getUserStats,
+  getRecentActivity
 } = require('../controllers/User.controller');
 
 const { verifyJWT } = require('../middleware/authentication');
@@ -29,5 +30,6 @@ router.post('/uploadPicture', verifyJWT, upload.single('profilePic'), uploadPict
 router.get('/online', getOnlineUsers);
 router.patch('/notification-preferences', verifyJWT, updatePreferences);
 router.get('/stats', verifyJWT, getUserStats);
+router.get('/recent-activity', verifyJWT, getRecentActivity);
 
 module.exports = router;

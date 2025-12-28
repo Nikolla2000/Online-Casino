@@ -7,6 +7,7 @@ const { hashPassword, comparePasswords} = require('../helpers/auth');
 const asyncHandler = require('../helpers/asyncHandler');
 const GameHistory = require('../models/GameHistory.model');
 const { default: mongoose } = require('mongoose');
+const { AppError } = require('../middleware/errorHandler');
 
 
 //List all registered users
@@ -272,11 +273,11 @@ const updatePreferences = async (req, res) => {
 
 
 /**
- * Get user stats
- * POST /server/v1/user/stats
- * ACCESS: Private
- * Body: {}
- * Returns { favoriteGame: string }
+ * Get user statistics including wagered amount, wins, rounds played, and favorite game
+ * 
+ * @route GET /server/v1/user/stats
+ * @access Private
+ * @returns {Object} User statistics object
  */
 const getUserStats =  asyncHandler(async (req, res) => {
   const userId = req.userId;
@@ -307,7 +308,31 @@ const getUserStats =  asyncHandler(async (req, res) => {
     stats: gameStats[0] || { totalWagered: 0, totalWins: 0, totalRoundsPlayed: 0 },
     favoriteGame: favoriteGame[0]?._id || 'None yet'
   });
-})
+});
+
+
+/**
+ * Get recent user game activity from the last month
+ * 
+ * @route  GET /server/v1/user/recent-activity
+ * @access Private
+ * @returns {Array} recentActivity - Array of recent game history objects
+ */
+const getRecentActivity = asyncHandler(async (req, res) => {
+  const userId = req.userId;
+  const oneMonthAgo = new Date();
+  oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+
+  const recentGames = await GameHistory.find({
+    userId,
+    timestamp: { $gte: oneMonthAgo }
+  })
+  .sort({ timestamp: -1 })
+  .limit(4)
+  .lean();
+
+  res.status(200).json({ recentActivity: recentGames });
+});
 
 
 module.exports = {
@@ -322,4 +347,5 @@ module.exports = {
   getOnlineUsers,
   updatePreferences,
   getUserStats,
+  getRecentActivity,
 }
