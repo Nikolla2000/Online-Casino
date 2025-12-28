@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { logoutUser, updateProfilePic } from '../../../redux/features/auth/authSlice';
 import axios from '../../../axiosConfig';
@@ -7,7 +7,11 @@ import './DashboardStyles.scss';
 import { getCountryFlag } from '../../../utils/countries';
 import { userAPI } from '../../../services/api/userAPI';
 import { useUserStats } from '../../../hooks/userUserStats';
-import { LoadingSpinnerSmall } from '../../../Components/Spinner/Spinner';
+import LoadingSpinner, { LoadingSpinnerSmall } from '../../../Components/Spinner/Spinner';
+import api from '../../../axiosConfig';
+import { useRecentActivity } from '../../../hooks/useRecentActivity';
+import { capitalize } from '../../../utils/generalActions';
+import { formatTimeAgo } from '../../../utils/timeFormatter';
 
 const Dashboard = () => {
   const user = useSelector((state) => state.auth.user);
@@ -126,17 +130,9 @@ const Dashboard = () => {
     }
   }
 
-  const recentActivityMock = [
-    {
-      game: 'Roulette',
-      isWin: true,
-      amount: 250,
-      time: 'Less than an hour ago'
-    }
-  ]
 
   const { data: userStats, isLoading, error } = useUserStats();
-  console.log(userStats)
+  const { data: recentActivity = [], isLoading: isLoadingActivity, error: activityError } = useRecentActivity();
 
   const creditPackages = [
     { credits: 1000, price: 9.99, originalPrice: null, popular: false },
@@ -292,7 +288,7 @@ const Dashboard = () => {
                   <div className="stat-content">
                     <h4>Favorite Game</h4>
                     {isLoading ? <div style={{marginTop:'10px'}}><LoadingSpinnerSmall/></div> : (
-                      <p className="stat-text">{userStats.favoriteGame.charAt(0).toUpperCase() + userStats.favoriteGame.slice(1)}</p>
+                      <p className="stat-text">{capitalize(userStats.favoriteGame)}</p>
                     )}
                   </div>
                 </div>
@@ -300,18 +296,26 @@ const Dashboard = () => {
 
               <div className="recent-activity">
                 <h4>Recent Activity</h4>
-                <div className="activity-list">
-                  <div className="activity-item">
-                    <span className="activity-game">Book of Dead</span>
-                    <div className="activity-result win">+250<img src='/images/casino-chips.png' className='chips-img'/></div>
-                    <span className="activity-time">2 hours ago</span>
-                  </div>
-                  <div className="activity-item">
-                    <span className="activity-game">Mega Moolah</span>
-                    <div className="activity-result loss">-50<img src='/images/casino-chips.png' className='chips-img'/></div>
-                    <span className="activity-time">5 hours ago</span>
-                  </div>
-                </div>
+
+                {isLoadingActivity ? (
+                  <LoadingSpinner/>
+                ) : activityError ? (
+                  <div className="activity-error">Failed to load recent activity</div>
+                ) : recentActivity.length === 0 ? (
+                  <div className="activity-empty">No recent activity</div>
+                ) : <div className="activity-list">
+                    {recentActivity.map((game) => (
+                      <div key={game._id} className="activity-item">
+                        <span className="activity-game">{capitalize(game.gameType)}</span>
+                        <div className={`activity-result ${game.netProfit > 0 ? 'win' : 'loss'}`}>
+                          {game.netProfit > 0 ? '+' : ''}{game.netProfit}
+                          <img src='/images/casino-chips.png' className='chips-img'/>
+                        </div>
+                        <span className="activity-time">{formatTimeAgo(game.timestamp)}</span>
+                      </div>
+                    ))}
+                    </div>
+                }
               </div>
             </div>
           )}
