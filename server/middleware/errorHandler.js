@@ -3,6 +3,8 @@ const logger = require("../helpers/logger");
 class AppError extends Error {
 
   constructor(message, statusCode, isOperational = true) {
+    super(message);
+    
     this.message = message;
     this.statusCode = statusCode;
     this.isOperational = isOperational;
