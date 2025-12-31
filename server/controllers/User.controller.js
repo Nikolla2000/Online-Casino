@@ -8,6 +8,8 @@ const asyncHandler = require('../helpers/asyncHandler');
 const GameHistory = require('../models/GameHistory.model');
 const { default: mongoose } = require('mongoose');
 const { AppError } = require('../middleware/errorHandler');
+const userService = require('../services/userService');
+const { ValidationError } = require('../helpers/errors');
 
 
 //List all registered users
@@ -316,22 +318,15 @@ const getUserStats =  asyncHandler(async (req, res) => {
  * 
  * @route  GET /server/v1/user/recent-activity
  * @access Private
- * @returns {Array} recentActivity - Array of recent game history objects
  */
 const getRecentActivity = asyncHandler(async (req, res) => {
   const userId = req.userId;
   const oneMonthAgo = new Date();
   oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
-  const recentGames = await GameHistory.find({
-    userId,
-    timestamp: { $gte: oneMonthAgo }
-  })
-  .sort({ timestamp: -1 })
-  .limit(4)
-  .lean();
+  const recentGames = await userService.recentActivity(userId, 4, oneMonthAgo);
 
-  res.status(200).json({ recentActivity: recentGames });
+  res.status(200).json({ success: true, recentActivity: recentGames });
 });
 
 
@@ -340,11 +335,21 @@ const getRecentActivity = asyncHandler(async (req, res) => {
  * 
  * @route  GET /server/v1/user/game-history
  * @access Private
- * @param {number} page - Starting page - needed for pagination.
- * @param {number} limit - The numbver of gameHistory objects to be returned on a page
- * @returns {Array} gameHistory - Array of game history objects
  */
+const getGameHistory = asyncHandler(async (req, res) => {
+  const userId = req.userId;
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const maxRecords = 200;
 
+  if ((page && isNaN(page)) || (limit && isNaN(limit))) {
+    throw new ValidationError("Page and limit must be valid numbers");
+  }
+
+  const gameHistory = await userService.gameHistory(userId, page, limit, maxRecords);
+
+  res.status(200).json({ success: true, gameHistory });
+});
 
 module.exports = {
   registerUser,
@@ -359,4 +364,5 @@ module.exports = {
   updatePreferences,
   getUserStats,
   getRecentActivity,
+  getGameHistory,
 }

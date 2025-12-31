@@ -14,7 +14,8 @@ const {
   getOnlineUsers,
   updatePreferences,
   getUserStats,
-  getRecentActivity
+  getRecentActivity,
+  getGameHistory
 } = require('../controllers/User.controller');
 
 const { verifyJWT } = require('../middleware/authentication');
@@ -31,5 +32,6 @@ router.get('/online', getOnlineUsers);
 router.patch('/notification-preferences', verifyJWT, updatePreferences);
 router.get('/stats', verifyJWT, getUserStats);
 router.get('/recent-activity', verifyJWT, getRecentActivity);
+router.get('/game-history', verifyJWT, getGameHistory);
 
 module.exports = router;
