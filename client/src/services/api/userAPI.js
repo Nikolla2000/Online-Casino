@@ -29,5 +29,10 @@ export const userAPI = {
     getRecentActivity: async () => {
         const res = await api.get('/user/recent-activity');
         return res.data.recentActivity;
+    },
+
+    getGameHisory: async(page, limit) => {
+        const res = await api.get(`/user/game-history?page=${page}&limit=${limit}`);
+        return res.data;
     }
 };

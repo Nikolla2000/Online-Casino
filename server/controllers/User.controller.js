@@ -335,6 +335,17 @@ const getRecentActivity = asyncHandler(async (req, res) => {
 });
 
 
+/**
+ * Get game history for an user
+ * 
+ * @route  GET /server/v1/user/game-history
+ * @access Private
+ * @param {number} page - Starting page - needed for pagination.
+ * @param {number} limit - The numbver of gameHistory objects to be returned on a page
+ * @returns {Array} gameHistory - Array of game history objects
+ */
+
+
 module.exports = {
   registerUser,
   loginUser,
