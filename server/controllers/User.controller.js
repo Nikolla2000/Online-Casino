@@ -340,15 +340,10 @@ const getGameHistory = asyncHandler(async (req, res) => {
   const userId = req.userId;
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
-  const maxRecords = 200;
 
-  if ((page && isNaN(page)) || (limit && isNaN(limit))) {
-    throw new ValidationError("Page and limit must be valid numbers");
-  }
+  const { history, pagination } = await userService.gameHistory(userId, page, limit);
 
-  const gameHistory = await userService.gameHistory(userId, page, limit, maxRecords);
-
-  res.status(200).json({ success: true, gameHistory });
+  res.status(200).json({ success: true, history, pagination });
 });
 
 module.exports = {
