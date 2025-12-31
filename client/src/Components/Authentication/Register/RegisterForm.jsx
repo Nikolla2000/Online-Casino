@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
-import axios from '../../../axiosConfig';
 import './RegisterStyles.scss';
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-hot-toast';
@@ -19,6 +18,7 @@ import {
   faCrown,
   faIdCard
 } from "@fortawesome/free-solid-svg-icons";
+import api from '../../../axiosConfig';
 
 const RegisterForm = ({ handleClose, setShowDropdown }) => {
   const [formData, setFormData] = useState({
@@ -90,7 +90,7 @@ const RegisterForm = ({ handleClose, setShowDropdown }) => {
 
     if (Object.keys(errors).length === 0) {
       try {
-        const response = await axios.post('/user/register', formData);
+        await api.post('/user/register', formData);
         const loginCredentials = {
           username: formData.username,
           password: formData.password
@@ -110,13 +110,15 @@ const RegisterForm = ({ handleClose, setShowDropdown }) => {
 
         toast.success(`Welcome to Elite Casino, ${name}! 🎰`);
         
-        const res = await dispatch(login(loginCredentials));
+        const res = dispatch(login(loginCredentials));
         
         if (login.fulfilled.match(res)) {
           const token = res.payload.accessToken;
-          await dispatch(fetchCurrentUser(token));
+          dispatch(fetchCurrentUser(token));
           dispatch(hideModals());
+
           if (setShowDropdown) setShowDropdown(false);
+
           setTimeout(() => navigate("/"), 400);
         } else {
           toast.error("Error signing in.");
