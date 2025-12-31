@@ -11,7 +11,9 @@ import LoadingSpinner, { LoadingSpinnerSmall } from '../../../Components/Spinner
 import api from '../../../axiosConfig';
 import { useRecentActivity } from '../../../hooks/useRecentActivity';
 import { capitalize } from '../../../utils/generalActions';
-import { formatTimeAgo } from '../../../utils/timeFormatter';
+import { formatDate, formatTimeAgo } from '../../../utils/timeFormatter';
+import { useGameHistory } from '../../../hooks/useGameHistory';
+import Pagination from '../../../Components/Pagination/Pagination';
 
 const Dashboard = () => {
   const user = useSelector((state) => state.auth.user);
@@ -24,6 +26,8 @@ const Dashboard = () => {
 
   const [isSaving, setIsSaving] = useState(false);
   const [noChangesMessage, setNoChangesMessage] = useState('');
+
+  const [currentPage, setCurrentPage] = useState(1);
 
   const [notificationsPrefs, setNotificationsPrefs] = useState({
     bonusOffers: user.bonusOffers || false,
@@ -133,6 +137,12 @@ const Dashboard = () => {
 
   const { data: userStats, isLoading, error } = useUserStats();
   const { data: recentActivity = [], isLoading: isLoadingActivity, error: activityError } = useRecentActivity();
+  const { data: gameHistoryData, isLoading: isLoadingHistory, error: historyError } = useGameHistory(currentPage, 10, activeSection === 'history');
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+    document.querySelector('.game-history-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 
   const creditPackages = [
     { credits: 1000, price: 9.99, originalPrice: null, popular: false },
@@ -239,7 +249,10 @@ const Dashboard = () => {
             </button>
             <button 
               className={`nav-item ${activeSection === 'history' ? 'active' : ''}`}
-              onClick={() => setActiveSection('history')}
+              onClick={() => {
+                setActiveSection('history');
+                setCurrentPage(1);
+              }}
             >
               📜 Game History
             </button>
@@ -317,6 +330,77 @@ const Dashboard = () => {
                     </div>
                 }
               </div>
+            </div>
+          )}
+
+{activeSection === 'history' && (
+            <div className="content-section game-history-section">
+              <div className="section-header">
+                <h3>Game History</h3>
+                {gameHistoryData && (
+                  <p className="history-info">
+                    Showing {gameHistoryData.history.length} of {gameHistoryData.pagination.totalRecords} total games
+                  </p>
+                )}
+              </div>
+
+              {isLoadingHistory ? (
+                <LoadingSpinner />
+              ) : historyError ? (
+                <div className="history-error">Failed to load game history</div>
+              ) : !gameHistoryData || gameHistoryData.history.length === 0 ? (
+                <div className="history-empty">
+                  <p>No game history found</p>
+                  <p className="empty-subtitle">Start playing to see your history here!</p>
+                </div>
+              ) : (
+                <>
+                  <div className="history-table-wrapper">
+                    <table className="history-table">
+                      <thead>
+                        <tr>
+                          <th>Date & Time</th>
+                          <th>Game</th>
+                          <th>Bet Amount</th>
+                          <th>Win Amount</th>
+                          <th>Net Profit</th>
+                          <th>Balance After</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {gameHistoryData.history.map((game) => (
+                          <tr key={game._id}>
+                            <td className="date-cell">{formatDate(game.timestamp)}</td>
+                            <td className="game-cell">{capitalize(game.gameType)}</td>
+                            <td className="bet-cell">
+                              {game.betAmount}
+                              <img src='/images/casino-chips.png' className='chips-img-small'/>
+                            </td>
+                            <td className="win-cell">
+                              {game.winAmount}
+                              <img src='/images/casino-chips.png' className='chips-img-small'/>
+                            </td>
+                            <td className={`profit-cell ${game.netProfit > 0 ? 'profit-positive' : 'profit-negative'}`}>
+                              {game.netProfit > 0 ? '+' : ''}{game.netProfit}
+                              <img src='/images/casino-chips.png' className='chips-img-small'/>
+                            </td>
+                            <td className="balance-cell">
+                              {game.balanceAfter}
+                              <img src='/images/casino-chips.png' className='chips-img-small'/>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={gameHistoryData.pagination.totalPages}
+                    onPageChange={handlePageChange}
+                  />
+                </>
+              )}
             </div>
           )}
 
