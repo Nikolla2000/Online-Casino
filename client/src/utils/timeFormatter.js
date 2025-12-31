@@ -1,5 +1,6 @@
 /**
  * Formats a timestamp into a relative "time ago" string.
+ * 
  * @param {string} timestamp - An ISO 8601 formatted date string.
  * @returns {string} A human-readable relative time string.
  */
@@ -22,4 +23,21 @@ export const formatTimeAgo = (timestamp) => {
   } else {
     return `${diffWeeks} ${diffWeeks === 1 ? 'week' : 'weeks'} ago`;
   }
+};
+
+/**
+ * Formats an ISO 8601 timestamp into a human-readable date and time string.
+ * 
+ * @param {string} timestamp - An ISO 8601 formatted date string.
+ * @returns {string} A localized string containing the short month, numeric day, full year, and 2-digit time.
+ */
+export const formatDate = (timestamp) => {
+  const date = new Date(timestamp);
+  return date.toLocaleDateString('en-US', { 
+    month: 'short', 
+    day: 'numeric', 
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
 };
