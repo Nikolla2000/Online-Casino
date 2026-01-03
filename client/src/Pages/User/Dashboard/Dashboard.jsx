@@ -333,7 +333,7 @@ const Dashboard = () => {
             </div>
           )}
 
-{activeSection === 'history' && (
+          {activeSection === 'history' && (
             <div className="content-section game-history-section">
               <div className="section-header">
                 <h3>Game History</h3>
@@ -401,6 +401,175 @@ const Dashboard = () => {
                   />
                 </>
               )}
+            </div>
+          )}
+
+          {activeSection === 'vip' && (
+            <div className="content-section vip-section">
+              <div className="vip-header">
+                <h3>VIP Benefits Program</h3>
+                <p className="vip-subtitle">Unlock exclusive rewards as you play</p>
+              </div>
+
+              <div className="vip-progress-card">
+                <div className="progress-header">
+                  <div className="current-tier">
+                    <span className="tier-icon">{user.isVip ? '👑' : '⭐'}</span>
+                    <div className="tier-info">
+                      <h4>{user.isVip ? 'Gold Member' : 'Regular Player'}</h4>
+                      <p>Level 3 of 5</p>
+                    </div>
+                  </div>
+                  <div className="next-tier">
+                    <span className="next-label">Next Tier</span>
+                    <span className="next-tier-name">💎 Platinum</span>
+                  </div>
+                </div>
+                
+                <div className="progress-bar-container">
+                  <div className="progress-bar">
+                    <div className="progress-fill" style={{ width: '65%' }}>
+                      <span className="progress-text">65%</span>
+                    </div>
+                  </div>
+                  <p className="progress-info">Wager 3,500 more credits to reach Platinum</p>
+                </div>
+              </div>
+
+              <div className="vip-tiers-grid">
+                <div className="tier-card bronze">
+                  <div className="tier-badge">
+                    <span className="tier-icon">🥉</span>
+                    <h4>Bronze</h4>
+                  </div>
+                  <div className="tier-requirement">0 - 1,000 wagered</div>
+                  <ul className="tier-benefits">
+                    <li>✓ Welcome bonus</li>
+                    <li>✓ Basic support</li>
+                    <li>✓ Standard withdrawal time</li>
+                  </ul>
+                </div>
+
+                <div className="tier-card silver">
+                  <div className="tier-badge">
+                    <span className="tier-icon">🥈</span>
+                    <h4>Silver</h4>
+                  </div>
+                  <div className="tier-requirement">1,000 - 5,000 wagered</div>
+                  <ul className="tier-benefits">
+                    <li>✓ 5% cashback</li>
+                    <li>✓ Priority support</li>
+                    <li>✓ Weekly bonuses</li>
+                    <li>✓ Faster withdrawals</li>
+                  </ul>
+                </div>
+
+                <div className="tier-card gold active">
+                  <div className="tier-badge">
+                    <span className="tier-icon">👑</span>
+                    <h4>Gold</h4>
+                    <div className="current-badge">YOUR TIER</div>
+                  </div>
+                  <div className="tier-requirement">5,000 - 20,000 wagered</div>
+                  <ul className="tier-benefits">
+                    <li>✓ 10% cashback</li>
+                    <li>✓ Dedicated VIP manager</li>
+                    <li>✓ Exclusive tournaments</li>
+                    <li>✓ Instant withdrawals</li>
+                    <li>✓ Birthday bonus</li>
+                  </ul>
+                </div>
+
+                <div className="tier-card platinum locked">
+                  <div className="tier-badge">
+                    <span className="tier-icon">💎</span>
+                    <h4>Platinum</h4>
+                  </div>
+                  <div className="tier-requirement">20,000 - 50,000 wagered</div>
+                  <ul className="tier-benefits">
+                    <li>✓ 15% cashback</li>
+                    <li>✓ VIP events access</li>
+                    <li>✓ Personal account manager</li>
+                    <li>✓ Luxury gifts</li>
+                    <li>✓ Higher bet limits</li>
+                    <li>✓ Custom bonuses</li>
+                  </ul>
+                  <div className="locked-overlay">
+                    <span className="lock-icon">🔒</span>
+                  </div>
+                </div>
+
+                <div className="tier-card diamond locked">
+                  <div className="tier-badge">
+                    <span className="tier-icon">💠</span>
+                    <h4>Diamond</h4>
+                  </div>
+                  <div className="tier-requirement">50,000+ wagered</div>
+                  <ul className="tier-benefits">
+                    <li>✓ 20% cashback</li>
+                    <li>✓ Invitations to VIP trips</li>
+                    <li>✓ 24/7 premium support</li>
+                    <li>✓ Exclusive high-roller games</li>
+                    <li>✓ No withdrawal limits</li>
+                    <li>✓ Personalized rewards</li>
+                    <li>✓ Red carpet treatment</li>
+                  </ul>
+                  <div className="locked-overlay">
+                    <span className="lock-icon">🔒</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="exclusive-perks">
+                <h4 className="perks-title">
+                  <span className="sparkle">✨</span>
+                  Your Gold Member Exclusive Perks
+                  <span className="sparkle">✨</span>
+                </h4>
+                
+                <div className="perks-grid">
+                  <div className="perk-card">
+                    <div className="perk-icon">🎁</div>
+                    <h5>Monthly Bonus</h5>
+                    <p>Receive 500 bonus credits every month</p>
+                    <button className="claim-btn">Claim Now</button>
+                  </div>
+
+                  <div className="perk-card">
+                    <div className="perk-icon">🎰</div>
+                    <h5>Free Spins</h5>
+                    <p>50 free spins on premium slots weekly</p>
+                    <button className="claim-btn">Claim Now</button>
+                  </div>
+
+                  <div className="perk-card">
+                    <div className="perk-icon">🏆</div>
+                    <h5>VIP Tournament</h5>
+                    <p>Access to exclusive high-stakes tournaments</p>
+                    <button className="claim-btn disabled" disabled>Coming Soon</button>
+                  </div>
+
+                  <div className="perk-card">
+                    <div className="perk-icon">💰</div>
+                    <h5>Cashback Boost</h5>
+                    <p>10% cashback on all losses this week</p>
+                    <div className="perk-status">Active</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* VIP Lounge CTA */}
+              <div className="vip-lounge-cta">
+                <div className="cta-content">
+                  <h3>🌟 Want More Exclusive Benefits?</h3>
+                  <p>Upgrade to Platinum and unlock premium rewards, personal manager, and VIP events</p>
+                  <button className="upgrade-btn">
+                    <span>View Upgrade Path</span>
+                    <span className="arrow">→</span>
+                  </button>
+                </div>
+                <div className="cta-decoration"></div>
+              </div>
             </div>
           )}
 
