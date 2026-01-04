@@ -19,6 +19,7 @@ const router = createBrowserRouter([
       { path: routes.slots.path, element: <ProtectedRoute>{routes.slots.element}</ProtectedRoute> },
       { path: routes.roulette.path, element:<ProtectedRoute>{routes.roulette.element}</ProtectedRoute> },
       { path: routes.oauth.path, element: routes.oauth.element },
+      { path: routes.terms.path, element: routes.terms.element },
     ]
   }
 ])

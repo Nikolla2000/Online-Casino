@@ -9,6 +9,7 @@ import Dashboard from "../Pages/User/Dashboard/Dashboard";
 import React, { useContext } from "react";
 import { UserContext } from "../../context/userContext";
 import OAuthCallback from "../Components/Oauth/OauthCallback";
+import TermsConditions from "../Pages/TermsConditionsPage/TermsConditions";
 
 const routes = {
   main: {
@@ -67,6 +68,12 @@ const routes = {
     path: '/oauth/callback',
     element: <OAuthCallback/>,
     name: 'oauth-callback',
+    includeInNav: false,
+  },
+  terms: {
+    path: '/terms',
+    element: <TermsConditions/>,
+    name: 'terms',
     includeInNav: false,
   }
 }

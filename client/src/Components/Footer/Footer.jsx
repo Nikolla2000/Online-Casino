@@ -59,7 +59,7 @@ const Footer = () => {
                         <ul className="footer-links">
                             <li><Link to="/help">FAQ</Link></li>
                             <li><Link to="/responsible">Responsible Gaming</Link></li>
-                            <li><Link to="/support">Support</Link></li>
+                            <li><Link to="/email">Support</Link></li>
                         </ul>
                     </Grid>
 
