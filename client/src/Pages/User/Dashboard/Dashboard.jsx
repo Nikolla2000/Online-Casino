@@ -14,6 +14,7 @@ import { capitalize } from '../../../utils/generalActions';
 import { formatDate, formatTimeAgo } from '../../../utils/timeFormatter';
 import { useGameHistory } from '../../../hooks/useGameHistory';
 import Pagination from '../../../Components/Pagination/Pagination';
+import { useSearchParams } from 'react-router-dom';
 
 const Dashboard = () => {
   const user = useSelector((state) => state.auth.user);
@@ -34,6 +35,19 @@ const Dashboard = () => {
     gameUpdates: user.gameUpdates || false,
     vipEvents: user.vipEvents || false
   });
+
+  const [searchParams] = useSearchParams();
+  const section = searchParams.get('section');
+
+  useEffect(() => {
+
+    if (section === 'history') {
+      setActiveSection('history');
+      setCurrentPage(1);
+    } else if (section === 'account') {
+      setActiveSection('account')
+    }
+  }, [section]);
 
   const handleFileUpload = async (event) => {
     const file = event.target.files[0];
