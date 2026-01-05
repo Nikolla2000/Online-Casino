@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState =  {
     showAiChatWidget: false,
+    showChatButton: true,
     conversationHistory: [],
     isChatbotTyping: false,
     showQuickQuestions: false,
@@ -48,6 +49,9 @@ const aiChatbotSlice = createSlice({
         },
         stopLoading: (state) => {
             state.isLoading = false;
+        },
+        toggleChatButton: (state, action) => {
+            state.showChatButton = action.payload;
         }
     }
 
@@ -66,5 +70,6 @@ export const {
     hideDelete,
     startLoading,
     stopLoading,
+    toggleChatButton,
 } = aiChatbotSlice.actions;
 export default aiChatbotSlice.reducer;

@@ -6,17 +6,23 @@ import LiveChatModal from '../Components/LiveChat/LiveChatModal';
 import { useDispatch, useSelector } from 'react-redux';
 import FloatingChatButton from '../Components/AIChatSupport/FloatingChatButton';
 import AIChatWidget from '../Components/AIChatSupport/AIChatWidget';
-import { hideChat } from '../redux/features/aiChatbot/aiChatbotSlice';
+import { hideChat, toggleChatButton } from '../redux/features/aiChatbot/aiChatbotSlice';
 
 const RootLayout = () => {
   const navigation = useNavigation();
   const { activeChat } = useSelector(state => state.chat);
-  const { showAiChatWidget } = useSelector(state => state.aiChatbot);
+  const { showAiChatWidget, showChatButton } = useSelector(state => state.aiChatbot);
   const dispatch = useDispatch();
   const location = useLocation();
 
   useEffect(() => {
     dispatch(hideChat());
+
+    if (location.pathname.includes('/games/')) {
+      dispatch(toggleChatButton(false));
+    } else {
+      dispatch(toggleChatButton(true));
+    }
   }, [location.pathname, dispatch]);
 
   return (
@@ -29,7 +35,7 @@ const RootLayout = () => {
         )}
         <Outlet />
         {activeChat && <LiveChatModal />}
-        {!showAiChatWidget && <FloatingChatButton/>}
+        {!showAiChatWidget && showChatButton && <FloatingChatButton/>}
         {showAiChatWidget && <AIChatWidget/>}
       </main>
     </>
