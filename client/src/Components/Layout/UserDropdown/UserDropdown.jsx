@@ -109,12 +109,12 @@ const UserDropdown = ({ show, setShowDropdown }) => {
                     <span>Wallet</span>
                   </div>
                   
-                  <div className="menu-item" onClick={() => handleNavigate('/history')}>
+                  <div className="menu-item" onClick={() => handleNavigate('/dashboard?section=history')}>
                     <FontAwesomeIcon icon={faHistory} className="menu-icon" />
                     <span>Game History</span>
                   </div>
                   
-                  <div className="menu-item" onClick={() => handleNavigate('/settings')}>
+                  <div className="menu-item" onClick={() => handleNavigate('/dashboard?section=account')}>
                     <FontAwesomeIcon icon={faCog} className="menu-icon" />
                     <span>Settings</span>
                   </div>
