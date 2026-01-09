@@ -6,8 +6,8 @@ const {
   createChat,
   markMessagesAsRead,
   deleteChat
-} = require('../controllers/Chat.controller');
-const { auth, verifyJWT } = require('../middleware/authentication.js');
+} = require('../../controllers/Chat.controller.js');
+const { auth, verifyJWT } = require('../../middleware/authentication.js');
 
 // Apply auth middleware to all routes
 // router.use(auth);

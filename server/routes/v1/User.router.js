@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const upload = require('../helpers/fileUpload');
+const upload = require('../../helpers/fileUpload');
 
 const {
   registerUser,
@@ -16,9 +16,9 @@ const {
   getUserStats,
   getRecentActivity,
   getGameHistory
-} = require('../controllers/User.controller');
+} = require('../../controllers/User.controller');
 
-const { verifyJWT } = require('../middleware/authentication');
+const { verifyJWT } = require('../../middleware/authentication');
 
 router.post('/register', registerUser);
 router.post('/login', loginUser);

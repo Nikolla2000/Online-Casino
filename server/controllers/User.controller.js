@@ -7,9 +7,7 @@ const { hashPassword, comparePasswords} = require('../helpers/auth');
 const asyncHandler = require('../helpers/asyncHandler');
 const GameHistory = require('../models/GameHistory.model');
 const { default: mongoose } = require('mongoose');
-const { AppError } = require('../middleware/errorHandler');
 const userService = require('../services/userService');
-const { ValidationError } = require('../helpers/errors');
 
 
 //List all registered users
