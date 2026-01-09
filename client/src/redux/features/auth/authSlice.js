@@ -15,7 +15,7 @@ import api from '../../../axiosConfig';
 
 
 export const login = createAsyncThunk('auth/login', async (credentials) => {
-  const res = await api.post('auth/login', credentials, {
+  const res = await api.post('/v1/auth/login', credentials, {
     withCredentials: true,
   });
   return res.data;
@@ -23,7 +23,7 @@ export const login = createAsyncThunk('auth/login', async (credentials) => {
 
 
 export const refresh = createAsyncThunk('auth/refresh', async () => {
-  const res = await api.post('/auth/refresh', null, {
+  const res = await api.post('/v1/auth/refresh', null, {
     withCredentials: true,
   });
   return res.data;
@@ -31,7 +31,7 @@ export const refresh = createAsyncThunk('auth/refresh', async () => {
 
 
 export const logoutUser = createAsyncThunk('auth/logout', async () => {
-    await api.get('/auth/logout', {
+    await api.get('/v1/auth/logout', {
       withCredentials: true,
     });
 });
@@ -40,7 +40,7 @@ export const logoutUser = createAsyncThunk('auth/logout', async () => {
 export const fetchCurrentUser = createAsyncThunk(
     'auth/fetchCurrentUser',
     async (token) => {
-      const res = await api.get('/auth/me', {
+      const res = await api.get('/v1/auth/me', {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true
       });

@@ -46,7 +46,7 @@ const OauthCallback = () => {
                     },
                   });
 
-                  await api.post('/auth/oauth', {
+                  await api.post('/v1/auth/oauth', {
                     email: userInfoResponse.data.email,
                     firstName: userInfoResponse.data.given_name,
                     lastName: userInfoResponse.data.family_name,

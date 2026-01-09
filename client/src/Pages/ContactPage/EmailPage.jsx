@@ -20,7 +20,7 @@ const EmailPage = () => {
     try {
       setSubmitError('');
       
-      const res = await api.post('email/sendEmail', data);
+      const res = await api.post('/v1/email/sendEmail', data);
       
       console.log('Email sent:', res.data);
       setIsSubmitted(true);

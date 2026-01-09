@@ -21,7 +21,7 @@ const AdminPage = () => {
       const controller = new AbortController();
 
       try {
-        const response = await axios.get('user/allUsers', {
+        const response = await axios.get('/v1/user/allUsers', {
           signal: controller.signal,
         });
 
@@ -49,7 +49,7 @@ const AdminPage = () => {
     setUserId(id)
     dispatch(maxCredits())
     try {
-      const {data} = axios.put('/user/updateCredits', { userId: userId, totalCredits: 10000})
+      const {data} = axios.put('/v1/user/updateCredits', { userId: userId, totalCredits: 10000})
       toast.success('Max Credits Restored Successfully!')
     } catch (error) {
       console.log(error);

@@ -68,7 +68,7 @@ const Dashboard = () => {
 
     try {
       setIsUploading(true);
-      const res = await axios.post('/user/uploadPicture', formData, {
+      const res = await axios.post('/v1/user/uploadPicture', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         withCredentials: true
       });
