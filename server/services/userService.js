@@ -1,4 +1,5 @@
 const { ValidationError, NotFoundError } = require("../helpers/errors");
+const { AppError } = require("../middleware/errorHandler");
 const GameHistory = require("../models/GameHistory.model");
 const User = require("../models/User.model");
 
@@ -124,6 +125,70 @@ class UserService {
     const users = await query.lean();
 
     return users;
+  }
+
+
+  /**
+ * Updates total credits for a user
+ * @param {string} userId - User ID to update
+ * @param {number} totalCredits - New total credits amount
+ * @param {string} adminId - Admin user ID who is making the update
+ * @returns {Promise<Object>} Updated user info
+ * @throws {NotFoundError} If user not found
+ * @throws {ValidationError} If credits value is invalid
+ * @throws {Error} If user doesn't have admin role
+ */
+  async updateTotalCredits(userId, totalCredits, adminId) {
+    if (totalCredits === undefined || totalCredits === null) {
+      throw new ValidationError('totalCredits field is required');
+    }
+    
+    if (typeof totalCredits !== 'number' || isNaN(totalCredits)) {
+      throw new ValidationError('totalCredits must be a valid number');
+    }
+    
+    if (totalCredits < 0) {
+      throw new ValidationError('totalCredits cannot be negative');
+    }
+    
+    const MAX_TOTAL_CREDITS_SET = 100000 // 100 Thousand
+    if (totalCredits > MAX_TOTAL_CREDITS_SET) {
+      throw new ValidationError('totalCredits cannot exceed 100 000');
+    }
+
+    const adminUser = await User.findById(adminId).select('role');
+
+    if (!adminUser) {
+      throw new NotFoundError('Admin user not found');
+    }
+
+    if (adminUser.role !== 'admin') {
+      throw new AppError('Access denied. Admin role required to update credits.', 403);
+    }
+
+    const userToUpdate = await User.findOneAndUpdate(
+      { _id: userId },
+      { 
+        $set: { 
+          totalCredits: totalCredits,
+        } 
+      },
+      { 
+        new: true,
+        select: '-password'
+      }
+    );
+
+    if (!userToUpdate) {
+      throw new NotFoundError('User not found');
+    }
+
+    return {
+      id: userToUpdate._id,
+      username: userToUpdate.username,
+      email: userToUpdate.email,
+      totalCredits: userToUpdate.totalCredits,
+    };
   }
 }
 

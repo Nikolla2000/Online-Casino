@@ -10,6 +10,7 @@ import React, { useContext } from "react";
 import { UserContext } from "../../context/userContext";
 import OAuthCallback from "../Components/Oauth/OauthCallback";
 import TermsConditions from "../Pages/TermsConditionsPage/TermsConditions";
+import { useSelector } from "react-redux";
 
 const routes = {
   main: {
@@ -24,8 +25,8 @@ const routes = {
   //   name: 'admin',
   //   // includeInNav: true,
   //   get includeInNav() {
-  //     const { user } = useContext(UserContext);
-  //     return user && user.email === import.meta.env.VITE_ADMIN_USER_EMAIL;
+  //     const { user } = useSelector(state => state.auth);
+  //     return user && user.email !== import.meta.env.VITE_ADMIN_USER_EMAIL;
   //   },
   // },
   games: {

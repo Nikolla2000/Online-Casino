@@ -26,7 +26,7 @@ router.get('/logout', logoutUser);
 router.get('/allUsers', getAllUsers);
 router.get('/profile', getProfile);
 router.get('/totalCredits', verifyJWT, getTotalCredits);
-router.put('/updateCredits', updateTotalCredits);
+router.put('/:userId/updateCredits', verifyJWT, updateTotalCredits);
 router.post('/uploadPicture', verifyJWT, upload.single('profilePic'), uploadPicture);
 router.get('/online', getOnlineUsers);
 router.patch('/notification-preferences', verifyJWT, updatePreferences);

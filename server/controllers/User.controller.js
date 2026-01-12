@@ -139,22 +139,33 @@ const getProfile = (req, res) => {
 }
 
 
-//Update total credits
-const updateTotalCredits = async (req, res) => {
-  const { userId, totalCredits} = req.body
+/**
+ * Update total credits for a user
+ * @route PUT /server/v1/user/credits
+ * @access Private/Admin
+ * @param {number} totalCredits - New total credits amount
+ * @returns {Object} Updated user info
+ */
+const updateTotalCredits = asyncHandler(async (req, res) => {
+  const { totalCredits} = req.body;
+  const { userId } = req.params;
+  const adminUserId = req.userId;
 
-  try {
-    const userToUpdate = await User.findOneAndUpdate(
-      { _id: userId },
-      { $set: { totalCredits: totalCredits } },
-      { new: true }
-    ).lean();
-
-    res.status(200).json({ message: 'Total credits updated successfully', user: userToUpdate });
-  } catch (error) {
-    res.status(500).json({ message: error.message })
+  if (!userId) {
+    return res.status(400).json({
+      success: false,
+      message: 'User ID is required in URL parameters'
+    });
   }
-}
+
+  const updatedUser = await userService.updateTotalCredits(userId, totalCredits, adminUserId);
+  
+  res.status(200).json({
+    success: true,
+    message: 'Total credits updated successfully',
+    user: updatedUser
+  });
+});
 
 
 const getTotalCredits = async (req, res) => {
