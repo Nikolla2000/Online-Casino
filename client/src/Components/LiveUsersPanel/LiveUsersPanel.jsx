@@ -11,7 +11,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import './LiveUsersPanel.scss';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchOnlineUsers } from '../../lib/data';
 import LoadingSpinner from '../Spinner/Spinner';
 import { useNavigate } from 'react-router';
 import { setActiveChat } from '../../redux/features/chat/chatSlice';
