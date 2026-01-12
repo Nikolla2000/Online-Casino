@@ -341,7 +341,39 @@ const getGameHistory = asyncHandler(async (req, res) => {
 
   const { history, pagination } = await userService.gameHistory(userId, page, limit);
 
-  res.status(200).json({ success: true, history, pagination });
+  res.status(200).json({
+    success: true,
+    history,
+    pagination
+  });
+});
+
+
+/**
+ * Get users with optional filtering
+ * 
+ * @route GET /server/v2/users
+ * @query {string} online - Filter by online status ('true' for online users only)
+ * @query {string} vip - Filter by VIP status ('true' for VIP users only)
+ * @query {number} limit - Maximum number of users to return
+ * @query {string} sort - Sort field (default: 'username', options: 'username', 'totalCredits', 'lastSeen')
+ * @access Private
+ */
+const getUsers = asyncHandler(async(req, res) => {
+  const { online, vip, limit, sort } = req.query;
+
+  const users = await userService.getUsers({
+    onlineOnly: online === 'true',
+    vipOnly: vip === 'true',
+    limit: limit ? parseInt(limit) : undefined,
+    sortBy: sort || 'username'
+  });
+
+  res.status(200).json({ 
+    success: true, 
+    count: users.length, 
+    users 
+  });
 });
 
 module.exports = {
@@ -358,4 +390,5 @@ module.exports = {
   getUserStats,
   getRecentActivity,
   getGameHistory,
+  getUsers,
 }

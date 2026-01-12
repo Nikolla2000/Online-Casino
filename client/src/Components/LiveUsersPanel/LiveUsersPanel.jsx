@@ -16,6 +16,7 @@ import LoadingSpinner from '../Spinner/Spinner';
 import { useNavigate } from 'react-router';
 import { setActiveChat } from '../../redux/features/chat/chatSlice';
 import { normalizeDates } from '../../utils/normalizeDates';
+import { userAPI } from '../../services/api/userAPI';
 
 const LiveUsersPanel = ({ isOpen, onClose }) => {
   const [onlineUsers, setOnlineUsers] = useState([]);
@@ -38,7 +39,7 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
     setError(null);
 
     try {
-      const data = await fetchOnlineUsers();
+      const data = await userAPI.fetchOnlineUsers();
       if (data.success) {
         setOnlineUsers(data.users);
       } else {

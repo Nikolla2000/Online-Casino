@@ -104,13 +104,16 @@ app.use(express.static("./public"));
 app.use(express.json());
 
 //routes
+//V1 routes
 app.use('/server/v1/user', userRouter);
-app.use('/server/v2/user', userRouterV2);
 app.use('/server/v1/auth', authRouter);
 app.use('/server/v1/email', emailRouter);
 app.use('/server/v1/chats', chatRouter);
 app.use('/server/v1/chatbot', chatBotRouter);
 app.use('/server/v1/game', gameRouter);
+
+//V2 routes
+app.use('/server/v2/users', userRouterV2);
 
 //Serve static files
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));

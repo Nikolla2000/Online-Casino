@@ -38,7 +38,7 @@ export const userAPI = {
 
     fetchOnlineUsers: async() => {
         try {
-            const res = await api.get('/v1/user?online=true');
+            const res = await api.get('/v2/users?online=true');
             return res.data;
         } catch (err) {
             console.error('Error fetching online users: ', err);

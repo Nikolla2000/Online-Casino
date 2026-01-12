@@ -1,5 +1,6 @@
-const { ValidationError } = require("../helpers/errors");
+const { ValidationError, NotFoundError } = require("../helpers/errors");
 const GameHistory = require("../models/GameHistory.model");
+const User = require("../models/User.model");
 
 class UserService {
   
@@ -62,6 +63,67 @@ class UserService {
         hasPrevPage: page > 1
       }
     }
+  }
+
+
+  /**
+   * Retrieves a list of users with optional filtering. Returns selected fields only for security and performance.
+   * 
+   * @param {Object} options - Filter and sort options
+   * @param {boolean} [options.onlineOnly=false] - If true, returns only users with isOnline=true
+   * @param {boolean} [options.vipOnly=false] - If true, returns only VIP users
+   * @param {number} [options.limit] - Maximum number of users to return (optional)
+   * @param {string} [options.sortBy='username'] - Field to sort by ('username', 'totalCredits', 'lastSeen')
+   * @returns {Promise<Array<Object>>} A promise that resolves to an array of lean user objects
+   * @throws {ValidationError} If invalid sort field is provided
+   * @throws {Error} If database query fails.
+   */
+  async getUsers(options = {}) {
+    const {
+      onlineOnly = false,
+      vipOnly = false,
+      limit,
+      sortBy = 'username'
+    } = options;  
+
+    const validSortFields = ['username', 'totalCredits', 'lastSeen', 'registrationDate'];
+    if (!validSortFields.includes(sortBy)) {
+      throw new ValidationError(
+        `Invalid sort field: ${sortBy}. Valid options: ${validSortFields.join(', ')}`
+      );
+    }
+
+    const MAX_LIMIT = 100;
+    if (limit !== undefined) {
+      const parsedLimit = parseInt(limit);
+      if (isNaN(parsedLimit) || parsedLimit < 1) {
+        throw new ValidationError('Limit must be a positive number');
+      }
+      if (parsedLimit > MAX_LIMIT) {
+        throw new ValidationError(`Limit cannot exceed ${MAX_LIMIT}`);
+      }
+    }
+
+    const filters = {};
+    if (onlineOnly) filters.isOnline = true;
+    if (vipOnly) filters.isVip = true;
+
+    const sortOrder = sortBy === 'totalCredits' ? -1 : 1;
+    const sortObj = { [sortBy]: sortOrder };
+
+    let query = User.find(
+      filters
+    )
+    .select('-password')
+    .sort(sortObj);
+
+    if (limit && limit > 0) {
+      query = query.limit(Math.min(parseInt(limit), MAX_LIMIT));
+    }
+
+    const users = await query.lean();
+
+    return users;
   }
 }
 
