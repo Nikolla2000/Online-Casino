@@ -190,6 +190,23 @@ class UserService {
       totalCredits: userToUpdate.totalCredits,
     };
   }
+
+
+/**
+ * Get total credits for an user
+ * @param {string} userId - User ID to get credits for
+ * @returns {Promise<Object>} User credits info
+ * @throws {NotFoundError} If user not found
+ */
+async getTotalCredits(userId) {
+  const user = await User.findById(userId).select('totalCredits').lean();
+
+  if (!user) {
+    throw new NotFoundError('User not found');
+  }
+
+  return { totalCredits: user.totalCredits };
+}
 }
 
 module.exports = new UserService();

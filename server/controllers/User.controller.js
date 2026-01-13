@@ -168,7 +168,7 @@ const updateTotalCredits = asyncHandler(async (req, res) => {
 });
 
 
-const getTotalCredits = async (req, res) => {
+const getTotalCreditsOld = async (req, res) => {
   try {
     const userId = req.userId;
 
@@ -387,6 +387,22 @@ const getUsers = asyncHandler(async(req, res) => {
   });
 });
 
+
+/**
+ * Get total credits for a specific user
+ * @route GET /server/v2/users/:userId/credits
+ * @access Private
+ * @param {string} userId - User ID from URL params
+ * @returns {Object} User credits info
+ */
+const getTotalCredits = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+
+  const userCredits = await userService.getTotalCredits(userId);
+
+  res.status(200).json(userCredits);
+});
+
 module.exports = {
   registerUser,
   loginUser,
@@ -394,7 +410,7 @@ module.exports = {
   getAllUsers,
   getProfile,
   updateTotalCredits,
-  getTotalCredits,
+  getTotalCreditsOld,
   uploadPicture,
   getOnlineUsers,
   updatePreferences,
@@ -402,4 +418,5 @@ module.exports = {
   getRecentActivity,
   getGameHistory,
   getUsers,
+  getTotalCredits,
 }
