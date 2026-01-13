@@ -45,7 +45,7 @@ const AdminPage = () => {
     setUserId(id)
     dispatch(maxCredits())
     try {
-      await api.put(`/v1/user/${userId}/updateCredits`, { totalCredits: 10000})
+      await api.put(`/v1/user/${userId}/credits`, { totalCredits: 10000})
       toast.success('Max Credits Restored Successfully!')
     } catch (error) {
       console.log(error);

@@ -12,9 +12,9 @@ export const userAPI = {
         }
     },
 
-    getTotalCredits: async () => {
+    getTotalCredits: async (userId) => {
         try {
-            const res = await api.get('/v1/user/totalCredits');
+            const res = await api.get(`/v2/users/${userId}/credits`);
             return res;      
         } catch (err) {
             console.error('Error on request for fetching total credits: ', err);
