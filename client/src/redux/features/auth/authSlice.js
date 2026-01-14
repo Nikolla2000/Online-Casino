@@ -62,27 +62,61 @@ const authSlice = createSlice({
   reducers: {
     logout: (state) => {
       state.accessToken = null;
+      state.user = null;
+      state.status = 'idle';
     //   localStorage.removeItem('refreshToken');
     },
     updateProfilePic: (state, action) => {
       if (state.user) {
         state.user.profileImage = action.payload;
       }
+    },
+    cleanError: (state) => {
+      state.error = null;
     }
   },
   extraReducers: (builder) => {
     builder
+    .addCase(login.pending, (state) => {
+      state.status = 'loading';
+    })
     .addCase(login.fulfilled, (state, action) => {
+      state.status = 'succeeded';
       state.accessToken = action.payload.accessToken;
+      state.error = null;
+    })
+    .addCase(login.rejected, (state, action) => {
+      state.status = 'failed';
+      state.error = action.error.message;
+    })
+    .addCase(refresh.pending, (state) => {
+      state.status = 'loading';
     })
     .addCase(refresh.fulfilled, (state, action) => {
+      state.status = 'succeeded';
       state.accessToken = action.payload.accessToken;
+      state.error = null;
+    })
+    .addCase(refresh.rejected, (state, action) => {
+      state.status = 'failed';
+      state.error = action.error.message;
     })
     .addCase(logoutUser.fulfilled, (state) => {
-        state.accessToken = null;
+      state.accessToken = null;
+      state.user = null;
+      state.status = 'idle';
+    })
+    .addCase(fetchCurrentUser.pending, (state) => {
+      state.status = 'loading';
     })
     .addCase(fetchCurrentUser.fulfilled, (state, action) => {
-        state.user = action.payload;
+      state.status = 'succeeded';
+      state.user = action.payload;
+      state.error = null;
+    })
+    .addCase(fetchCurrentUser.rejected, (state, action) => {
+      state.status = 'failed';
+      state.error = action.error.message;
     });
   }
 })
