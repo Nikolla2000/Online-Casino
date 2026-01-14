@@ -6,11 +6,9 @@ import MainPage from "../Pages/MainPage/MainPage";
 import RoulettePage from "../Pages/RoulettePage/RoulettePage";
 import SlotsPage from "../Pages/SlotsPage/SlotsPage";
 import Dashboard from "../Pages/User/Dashboard/Dashboard";
-import React, { useContext } from "react";
-import { UserContext } from "../../context/userContext";
+import React from "react";
 import OAuthCallback from "../Components/Oauth/OauthCallback";
 import TermsConditions from "../Pages/TermsConditionsPage/TermsConditions";
-import { useSelector } from "react-redux";
 
 const routes = {
   main: {
