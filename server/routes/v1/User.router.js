@@ -23,7 +23,6 @@ const { verifyJWT } = require('../../middleware/authentication');
 router.post('/register', registerUser);
 router.post('/login', loginUser);
 router.get('/logout', logoutUser);
-router.get('/allUsers', getAllUsers);
 router.get('/profile', getProfile);
 router.get('/credits', verifyJWT, getTotalCreditsOld);
 router.put('/:userId/credits', verifyJWT, updateTotalCredits);
