@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { io } from "socket.io-client";
+import { useAuthInitialization } from "../src/hooks/useAuthInitialization";
 
 const SocketContext = createContext();
 
@@ -21,6 +22,7 @@ export const SocketProvider = ({ children }) => {
   // if (user) {
   //   console.log(user.id)
   // }
+  useAuthInitialization();
 
   useEffect(() => {
     if (accessToken && user) {
