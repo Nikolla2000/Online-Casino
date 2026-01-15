@@ -26,9 +26,16 @@ class ForbiddenError extends AppError {
   }
 }
 
+class ConflictError extends AppError {
+  constructor(message) {
+    super(message, 409);
+  }
+}
+
 module.exports = {
   ValidationError,
   NotFoundError,
   UnauthorizedError,
-  ForbiddenError
+  ForbiddenError,
+  ConflictError,
 };
