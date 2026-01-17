@@ -47,7 +47,7 @@ const Footer = () => {
                         <ul className="footer-links">
                             <li><Link to="/about">About Us</Link></li>
                             <li><Link to="/terms">Terms & Conditions</Link></li>
-                            <li><Link to="/privacy">Privacy Policy</Link></li>
+                            {/* <li><Link to="/privacy">Privacy Policy</Link></li> */}
                             <li><Link to="/contact">Contact</Link></li>
                         </ul>
                     </Grid>
