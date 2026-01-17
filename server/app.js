@@ -88,12 +88,13 @@ app.use((req, res, next) => {
 });
 
 //Routers
-const userRouter = require('./routes/User.router');
-const authRouter = require('./routes/Auth.router');
-const emailRouter = require('./routes/Email.router');
-const chatRouter = require('./routes/Chat.router');
-const chatBotRouter = require('./routes/ChatBot.router');
-const gameRouter = require('./routes/Game.router');
+const userRouter = require('./routes/v1/User.router');
+const authRouter = require('./routes/v1/Auth.router');
+const emailRouter = require('./routes/v1/Email.router');
+const chatRouter = require('./routes/v1/Chat.router');
+const chatBotRouter = require('./routes/v1/ChatBot.router');
+const gameRouter = require('./routes/v1/Game.router');
+const userRouterV2 = require('./routes/v2/User.routerV2');
 
 //Middleware
 app.use(cookieParser());
@@ -103,12 +104,16 @@ app.use(express.static("./public"));
 app.use(express.json());
 
 //routes
+//V1 routes
 app.use('/server/v1/user', userRouter);
 app.use('/server/v1/auth', authRouter);
 app.use('/server/v1/email', emailRouter);
 app.use('/server/v1/chats', chatRouter);
 app.use('/server/v1/chatbot', chatBotRouter);
 app.use('/server/v1/game', gameRouter);
+
+//V2 routes
+app.use('/server/v2/users', userRouterV2);
 
 //Serve static files
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));

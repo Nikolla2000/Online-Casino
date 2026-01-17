@@ -2,25 +2,25 @@ import api from '../axiosConfig';
 
 export const chatAPI = {
   getUserChats: async (accessToken) => {
-    return api.get('/chats', {
+    return api.get('/v1/chats', {
       headers: { Authorization: `Bearer ${accessToken}` }
     });
   },
 
   createChat: async (receiverId, accessToken) => {
-    return api.post('/chats', { receiverId }, {
+    return api.post('/v1/chats', { receiverId }, {
       headers: { Authorization: `Bearer ${accessToken}` }
     });
   },
 
   getChatMessages: async (chatId, accessToken) => {
-    return api.get(`/chats/${chatId}/messages`, {
+    return api.get(`/v1/chats/${chatId}/messages`, {
       headers: { Authorization: `Bearer ${accessToken}` }
     });
   },
 
   sendMessage: async (chatId, content, accessToken) => {
-    return api.post(`/chats/${chatId}/messages`, { content }, {
+    return api.post(`/v1/chats/${chatId}/messages`, { content }, {
       headers: { Authorization: `Bearer ${accessToken}` }
     });
   }

@@ -15,7 +15,7 @@ import api from '../../../axiosConfig';
 
 
 export const login = createAsyncThunk('auth/login', async (credentials) => {
-  const res = await api.post('auth/login', credentials, {
+  const res = await api.post('/v1/auth/login', credentials, {
     withCredentials: true,
   });
   return res.data;
@@ -23,7 +23,7 @@ export const login = createAsyncThunk('auth/login', async (credentials) => {
 
 
 export const refresh = createAsyncThunk('auth/refresh', async () => {
-  const res = await api.post('/auth/refresh', null, {
+  const res = await api.post('/v1/auth/refresh', null, {
     withCredentials: true,
   });
   return res.data;
@@ -31,7 +31,7 @@ export const refresh = createAsyncThunk('auth/refresh', async () => {
 
 
 export const logoutUser = createAsyncThunk('auth/logout', async () => {
-    await api.get('/auth/logout', {
+    await api.get('/v1/auth/logout', {
       withCredentials: true,
     });
 });
@@ -40,7 +40,7 @@ export const logoutUser = createAsyncThunk('auth/logout', async () => {
 export const fetchCurrentUser = createAsyncThunk(
     'auth/fetchCurrentUser',
     async (token) => {
-      const res = await api.get('/auth/me', {
+      const res = await api.get('/v1/auth/me', {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true
       });
@@ -62,27 +62,61 @@ const authSlice = createSlice({
   reducers: {
     logout: (state) => {
       state.accessToken = null;
+      state.user = null;
+      state.status = 'idle';
     //   localStorage.removeItem('refreshToken');
     },
     updateProfilePic: (state, action) => {
       if (state.user) {
         state.user.profileImage = action.payload;
       }
+    },
+    cleanError: (state) => {
+      state.error = null;
     }
   },
   extraReducers: (builder) => {
     builder
+    .addCase(login.pending, (state) => {
+      state.status = 'loading';
+    })
     .addCase(login.fulfilled, (state, action) => {
+      state.status = 'succeeded';
       state.accessToken = action.payload.accessToken;
+      state.error = null;
+    })
+    .addCase(login.rejected, (state, action) => {
+      state.status = 'failed';
+      state.error = action.error.message;
+    })
+    .addCase(refresh.pending, (state) => {
+      state.status = 'loading';
     })
     .addCase(refresh.fulfilled, (state, action) => {
+      state.status = 'succeeded';
       state.accessToken = action.payload.accessToken;
+      state.error = null;
+    })
+    .addCase(refresh.rejected, (state, action) => {
+      state.status = 'failed';
+      state.error = action.error.message;
     })
     .addCase(logoutUser.fulfilled, (state) => {
-        state.accessToken = null;
+      state.accessToken = null;
+      state.user = null;
+      state.status = 'idle';
+    })
+    .addCase(fetchCurrentUser.pending, (state) => {
+      state.status = 'loading';
     })
     .addCase(fetchCurrentUser.fulfilled, (state, action) => {
-        state.user = action.payload;
+      state.status = 'succeeded';
+      state.user = action.payload;
+      state.error = null;
+    })
+    .addCase(fetchCurrentUser.rejected, (state, action) => {
+      state.status = 'failed';
+      state.error = action.error.message;
     });
   }
 })

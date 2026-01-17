@@ -22,7 +22,7 @@ export const setupInterceptors = (store) => {
       const originalRequest = err.config;
 
       //to not retry refresh request and enter infinite loop
-      if (originalRequest.url.includes('/auth/refresh')) {
+      if (originalRequest.url.includes('v1/auth/refresh')) {
         return Promise.reject(err);
       }
 

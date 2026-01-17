@@ -90,7 +90,7 @@ const RegisterForm = ({ handleClose, setShowDropdown }) => {
 
     if (Object.keys(errors).length === 0) {
       try {
-        await api.post('/user/register', formData);
+        await api.post('/v1/user/register', formData);
         const loginCredentials = {
           username: formData.username,
           password: formData.password

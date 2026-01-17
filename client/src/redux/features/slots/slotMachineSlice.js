@@ -17,9 +17,11 @@ const initialState = {
 }
 
 export const fetchTotalCredits = createAsyncThunk(
-  'user/totalCredits',
-  async () => {
-    const res = await userAPI.getTotalCredits();
+  'user/credits',
+  async (_, { getState }) => {
+    const state = getState();
+    const userId = state.auth.user._id;
+    const res = await userAPI.getTotalCredits(userId);
     return res.data.totalCredits;
   }
 )

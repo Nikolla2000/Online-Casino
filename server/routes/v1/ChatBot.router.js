@@ -1,6 +1,6 @@
 const express = require('express');
-const { promptChatBot, getConversationHistory, deleteConversationHistory } = require('../controllers/ChatBot.controller');
-const { auth } = require('../middleware/authentication');
+const { promptChatBot, getConversationHistory, deleteConversationHistory } = require('../../controllers/ChatBot.controller');
+const { auth } = require('../../middleware/authentication');
 const router = express.Router();
 
 // @route   POST /chatbot

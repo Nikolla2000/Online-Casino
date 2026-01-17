@@ -40,12 +40,13 @@ const Dashboard = () => {
   const section = searchParams.get('section');
 
   useEffect(() => {
-
     if (section === 'history') {
       setActiveSection('history');
       setCurrentPage(1);
     } else if (section === 'account') {
       setActiveSection('account')
+    } else if (section === 'stats') {
+      setActiveSection('stats');
     }
   }, [section]);
 
@@ -68,7 +69,7 @@ const Dashboard = () => {
 
     try {
       setIsUploading(true);
-      const res = await axios.post('/user/uploadPicture', formData, {
+      const res = await axios.post('/v1/user/uploadPicture', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         withCredentials: true
       });

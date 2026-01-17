@@ -1,32 +1,30 @@
 import React, { useEffect, useState, useContext } from 'react';
 import './AdminPageStyles.scss';
-import axios from '../../axiosConfig';
-import { UserContext } from '../../../context/userContext';
+import api from '../../axiosConfig';
 import { useNavigate } from 'react-router';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { maxCredits } from '../../redux/features/slots/slotMachineSlice';
 import { toast } from 'react-hot-toast';
 
 const AdminPage = () => {
   const [users, setUsers] = useState([]);
-  const {user} = useContext(UserContext)
-  const adminUser = import.meta.env.VITE_ADMIN_USER;
-  const navigate = useNavigate()
+  const { user, accessToken } = useSelector(state => state.auth);
+  const adminUser = import.meta.env.VITE_ADMIN_USER_EMAIL;
   const dispatch = useDispatch()
 
   useEffect(() => {
     const fetchUsers = async () => {
-      if(user.name && user.email === adminUser){
+      if(user && user.email === adminUser){
       let isMounted = true;
       const controller = new AbortController();
 
       try {
-        const response = await axios.get('user/allUsers', {
+        const res = await api.get('/v2/users/', {
           signal: controller.signal,
         });
 
         if (isMounted) {
-          setUsers(response.data);
+          setUsers(res.data);
         }
       } catch (error) {
         console.error(error);
@@ -35,8 +33,6 @@ const AdminPage = () => {
         isMounted = false;
         controller.abort();
       };
-    } else {
-      navigate('/errorPage')
     }};
     if(user) {
       fetchUsers();
@@ -45,11 +41,11 @@ const AdminPage = () => {
 
   const [userId, setUserId] = useState(null)
 
-  const restoreMaxCredits = (id) => {
+  const restoreMaxCredits = async (id) => {
     setUserId(id)
     dispatch(maxCredits())
     try {
-      const {data} = axios.put('/user/updateCredits', { userId: userId, totalCredits: 10000})
+      await api.put(`/v1/user/${userId}/credits`, { totalCredits: 10000})
       toast.success('Max Credits Restored Successfully!')
     } catch (error) {
       console.log(error);

@@ -7,20 +7,7 @@ const { hashPassword, comparePasswords} = require('../helpers/auth');
 const asyncHandler = require('../helpers/asyncHandler');
 const GameHistory = require('../models/GameHistory.model');
 const { default: mongoose } = require('mongoose');
-const { AppError } = require('../middleware/errorHandler');
 const userService = require('../services/userService');
-const { ValidationError } = require('../helpers/errors');
-
-
-//List all registered users
-const getAllUsers = async (req, res) => {
-  try {
-    const users = await User.find({})
-    res.status(200).json(users)
-  } catch (error) {
-    res.status(500).json({ message: error.message })
-  }
-}
 
 
 //Register Endpoint
@@ -141,25 +128,36 @@ const getProfile = (req, res) => {
 }
 
 
-//Update total credits
-const updateTotalCredits = async (req, res) => {
-  const { userId, totalCredits} = req.body
+/**
+ * Update total credits for a user
+ * @route PUT /server/v1/user/credits
+ * @access Private/Admin
+ * @param {number} totalCredits - New total credits amount
+ * @returns {Object} Updated user info
+ */
+const updateTotalCredits = asyncHandler(async (req, res) => {
+  const { totalCredits} = req.body;
+  const { userId } = req.params;
+  const adminUserId = req.userId;
 
-  try {
-    const userToUpdate = await User.findOneAndUpdate(
-      { _id: userId },
-      { $set: { totalCredits: totalCredits } },
-      { new: true }
-    ).lean();
-
-    res.status(200).json({ message: 'Total credits updated successfully', user: userToUpdate });
-  } catch (error) {
-    res.status(500).json({ message: error.message })
+  if (!userId) {
+    return res.status(400).json({
+      success: false,
+      message: 'User ID is required in URL parameters'
+    });
   }
-}
+
+  const updatedUser = await userService.updateTotalCredits(userId, totalCredits, adminUserId);
+  
+  res.status(200).json({
+    success: true,
+    message: 'Total credits updated successfully',
+    user: updatedUser
+  });
+});
 
 
-const getTotalCredits = async (req, res) => {
+const getTotalCreditsOld = async (req, res) => {
   try {
     const userId = req.userId;
 
@@ -343,21 +341,70 @@ const getGameHistory = asyncHandler(async (req, res) => {
 
   const { history, pagination } = await userService.gameHistory(userId, page, limit);
 
-  res.status(200).json({ success: true, history, pagination });
+  res.status(200).json({
+    success: true,
+    history,
+    pagination
+  });
+});
+
+
+/**
+ * Get users with optional filtering
+ * 
+ * @route GET /server/v2/users
+ * @query {string} online - Filter by online status ('true' for online users only)
+ * @query {string} vip - Filter by VIP status ('true' for VIP users only)
+ * @query {number} limit - Maximum number of users to return
+ * @query {string} sort - Sort field (default: 'username', options: 'username', 'totalCredits', 'lastSeen')
+ * @access Private
+ */
+const getUsers = asyncHandler(async(req, res) => {
+  const { online, vip, limit, sort } = req.query;
+
+  const users = await userService.getUsers({
+    onlineOnly: online === 'true',
+    vipOnly: vip === 'true',
+    limit: limit ? parseInt(limit) : undefined,
+    sortBy: sort || 'username'
+  });
+
+  res.status(200).json({ 
+    success: true, 
+    count: users.length, 
+    users 
+  });
+});
+
+
+/**
+ * Get total credits for a specific user
+ * @route GET /server/v2/users/:userId/credits
+ * @access Private
+ * @param {string} userId - User ID from URL params
+ * @returns {Object} User credits info
+ */
+const getTotalCredits = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+
+  const userCredits = await userService.getTotalCredits(userId);
+
+  res.status(200).json(userCredits);
 });
 
 module.exports = {
   registerUser,
   loginUser,
   logoutUser,
-  getAllUsers,
   getProfile,
   updateTotalCredits,
-  getTotalCredits,
+  getTotalCreditsOld,
   uploadPicture,
   getOnlineUsers,
   updatePreferences,
   getUserStats,
   getRecentActivity,
   getGameHistory,
+  getUsers,
+  getTotalCredits,
 }

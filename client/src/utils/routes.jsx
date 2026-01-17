@@ -6,8 +6,7 @@ import MainPage from "../Pages/MainPage/MainPage";
 import RoulettePage from "../Pages/RoulettePage/RoulettePage";
 import SlotsPage from "../Pages/SlotsPage/SlotsPage";
 import Dashboard from "../Pages/User/Dashboard/Dashboard";
-import React, { useContext } from "react";
-import { UserContext } from "../../context/userContext";
+import React from "react";
 import OAuthCallback from "../Components/Oauth/OauthCallback";
 import TermsConditions from "../Pages/TermsConditionsPage/TermsConditions";
 
@@ -24,8 +23,8 @@ const routes = {
   //   name: 'admin',
   //   // includeInNav: true,
   //   get includeInNav() {
-  //     const { user } = useContext(UserContext);
-  //     return user && user.email === import.meta.env.VITE_ADMIN_USER_EMAIL;
+  //     const { user } = useSelector(state => state.auth);
+  //     return user && user.email !== import.meta.env.VITE_ADMIN_USER_EMAIL;
   //   },
   // },
   games: {

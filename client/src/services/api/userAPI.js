@@ -3,7 +3,7 @@ import api from "../../axiosConfig";
 export const userAPI = {
     updatePreferences: async (data) => {
         try {
-            const res = await api.patch('/user/notification-preferences', data, {
+            const res = await api.patch('/v1/user/notification-preferences', data, {
                 withCredentials: true,
             });
             return res;
@@ -12,9 +12,9 @@ export const userAPI = {
         }
     },
 
-    getTotalCredits: async () => {
+    getTotalCredits: async (userId) => {
         try {
-            const res = await api.get('/user/totalCredits');
+            const res = await api.get(`/v2/users/${userId}/credits`);
             return res;      
         } catch (err) {
             console.error('Error on request for fetching total credits: ', err);
@@ -22,17 +22,26 @@ export const userAPI = {
     },
 
     getUserStats: async () => {
-        const res = await api.get('/user/stats');
+        const res = await api.get('/v1/user/stats');
         return res.data;
     },
 
     getRecentActivity: async () => {
-        const res = await api.get('/user/recent-activity');
+        const res = await api.get('/v1/user/recent-activity');
         return res.data.recentActivity;
     },
 
     getGameHisory: async(page, limit) => {
-        const res = await api.get(`/user/game-history?page=${page}&limit=${limit}`);
+        const res = await api.get(`/v1/user/game-history?page=${page}&limit=${limit}`);
         return res.data;
+    },
+
+    fetchOnlineUsers: async() => {
+        try {
+            const res = await api.get('/v2/users?online=true');
+            return res.data;
+        } catch (err) {
+            console.error('Error fetching online users: ', err);
+        }
     }
 };

@@ -3,7 +3,7 @@ import axios from "../axiosConfig";
 
 export async function fetchTotalCredits(userId) {
   try {
-    const response = await axios.get('user/getTotalCredits', {
+    const response = await axios.get('/v1/user/getTotalCredits', {
       params: {
         id: userId
       }
@@ -16,7 +16,7 @@ export async function fetchTotalCredits(userId) {
 
 export function updateTotalCredits(userId, amount) {
   try {
-    axios.put('user/updateCredits', {userId, totalCredits: amount});
+    axios.put('/v1/user/updateCredits', {userId, totalCredits: amount});
   } catch (error) {
     console.error('Error updating total credits: ', error);
   }
@@ -25,7 +25,7 @@ export function updateTotalCredits(userId, amount) {
 
 export async function fetchOnlineUsers() {
   try {
-    const res = await api.get('/user/online');
+    const res = await api.get('/v1/user/online');
     return res.data;
   } catch (err) {
     console.error('Error fetching online users: ', err);

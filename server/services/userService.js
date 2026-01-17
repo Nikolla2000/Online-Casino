@@ -1,5 +1,7 @@
-const { ValidationError } = require("../helpers/errors");
+const { ValidationError, NotFoundError } = require("../helpers/errors");
+const { AppError } = require("../middleware/errorHandler");
 const GameHistory = require("../models/GameHistory.model");
+const User = require("../models/User.model");
 
 class UserService {
   
@@ -63,6 +65,148 @@ class UserService {
       }
     }
   }
+
+
+  /**
+   * Retrieves a list of users with optional filtering. Returns selected fields only for security and performance.
+   * 
+   * @param {Object} options - Filter and sort options
+   * @param {boolean} [options.onlineOnly=false] - If true, returns only users with isOnline=true
+   * @param {boolean} [options.vipOnly=false] - If true, returns only VIP users
+   * @param {number} [options.limit] - Maximum number of users to return (optional)
+   * @param {string} [options.sortBy='username'] - Field to sort by ('username', 'totalCredits', 'lastSeen')
+   * @returns {Promise<Array<Object>>} A promise that resolves to an array of lean user objects
+   * @throws {ValidationError} If invalid sort field is provided
+   * @throws {Error} If database query fails.
+   */
+  async getUsers(options = {}) {
+    const {
+      onlineOnly = false,
+      vipOnly = false,
+      limit,
+      sortBy = 'username'
+    } = options;  
+
+    const validSortFields = ['username', 'totalCredits', 'lastSeen', 'registrationDate'];
+    if (!validSortFields.includes(sortBy)) {
+      throw new ValidationError(
+        `Invalid sort field: ${sortBy}. Valid options: ${validSortFields.join(', ')}`
+      );
+    }
+
+    const MAX_LIMIT = 100;
+    if (limit !== undefined) {
+      const parsedLimit = parseInt(limit);
+      if (isNaN(parsedLimit) || parsedLimit < 1) {
+        throw new ValidationError('Limit must be a positive number');
+      }
+      if (parsedLimit > MAX_LIMIT) {
+        throw new ValidationError(`Limit cannot exceed ${MAX_LIMIT}`);
+      }
+    }
+
+    const filters = {};
+    if (onlineOnly) filters.isOnline = true;
+    if (vipOnly) filters.isVip = true;
+
+    const sortOrder = sortBy === 'totalCredits' ? -1 : 1;
+    const sortObj = { [sortBy]: sortOrder };
+
+    let query = User.find(
+      filters
+    )
+    .select('-password')
+    .sort(sortObj);
+
+    if (limit && limit > 0) {
+      query = query.limit(Math.min(parseInt(limit), MAX_LIMIT));
+    }
+
+    const users = await query.lean();
+
+    return users;
+  }
+
+
+  /**
+ * Updates total credits for a user
+ * @param {string} userId - User ID to update
+ * @param {number} totalCredits - New total credits amount
+ * @param {string} adminId - Admin user ID who is making the update
+ * @returns {Promise<Object>} Updated user info
+ * @throws {NotFoundError} If user not found
+ * @throws {ValidationError} If credits value is invalid
+ * @throws {Error} If user doesn't have admin role
+ */
+  async updateTotalCredits(userId, totalCredits, adminId) {
+    if (totalCredits === undefined || totalCredits === null) {
+      throw new ValidationError('totalCredits field is required');
+    }
+    
+    if (typeof totalCredits !== 'number' || isNaN(totalCredits)) {
+      throw new ValidationError('totalCredits must be a valid number');
+    }
+    
+    if (totalCredits < 0) {
+      throw new ValidationError('totalCredits cannot be negative');
+    }
+    
+    const MAX_TOTAL_CREDITS_SET = 100000 // 100 Thousand
+    if (totalCredits > MAX_TOTAL_CREDITS_SET) {
+      throw new ValidationError('totalCredits cannot exceed 100 000');
+    }
+
+    const adminUser = await User.findById(adminId).select('role');
+
+    if (!adminUser) {
+      throw new NotFoundError('Admin user not found');
+    }
+
+    if (adminUser.role !== 'admin') {
+      throw new AppError('Access denied. Admin role required to update credits.', 403);
+    }
+
+    const userToUpdate = await User.findOneAndUpdate(
+      { _id: userId },
+      { 
+        $set: { 
+          totalCredits: totalCredits,
+        } 
+      },
+      { 
+        new: true,
+        select: '-password'
+      }
+    );
+
+    if (!userToUpdate) {
+      throw new NotFoundError('User not found');
+    }
+
+    return {
+      id: userToUpdate._id,
+      username: userToUpdate.username,
+      email: userToUpdate.email,
+      totalCredits: userToUpdate.totalCredits,
+    };
+  }
+
+
+/**
+ * Get total credits for an user
+ * @param {string} userId - User ID to get credits for
+ * @returns {Promise<Object>} User credits info
+ * @throws {NotFoundError} If user not found
+ */
+async getTotalCredits(userId) {
+  const user = await User.findById(userId).select('totalCredits').lean();
+
+  if (!user) {
+    throw new NotFoundError('User not found');
+  }
+
+  return { totalCredits: user.totalCredits };
+}
 }
 
 module.exports = new UserService();

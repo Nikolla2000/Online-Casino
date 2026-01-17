@@ -99,7 +99,7 @@ const UserDropdown = ({ show, setShowDropdown }) => {
               // LOGGED IN
               <>
                 <div className="menu-section">
-                  <div className="menu-item" onClick={() => handleNavigate('/dashboard')}>
+                  <div className="menu-item" onClick={() => handleNavigate('/dashboard?section=stats')}>
                     <FontAwesomeIcon icon={faIdCard} className="menu-icon" />
                     <span>Profile</span>
                   </div>
