@@ -6,7 +6,6 @@ const {
   registerUser,
   loginUser,
   logoutUser,
-  getAllUsers,
   getProfile,
   updateTotalCredits,
   uploadPicture,

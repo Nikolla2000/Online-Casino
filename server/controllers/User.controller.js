@@ -396,7 +396,6 @@ module.exports = {
   registerUser,
   loginUser,
   logoutUser,
-  getAllUsers,
   getProfile,
   updateTotalCredits,
   getTotalCreditsOld,
