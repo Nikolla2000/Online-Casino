@@ -1,4 +1,4 @@
-const { ValidationError, NotFoundError } = require("../helpers/errors");
+const { ValidationError, NotFoundError, ConflictError } = require("../helpers/errors");
 const { AppError } = require("../middleware/errorHandler");
 const GameHistory = require("../models/GameHistory.model");
 const User = require("../models/User.model");
@@ -198,15 +198,100 @@ class UserService {
  * @returns {Promise<Object>} User credits info
  * @throws {NotFoundError} If user not found
  */
-async getTotalCredits(userId) {
-  const user = await User.findById(userId).select('totalCredits').lean();
+  async getTotalCredits(userId) {
+    const user = await User.findById(userId).select('totalCredits').lean();
 
-  if (!user) {
-    throw new NotFoundError('User not found');
+    if (!user) {
+      throw new NotFoundError('User not found');
+    }
+
+    return { totalCredits: user.totalCredits };
   }
 
-  return { totalCredits: user.totalCredits };
-}
+
+  /**
+   * Register a new user
+   * 
+   * @param {Object} userData - User registration data 
+   * @param {string} userData.firstName 
+   * @param {string} userData.lastName 
+   * @param {string} userData.email 
+   * @param {string} userData.password 
+   * @param {string} userData.confirmPassword 
+   * @param {Date} userData.registraionDate (Optional)
+   * @param {string} userData.country (Optional)
+   * @param {string} userData.phoneNumber (Optional)
+   * @return {Promise<Object>} Credted user info
+   * @throws {ValidationError} If validation fails
+   * @throws {ConflictError} If user with email/username already exists
+   */
+  async register(userData) {
+    const {
+      firstName,
+      lastName,
+      username,
+      email,
+      password,
+      confirmPassword,
+      registrationDate,
+      country,
+      phoneNumber,
+    } = userData;
+
+    // const requiredFields = { firstName, lastName, username, email, password, confirmPassword };
+    // const missingFields = Object.keys(requiredFields).filter(key => !requiredFields[key]);
+
+    // if (missingFields.length > 0) {
+    //   throw new ValidationError(`Missing required fields: ${missingFields.join(', ')}`);
+    // }
+
+    // if (password !== confirmPassword) {
+    //   throw new ValidationError('Passwords do not match');
+    // }
+
+    // this.validatePasswordStrength(password);
+
+    // this.validateEmail(email);
+
+    // this.validateUsername(username);
+
+    const existingUser = await User.findOne({
+      $or: [
+        { username: username.toLowerCase() },
+        { email: email.toLowerCase() }
+      ]
+    }).select('_id username email');
+
+    if (existingUser) {
+      const conflictField = existingUser.username === username.toLowerCase() ? 'username' : 'email';
+      throw new ConflictError(`User with this ${conflictField} already exists`);
+    }
+
+    const cleanedUser = {
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      username: username.trim().toLowerCase(),
+      email: email.trim().toLowerCase(),
+      password, //its automatically hashed in the user model,
+      registrationDate: registrationDate || new Date(),
+      ...(country && { contry: country.trim() }),
+      ...(phoneNumber && { phoneNumber: phoneNumber.trim() }),
+    };
+
+    const newUser = new User(cleanedUser);
+
+    return {
+      id: newUser._id,
+      firstName: newUser.firstName,
+      lastName: newUser.lastName,
+      username: newUser.username,
+      email: newUser.email,
+      country: newUser.country,
+      registrationDate: newUser.registrationDate,
+      isActive: newUser.isActive,
+      createdAt: newUser.createdAt,
+    };
+  }
 }
 
 module.exports = new UserService();
