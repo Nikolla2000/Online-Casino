@@ -392,6 +392,26 @@ const getTotalCredits = asyncHandler(async (req, res) => {
   res.status(200).json(userCredits);
 });
 
+
+/**
+ * Get total credits for a specific user
+ * @route GET /server/v2/users/register
+ * @access Public
+ * @returns {Object} The new user object
+ */
+const registerUserV2 = asyncHandler(async (req, res) => {
+  const userData = req.validatedData.body;
+
+  const newUser = await userService.register(userData);
+
+  res.status(201).json({
+    success: true,
+    message: 'User registered successfully',
+    data: newUser
+  });
+});
+
+
 module.exports = {
   registerUser,
   loginUser,
@@ -407,4 +427,5 @@ module.exports = {
   getGameHistory,
   getUsers,
   getTotalCredits,
+  registerUserV2,
 }
