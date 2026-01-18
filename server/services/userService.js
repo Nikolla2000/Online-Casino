@@ -2,6 +2,7 @@ const { ValidationError, NotFoundError, ConflictError } = require("../helpers/er
 const { AppError } = require("../middleware/errorHandler");
 const GameHistory = require("../models/GameHistory.model");
 const User = require("../models/User.model");
+const { registerSchema } = require("../validation-schemas/user.schema");
 
 class UserService {
   
@@ -226,39 +227,12 @@ class UserService {
    * @throws {ConflictError} If user with email/username already exists
    */
   async register(userData) {
-    const {
-      firstName,
-      lastName,
-      username,
-      email,
-      password,
-      confirmPassword,
-      registrationDate,
-      country,
-      phoneNumber,
-    } = userData;
-
-    // const requiredFields = { firstName, lastName, username, email, password, confirmPassword };
-    // const missingFields = Object.keys(requiredFields).filter(key => !requiredFields[key]);
-
-    // if (missingFields.length > 0) {
-    //   throw new ValidationError(`Missing required fields: ${missingFields.join(', ')}`);
-    // }
-
-    // if (password !== confirmPassword) {
-    //   throw new ValidationError('Passwords do not match');
-    // }
-
-    // this.validatePasswordStrength(password);
-
-    // this.validateEmail(email);
-
-    // this.validateUsername(username);
+    const validatedData = registerSchema.parse(userData);
 
     const existingUser = await User.findOne({
       $or: [
-        { username: username.toLowerCase() },
-        { email: email.toLowerCase() }
+        { username: validatedData.username.toLowerCase() },
+        { email: validatedData.email.toLowerCase() }
       ]
     }).select('_id username email');
 
@@ -267,30 +241,18 @@ class UserService {
       throw new ConflictError(`User with this ${conflictField} already exists`);
     }
 
-    const cleanedUser = {
-      firstName: firstName.trim(),
-      lastName: lastName.trim(),
-      username: username.trim().toLowerCase(),
-      email: email.trim().toLowerCase(),
-      password, //its automatically hashed in the user model,
-      registrationDate: registrationDate || new Date(),
-      ...(country && { contry: country.trim() }),
-      ...(phoneNumber && { phoneNumber: phoneNumber.trim() }),
-    };
+    const newUser = await User.create({
+      ...validatedData,
+      password: validatedData.password
+    });
 
-    const newUser = new User(cleanedUser);
+    return this.sanitizeUser(newUser);
+  }
 
-    return {
-      id: newUser._id,
-      firstName: newUser.firstName,
-      lastName: newUser.lastName,
-      username: newUser.username,
-      email: newUser.email,
-      country: newUser.country,
-      registrationDate: newUser.registrationDate,
-      isActive: newUser.isActive,
-      createdAt: newUser.createdAt,
-    };
+
+  sanitizeUser(user) {
+    const { password, __v, ...sanitized } = user.toObject();
+    return sanitized;
   }
 }
 
