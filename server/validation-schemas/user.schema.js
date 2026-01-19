@@ -6,7 +6,7 @@ const emailSchema = z.email("Invalid email format")
 
 const usernameSchema = z.string()
   .min(4, 'Username must be at least 4 charactes')
-  .max(20, 'Username can\'nt be longer than 20 characters ')
+  .max(20, 'Username can\'t be longer than 20 characters ')
   .regex(/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers and underscores')
   .toLowerCase()
   .trim();
@@ -23,12 +23,12 @@ const passwordSchema = z.string()
 const registerSchema = z.object({
   firstName: z.string()
     .min(2, 'First name must be at least 2 characters')
-    .max(20, 'First name can\'nt be longer than 20 characters')
+    .max(20, 'First name can\'t be longer than 20 characters')
     .trim(),
 
     lastName: z.string()
     .min(2, 'Last name must be at least 2 characters')
-    .max(20, 'Last name can\'nt be longer than 20 characters')
+    .max(20, 'Last name can\'t be longer than 20 characters')
     .trim(),
 
     username: usernameSchema,
@@ -48,7 +48,7 @@ const registerSchema = z.object({
       .transform(val => val?.trim())
       .refine(val => val?.trim()),
 }).refine(data => data.password === data.confirmPassword, {
-  message: 'Passwords don\'nt match',
+  message: 'Passwords don\'t match',
   path: ['confirmPassword']
 });
 
