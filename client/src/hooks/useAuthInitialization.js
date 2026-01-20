@@ -1,17 +1,22 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { fetchCurrentUser, refresh } from "../redux/features/auth/authSlice";
 
 export const useAuthInitialization = () => {
     const dispatch = useDispatch();
     const { accessToken, user, status } = useSelector((state) => state.auth);
+    const isInitialized = useRef(false); // Предотвратява многократни извиквания
+    const isLoading = useRef(false);
 
     useEffect(() => {
-        if (user) return;
-
-        if (status === 'loading') return;
+        if (isInitialized.current || user || status === 'loading' || isLoading.current) {
+            return;
+        }
 
         const initializeAuth = async () => {
+            isLoading.current = true;
+            isInitialized.current = true;
+            
             try {
                 const resultAction = await dispatch(refresh());
                 if (refresh.fulfilled.match(resultAction)) {
@@ -23,9 +28,11 @@ export const useAuthInitialization = () => {
                 }
             } catch (err) {
                 console.error('Refresh failed: ', err);
+            } finally {
+                isLoading.current = false;
             }
         }
 
         initializeAuth();
-    }, [dispatch, user, status]);
+    }, [dispatch, user]);
 }

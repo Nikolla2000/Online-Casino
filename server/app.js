@@ -77,15 +77,15 @@ app.use(cors({
 }));
 
 // Logger middleware
-app.use((req, res, next) => {
-  logger.info('Incoming request', {
-    method: req.method,
-    url: req.originalUrl,
-    ip: req.ip,
-    userAgent: req.get('user-agent')
-  });
-  next();
-});
+// app.use((req, res, next) => {
+//   logger.info('Incoming request', {
+//     method: req.method,
+//     url: req.originalUrl,
+//     ip: req.ip,
+//     userAgent: req.get('user-agent')
+//   });
+//   next();
+// });
 
 //Routers
 const userRouter = require('./routes/v1/User.router');
