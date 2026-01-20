@@ -67,58 +67,6 @@ const registerUser = async (req, res) => {
 }
 
 
-/**
- * Authenticate user and return json web token in an HTTP-only cookie
- * 
- * @route POST /server/v1/user/login
- * @accesss Public
- * @param {string} email - User email
- * @param {string} password - User password
- * @returns {Promise<void>} Sets cookie and returns user data or error
- */
-const loginUser = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    const user = await User.findOne({ email });
-    if(!user) {
-      return res.status(401).json({ error: 'User with this email is not found' })
-    }
-
-    const match = await comparePasswords(password, user.password)
-    if (match) {
-      jwt.sign(
-        { email: user.email, id: user._id, name: user.firstName },
-        process.env.JWT_SECRET,
-        {},
-        (error, token) => {
-          if (error) {
-            res.status(500).json({ error: 'Failed to create a token' });
-          } else {
-            res.cookie('token', token, {
-              httpOnly: true,
-              sameSite: 'None',
-              secure: true
-            }).json(user);
-          }
-        }
-      );
-    } else {
-      res.json({ error: 'Passwords do not match' })
-    }
-  } catch (err) {
-    res.status(400).json({ message: err.message })
-  }
-}
-
-
-//Logout
-const logoutUser = (req, res) => {
-  res.clearCookie('token').json({ message: 'Logout successfull' });
-  res.redirect('/');
-}
-
-
 //Get User
 const getProfile = (req, res) => {
   const {token} = req.cookies;
@@ -420,8 +368,6 @@ const registerUserV2 = asyncHandler(async (req, res) => {
 
 module.exports = {
   registerUser,
-  loginUser,
-  logoutUser,
   getProfile,
   updateTotalCredits,
   getTotalCreditsOld,

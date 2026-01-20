@@ -4,8 +4,6 @@ const upload = require('../../helpers/fileUpload');
 
 const {
   registerUser,
-  loginUser,
-  logoutUser,
   getProfile,
   updateTotalCredits,
   uploadPicture,
@@ -20,8 +18,6 @@ const {
 const { verifyJWT } = require('../../middleware/authentication');
 
 router.post('/register', registerUser);
-router.post('/login', loginUser);
-router.get('/logout', logoutUser);
 router.get('/profile', getProfile);
 router.get('/credits', verifyJWT, getTotalCreditsOld);
 router.put('/:userId/credits', verifyJWT, updateTotalCredits);
