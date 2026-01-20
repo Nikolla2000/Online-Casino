@@ -10,7 +10,7 @@ const { default: mongoose } = require('mongoose');
 const userService = require('../services/userService');
 
 
-//Register Endpoint
+//Register Endpoint - OLD ENDPOINT - NOT USED!!! New registerUserV2 is now used.
 const registerUser = async (req, res) => {
   try {
     const {
@@ -67,14 +67,22 @@ const registerUser = async (req, res) => {
 }
 
 
-//Login Endpoint
+/**
+ * Authenticate user and return json web token in an HTTP-only cookie
+ * 
+ * @route POST /server/v1/user/login
+ * @accesss Public
+ * @param {string} email - User email
+ * @param {string} password - User password
+ * @returns {Promise<void>} Sets cookie and returns user data or error
+ */
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
     if(!user) {
-      return res.json({ error: 'User with this email is not found' })
+      return res.status(401).json({ error: 'User with this email is not found' })
     }
 
     const match = await comparePasswords(password, user.password)
@@ -95,13 +103,11 @@ const loginUser = async (req, res) => {
           }
         }
       );
-    }
-    
-    if(!match) {
+    } else {
       res.json({ error: 'Passwords do not match' })
     }
-  } catch (error) {
-    res.status(400).json({ message: error.message })
+  } catch (err) {
+    res.status(400).json({ message: err.message })
   }
 }
 
