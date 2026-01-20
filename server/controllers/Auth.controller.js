@@ -4,9 +4,18 @@ const User = require('../models/User.model');
 const { comparePasswords } = require('../helpers/auth');
 const { generateAccessToken, generateRefreshToken } = require('../helpers/tokens');
 const generateUsername = require('../helpers/generateUsername');
+const asyncHandler = require('../helpers/asyncHandler');
 
-
-const login = async (req, res) => {
+/**
+ * Authenticate user with username and password
+ * 
+ * @route POST /server/v1/auth/login
+ * @accesss Public
+ * @param {string} req.body.username - User username
+ * @param {string} req.body.password - User password
+ * @returns {Promise<Object>} JSON response with access token
+ */
+const login = asyncHandler(async (req, res) => {
     const { username, password } = req.body;
     if (!username || !password) {
         return res.status(400).json({ error: 'Username and password are required' });
@@ -15,7 +24,7 @@ const login = async (req, res) => {
     const user = await User.findOne({ username });
 
     if (!user || !(await comparePasswords(password, user.password))) {
-        return res.status(401).json({ error: "Invalid credentials", user: user });
+        return res.status(401).json({ error: "Invalid credentials" });
     }
 
     const accessToken = generateAccessToken(user._id);
@@ -35,17 +44,24 @@ const login = async (req, res) => {
     });
 
     return res.json({ accessToken });
-}
+});
 
-
+/**
+ * Refreshes access token using valid refresh token from cookies
+ * 
+ * @route POST /server/v1/auth/refresh
+ * @access Private
+ * @param {string} req.cookies.refreshToken - Refresh token stored in HTTP-only cookie
+ * @returns {Promise<Object>} JSON response with new access token or error
+ */
 const refresh = async (req, res) => {
     const refreshToken = req.cookies.refreshToken;
-    if (!refreshToken) return res.sendStatus(401);
+    if (!refreshToken) return res.status(401).json({ error: 'No refresh token provided' });
 
     try {
         const payload = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
         const user = await User.findById(payload.userId);
-        if (!user || user.refreshToken !== refreshToken) return res.sendStatus(403);  
+        if (!user || user.refreshToken !== refreshToken) return res.status(403).json({ error: 'Invalid refresh token' });
 
         user.isOnline = true;
         user.lastSeen = new Date();
@@ -76,20 +92,17 @@ const refresh = async (req, res) => {
     }
 }
 
-
+/**
+ * Logs out user by invalidating refresh token and clearing cookies
+ * 
+ * @route POST /server/v1/auth/logout
+ * @access Private
+ * @param {string} req.cookies.refreshToken - Refresh token to invalidate
+ * @returns {Promise<void>} No content response on success
+ */
 const logout = async (req, res) => {
     const token = req.cookies.refreshToken;
     if (!token) return res.sendStatus(204);
-
-    // try {
-    //     const payload = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
-    //     const user = await User.findById(payload.userId);
-    //     if (user) {
-    //       user.refreshToken = null;
-          
-    //       await user.save();
-    //     }
-    // } catch {}
 
     try {
         await User.findOneAndUpdate(
@@ -107,7 +120,7 @@ const logout = async (req, res) => {
         console.error('Logout error:', error);
     }
 
-    res.clearCookie('refreshToken', { httpOnly: true, sameSite: 'Strict', secure: process.env.NODE_ENV === 'production' });
+    res.clearCookie('refreshToken', { httpOnly: true, sameSite: 'Strict', secure: process.env.NODE_ENV === 'production', path: '/' });
     res.sendStatus(204);
 }
 
