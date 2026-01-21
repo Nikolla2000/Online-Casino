@@ -53,6 +53,7 @@ const RegisterForm = ({ handleClose, setShowDropdown }) => {
 
   const validateForm = () => {
     const errors = {};
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     if (formData.firstName.length < 2 || formData.firstName.length > 20) {
       errors.firstName = 'First Name must be between 2 and 20 characters';
@@ -64,6 +65,10 @@ const RegisterForm = ({ handleClose, setShowDropdown }) => {
 
     if (formData.username.length < 4 || formData.username.length > 20) {
       errors.username = 'Username must be between 4 and 20 characters';
+    }
+
+    if (!emailRegex.test(formData.email)) {
+      errors.email = 'You must enter a valid email';
     }
 
     if (!formData.country) {
@@ -166,7 +171,7 @@ const RegisterForm = ({ handleClose, setShowDropdown }) => {
         <form onSubmit={handleSubmit} className="register-form">
           <div className="form-row">
             <div className="input-group">
-              <div className="input-icon">
+              <div className={`input-icon ${errorMessages.firstName && 'center-input-icon'}`}>
                 <FontAwesomeIcon icon={faUser} />
               </div>
               <input
@@ -183,7 +188,7 @@ const RegisterForm = ({ handleClose, setShowDropdown }) => {
             </div>
 
             <div className="input-group">
-              <div className="input-icon">
+              <div className={`input-icon ${errorMessages.lastName && 'center-input-icon'}`}>
                 <FontAwesomeIcon icon={faUser} />
               </div>
               <input
@@ -201,7 +206,7 @@ const RegisterForm = ({ handleClose, setShowDropdown }) => {
           </div>
 
           <div className="input-group">
-            <div className="input-icon">
+            <div className={`input-icon ${errorMessages.username && 'center-input-icon'}`}>
               <FontAwesomeIcon icon={faIdCard} />
             </div>
             <input
@@ -218,7 +223,7 @@ const RegisterForm = ({ handleClose, setShowDropdown }) => {
           </div>
 
           <div className="input-group">
-            <div className="input-icon">
+            <div className={`input-icon ${errorMessages.email && 'center-input-icon'}`}>
               <FontAwesomeIcon icon={faEnvelope} />
             </div>
             <input
@@ -228,10 +233,13 @@ const RegisterForm = ({ handleClose, setShowDropdown }) => {
               value={formData.email}
               onChange={handleChange}
             />
+            {errorMessages.email && (
+              <span className="error-message">{errorMessages.email}</span>
+            )}
           </div>
 
           <div className="input-group country-group">
-            <div className="input-icon">
+            <div className={`input-icon ${errorMessages.country && 'center-input-icon'}`}>
               <FontAwesomeIcon icon={faGlobe} />
             </div>
             <input
@@ -269,7 +277,7 @@ const RegisterForm = ({ handleClose, setShowDropdown }) => {
 
           <div className="form-row">
             <div className="input-group">
-              <div className="input-icon">
+              <div className={`input-icon ${errorMessages.password && 'center-input-icon'}`}>
                 <FontAwesomeIcon icon={faLock} />
               </div>
               <input
@@ -286,7 +294,7 @@ const RegisterForm = ({ handleClose, setShowDropdown }) => {
             </div>
 
             <div className="input-group">
-              <div className="input-icon">
+              <div className={`input-icon ${errorMessages.confirm_password && 'center-input-icon'}`}>
                 <FontAwesomeIcon icon={faLock} />
               </div>
               <input
