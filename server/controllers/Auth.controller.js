@@ -157,85 +157,76 @@ const me = asyncHandler(async (req, res) => {
  * @param {string} oauthProvider - OAuth provier name ('google', 'facebook'...)
  * @returns {Promise<Object>} JSON response with access token and sets refresh token cookie
  */
-const oauthLogin = async (req, res) => {
-    try {
-        const { email, firstName, lastName, oauthId, oauthProvider } = req.body;
-    
-        if (!email) return res.status(400).json({ error: 'Email is required' });
-        if (!oauthProvider) return res.status(400).json({ error: 'OAuth provider is required' });
+const oauthLogin = asyncHandler(async (req, res) => {
+    const { email, firstName, lastName, oauthId, oauthProvider } = req.body;
 
-        let user = await User.findOne({ 
-            $or: [
-                { email },
-                { oauthId, oauthProvider }
-            ]
-        });
+    if (!email) throw new ValidationError('Email is required');
+    if (!oauthProvider) throw new ValidationError('OAuth provider is required');
 
-        if (user && user.oauthId !== oauthId && user.oauthProvider === oauthProvider) {
-            return res.status(409).json({ 
-                error: 'Email is already associated with a different account from this provider' 
-            });
-        }
+    let user = await User.findOne({ 
+        $or: [
+            { email },
+            { oauthId, oauthProvider }
+        ]
+    });
 
-        if (user && user.hasPassword && !user.oauthId) {
-            // Could offer linking accs in future
-            return res.status(400).json({ 
-                error: 'An account with this email already exists. Please log in with your password first.' 
-            });
-        }
-    
-    
-        if (!user) {
-            let username = generateUsername(email, firstName, lastName);
-            let usernameExists = await User.findOne({ username });
-            let counter = 1;
-
-            while (usernameExists) {
-                username = `${generateUsername(email, firstName, lastName)}${counter}`;
-                usernameExists = await User.findOne({ username });
-                counter++;
-                if (counter > 100) { // safety limit
-                    username = `${generateUsername(email, firstName, lastName)}${Date.now()}`;
-                    break;
-                }
-            }
-
-            user = new User({
-                firstName,
-                lastName,
-                username,
-                email,
-                oauthProvider,
-                oauthId,
-                hasPassword: false,
-                isVerified: true,
-                // password: null
-            })
-        } 
-
-        const accessToken = generateAccessToken(user._id);
-        const refreshToken = generateRefreshToken(user._id);
-    
-        user.refreshToken = refreshToken;
-        user.isOnline = true;
-        user.lastSeen = new Date()
-
-        await user.save();
-    
-        res.cookie('refreshToken', refreshToken, {
-            httpOnly: true,
-            // secure: process.env.NODE_ENV === 'production',
-            secure: false,
-            sameSite: 'Strict',
-            maxAge: 7 * 24 * 60 * 60 * 1000,
-        });
-    
-        return res.json({ accessToken });
-    
-    } catch (err) {
-        res.status(500).json({ message: err.message })
+    if (user && user.oauthId !== oauthId && user.oauthProvider === oauthProvider) {
+        throw new ConflictError('Email is already associated with a different account from this provider');
     }
-}
+
+    if (user && user.hasPassword && !user.oauthId) {
+        throw new ConflictError('An account with this email already exists. Please log in with your password first.');
+    }
+
+
+    if (!user) {
+        let username = generateUsername(email, firstName, lastName);
+        let usernameExists = await User.findOne({ username });
+        let counter = 1;
+
+        while (usernameExists) {
+            username = `${generateUsername(email, firstName, lastName)}${counter}`;
+            usernameExists = await User.findOne({ username });
+            counter++;
+            if (counter > 100) { // safety limit
+                username = `${generateUsername(email, firstName, lastName)}${Date.now()}`;
+                break;
+            }
+        }
+
+        user = new User({
+            firstName,
+            lastName,
+            username,
+            email,
+            oauthProvider,
+            oauthId,
+            hasPassword: false,
+            isVerified: true,
+            // password: null
+        });
+    } 
+
+    const accessToken = generateAccessToken(user._id);
+    const refreshToken = generateRefreshToken(user._id);
+
+    user.refreshToken = refreshToken;
+    user.isOnline = true;
+    user.lastSeen = new Date()
+
+    await user.save();
+
+    res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        secure: false,
+        // secure: process.env.NODE_ENV === 'production',
+        sameSite: 'Strict',
+        // sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    return res.status(200).json({ accessToken });
+});
 
 
 module.exports = {
