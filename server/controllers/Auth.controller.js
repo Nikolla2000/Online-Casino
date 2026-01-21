@@ -124,7 +124,14 @@ const logout = async (req, res) => {
     res.sendStatus(204);
 }
 
-
+/**
+ * Return the current authenticated user's profile information
+ * 
+ * @route GET /server/v1/auth/me
+ * @access Private
+ * @param {string} req.headers.authorization - Bearer token in format "Bearer <access_token>"
+ * @returns {Promise<Object>} JSON response with user data, excluding sensitive fields
+ */
 const me = async (req, res) => {
     try {
         const authHeader = req.headers['authorization'];
@@ -133,14 +140,29 @@ const me = async (req, res) => {
         
         const payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
         const user = await User.findById(payload.userId).select('-password -refreshToken');
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
         
-        res.json(user);
+        return res.status(200).json(user);
     } catch (err) {
         res.status(403).json({ error: err });
     }
 }
 
-
+/**
+ * Handles OAuth authentication (Google)
+ * 
+ * @route /server/v1/auth/oauth
+ * @access Public
+ * @param {string} email - User email 
+ * @param {string} firstName - User first name
+ * @param {string} lastName - User last name
+ * @param {string} oauthId - Unique identifier from OAuth provider
+ * @param {string} oauthProvider - OAuth provier name ('google', 'facebook'...)
+ * @returns {Promise<Object>} JSON response with access token and sets refresh token cookie
+ */
 const oauthLogin = async (req, res) => {
     try {
         const { email, firstName, lastName, oauthId, oauthProvider } = req.body;
@@ -156,7 +178,7 @@ const oauthLogin = async (req, res) => {
         });
 
         if (user && user.oauthId !== oauthId && user.oauthProvider === oauthProvider) {
-            return res.status(400).json({ 
+            return res.status(409).json({ 
                 error: 'Email is already associated with a different account from this provider' 
             });
         }
@@ -170,7 +192,7 @@ const oauthLogin = async (req, res) => {
     
     
         if (!user) {
-            const username = generateUsername(email, firstName, lastName);
+            let username = generateUsername(email, firstName, lastName);
             let usernameExists = await User.findOne({ username });
             let counter = 1;
 
