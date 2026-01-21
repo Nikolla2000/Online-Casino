@@ -5,6 +5,7 @@ const { comparePasswords } = require('../helpers/auth');
 const { generateAccessToken, generateRefreshToken } = require('../helpers/tokens');
 const generateUsername = require('../helpers/generateUsername');
 const asyncHandler = require('../helpers/asyncHandler');
+const { UnauthorizedError, ValidationError } = require('../helpers/errors');
 
 /**
  * Authenticate user with username and password
@@ -18,13 +19,13 @@ const asyncHandler = require('../helpers/asyncHandler');
 const login = asyncHandler(async (req, res) => {
     const { username, password } = req.body;
     if (!username || !password) {
-        return res.status(400).json({ error: 'Username and password are required' });
+        throw new ValidationError('Username and password are required');
     }
 
     const user = await User.findOne({ username });
 
     if (!user || !(await comparePasswords(password, user.password))) {
-        return res.status(401).json({ error: "Invalid credentials" });
+        throw new UnauthorizedError('Password is wrong');
     }
 
     const accessToken = generateAccessToken(user._id);
@@ -37,9 +38,10 @@ const login = asyncHandler(async (req, res) => {
 
     res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
-        // secure: process.env.NODE_ENV === 'production',
         secure: false,
+        // secure: process.env.NODE_ENV === 'production',
         sameSite: 'Strict',
+        // sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
         maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -132,24 +134,16 @@ const logout = async (req, res) => {
  * @param {string} req.headers.authorization - Bearer token in format "Bearer <access_token>"
  * @returns {Promise<Object>} JSON response with user data, excluding sensitive fields
  */
-const me = async (req, res) => {
-    try {
-        const authHeader = req.headers['authorization'];
-        const token = authHeader && authHeader.split(' ')[1];
-        if (!token) return res.sendStatus(401);
-        
-        const payload = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-        const user = await User.findById(payload.userId).select('-password -refreshToken');
+const me = asyncHandler(async (req, res) => {
+    const userId = req.userId;
+    const user = await User.findById(userId).select('-password -refreshToken');
 
-        if (!user) {
-            return res.status(404).json({ error: 'User not found' });
-        }
-        
-        return res.status(200).json(user);
-    } catch (err) {
-        res.status(403).json({ error: err });
+    if (!user) {
+        throw new NotFoundError('User not found');
     }
-}
+    
+    return res.status(200).json(user);
+});
 
 /**
  * Handles OAuth authentication (Google)
