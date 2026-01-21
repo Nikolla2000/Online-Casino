@@ -32,10 +32,24 @@ class ConflictError extends AppError {
   }
 }
 
+class TokenExpiredError extends AppError {
+  constructor(message = 'Token expired') {
+    super(message, 403);
+  }
+}
+
+class InvalidTokenError extends AppError {
+  constructor(message = 'Invalid token') {
+    super(message, 403);
+  }
+}
+
 module.exports = {
   ValidationError,
   NotFoundError,
   UnauthorizedError,
   ForbiddenError,
   ConflictError,
+  TokenExpiredError,
+  InvalidTokenError,
 };
