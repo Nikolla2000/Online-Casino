@@ -9,6 +9,7 @@ import { fetchCurrentUser, login } from '../../../redux/features/auth/authSlice'
 import { hideModals } from '../../../redux/features/auth/authModalsSlice';
 import { countries } from '../../../utils/countries';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import validateRegisterForm from '../../../utils/validateRegisterForm';
 import { 
   faUser, 
   faEnvelope, 
@@ -51,51 +52,17 @@ const RegisterForm = ({ handleClose, setShowDropdown }) => {
     });
   };
 
-  const validateForm = () => {
-    const errors = {};
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-    if (formData.firstName.length < 2 || formData.firstName.length > 20) {
-      errors.firstName = 'First Name must be between 2 and 20 characters';
-    }
-
-    if (formData.lastName.length < 2 || formData.lastName.length > 20) {
-      errors.lastName = 'Last Name must be between 2 and 20 characters';
-    }
-
-    if (formData.username.length < 4 || formData.username.length > 20) {
-      errors.username = 'Username must be between 4 and 20 characters';
-    }
-
-    if (!emailRegex.test(formData.email)) {
-      errors.email = 'You must enter a valid email';
-    }
-
-    if (!formData.country) {
-      errors.country = 'Please select a country';
-    }
-
-    if (formData.password.length < 6) {
-      errors.password = 'Password must be at least 6 characters';
-    }
-
-    if (formData.password !== formData.confirm_password) {
-      errors.confirm_password = 'Passwords do not match';
-    }
-
-    return errors;
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setErrorMessages({});
 
-    const errors = validateForm();
+    const errors = validateRegisterForm(formData);
 
     if (Object.keys(errors).length === 0) {
       try {
-        await api.post('/v1/user/register', formData);
+        await api.post('/v2/users/register', formData);
         const loginCredentials = {
           username: formData.username,
           password: formData.password
