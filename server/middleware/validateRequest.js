@@ -12,7 +12,7 @@ const validateRequest = (validationSchema) => {
   
       if (!result.success) {
         const error = new ValidationError('Validation failed');
-        error.details = result.error.errors;
+        error.details = result.error;
         return next(error);
       }
   
