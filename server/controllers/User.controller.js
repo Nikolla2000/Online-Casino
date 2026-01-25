@@ -128,7 +128,17 @@ const getTotalCreditsOld = async (req, res) => {
   }
 }
 
-
+/**
+ * Handles the uploading and processing of a user profile picture.
+ * 
+ * @route POST /server/v1/user/uploadPicture
+ * @access Private
+ * @returns {Promise<void>} JSON response with the new profile picture URL or an error message.
+ * 
+ * @throws {400} If no file is provided in the request.
+ * @throws {401} If the user ID is missing from the request.
+ * @throws {500} If a file system error or database update failure occurs.
+ */
 const uploadPicture = async (req, res) => {
   try {
     if (!req.file) {
@@ -177,7 +187,7 @@ const uploadPicture = async (req, res) => {
   }
 }
 
-
+// OLD - NOT USED
 const getOnlineUsers = async (req, res) => {
   try {
     const onlineUsers = await User.find(
@@ -194,6 +204,15 @@ const getOnlineUsers = async (req, res) => {
 }
 
 
+/**
+ * Updates the notification and marketing preferences for the authenticated user.
+ * 
+ * @route PATCH /server/v1/user/notification-preferences
+ * @param {boolean} bonusOffers - Allow user to receive bonus offers
+ * @param {boolean} gameUpdates - Allow user to receive game updates
+ * @param {boolean} vipEvents - Invite user to vip events
+ * @returns {Promise<void>} Returns success message if the update is completed
+ */
 const updatePreferences = async (req, res) => {
   try {
     const { bonusOffers, gameUpdates, vipEvents } = req.body;
@@ -307,10 +326,10 @@ const getGameHistory = asyncHandler(async (req, res) => {
  * Get users with optional filtering
  * 
  * @route GET /server/v2/users
- * @query {string} online - Filter by online status ('true' for online users only)
- * @query {string} vip - Filter by VIP status ('true' for VIP users only)
- * @query {number} limit - Maximum number of users to return
- * @query {string} sort - Sort field (default: 'username', options: 'username', 'totalCredits', 'lastSeen')
+ * @param {string} online - Filter by online status ('true' for online users only)
+ * @param {string} vip - Filter by VIP status ('true' for VIP users only)
+ * @param {number} limit - Maximum number of users to return
+ * @param {string} sort - Sort field (default: 'username', options: 'username', 'totalCredits', 'lastSeen')
  * @access Private
  */
 const getUsers = asyncHandler(async(req, res) => {
