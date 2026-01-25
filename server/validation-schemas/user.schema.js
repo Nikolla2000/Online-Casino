@@ -46,7 +46,9 @@ const registerSchema = z.object({
     phoneNumber: z.string()
       .optional()
       .transform(val => val?.trim())
-      .refine(val => val?.trim()),
+      .refine(val => !val || /^\+?[\d\s\-\(\)]+$/.test(val), {
+        message: 'Invalid phone number format'
+      }),
 }).refine(data => data.password === data.confirmPassword, {
   message: 'Passwords don\'t match',
   path: ['confirmPassword']
