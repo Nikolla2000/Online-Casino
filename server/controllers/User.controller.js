@@ -192,6 +192,7 @@ const uploadPicture = async (req, res) => {
  * Updates the notification and marketing preferences for the authenticated user.
  * 
  * @route PATCH /server/v1/user/notification-preferences
+ * @access Private
  * @param {boolean} bonusOffers - Allow user to receive bonus offers
  * @param {boolean} gameUpdates - Allow user to receive game updates
  * @param {boolean} vipEvents - Invite user to vip events
