@@ -29,7 +29,7 @@ const RegisterForm = ({ handleClose, setShowDropdown }) => {
     email: '',
     country: '',
     password: '',
-    confirm_password: '',
+    confirmPassword: '',
   });
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -77,21 +77,24 @@ const RegisterForm = ({ handleClose, setShowDropdown }) => {
           email: '',
           country: '',
           password: '',
-          confirm_password: '',
+          confirmPassword: '',
         });
 
         toast.success(`Welcome to Elite Casino, ${name}! 🎰`);
         
-        const res = dispatch(login(loginCredentials));
-        
+        const res = await dispatch(login(loginCredentials));
+
         if (login.fulfilled.match(res)) {
+          console.log("Enters");
           const token = res.payload.accessToken;
           dispatch(fetchCurrentUser(token));
           dispatch(hideModals());
 
           if (setShowDropdown) setShowDropdown(false);
 
-          setTimeout(() => navigate("/"), 400);
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 400);
         } else {
           toast.error("Error signing in.");
         }
@@ -261,19 +264,19 @@ const RegisterForm = ({ handleClose, setShowDropdown }) => {
             </div>
 
             <div className="input-group">
-              <div className={`input-icon ${errorMessages.confirm_password && 'center-input-icon'}`}>
+              <div className={`input-icon ${errorMessages.confirmPassword && 'center-input-icon'}`}>
                 <FontAwesomeIcon icon={faLock} />
               </div>
               <input
                 type="password"
-                name="confirm_password"
+                name="confirmPassword"
                 placeholder="Confirm Password"
-                value={formData.confirm_password}
+                value={formData.confirmPassword}
                 onChange={handleChange}
-                className={errorMessages.confirm_password ? 'error' : ''}
+                className={errorMessages.confirmPassword ? 'error' : ''}
               />
-              {errorMessages.confirm_password && (
-                <span className="error-message">{errorMessages.confirm_password}</span>
+              {errorMessages.confirmPassword && (
+                <span className="error-message">{errorMessages.confirmPassword}</span>
               )}
             </div>
           </div>

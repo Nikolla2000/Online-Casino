@@ -9,7 +9,7 @@
  * @param {string} formData.email - User email address.
  * @param {string} formData.country - Selected country code.
  * @param {string} formData.password - Password requiring uppercase, lowercase, number, and special char.
- * @param {string} formData.confirm_password - Must match formData.password
+ * @param {string} formData.confirmPassword - Must match formData.password
  * @returns {Object} An errors object. Empty object indicates valid form.
  */
 const validateRegisterForm = (formData) => {
@@ -43,7 +43,7 @@ const validateRegisterForm = (formData) => {
   if (!specialCharRegex.test(formData.password)) {
     errors.password = 'Password must contain at least one special character';
   }
-  
+
   if (!uppercaseLetterRegex.test(formData.password)) {
     errors.password = 'Password must contain at least one uppercase letter';
   }
@@ -60,8 +60,8 @@ const validateRegisterForm = (formData) => {
     errors.password = 'Password must be at least 8 characters';
   }
 
-  if ((formData.password !== formData.confirm_password) || !formData.confirm_password) {
-    errors.confirm_password = 'Passwords do not match';
+  if ((formData.password !== formData.confirmPassword) || !formData.confirmPassword) {
+    errors.confirmPassword = 'Passwords do not match';
   }
 
   return errors;
