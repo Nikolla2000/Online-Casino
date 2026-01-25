@@ -187,22 +187,6 @@ const uploadPicture = async (req, res) => {
   }
 }
 
-// OLD - NOT USED
-const getOnlineUsers = async (req, res) => {
-  try {
-    const onlineUsers = await User.find(
-      {isOnline: true},
-      'username email profileImage totalCredits isVip lastSeen'
-    )
-    .sort({ username: 1 })
-    .lean();
-  
-    res.status(200).json({ success: true, count: onlineUsers.length, users: onlineUsers });
-  } catch (err) {
-    res.status(500).json({  message: err.message })
-  }
-}
-
 
 /**
  * Updates the notification and marketing preferences for the authenticated user.
@@ -391,7 +375,6 @@ module.exports = {
   updateTotalCredits,
   getTotalCreditsOld,
   uploadPicture,
-  getOnlineUsers,
   updatePreferences,
   getUserStats,
   getRecentActivity,

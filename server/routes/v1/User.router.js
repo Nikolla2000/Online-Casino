@@ -7,7 +7,6 @@ const {
   getProfile,
   updateTotalCredits,
   uploadPicture,
-  getOnlineUsers,
   updatePreferences,
   getUserStats,
   getRecentActivity,
@@ -22,7 +21,6 @@ router.get('/profile', getProfile);
 router.get('/credits', verifyJWT, getTotalCreditsOld);
 router.put('/:userId/credits', verifyJWT, updateTotalCredits);
 router.post('/uploadPicture', verifyJWT, upload.single('profilePic'), uploadPicture);
-router.get('/online', getOnlineUsers);
 router.patch('/notification-preferences', verifyJWT, updatePreferences);
 router.get('/stats', verifyJWT, getUserStats);
 router.get('/recent-activity', verifyJWT, getRecentActivity);
