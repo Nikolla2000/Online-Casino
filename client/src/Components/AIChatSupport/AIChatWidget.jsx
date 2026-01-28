@@ -130,7 +130,7 @@ const AIChatWidget = () => {
       dispatch(startLoading());
   
       if (user && accessToken) {
-        await deleteConversationHistory(user._id);
+        await deleteConversationHistory();
         dispatch(setConversationHistory([]));
       } else {
         dispatch(setConversationHistory([]));

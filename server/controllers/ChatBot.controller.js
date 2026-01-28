@@ -119,21 +119,14 @@ const getConversationHistory = async (req, res) => {
  * @throws {500} database error
  */
 const deleteConversationHistory = async (req, res) => {
-  const userId = req.params.userId;
-
-  if (!userId || userId === 'undefined' || userId === 'null') {
-    return res.status(400).json({ error: 'Valid user ID is required' });
-  }
-
   try {
-    await ChatbotMessage.deleteMany({ userId: userId })
+    await ChatbotMessage.deleteMany({ userId: req.user.id })
 
     return res.status(200).json({ message: "Successfully deleted conversation history" });
   } catch (err) {
     console.error("Delete conversation history error: ", err);
     return res.status(500).json({ error: 'Failed to delete conversation history'});
   }
-
 }
 
 module.exports = {

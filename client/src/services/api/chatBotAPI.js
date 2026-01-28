@@ -20,9 +20,9 @@ export async function fetchConversationHistory() {
 }
 
 
-export async function deleteConversationHistory(userId) {
+export async function deleteConversationHistory() {
   try {
-    const res = await api.delete(`/v1/chatbot/${userId}`);
+    const res = await api.delete('/v1/chatbot/');
     return res.data;
   } catch (err) {
     console.log("Error requesting a delete of conversation history", err);

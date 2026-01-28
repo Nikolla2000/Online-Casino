@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.post('/', promptChatBot);
 router.get('/', auth, getConversationHistory);
-router.delete('/:userId', deleteConversationHistory);
+router.delete('/', auth, deleteConversationHistory);
 
 module.exports = router;
