@@ -5,6 +5,17 @@ const ChatbotMessage = require("../models/ChatbotMessage.model");
 const groq = new Groq({ apiKey: process.env.GROQ_AI_API_KEY });
 
 
+/**
+ * Send a message to AI chatbot and get response
+ * 
+ * @route POST /server/v1/chatbot
+ * @access Public/Private (guest or authenticated)
+ * @param {string} message - User message to send to chatbot
+ * @param {string} [userId] - Optional user ID for authenticated users
+ * @returns {Promise<void>} sends JSON response with AI reply
+ * @throws {400} If message is missing
+ * @throws {500} If AI service or database fails
+ */
 const promptChatBot = async (req, res)  => {
   const { message, userId } = req.body;
 
@@ -60,7 +71,7 @@ const promptChatBot = async (req, res)  => {
       }
     }
 
-    res.json({
+    return res.json({
       response: aiResponse,
       guestMode: guestMode,
       timestamp: new Date().toISOString()
@@ -68,12 +79,21 @@ const promptChatBot = async (req, res)  => {
 
   } catch (err) {
     console.error("Groq API error:", err);
-    res.status(500).json({ message: "AI service unavailable" });
+    return res.status(500).json({ message: "AI service unavailable" });
   }
 
 }
 
 
+/**
+ * Get conversation history for authenticated user
+ * 
+ * @route GET /server/v1/chatbot/
+ * @access Private
+ * @returns {Promise<void>} sends JSON array of message history
+ * @throws {401} not authenticated
+ * @throws {500} database error
+ */
 const getConversationHistory = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -82,14 +102,22 @@ const getConversationHistory = async (req, res) => {
       .select('userMessage aiResponse timeStamp')
       .limit(100)
 
-    res.status(200).json(conversationHistory);
+    return res.status(200).json(conversationHistory);
   } catch (err) {
     console.error("Error retrieving conversation history: ", err);
-    res.status(500).json({ error: 'Failed to retrieve conversation history'});
+    return res.status(500).json({ error: 'Failed to retrieve conversation history'});
   }
 }
 
 
+/**
+ * Delete conversation history for authenticated user
+ * 
+ * @route DELETE /server/v1/chatbot/:userId
+ * @access Private
+ * @returns {Promise<void>} sends JSON: {message: "Successfully deleted..."}
+ * @throws {500} database error
+ */
 const deleteConversationHistory = async (req, res) => {
   const userId = req.params.userId;
 
@@ -100,10 +128,10 @@ const deleteConversationHistory = async (req, res) => {
   try {
     await ChatbotMessage.deleteMany({ userId: userId })
 
-    res.status(200).json({ message: "Successfully deleted conversation history" });
+    return res.status(200).json({ message: "Successfully deleted conversation history" });
   } catch (err) {
     console.error("Delete conversation history error: ", err);
-    res.status(500).json({ error: 'Failed to delete conversation history'});
+    return res.status(500).json({ error: 'Failed to delete conversation history'});
   }
 
 }
