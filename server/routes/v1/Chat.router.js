@@ -7,34 +7,15 @@ const {
   markMessagesAsRead,
   deleteChat
 } = require('../../controllers/Chat.controller.js');
-const { auth, verifyJWT } = require('../../middleware/authentication.js');
+const { verifyJWT } = require('../../middleware/authentication.js');
 
 // Apply auth middleware to all routes
-// router.use(auth);
+router.use(verifyJWT);
 
-// @route   GET /api/chats
-// @desc    Get all chats for authenticated user
-// @access  Private
 router.get('/', getUserChats);
-
-// @route   POST /api/chats
-// @desc    Create new chat
-// @access  Private
 router.post('/', createChat);
-
-// @route   GET /api/chats/:chatId/messages
-// @desc    Get messages for specific chat
-// @access  Private
-router.get('/:chatId/messages', auth, getChatMessages);
-
-// @route   PUT /api/chats/:chatId/messages/read
-// @desc    Mark messages as read
-// @access  Private
+router.get('/:chatId/messages', getChatMessages);
 router.put('/:chatId/messages/read', markMessagesAsRead);
-
-// @route   DELETE /api/chats/:chatId
-// @desc    Delete chat and all messages
-// @access  Private
 router.delete('/:chatId', deleteChat);
 
 module.exports = router;

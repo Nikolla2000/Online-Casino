@@ -1,13 +1,18 @@
 const Chat = require('../models/Chat.model');
 const Message = require('../models/Message.model');
 
-// @desc    Get user's chats
-// @route   GET /api/chats
-// @access  Private
+
+/**
+ * Get all chats for the authenticated user
+ * 
+ * @route GET /server/v1/chats
+ * @access Private
+ * @returns {Promise<void>} sends JSON response with user chats
+ */
 const getUserChats = async (req, res) => {
   try {
     const chats = await Chat.find({
-      participants: req.user.id
+      participants: req.userId
     })
     .populate('participants', 'username email profileImage isVip totalCredits')
     .populate({
@@ -31,15 +36,20 @@ const getUserChats = async (req, res) => {
   }
 };
 
-// @desc    Get chat messages
-// @route   GET /api/chats/:chatId/messages
-// @access  Private
+/**
+ * Get messages for a specific chat
+ * 
+ * @route GET /server/v1/chats/:chatId/messages
+ * @access Private
+ * @param {string} chatId - ID of the chat to fetch messages from
+ * @returns {Promise<void>} sends JSON response with chat messages
+ */
 const getChatMessages = async (req, res) => {
   try {
     const { chatId } = req.params;
 
     const chat = await Chat.findById(chatId);
-    if (!chat || !chat.participants.includes(req.user.id)) {
+    if (!chat || !chat.participants.includes(req.userId)) {
       return res.status(403).json({
         success: false,
         message: 'Access denied to this chat'
@@ -66,20 +76,25 @@ const getChatMessages = async (req, res) => {
   }
 };
 
-// @desc    Create new chat
-// @route   POST /api/chats
-// @access  Private
+/**
+ * Create a new chat or return existing chat with specified user
+ * 
+ * @route POST /server/v1/chats
+ * @access Private
+ * @param {string} receiverId - ID of the receiver of the message
+ * @returns {Promise<void>} sends JSON response with chat object
+ */
 const createChat = async (req, res) => {
   try {
     const { receiverId } = req.body;
 
     let chat = await Chat.findOne({
-      participants: { $all: [req.user.id, receiverId] }
+      participants: { $all: [req.userId, receiverId] }
     }).populate('participants', 'username email profileImage isVip totalCredits');
 
     if (!chat) {
       chat = new Chat({
-        participants: [req.user.id, receiverId]
+        participants: [req.userId, receiverId]
       });
       await chat.save();
       await chat.populate('participants', 'username email profileImage isVip totalCredits');
@@ -99,16 +114,22 @@ const createChat = async (req, res) => {
   }
 };
 
-// @desc    Mark messages as read
-// @route   PUT /api/chats/:chatId/messages/read
-// @access  Private
+/**
+ * Mark messages as read in a specific chat
+ * 
+ * @route PUT /server/v1/chats/:chatId/messages/read
+ * @access Private
+ * @param {string} chatId - ID of the chat containing messages
+ * @param {string} messageIds - ID of the messages to be read
+ * @returns {Promise<void>} sends JSON response indicating success
+ */
 const markMessagesAsRead = async (req, res) => {
   try {
     const { chatId } = req.params;
     const { messageIds } = req.body;
 
     const chat = await Chat.findById(chatId);
-    if (!chat || !chat.participants.includes(req.user.id)) {
+    if (!chat || !chat.participants.includes(req.userId)) {
       return res.status(403).json({
         success: false,
         message: 'Access denied'
@@ -119,7 +140,7 @@ const markMessagesAsRead = async (req, res) => {
       {
         _id: { $in: messageIds },
         chatId,
-        senderId: { $ne: req.user.id },
+        senderId: { $ne: req.userId },
         read: false
       },
       {
@@ -142,9 +163,14 @@ const markMessagesAsRead = async (req, res) => {
   }
 };
 
-// @desc    Delete chat
-// @route   DELETE /api/chats/:chatId
-// @access  Private
+/**
+ * Delete a chat and all associated messages
+ * 
+ * @route DELETE /server/v1/chats/:chatId
+ * @access Private
+ * @param {string} chatId - ID of the chat to delete
+ * @returns {Promise<void>} sends JSON response indicating success or error
+ */
 const deleteChat = async (req, res) => {
   try {
     const { chatId } = req.params;
@@ -157,7 +183,7 @@ const deleteChat = async (req, res) => {
       });
     }
 
-    if (!chat.participants.includes(req.user.id)) {
+    if (!chat.participants.includes(req.userId)) {
       return res.status(403).json({
         success: false,
         message: 'Access denied'
