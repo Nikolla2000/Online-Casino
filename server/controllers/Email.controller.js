@@ -1,5 +1,19 @@
 const nodemailer = require("nodemailer");
 
+/**
+ * Send contact form email to admin
+ * 
+ * @route POST /server/v1/email/sendEmail
+ * @access Public
+ * @param {string} email - Sender's email address (required)
+ * @param {string} message - Contact message (required)
+ * @param {string} [firstName] - Sender's first name
+ * @param {string} [lastName] - Sender's last name  
+ * @param {string} [phone] - Sender's phone number
+ * @returns {Promise<void>} sends JSON indicating success on sending email
+ * @throws {400} email or message missing
+ * @throws {500} email service failure
+ */
 const sendEmail = async (req, res) => {
     try {
         const { firstName, lastName, email, phone, message } = req.body;
@@ -34,12 +48,12 @@ const sendEmail = async (req, res) => {
 
         await transporter.sendMail(mailOptions);
 
-        res.status(200).json({ message: "Email send successfully!" });
+        return res.status(200).json({ message: "Email send successfully!" });
 
 
     } catch (err) {
         console.error("Email error: ", err);
-        res.status(500).json({ error: 'Failed to send email'});
+        return res.status(500).json({ error: 'Failed to send email'});
     }
 }
 
