@@ -43,5 +43,17 @@ export const userAPI = {
         } catch (err) {
             console.error('Error fetching online users: ', err);
         }
+    },
+
+    getUserData: async() => { 
+        try {
+            const pathParts = window.location.pathname.split('/');
+            const userId = pathParts[2];
+    
+            const res = await api.get(`/v2/users/${userId}`);
+            return res.data;
+        } catch (err) {
+            console.error('Error fetching user data: ', err);
+        }
     }
 };
