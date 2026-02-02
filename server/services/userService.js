@@ -160,7 +160,7 @@ class UserService {
     const adminUser = await User.findById(adminId).select('role');
 
     if (!adminUser) {
-      throw new NotFoundError('Admin user not found');
+      throw new NotFoundError('Admin');
     }
 
     if (adminUser.role !== 'admin') {
@@ -203,7 +203,7 @@ class UserService {
     const user = await User.findById(userId).select('totalCredits').lean();
 
     if (!user) {
-      throw new NotFoundError('User not found');
+      throw new NotFoundError('User');
     }
 
     return { totalCredits: user.totalCredits };
@@ -253,6 +253,18 @@ class UserService {
   sanitizeUser(user) {
     const { password, __v, ...sanitized } = user.toObject();
     return sanitized;
+  }
+
+
+  async getProfileById(userId) {
+    const user = await User.findById(userId)
+      .select('-password -email -oauthProvider -oauthId -hasPassword -totalCredits -refreshToken -bonusOffers -gameUpdates -vipEvents');
+
+    if (!user) {
+      throw new NotFoundError('User');
+    }
+
+    return user;
   }
 }
 

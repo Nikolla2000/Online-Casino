@@ -8,6 +8,7 @@ const asyncHandler = require('../helpers/asyncHandler');
 const GameHistory = require('../models/GameHistory.model');
 const { default: mongoose } = require('mongoose');
 const userService = require('../services/userService');
+const { ValidationError } = require('../helpers/errors');
 
 
 //Register Endpoint - OLD ENDPOINT - NOT USED!!! New registerUserV2 is now used.
@@ -315,6 +316,7 @@ const getGameHistory = asyncHandler(async (req, res) => {
  * @param {string} vip - Filter by VIP status ('true' for VIP users only)
  * @param {number} limit - Maximum number of users to return
  * @param {string} sort - Sort field (default: 'username', options: 'username', 'totalCredits', 'lastSeen')
+ * @returns {Promise<void>} JSON response indicating success, containg array of found users object and count of users found
  * @access Private
  */
 const getUsers = asyncHandler(async(req, res) => {
@@ -340,7 +342,7 @@ const getUsers = asyncHandler(async(req, res) => {
  * @route GET /server/v2/users/:userId/credits
  * @access Private
  * @param {string} userId - User ID from URL params
- * @returns {Object} User credits info
+ * @returns {Promise<void>} JSON response with user credits info object
  */
 const getTotalCredits = asyncHandler(async (req, res) => {
   const { userId } = req.params;
@@ -355,7 +357,7 @@ const getTotalCredits = asyncHandler(async (req, res) => {
  * Get total credits for a specific user
  * @route GET /server/v2/users/register
  * @access Public
- * @returns {Object} The new user object
+ * @returns {Promise<void>} JSON response with the new user object
  */
 const registerUserV2 = asyncHandler(async (req, res) => {
   const userData = req.validatedData.body;
@@ -367,6 +369,19 @@ const registerUserV2 = asyncHandler(async (req, res) => {
     message: 'User registered successfully',
     data: newUser
   });
+});
+
+
+const getUserProfile = asyncHandler(async (req, res) => {
+  const userId = req.params.userId;
+
+  if (!userId) {
+    throw new ValidationError('User id is required');
+  }
+
+  const userData = await userService.getProfileById(userId);
+
+  return res.status(200).json(userData);
 });
 
 
@@ -383,4 +398,5 @@ module.exports = {
   getUsers,
   getTotalCredits,
   registerUserV2,
+  getUserProfile,
 }
