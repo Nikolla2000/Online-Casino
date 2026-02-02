@@ -9,6 +9,7 @@ import Dashboard from "../Pages/User/Dashboard/Dashboard";
 import React from "react";
 import OAuthCallback from "../Components/Oauth/OauthCallback";
 import TermsConditions from "../Pages/TermsConditionsPage/TermsConditions";
+import ProfilePage from "../Pages/ViewProfilePage/ProfilePage";
 
 const routes = {
   main: {
@@ -74,7 +75,13 @@ const routes = {
     element: <TermsConditions/>,
     name: 'terms',
     includeInNav: false,
-  }
+  },
+  profile: {
+    path: '/profile/:userId',
+    element: <ProfilePage/>,
+    name: 'profile',
+    includeInNav: false,
+  },
 }
 
 export default routes
