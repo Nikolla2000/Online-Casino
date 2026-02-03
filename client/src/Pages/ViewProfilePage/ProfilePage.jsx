@@ -1,27 +1,203 @@
-import { useUserData } from "../../hooks/useUserData";
+import React from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useUserData } from '../../hooks/useUserData';
+import { getCountryFlag } from '../../utils/countries';
+import { formatTimeAgo } from '../../utils/timeFormatter';
+import ProfileSkeleton from '../../Components/Skeletons/ProfileSkeleton/ProfileSkeleton';
+import './ProfilePageStyles.scss';
 
 const ProfilePage = () => {
+  const { userId } = useParams();
+  const navigate = useNavigate();
+  const { data: userData, isLoading, error } = useUserData(userId);
 
-    const { data: userData, isLoading, error } = useUserData();
+  const getMemberDuration = (registrationDate) => {
+    const joined = new Date(registrationDate);
+    const now = new Date();
+    const diffTime = Math.abs(now - joined);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays < 30) {
+      return `${diffDays} days`;
+    } else if (diffDays < 365) {
+      const months = Math.floor(diffDays / 30);
+      return `${months} ${months === 1 ? 'month' : 'months'}`;
+    } else {
+      const years = Math.floor(diffDays / 365);
+      return `${years} ${years === 1 ? 'year' : 'years'}`;
+    }
+  };
 
-    console.log(userData);
-
+  if (isLoading) {
     return (
-        <>
-        <div>test</div>
-        <div>test</div>
-        <div>test</div>
-        <div>test</div>
-        <div>test</div>
-        <div>test</div>
-        <div>test</div>
-        <div>test</div>
-        <div>test</div>
-        <div>test</div>
-        <div>test</div>
-        <div>test</div>
-        </>
-    )
-}
+      <div className="user-profile-page">
+        <ProfileSkeleton />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="user-profile-page">
+        <div className="profile-error">
+          <div className="error-icon">❌</div>
+          <h2>User Not Found</h2>
+          <p>The user you're looking for doesn't exist or has been removed.</p>
+          <button className="back-btn" onClick={() => navigate(-1)}>
+            ← Go Back
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="user-profile-page">
+      <div className="profile-container">
+
+        <div className="profile-header">
+          <div className="header-background"></div>
+          <div className="header-content">
+            <div className="profile-image-section">
+              <div className="profile-avatar">
+                <img 
+                  src={userData.profileImage !== "/images/user.png" 
+                    ? `http://localhost:3000${userData.profileImage}` 
+                    : "/images/user.png"
+                  } 
+                  alt={userData.username}
+                />
+                <div className={`online-indicator ${userData.isOnline ? 'online' : 'offline'}`}>
+                  {userData.isOnline ? '🟢' : '⚫'}
+                </div>
+              </div>
+            </div>
+
+            <div className="profile-info">
+              <h1 className="profile-name">
+                {userData.firstName} {userData.lastName}
+              </h1>
+              <p className="profile-username">@{userData.username}</p>
+              
+              <div className="profile-badges">
+                <div className={`vip-badge ${userData.isVip ? 'vip' : 'regular'}`}>
+                  {userData.isVip ? '👑 VIP Member' : '⭐ Player'}
+                </div>
+                {userData.isVerified && (
+                  <div className="verified-badge">
+                    ✓ Verified
+                  </div>
+                )}
+                <div className={`status-badge ${userData.isOnline ? 'online' : 'offline'}`}>
+                  {userData.isOnline ? 'Online' : `Last seen ${formatTimeAgo(userData.lastSeen)}`}
+                </div>
+              </div>
+
+              {userData.country && userData.country !== 'unknown' && (
+                <div className="profile-location">
+                  <span className="location-icon">📍</span>
+                  <span className="location-text">{userData.country}</span>
+                  <span className="location-flag">{getCountryFlag(userData.country)}</span>
+                </div>
+              )}
+
+              <div className="member-info">
+                <span className="member-icon">🗓️</span>
+                Member for {getMemberDuration(userData.registrationDate)}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="profile-stats">
+          <div className="stat-card">
+            <div className="stat-icon">💰</div>
+            <div className="stat-content">
+              <div className="stat-value">
+                {userData.totalWagered.toLocaleString()}
+                <img src='/images/casino-chips.png' className='chips-img' alt="chips"/>
+              </div>
+              <div className="stat-label">Total Wagered</div>
+            </div>
+          </div>
+
+          <div className="stat-card">
+            <div className="stat-icon">🏆</div>
+            <div className="stat-content">
+              <div className="stat-value">
+                {userData.totalWon.toLocaleString()}
+                <img src='/images/casino-chips.png' className='chips-img' alt="chips"/>
+              </div>
+              <div className="stat-label">Total Won</div>
+            </div>
+          </div>
+
+          <div className="stat-card">
+            <div className="stat-icon">🎮</div>
+            <div className="stat-content">
+              <div className="stat-value">{userData.gamesPlayed}</div>
+              <div className="stat-label">Games Played</div>
+            </div>
+          </div>
+
+          <div className="stat-card">
+            <div className="stat-icon">📊</div>
+            <div className="stat-content">
+              <div className="stat-value">
+                {userData.totalWagered > 0 
+                  ? ((userData.totalWon / userData.totalWagered) * 100).toFixed(1)
+                  : '0.0'
+                }%
+              </div>
+              <div className="stat-label">Win Rate</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="profile-activity">
+          <h3 className="section-title">Player Activity</h3>
+          
+          {userData.gamesPlayed === 0 ? (
+            <div className="no-activity">
+              <div className="no-activity-icon">🎰</div>
+              <p>This player hasn't played any games yet</p>
+            </div>
+          ) : (
+            <div className="activity-summary">
+              <div className="summary-item">
+                <span className="summary-label">Joined</span>
+                <span className="summary-value">
+                  {new Date(userData.registrationDate).toLocaleDateString('en-US', {
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric'
+                  })}
+                </span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">Account Status</span>
+                <span className={`summary-value ${userData.isVerified ? 'verified' : 'unverified'}`}>
+                  {userData.isVerified ? '✓ Verified' : 'Not Verified'}
+                </span>
+              </div>
+              <div className="summary-item">
+                <span className="summary-label">VIP Status</span>
+                <span className="summary-value">
+                  {userData.isVip ? '👑 Gold Member' : '⭐ Regular Player'}
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="profile-actions">
+          <button className="action-btn secondary" onClick={() => navigate(-1)}>
+            ← Back
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default ProfilePage;
