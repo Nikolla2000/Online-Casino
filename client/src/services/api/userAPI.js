@@ -45,15 +45,13 @@ export const userAPI = {
         }
     },
 
-    getUserData: async() => { 
-        try {
-            const pathParts = window.location.pathname.split('/');
-            const userId = pathParts[2];
-    
+    getUserData: async(userId) => { 
+        try {    
             const res = await api.get(`/v2/users/${userId}`);
             return res.data;
         } catch (err) {
             console.error('Error fetching user data: ', err);
+            throw err;
         }
     }
 };
