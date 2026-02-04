@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useUserData } from '../../hooks/useUserData';
 import { getCountryFlag } from '../../utils/countries';
-import { formatTimeAgo } from '../../utils/timeFormatter';
+import { formatTimeAgo, getMemberDuration } from '../../utils/timeFormatter';
 import ProfileSkeleton from '../../Components/Skeletons/ProfileSkeleton/ProfileSkeleton';
 import './ProfilePageStyles.scss';
 
@@ -10,23 +10,6 @@ const ProfilePage = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
   const { data: userData, isLoading, error } = useUserData(userId);
-
-  const getMemberDuration = (registrationDate) => {
-    const joined = new Date(registrationDate);
-    const now = new Date();
-    const diffTime = Math.abs(now - joined);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
-    if (diffDays < 30) {
-      return `${diffDays} days`;
-    } else if (diffDays < 365) {
-      const months = Math.floor(diffDays / 30);
-      return `${months} ${months === 1 ? 'month' : 'months'}`;
-    } else {
-      const years = Math.floor(diffDays / 365);
-      return `${years} ${years === 1 ? 'year' : 'years'}`;
-    }
-  };
 
   if (isLoading) {
     return (

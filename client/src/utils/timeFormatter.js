@@ -41,3 +41,26 @@ export const formatDate = (timestamp) => {
     minute: '2-digit'
   });
 };
+
+/**
+ * Formats an ISO 8601 past date into human readable timestamp.
+ * 
+ * @param {string} registrationDate - An ISO 8601 formatted date string.
+ * @returns {string} (days, months or years).
+ */
+export const getMemberDuration = (registrationDate) => {
+  const joined = new Date(registrationDate);
+  const now = new Date();
+  const diffTime = Math.abs(now - joined);
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  
+  if (diffDays < 30) {
+    return `${diffDays} days`;
+  } else if (diffDays < 365) {
+    const months = Math.floor(diffDays / 30);
+    return `${months} ${months === 1 ? 'month' : 'months'}`;
+  } else {
+    const years = Math.floor(diffDays / 365);
+    return `${years} ${years === 1 ? 'year' : 'years'}`;
+  }
+};
