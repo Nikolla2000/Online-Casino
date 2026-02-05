@@ -11,6 +11,9 @@ const ProfilePage = () => {
   const navigate = useNavigate();
   const { data: userData, isLoading, error } = useUserData(userId);
 
+  const handleMessage = () => {}
+  const handleBlock = () => {}
+
   if (isLoading) {
     return (
       <div className="user-profile-page">
@@ -74,6 +77,12 @@ const ProfilePage = () => {
                 <div className={`status-badge ${userData.isOnline ? 'online' : 'offline'}`}>
                   {userData.isOnline ? 'Online' : `Last seen ${formatTimeAgo(userData.lastSeen)}`}
                 </div>
+                <button className="action-btn-badge message" style={{marginBottom: 0}} onClick={handleMessage}>
+                    <span>Message</span>
+                </button>
+                <button className="action-btn-badge block" onClick={handleBlock}>
+                    <span>Block</span>
+                </button>
               </div>
 
               {userData.country && userData.country !== 'unknown' && (
