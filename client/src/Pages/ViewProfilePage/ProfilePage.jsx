@@ -45,6 +45,7 @@ const ProfilePage = () => {
           <div className="header-background"></div>
           <div className="header-content">
             <div className="profile-image-section">
+            <div className="profile-avatar-wrapper">
               <div className="profile-avatar">
                 <img 
                   src={userData.profileImage !== "/images/user.png" 
@@ -53,6 +54,8 @@ const ProfilePage = () => {
                   } 
                   alt={userData.username}
                 />
+
+              </div>
                 <div className={`online-indicator ${userData.isOnline ? 'online' : 'offline'}`}>
                   {userData.isOnline ? '🟢' : '⚫'}
                 </div>
@@ -77,7 +80,7 @@ const ProfilePage = () => {
                 <div className={`status-badge ${userData.isOnline ? 'online' : 'offline'}`}>
                   {userData.isOnline ? 'Online' : `Last seen ${formatTimeAgo(userData.lastSeen)}`}
                 </div>
-                <button className="action-btn-badge message" style={{marginBottom: 0}} onClick={handleMessage}>
+                <button className="action-btn-badge message" style={{marginBottom: 0}} onClick={() => handleStartChat(userData)}>
                     <span>Message</span>
                 </button>
                 <button className="action-btn-badge block" onClick={handleBlock}>
