@@ -260,7 +260,18 @@
         }
       }
     }
-  }
+
+}
+.block-confirmation-modal {
+    &::before {
+        background: linear-gradient(135deg, #ff0000 0%, #a80000 100%);
+
+    }
+
+    .confirm-btn {
+        background: linear-gradient(135deg, #ff0000 0%, #a80000 100%);
+    }
+}
   
   .profile-stats {
     display: grid;

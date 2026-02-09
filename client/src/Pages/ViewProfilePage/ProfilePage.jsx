@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useUserData } from '../../hooks/useUserData';
 import { getCountryFlag } from '../../utils/countries';
@@ -9,10 +9,37 @@ import './ProfilePageStyles.scss';
 const ProfilePage = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
+  const [showBlockConfirm, setShowBlockConfirm] = useState(false);
+  const blockModalRef = useRef(null);
   const { data: userData, isLoading, error } = useUserData(userId);
 
   const handleMessage = () => {}
-  const handleBlock = () => {}
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+        if (showBlockConfirm && blockModalRef.current && !blockModalRef.current.contains(e.target)) {
+            setShowBlockConfirm(false);
+        }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+        document.removeEventListener(' mousedown', handleClickOutside)
+    }
+  }, [showBlockConfirm])
+
+  const handleOpenBlock = () => {
+    setShowBlockConfirm(true);
+  }
+
+  const handleConfirmBlock = () => {
+    alert('Blocked!');
+  }
+
+  const handleCancelBlock = () => {
+    setShowBlockConfirm(false);
+  }
 
   if (isLoading) {
     return (
@@ -83,7 +110,7 @@ const ProfilePage = () => {
                 <button className="action-btn-badge message" style={{marginBottom: 0}} onClick={() => handleStartChat(userData)}>
                     <span>Message</span>
                 </button>
-                <button className="action-btn-badge block" onClick={handleBlock}>
+                <button className="action-btn-badge block" onClick={handleOpenBlock}>
                     <span>Block</span>
                 </button>
               </div>
@@ -191,6 +218,24 @@ const ProfilePage = () => {
           </button>
         </div>
       </div>
+
+      {showBlockConfirm && (
+        <div className="confirmation-overlay">
+          <div className="confirmation-modal block-confirmation-modal" ref={blockModalRef}>
+            <h4>Block user</h4>
+            <p>Are you sure you want to block {userData.username}?</p>
+            <div className="confirmation-actions">
+              <button className="confirm-btn" onClick={handleConfirmBlock}>
+                Yes
+              </button>
+              <button className="cancel-btn" onClick={handleCancelBlock}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
