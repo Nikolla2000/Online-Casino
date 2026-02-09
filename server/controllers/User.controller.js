@@ -9,6 +9,7 @@ const GameHistory = require('../models/GameHistory.model');
 const { default: mongoose } = require('mongoose');
 const userService = require('../services/userService');
 const { ValidationError } = require('../helpers/errors');
+const Blocking = require('../models/Blocking.model');
 
 
 //Register Endpoint - OLD ENDPOINT - NOT USED!!! New registerUserV2 is now used.
@@ -393,11 +394,23 @@ const getUserProfile = asyncHandler(async (req, res) => {
 
 /**
  * Block user
+ * 
+ * @param {string} blockedId - User to be blocked
+ * @route POST /server/v2/users/:userId/block
+ * @access Private
+ * @returns {Promise<void>} JSON response indicating success
  */
 const blockUser = asyncHandler(async (req, res) => {
-  const { userId } = req.params;
+  const blockerId = req.userId;
+  const blockedId = req.params.userId;
 
-  return res.status(200).json('ii');
+  if (blockerId === blockedId) {
+    throw new ValidationError('You can\'t block yourself');
+  }
+
+  await Blocking.create({ blockerId, blockedId });
+
+  return res.status(201).json({ message: 'User is blocked' });
 }); 
 
 module.exports = {
