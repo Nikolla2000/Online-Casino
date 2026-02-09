@@ -5,6 +5,9 @@ import { getCountryFlag } from '../../utils/countries';
 import { formatTimeAgo, getMemberDuration } from '../../utils/timeFormatter';
 import ProfileSkeleton from '../../Components/Skeletons/ProfileSkeleton/ProfileSkeleton';
 import './ProfilePageStyles.scss';
+import BlockButton from '../../Components/BlockButton/BlockButton';
+import MessageButton from '../../Components/MessageButton/MessageButton,';
+import { userAPI } from '../../services/api/userAPI';
 
 const ProfilePage = () => {
   const { userId } = useParams();
@@ -33,8 +36,8 @@ const ProfilePage = () => {
     setShowBlockConfirm(true);
   }
 
-  const handleConfirmBlock = () => {
-    alert('Blocked!');
+  const handleConfirmBlock = async () => {
+    await userAPI.blockUser(userData._id);
   }
 
   const handleCancelBlock = () => {
@@ -107,12 +110,14 @@ const ProfilePage = () => {
                 <div className={`status-badge ${userData.isOnline ? 'online' : 'offline'}`}>
                   {userData.isOnline ? 'Online' : `Last seen ${formatTimeAgo(userData.lastSeen)}`}
                 </div>
-                <button className="action-btn-badge message" style={{marginBottom: 0}} onClick={() => handleStartChat(userData)}>
+                {/* <button className="action-btn-badge message" style={{marginBottom: 0}} onClick={() => handleStartChat(userData)}>
                     <span>Message</span>
-                </button>
-                <button className="action-btn-badge block" onClick={handleOpenBlock}>
+                </button> */}
+                {/* <button className="action-btn-badge block" onClick={handleOpenBlock}>
                     <span>Block</span>
-                </button>
+                </button> */}
+                <MessageButton/>
+                <BlockButton setShowBlockConfirm={setShowBlockConfirm}/>
               </div>
 
               {userData.country && userData.country !== 'unknown' && (
