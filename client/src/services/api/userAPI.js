@@ -53,5 +53,14 @@ export const userAPI = {
             console.error('Error fetching user data: ', err);
             throw err;
         }
+    },
+
+    blockUser: async(userId) => {
+        try {
+            const res = await api.post(`/v2/users/${userId}/block`);
+            return res.data;
+        } catch (err) {
+            console.error('Error making request on blocking user');
+        }
     }
 };
