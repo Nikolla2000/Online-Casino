@@ -188,7 +188,7 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
                       {user.username?.charAt(0).toUpperCase() || 'U'}
                     </div>
                     )}
-                    <div className={`status-indicator ${user.isOnline || 'online'}`}></div>
+                    <div className={`status-indicator ${user.isOnline && 'online'}`}></div>
                   </div>
                   
                   <div className="user-details">
@@ -202,13 +202,15 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
                           <span className="you-badge">(You)</span>
                         )}
                       </span>
-                      <span className="user-status">{user.status || 'online'}</span>
+                      {/* <span className="user-status">{user.status || 'online'}</span> */}
                     </div>
                     
-                    <div className="chips-info">
-                      <FontAwesomeIcon icon={faStar} className="chips-icon" />
-                      <span className="chips-amount">{formatChips(user.totalCredits)}</span>
-                    </div>
+                    {user._id === currentUser._id && (
+                      <div className="chips-info">
+                        <FontAwesomeIcon icon={faStar} className="chips-icon" />
+                        <span className="chips-amount">{formatChips(user.totalCredits)}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
 

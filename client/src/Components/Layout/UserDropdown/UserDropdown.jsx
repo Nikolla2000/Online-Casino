@@ -52,7 +52,7 @@ const UserDropdown = ({ show, setShowDropdown }) => {
       <div className="user-dropdown-container">
         <div className="user-dropdown-content">
           <div className="user-header">
-            <div className="user-avatar">
+            <div className="user-avatar-dropdown">
               {user?.profileImage && user.profileImage !== "/images/user.png" ? (
                 <img 
                   src={`http://localhost:3000${user.profileImage}?${Date.now()}`} 
