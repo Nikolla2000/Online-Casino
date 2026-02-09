@@ -371,7 +371,14 @@ const registerUserV2 = asyncHandler(async (req, res) => {
   });
 });
 
-
+/**
+ * Get user data when visiting user profile
+ * 
+ * @route GET /server/v2/users/:userId
+ * @param {string} userId - Id of the user to be searched
+ * @access Private
+ * @returns {Promise<void>} JSON response with user data
+ */
 const getUserProfile = asyncHandler(async (req, res) => {
   const userId = req.params.userId;
 
@@ -384,6 +391,14 @@ const getUserProfile = asyncHandler(async (req, res) => {
   return res.status(200).json(userData);
 });
 
+/**
+ * Block user
+ */
+const blockUser = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+
+  return res.status(200).json('ii');
+}); 
 
 module.exports = {
   registerUser,
@@ -399,4 +414,5 @@ module.exports = {
   getTotalCredits,
   registerUserV2,
   getUserProfile,
+  blockUser,
 }
