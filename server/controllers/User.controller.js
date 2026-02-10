@@ -8,7 +8,7 @@ const asyncHandler = require('../helpers/asyncHandler');
 const GameHistory = require('../models/GameHistory.model');
 const { default: mongoose } = require('mongoose');
 const userService = require('../services/userService');
-const { ValidationError } = require('../helpers/errors');
+const { ValidationError, NotFoundError } = require('../helpers/errors');
 const Blocking = require('../models/Blocking.model');
 
 
@@ -407,6 +407,16 @@ const blockUser = asyncHandler(async (req, res) => {
   if (blockerId === blockedId) {
     throw new ValidationError('You can\'t block yourself');
   }
+
+  const userToBlock = await User.findById(blockedId);
+  if (!userToBlock) {
+    throw new NotFoundError('User not found');
+  }
+
+  // const existingBlock = await Blocking.findOne({ blockerId, blockedId });
+  // if (existingBlock) {
+  //   return res.status(409).json({ message: 'User is already blocked' });
+  // }
 
   await Blocking.create({ blockerId, blockedId });
 
