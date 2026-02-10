@@ -381,13 +381,14 @@ const registerUserV2 = asyncHandler(async (req, res) => {
  * @returns {Promise<void>} JSON response with user data
  */
 const getUserProfile = asyncHandler(async (req, res) => {
-  const userId = req.params.userId;
+  const currentUserId = req.userId;
+  const targetUserId = req.params.userId;
 
-  if (!userId) {
+  if (!targetUserId) {
     throw new ValidationError('User id is required');
   }
 
-  const userData = await userService.getProfileById(userId);
+  const userData = await userService.getProfileById(targetUserId, currentUserId);
 
   return res.status(200).json(userData);
 });
@@ -395,7 +396,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
 /**
  * Block user
  * 
- * @param {string} blockedId - User to be blocked
+ * @param {string} blockedId - Id of the user to be blocked
  * @route POST /server/v2/users/:userId/block
  * @access Private
  * @returns {Promise<void>} JSON response indicating success
@@ -421,7 +422,27 @@ const blockUser = asyncHandler(async (req, res) => {
   await Blocking.create({ blockerId, blockedId });
 
   return res.status(201).json({ message: 'User is blocked' });
-}); 
+});
+
+/**
+ * Unblock user
+ * 
+ * @param {string} blockedId - Id of the user to be unblocked
+ * @route DELETE /server/v2/users/:userId/block
+ * @access Private
+ */
+const unblockUser = asyncHandler(async (req, res) => {
+  const blockerId = req.userId;
+  const blockedId = req.params.userId;
+
+  const result = await Blocking.findOneAndDelete({ blockerId, blockedId });
+
+  if (!result) {
+    return res.status(404).json({ message: 'User can\'t be unblocked'});
+  }
+
+  return res.status(200).json({ message: 'User is unblocked' });
+});
 
 module.exports = {
   registerUser,
@@ -438,4 +459,5 @@ module.exports = {
   registerUserV2,
   getUserProfile,
   blockUser,
+  unblockUser,
 }

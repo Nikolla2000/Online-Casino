@@ -1,5 +1,6 @@
 const { ValidationError, NotFoundError, ConflictError } = require("../helpers/errors");
 const { AppError } = require("../middleware/errorHandler");
+const Blocking = require("../models/Blocking.model");
 const GameHistory = require("../models/GameHistory.model");
 const User = require("../models/User.model");
 const { registerSchema } = require("../validation-schemas/user.schema");
@@ -256,15 +257,23 @@ class UserService {
   }
 
 
-  async getProfileById(userId) {
-    const user = await User.findById(userId)
+  async getProfileById(targetUserId, currentUserId) {
+    const user = await User.findById(targetUserId)
       .select('-password -email -oauthProvider -oauthId -hasPassword -totalCredits -refreshToken -bonusOffers -gameUpdates -vipEvents');
 
     if (!user) {
       throw new NotFoundError('User');
     }
 
-    return user;
+    let isBlocked = false;
+
+    const blockingRecord = await Blocking.findOne({ blockerId: currentUserId, blockedId: targetUserId });
+    isBlocked = !!blockingRecord;
+
+    const userObject = user.toObject();
+    userObject.isBlocked = isBlocked;
+  
+    return userObject;
   }
 }
 
