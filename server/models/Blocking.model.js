@@ -13,6 +13,8 @@ const blockingSchema = new mongoose.Schema({
     },
 }, { timestamps: true });
 
+blockingSchema.index({ blockerId: 1 });
+blockingSchema.index({ blockedId: 1 });
 blockingSchema.index({ blockerId: 1, blockedId: 1 }, { unique: true });
 
 const Blocking = mongoose.model('Blocking', blockingSchema);
