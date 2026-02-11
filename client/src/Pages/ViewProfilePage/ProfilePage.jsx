@@ -124,37 +124,43 @@ const ProfilePage = () => {
               <p className="profile-username">@{userData.username}</p>
               
               <div className="profile-badges">
-                <div className={`vip-badge ${userData.isVip ? 'vip' : 'regular'}`}>
-                  {userData.isVip ? '👑 VIP Member' : '⭐ Player'}
-                </div>
-                {userData.isVerified && (
-                  <div className="verified-badge">
-                    ✓ Verified
-                  </div>
+                {!isBlocked && (
+                    <>
+                    <div className={`vip-badge ${userData.isVip ? 'vip' : 'regular'}`}>
+                    {userData.isVip ? '👑 VIP Member' : '⭐ Player'}
+                    </div>
+                    {userData.isVerified && (
+                        <div className="verified-badge">
+                        ✓ Verified
+                        </div>
+                    )}
+                    <div className={`status-badge ${userData.isOnline ? 'online' : 'offline'}`}>
+                        {userData.isOnline ? 'Online' : `Last seen ${formatTimeAgo(userData.lastSeen)}`}
+                    </div>
+                        
+                    <MessageButton/>
+                    </>
                 )}
-                <div className={`status-badge ${userData.isOnline ? 'online' : 'offline'}`}>
-                  {userData.isOnline ? 'Online' : `Last seen ${formatTimeAgo(userData.lastSeen)}`}
-                </div>
-                {/* <button className="action-btn-badge message" style={{marginBottom: 0}} onClick={() => handleStartChat(userData)}>
-                    <span>Message</span>
-                </button> */}
-
-                <MessageButton/>
+                
                 <OpenBlockButton setShowBlockConfirm={setShowBlockConfirm} isBlocked={isBlocked}/>
               </div>
 
-              {userData.country && userData.country !== 'unknown' && (
-                <div className="profile-location">
-                  <span className="location-icon">📍</span>
-                  <span className="location-text">{userData.country}</span>
-                  <span className="location-flag">{getCountryFlag(userData.country)}</span>
-                </div>
-              )}
+              {!isBlocked && (
+                <>
+                    {userData.country && userData.country !== 'unknown' && (
+                    <div className="profile-location">
+                        <span className="location-icon">📍</span>
+                        <span className="location-text">{userData.country}</span>
+                        <span className="location-flag">{getCountryFlag(userData.country)}</span>
+                    </div>
+                    )}
 
-              <div className="member-info">
-                <span className="member-icon">🗓️</span>
-                Member for {getMemberDuration(userData.registrationDate)}
-              </div>
+                    <div className="member-info">
+                        <span className="member-icon">🗓️</span>
+                        Member for {getMemberDuration(userData.registrationDate)}
+                    </div>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -170,7 +176,7 @@ const ProfilePage = () => {
             <div className="stat-icon">💰</div>
             <div className="stat-content">
               <div className="stat-value">
-                {userData.totalWagered.toLocaleString()}
+                {!isBlocked ? userData.totalWagered.toLocaleString() : '0'}
                 <img src='/images/casino-chips.png' className='chips-img' alt="chips"/>
               </div>
               <div className="stat-label">Total Wagered</div>
@@ -181,7 +187,7 @@ const ProfilePage = () => {
             <div className="stat-icon">🏆</div>
             <div className="stat-content">
               <div className="stat-value">
-                {userData.totalWon.toLocaleString()}
+                {!isBlocked ? userData.totalWon.toLocaleString() : '0'}
                 <img src='/images/casino-chips.png' className='chips-img' alt="chips"/>
               </div>
               <div className="stat-label">Total Won</div>
@@ -191,7 +197,7 @@ const ProfilePage = () => {
           <div className="stat-card">
             <div className="stat-icon">🎮</div>
             <div className="stat-content">
-              <div className="stat-value">{userData.gamesPlayed}</div>
+              <div className="stat-value">{!isBlocked ? userData.gamesPlayed: '0'}</div>
               <div className="stat-label">Games Played</div>
             </div>
           </div>
@@ -200,10 +206,10 @@ const ProfilePage = () => {
             <div className="stat-icon">📊</div>
             <div className="stat-content">
               <div className="stat-value">
-                {userData.totalWagered > 0 
-                  ? ((userData.totalWon / userData.totalWagered) * 100).toFixed(1)
-                  : '0.0'
-                }%
+                    {userData.totalWagered > 0 && !isBlocked
+                        ? ((userData.totalWon / userData.totalWagered) * 100).toFixed(1)
+                        : '0.0'
+                    }%
               </div>
               <div className="stat-label">Win Rate</div>
             </div>
@@ -213,7 +219,7 @@ const ProfilePage = () => {
         <div className="profile-activity">
           <h3 className="section-title">Player Activity</h3>
           
-          {userData.gamesPlayed === 0 ? (
+          {userData.gamesPlayed === 0  || isBlocked ? (
             <div className="no-activity">
               <div className="no-activity-icon">🎰</div>
               <p>This player hasn't played any games yet</p>
