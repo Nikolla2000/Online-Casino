@@ -233,7 +233,7 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
                     <FontAwesomeIcon icon={faUser} />
                   </button>
                   
-                  {user._id !== currentUser._id && (
+                  {/* {user._id !== currentUser._id && (
                     <button 
                       className="action-btn block-btn"
                       onClick={() => handleBlockUser(user._id)}
@@ -241,7 +241,7 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
                     >
                       <FontAwesomeIcon icon={faBan} />
                     </button>
-                  )}
+                  )} */}
                 </div>
               </div>
             ))
