@@ -6,7 +6,7 @@ import { formatTimeAgo, getMemberDuration } from '../../utils/timeFormatter';
 import ProfileSkeleton from '../../Components/Skeletons/ProfileSkeleton/ProfileSkeleton';
 import './ProfilePageStyles.scss';
 import OpenBlockButton from '../../Components/Block/OpenBlockButton';
-import MessageButton from '../../Components/MessageButton/MessageButton,';
+import MessageButton from '../../Components/MessageButton/MessageButton';
 import { userAPI } from '../../services/api/userAPI';
 import { useBlockUser } from '../../hooks/useBlockUser';
 
