@@ -73,4 +73,13 @@
         }
       }
     }
+
+    &.unblock {
+      background: linear-gradient(135deg, #2ed573 0%, #26de81 100%);
+      
+      &:hover {
+        background: linear-gradient(135deg, #7bed9f 0%, #70d97f 100%);
+      }
+    }
+    
   }
