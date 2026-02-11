@@ -5,16 +5,27 @@ import { getCountryFlag } from '../../utils/countries';
 import { formatTimeAgo, getMemberDuration } from '../../utils/timeFormatter';
 import ProfileSkeleton from '../../Components/Skeletons/ProfileSkeleton/ProfileSkeleton';
 import './ProfilePageStyles.scss';
-import BlockButton from '../../Components/BlockButton/BlockButton';
+import OpenBlockButton from '../../Components/Block/OpenBlockButton';
 import MessageButton from '../../Components/MessageButton/MessageButton,';
 import { userAPI } from '../../services/api/userAPI';
+import { useBlockUser } from '../../hooks/useBlockUser';
 
 const ProfilePage = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
   const [showBlockConfirm, setShowBlockConfirm] = useState(false);
   const blockModalRef = useRef(null);
+
   const { data: userData, isLoading, error } = useUserData(userId);
+  const { blockUser, unblockUser, isLoading: isBlockLoading } = useBlockUser(userId)
+
+  const [isBlocked, setIsBlocked] = useState(false);
+
+  useEffect(() => {
+    if (userData?.isBlocked !== undefined) {
+        setIsBlocked(userData.isBlocked);
+    }
+  }, [userData?.isBlocked])
 
   const handleMessage = () => {}
 
@@ -37,7 +48,21 @@ const ProfilePage = () => {
   }
 
   const handleConfirmBlock = async () => {
-    await userAPI.blockUser(userData._id);
+    if (isBlocked) {
+        unblockUser(undefined, {
+            onSuccess: () => {
+                setIsBlocked(false);
+                setShowBlockConfirm(false);
+            }
+        });
+    } else {
+        blockUser(undefined, {
+            onSuccess: () => {
+                setIsBlocked(true);
+                setShowBlockConfirm(false);
+            }
+        })
+    }
   }
 
   const handleCancelBlock = () => {
@@ -113,11 +138,9 @@ const ProfilePage = () => {
                 {/* <button className="action-btn-badge message" style={{marginBottom: 0}} onClick={() => handleStartChat(userData)}>
                     <span>Message</span>
                 </button> */}
-                {/* <button className="action-btn-badge block" onClick={handleOpenBlock}>
-                    <span>Block</span>
-                </button> */}
+
                 <MessageButton/>
-                <BlockButton setShowBlockConfirm={setShowBlockConfirm}/>
+                <OpenBlockButton setShowBlockConfirm={setShowBlockConfirm} isBlocked={isBlocked}/>
               </div>
 
               {userData.country && userData.country !== 'unknown' && (
@@ -135,6 +158,12 @@ const ProfilePage = () => {
             </div>
           </div>
         </div>
+
+        {isBlocked && (
+          <div className="blocked-notice">
+            <span>🚫</span> You have blocked this user
+          </div>
+        )}
 
         <div className="profile-stats">
           <div className="stat-card">
@@ -224,9 +253,10 @@ const ProfilePage = () => {
         </div>
       </div>
 
-      {showBlockConfirm && (
+      {/* {showBlockConfirm && (
         <div className="confirmation-overlay">
           <div className="confirmation-modal block-confirmation-modal" ref={blockModalRef}>
+          <h4>{isBlocked ? 'Unblock user' : 'Block user'}</h4>
             <h4>Block user</h4>
             <p>Are you sure you want to block {userData.username}?</p>
             <div className="confirmation-actions">
@@ -234,6 +264,33 @@ const ProfilePage = () => {
                 Yes
               </button>
               <button className="cancel-btn" onClick={handleCancelBlock}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )} */}
+
+    {showBlockConfirm && (
+        <div className="confirmation-overlay">
+          <div className="confirmation-modal block-confirmation-modal" ref={blockModalRef}>
+            <h4>{isBlocked ? 'Unblock user' : 'Block user'}</h4>
+            <p>
+              Are you sure you want to {isBlocked ? 'unblock' : 'block'} {userData.username}?
+            </p>
+            <div className="confirmation-actions">
+              <button 
+                className="confirm-btn" 
+                onClick={handleConfirmBlock}
+                disabled={isBlockLoading}
+              >
+                {isBlockLoading ? 'Processing...' : 'Yes'}
+              </button>
+              <button 
+                className="cancel-btn" 
+                onClick={handleCancelBlock}
+                disabled={isBlockLoading}
+              >
                 Cancel
               </button>
             </div>

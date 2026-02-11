@@ -413,6 +413,22 @@
     }
   }
 
+  .blocked-notice {
+    background: linear-gradient(135deg, #ff4757 0%, #ff6348 100%);
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    
+    span {
+      font-size: 1.2rem;
+    }
+  }
+
   @media (max-width: 768px) {
     .profile-header .header-content {
       flex-direction: column;
