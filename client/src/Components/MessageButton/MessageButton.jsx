@@ -1,4 +1,4 @@
-import '../BlockButton/ButtonStyles.scss';
+import '../Block/ButtonStyles.scss';
 
 const MessageButton = () => {
   return (

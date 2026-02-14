@@ -56,11 +56,18 @@ export const userAPI = {
     },
 
     blockUser: async(userId) => {
-        try {
-            const res = await api.post(`/v2/users/${userId}/block`);
-            return res.data;
-        } catch (err) {
-            console.error('Error making request on blocking user');
-        }
+        const res = await api.post(`/v2/users/${userId}/block`);
+        return res.data;
+
+    },
+
+    unblockUser: async(userId) => {
+        const res = await api.delete(`/v2/users/${userId}/block`);
+        return res.data;
+    },
+
+    getBlockedUsers: async(userId) => {
+        const res = await api.get(`/v2/users/${userId}/blocked`);
+        return res.data;
     }
 };

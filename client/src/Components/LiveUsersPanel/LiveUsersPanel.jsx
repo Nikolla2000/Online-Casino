@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
   faTimes, 
@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router';
 import { setActiveChat } from '../../redux/features/chat/chatSlice';
 import { normalizeDates } from '../../utils/normalizeDates';
 import { userAPI } from '../../services/api/userAPI';
+import { useGetBlockedUsers } from '../../hooks/useGetBlockedUsers';
 
 const LiveUsersPanel = ({ isOpen, onClose }) => {
   const [onlineUsers, setOnlineUsers] = useState([]);
@@ -27,9 +28,18 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const {data: blockedUsersData} = useGetBlockedUsers(currentUser?._id, isOpen);
+
+  const blockedUsers = useMemo(() => {
+    if (!blockedUsersData) return new Set();
+
+    return new Set(blockedUsersData.map(u => u.blockedId))
+  }, blockedUsersData);
+
   useEffect(() => {
     if (isOpen && accessToken) {
       getOnlineUsers();
+      console.log(blockedUsers);
     }
   }, [isOpen, accessToken]);
 
@@ -236,7 +246,7 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
                     <FontAwesomeIcon icon={faUser} />
                   </button>
                   
-                  {user._id !== currentUser._id && (
+                  {/* {user._id !== currentUser._id && (
                     <button 
                       className="action-btn block-btn"
                       onClick={() => handleBlockUser(user._id)}
@@ -244,7 +254,7 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
                     >
                       <FontAwesomeIcon icon={faBan} />
                     </button>
-                  )}
+                  )} */}
                 </div>
               </div>
             ))
