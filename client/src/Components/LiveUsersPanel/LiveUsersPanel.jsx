@@ -60,8 +60,11 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
       const normalizedChat = normalizeDates(existingChat);
       dispatch(setActiveChat(normalizedChat));
     } else {
+      const ids = [currentUser._id, user._id];
+      ids.sort();
       const tempChat = normalizeDates({
-        _id: `temp_${Date.now()}`,
+        // _id: `temp_${Date.now()}`,
+        _id: `temp_${ids[0]}_${ids[1]}`,
         participants: [
           { 
             _id: currentUser._id, 
