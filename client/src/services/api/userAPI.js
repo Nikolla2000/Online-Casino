@@ -64,5 +64,10 @@ export const userAPI = {
     unblockUser: async(userId) => {
         const res = await api.delete(`/v2/users/${userId}/block`);
         return res.data;
+    },
+
+    getBlockedUsers: async(userId) => {
+        const res = await api.get(`/v2/users/${userId}/blocked`);
+        return res.data;
     }
 };
