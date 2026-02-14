@@ -444,6 +444,22 @@ const unblockUser = asyncHandler(async (req, res) => {
   return res.status(200).json({ message: 'User is unblocked' });
 });
 
+/**
+ * Get all the blocked users from the current user.
+ * 
+ * @route GET /server/v2/users/:userId/blocked
+ * @access Private
+ * @returns {Promise<void>} JSON response with array with all blocked users ids.
+ */
+const getBlockedUsers = asyncHandler(async (req, res) => {
+  const currentUserId = req.userId;
+
+  const blockedUsers = await Blocking.find({ blockerId: currentUserId })
+    .select('blockedId');
+
+  return res.status(200).json(blockedUsers);
+});
+
 module.exports = {
   registerUser,
   getProfile,
@@ -460,4 +476,5 @@ module.exports = {
   getUserProfile,
   blockUser,
   unblockUser,
+  getBlockedUsers,
 }
