@@ -28,7 +28,9 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const {data: blockedUsersData} = useGetBlockedUsers(currentUser?._id, isOpen);
+  const { data: blockedUsersData, isLoading: isLoadingBlocked } = useGetBlockedUsers(currentUser?._id, isOpen);
+
+  const isActuallyLoading = isLoading || isLoadingBlocked;
 
   const blockedUsers = useMemo(() => {
     if (!blockedUsersData) return new Set();
@@ -122,10 +124,21 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
     getOnlineUsers();
   };
 
-  const filteredUsers = onlineUsers.filter(user =>
-    user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (user.email && user.email.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  // const filteredUsers = onlineUsers.filter(user =>
+  //   user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //   (user.email && user.email.toLowerCase().includes(searchTerm.toLowerCase()))
+  // );
+
+  const processedUsers = useMemo(() => {
+    console.log("baa")
+    return onlineUsers.map(user => ({
+      ...user,
+      isBlocked: blockedUsers.has(user._id)
+    })).filter(user =>
+        user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (user.email && user.email.toLowerCase().includes(searchTerm.toLowerCase())) 
+      );
+  }, [onlineUsers, blockedUsers, searchTerm]);
 
   if (!isOpen) return null;
 
@@ -137,7 +150,7 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
           <h2>
             <span className="live-indicator"></span>
             Online Players
-            <span className="online-count">({isLoading ? '...' : onlineUsers.length})</span>
+            <span className="online-count">({isActuallyLoading ? '...' : onlineUsers.length})</span>
           </h2>
           <button className="close-btn" onClick={onClose}>
             <FontAwesomeIcon icon={faTimes} />
@@ -155,7 +168,7 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
         </div>
 
         <div className="users-list">
-          {isLoading ? (
+          {isActuallyLoading ? (
             <div className="loading-container">
               <LoadingSpinner />
               <p>Loading online players...</p>
@@ -175,15 +188,15 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
               <p>No other active users at the moment</p>
               <small>Invite friends to join the fun!</small>
             </div>
-          ) : filteredUsers.length === 0 ? (
+          ) : processedUsers.length === 0 ? (
             <div className="empty-state">
               <div className="empty-icon">🔍</div>
               <h3>No players found</h3>
               <p>Try adjusting your search terms</p>
             </div>
           ) : (
-            filteredUsers.map(user => (
-              <div key={user._id} className="user-card">
+            processedUsers.map(user => (
+              <div key={user._id} className={`user-card ${user.isBlocked ? 'is-blocked' : ''}`}>
                 <div className="user-info">
                   <div className="avatar-container">
                     {user.profileImage && user.profileImage !== "/images/user.png" ? (
@@ -201,7 +214,16 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
                       {user.username?.charAt(0).toUpperCase() || 'U'}
                     </div>
                     )}
-                    <div className={`status-indicator ${user.isOnline && 'online'}`}></div>
+                    {!user.isBlocked && (
+                      <div className={`status-indicator ${user.isOnline && 'online'}`}></div>
+                    )}
+
+                    {user.isBlocked && (
+                      <div className="blocked-overlay">
+                        <FontAwesomeIcon icon={faBan} />
+                      </div>
+                    )}
+
                   </div>
                   
                   <div className="user-details">
@@ -217,7 +239,9 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
                       </span>
                       {/* <span className="user-status">{user.status || 'online'}</span> */}
                     </div>
-                    
+                    {user.isBlocked && (
+                      <p>Blocked</p>
+                    )}
                     {user._id === currentUser._id && (
                       <div className="chips-info">
                         <FontAwesomeIcon icon={faStar} className="chips-icon" />
@@ -232,9 +256,10 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
                     <button 
                       className="action-btn chat-btn"
                       onClick={() => handleStartChat(user)}
-                      title="Start chat"
+                      disabled={user.isBlocked}
+                      title={user.isBlocked ? "Unblock to chat" : "Start chat"}
                     >
-                      <FontAwesomeIcon icon={faComment} />
+                      <FontAwesomeIcon icon={user.isBlocked ? faBan : faComment} />
                     </button>
                   )}
                   
@@ -265,10 +290,10 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
           <button 
             onClick={getOnlineUsers} 
             className="refresh-btn" 
-            disabled={isLoading}
+            disabled={isActuallyLoading}
           >
             <FontAwesomeIcon icon={faRefresh} />
-            {isLoading ? 'Refreshing...' : 'Refresh List'}
+            {isActuallyLoading ? 'Refreshing...' : 'Refresh List'}
           </button>
           <div className="legend">
             <div className="legend-item">
