@@ -36,7 +36,7 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
     if (!blockedUsersData) return new Set();
 
     return new Set(blockedUsersData.map(u => u.blockedId))
-  }, blockedUsersData);
+  }, [blockedUsersData]);
 
   useEffect(() => {
     if (isOpen && accessToken) {
