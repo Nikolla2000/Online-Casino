@@ -16,6 +16,7 @@ import { useGameHistory } from '../../../hooks/useGameHistory';
 import Pagination from '../../../Components/Pagination/Pagination';
 import { useSearchParams } from 'react-router-dom';
 import SectionButton from './SectionButton';
+import BlockedSection from './DashboardSections/BlockedSection';
 
 const Dashboard = () => {
   const user = useSelector((state) => state.auth.user);
@@ -649,6 +650,10 @@ const Dashboard = () => {
               )}
             </div>
           </div>
+        )}
+
+        {activeSection === 'blocked-users' && (
+          <BlockedSection/>
         )}
       </div>
 

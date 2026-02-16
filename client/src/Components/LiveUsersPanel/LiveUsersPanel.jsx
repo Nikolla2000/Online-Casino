@@ -35,7 +35,7 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
   const blockedUsers = useMemo(() => {
     if (!blockedUsersData) return new Set();
 
-    return new Set(blockedUsersData.map(u => u.blockedId))
+    return new Set(blockedUsersData.map(u => u.blockedId._id))
   }, [blockedUsersData]);
 
   useEffect(() => {
