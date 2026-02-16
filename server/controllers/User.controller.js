@@ -455,7 +455,9 @@ const getBlockedUsers = asyncHandler(async (req, res) => {
   const currentUserId = req.userId;
 
   const blockedUsers = await Blocking.find({ blockerId: currentUserId })
-    .select('blockedId');
+    .populate('blockedId', 'username firstName lastName profileImage')
+    .sort({ createdAt: -1 })
+    .lean();
 
   return res.status(200).json(blockedUsers);
 });
