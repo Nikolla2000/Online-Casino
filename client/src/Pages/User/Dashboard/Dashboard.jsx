@@ -15,6 +15,7 @@ import { formatDate, formatTimeAgo } from '../../../utils/timeFormatter';
 import { useGameHistory } from '../../../hooks/useGameHistory';
 import Pagination from '../../../Components/Pagination/Pagination';
 import { useSearchParams } from 'react-router-dom';
+import SectionButton from './SectionButton';
 
 const Dashboard = () => {
   const user = useSelector((state) => state.auth.user);
@@ -175,6 +176,14 @@ const Dashboard = () => {
     { credits: 10000, price: 89.99, originalPrice: 99.99, popular: true }
   ];
 
+  const sectionItems = [
+    { id: 'stats', label: '📊 Game Stats' },
+    { id: 'account', label: '⚙️ Account Settings' },
+    { id: 'history', label: '📜 Game History' },
+    { id: 'vip', label: '🏆 VIP Benefits' },
+    { id: 'blocked-users', label: '🚫 Blocked users' },
+  ];
+
   return (
     <div className='casino-dashboard'>
 
@@ -259,36 +268,23 @@ const Dashboard = () => {
           </div>
 
           <nav className="profile-nav">
-            <button 
-              className={`nav-item ${activeSection === 'stats' ? 'active' : ''}`}
-              onClick={() => setActiveSection('stats')}
-            >
-              📊 Game Stats
-            </button>
-            <button 
-              className={`nav-item ${activeSection === 'account' ? 'active' : ''}`}
-              onClick={() => setActiveSection('account')}
-            >
-              ⚙️ Account Settings
-            </button>
-            <button 
-              className={`nav-item ${activeSection === 'history' ? 'active' : ''}`}
-              onClick={() => {
-                setActiveSection('history');
-                setCurrentPage(1);
-              }}
-            >
-              📜 Game History
-            </button>
-            <button 
-              className={`nav-item ${activeSection === 'vip' ? 'active' : ''}`}
-              onClick={() => setActiveSection('vip')}
-            >
-              🏆 VIP Benefits
-            </button>
-            <button className="nav-item logout" onClick={handleLogout}>
-              🚪 Logout
-            </button>
+            {sectionItems.map((item) => (
+              <SectionButton
+                key={item.id}
+                {...item}
+                activeSection={activeSection}
+                onClick={(id) => {
+                  setActiveSection(id);
+                  if (id === 'hisotry') setCurrentPage(1);
+                }}
+              />
+            ))}
+
+            <SectionButton
+              label='Logout'
+              className='logout'
+              onClick={handleLogout}
+            />
           </nav>
         </div>
 
