@@ -1,6 +1,7 @@
 import axios from "axios";
 // import { store } from "./redux/store/store";
 import { refresh } from "./redux/features/auth/authSlice";
+import toast from "react-hot-toast";
 
 
 const api = axios.create({
@@ -37,13 +38,24 @@ export const setupInterceptors = (store) => {
             return api(originalRequest);
           }
         } catch (refreshErr) {
-          console.error('Refresh failed:', refreshError);
+          console.error('Refresh failed:', refreshErr);
         }
 
       }
       return Promise.reject(err);
     }
   );
+
+  api.interceptors.response.use(
+    response => response,
+    error => {
+      if (error.response?.status === 429) {
+        const retryAfter = error.response.data?.retryAfter;
+        toast.error(`Too many requests. Please wait ${retryAfter} seconds.`)
+      }
+      return Promise.reject(error);
+    }
+  )
 
   // api.interceptors.response.use(
   //   (response) => response,

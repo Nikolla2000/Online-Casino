@@ -95,6 +95,7 @@ const chatRouter = require('./routes/v1/Chat.router');
 const chatBotRouter = require('./routes/v1/ChatBot.router');
 const gameRouter = require('./routes/v1/Game.router');
 const userRouterV2 = require('./routes/v2/User.routerV2');
+const { generalLimiter, authLimiter, chatbotLimiter, gameLimiter } = require("./middleware/rateLimiter");
 
 //Middleware
 app.use(cookieParser());
@@ -103,14 +104,21 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static("./public"));
 app.use(express.json());
 
+//General rate limiter
+app.use(generalLimiter);
+
+//Specific endpoints rate limits
+app.use('/server/v1/auth/login', authLimiter);
+app.use('/server/v2/users/register', authLimiter);
+
 //routes
 //V1 routes
 app.use('/server/v1/user', userRouter);
 app.use('/server/v1/auth', authRouter);
 app.use('/server/v1/email', emailRouter);
 app.use('/server/v1/chats', chatRouter);
-app.use('/server/v1/chatbot', chatBotRouter);
-app.use('/server/v1/game', gameRouter);
+app.use('/server/v1/chatbot', chatbotLimiter, chatBotRouter);
+app.use('/server/v1/game', gameLimiter, gameRouter);
 
 //V2 routes
 app.use('/server/v2/users', userRouterV2);
@@ -121,11 +129,6 @@ app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 // app.use(helmet());
 // app.use(express.json({ limit: '10mb' }));
 // app.use(express.urlencoded({ extended: true }));
-
-// const limiter = rateLimit({
-//   windowMs: 15 * 60 * 1000, // 15 min
-//   max: 100 // limit each IP to 100 requests per 15 min 
-// });
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server`, 401));

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { toast } from 'react-hot-toast';
@@ -18,6 +18,8 @@ const LoginForm = ({ handleClose, setShowDropdown }) => {
 
   const { isFromGamesPage, gameLink } = useSelector(state => state.authModals);
 
+  const [attemptsLeft, setAttemptsLeft] = useState(5);
+
   const {
     register,
     handleSubmit,
@@ -33,7 +35,7 @@ const LoginForm = ({ handleClose, setShowDropdown }) => {
       const res = await dispatch(login(data));
 
       if (login.fulfilled.match(res)) {
-        toast.success('Login successful! 🎰');
+        toast.success('Login successful!');
         const token = res.payload.accessToken;
         await dispatch(fetchCurrentUser(token));
         setTimeout(() => {
@@ -44,8 +46,12 @@ const LoginForm = ({ handleClose, setShowDropdown }) => {
           }
         }, 400);
         dispatch(hideModals());
+        setAttemptsLeft(5);
         if (setShowDropdown) setShowDropdown(false);
-      } else {
+      } 
+      else {
+        const newAttempts = attemptsLeft - 1;
+        setAttemptsLeft(newAttempts);
         toast.error('Invalid username or password');
       }
     } catch (err) {
@@ -125,6 +131,12 @@ const LoginForm = ({ handleClose, setShowDropdown }) => {
           {errors.password && (
             <span className="error-message">{errors.password.message}</span>
             )}
+
+          {attemptsLeft <= 3 && attemptsLeft > 0 && (
+            <span className="error-message">
+              {attemptsLeft} attempt{attemptsLeft !== 1 ? 's' : ''} remaining
+            </span>
+          )}
 
           <button 
             type="submit" 
