@@ -50,8 +50,10 @@ export const setupInterceptors = (store) => {
     response => response,
     error => {
       if (error.response?.status === 429) {
-        const retryAfter = error.response.data?.retryAfter;
-        toast.error(`Too many requests. Please wait ${retryAfter} seconds.`)
+        const retryAfter = error.response.headers['retry-after'];
+        toast.error(`Too many requests. Please wait ${retryAfter} seconds.`, {
+          toastId: 'rate-limit'
+        })
       }
       return Promise.reject(error);
     }

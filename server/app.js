@@ -73,8 +73,11 @@ app.use(cors({
   // origin: 'https://uzu-online-casino.netlify.app', // uncomment for production
   methods: 'GET,POST,PUT,PATCH,DELETE',
   allowedHeaders: 'Content-Type,Authorization',
-  credentials: true
+  credentials: true,
+  exposedHeaders: ['Retry-After'],
 }));
+
+app.set('trust proxy', 1);
 
 // Logger middleware
 // app.use((req, res, next) => {
