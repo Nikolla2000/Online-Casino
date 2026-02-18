@@ -52,7 +52,9 @@ const LoginForm = ({ handleClose, setShowDropdown }) => {
       else {
         const newAttempts = attemptsLeft - 1;
         setAttemptsLeft(newAttempts);
-        toast.error('Invalid username or password');
+        if (attemptsLeft > 0) {
+          toast.error('Invalid username or password');
+        }
       }
     } catch (err) {
       toast.error('Login failed. Please try again.');
