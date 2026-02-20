@@ -41,6 +41,24 @@ class UserService {
 
     const skip = (page - 1) * limit;
 
+    /**
+     * Caching strategy:
+     * Caching only first page (1-10 records) because:
+     * - 90% of views are only for this first page
+     * - Avoids cache bloat from storing rarely-accessed pagination data
+     * - Reduces Redis memory usage for rarely viewwed pages
+     * - Cache invalidated after each game to ensure fresh data on page 1
+     */
+    const shouldCache = page === 1 && limit === 10;
+    const cacheKey = `user:history:${userId}`;
+
+    if (shouldCache) {
+      const cached = await redis.get(cacheKey).catch(() => null)
+      if (cached) {
+        return JSON.parse(cached);
+      }
+    }
+
     const totalCount = await GameHistory.countDocuments({ userId });
     const limitedTotal = Math.min(totalCount, MAX_RECORDS);
     const totalPages = Math.ceil(limitedTotal / limit);
@@ -55,7 +73,7 @@ class UserService {
       .skip(skip)
       .lean();
 
-    return {
+    const result = {
       history,
       pagination: {
         currentPage: page,
@@ -66,6 +84,12 @@ class UserService {
         hasPrevPage: page > 1
       }
     }
+
+    if (shouldCache) {
+      await redis.setEc(cacheKey, 120, JSON.stringify(result));
+    }
+
+    return result;
   }
 
 

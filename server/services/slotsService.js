@@ -94,8 +94,12 @@ class SlotsService {
     }
 
     await redis.del(`user:stats:${userId}`).catch(err => {
-      console.warn('Failed to invalidate cache:', err);
+      console.warn('Failed to invalidate stats cache:', err);
     })
+
+    await redis.del(`user:history:${userId}`).catch(err => {
+      console.warn('Failed to invalidate history cache:', err);
+    });
 
     return {
       success: true,

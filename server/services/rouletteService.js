@@ -2,6 +2,7 @@ const User = require('../models/User.model');
 const { validateUserAndCredits, isValidChipValue, saveTransaction } = require("../helpers/gameHelpers");
 const GameHistory = require("../models/GameHistory.model");
 const logger = require('../helpers/logger');
+const redis = require('../config/redis');
 
 class RouletteService {
 
@@ -139,6 +140,14 @@ class RouletteService {
             isWin,
             winAmount,
             spinResult
+        });
+
+        await redis.del(`user:stats:${userId}`).catch(err => {
+            console.warn('Failed to invalidate stats cache:', err);
+        })
+    
+        await redis.del(`user:history:${userId}`).catch(err => {
+            console.warn('Failed to invalidate history cache:', err);
         });
 
         return {
