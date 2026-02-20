@@ -10,6 +10,7 @@ const { default: mongoose } = require('mongoose');
 const userService = require('../services/userService');
 const { ValidationError, NotFoundError } = require('../helpers/errors');
 const Blocking = require('../models/Blocking.model');
+const redis = require('../config/redis');
 
 
 //Register Endpoint - OLD ENDPOINT - NOT USED!!! New registerUserV2 is now used.
@@ -241,6 +242,12 @@ const updatePreferences = async (req, res) => {
  */
 const getUserStats =  asyncHandler(async (req, res) => {
   const userId = req.userId;
+  const cacheKey = `user:stats:${userId}`;
+
+  const cached = await redis.get(cacheKey);
+  if (cached) {
+    return res.status(200).json(JSON.parse(cached));
+  }
 
   const [ gameStats, favoriteGame ] = await Promise.all([
     GameHistory.aggregate([
@@ -264,10 +271,19 @@ const getUserStats =  asyncHandler(async (req, res) => {
     ]),
   ]);
 
-  res.status(200).json({
+  // res.status(200).json({
+  //   stats: gameStats[0] || { totalWagered: 0, totalWins: 0, totalRoundsPlayed: 0 },
+  //   favoriteGame: favoriteGame[0]?._id || 'None yet'
+  // });
+    const result = {
     stats: gameStats[0] || { totalWagered: 0, totalWins: 0, totalRoundsPlayed: 0 },
     favoriteGame: favoriteGame[0]?._id || 'None yet'
-  });
+  };
+
+  // 3. Запази в Redis за 5 минути (300 секунди)
+  await redis.setEx(cacheKey, 300, JSON.stringify(result));
+
+  res.status(200).json(result);
 });
 
 

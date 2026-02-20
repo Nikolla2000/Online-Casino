@@ -1,6 +1,7 @@
 const { saveTransaction } = require("../helpers/gameHelpers");
 const GameHistory = require("../models/GameHistory.model");
 const User = require("../models/User.model");
+const redis = require('../config/redis');
 
 class SlotsService {
 
@@ -91,6 +92,10 @@ class SlotsService {
         });
       }
     }
+
+    await redis.del(`user:stats:${userId}`).catch(err => {
+      console.warn('Failed to invalidate cache:', err);
+    })
 
     return {
       success: true,
