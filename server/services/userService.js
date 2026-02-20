@@ -18,15 +18,27 @@ class UserService {
    * @throws {Error} If database query fails.
    */
   async recentActivity(userId, limit = 4, sinceDate) {
+    const cacheKey = `user:recent-activity:${userId}`;
+    const cached = await redis.get(cacheKey).catch(() => null);
+    if (cached) {
+      return JSON.parse(cached);
+    }
+
     const targetDate = sinceDate || new Date(new Date().setMonth(new Date().getMonth() - 1));
 
-    return await GameHistory.find({
+    const recentGames = await GameHistory.find({
       userId,
       timestamp: { $gte: targetDate }
     })
     .sort({ timestamp: -1 })
     .limit(limit)
     .lean();
+    
+    if (recentGames.length > 0) {
+      await redis.setEx(cacheKey, 180, JSON.stringify(recentGames)).catch(() => {});
+    }
+
+    return recentGames;
   }
 
   /**

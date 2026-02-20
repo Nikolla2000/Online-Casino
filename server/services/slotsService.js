@@ -101,6 +101,8 @@ class SlotsService {
       console.warn('Failed to invalidate history cache:', err);
     });
 
+    await redis.del(`user:recent-activity:${userId}`).catch(() => {});
+
     return {
       success: true,
       betAmount,
