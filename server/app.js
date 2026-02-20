@@ -13,6 +13,8 @@ const logger = require('./helpers/logger');
 const app = express();
 const server = createServer(app);
 const setupSocket = require("./socket/socket");
+const redisClient = require('./config/redis');
+
 const io = new Server(server, {
   cors: {
     origin: 'http://localhost:5173',
@@ -165,6 +167,7 @@ process.on('uncaughtException', (err) => {
 const start = async () => {
   try {
     await connectDB(process.env.MONGO_URL);
+    await redisClient.connect();
     server.listen(port, () =>
       console.log(`Server is listening on port ${port}...`)
     );
