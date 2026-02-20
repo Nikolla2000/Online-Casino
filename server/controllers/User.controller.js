@@ -280,7 +280,6 @@ const getUserStats =  asyncHandler(async (req, res) => {
     favoriteGame: favoriteGame[0]?._id || 'None yet'
   };
 
-  // 3. Запази в Redis за 5 минути (300 секунди)
   await redis.setEx(cacheKey, 300, JSON.stringify(result));
 
   res.status(200).json(result);

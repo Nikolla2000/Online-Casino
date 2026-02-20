@@ -4,6 +4,7 @@ const Blocking = require("../models/Blocking.model");
 const GameHistory = require("../models/GameHistory.model");
 const User = require("../models/User.model");
 const { registerSchema } = require("../validation-schemas/user.schema");
+const redis = require('../config/redis');
 
 class UserService {
   
@@ -86,7 +87,7 @@ class UserService {
     }
 
     if (shouldCache) {
-      await redis.setEc(cacheKey, 120, JSON.stringify(result));
+      await redis.setEx(cacheKey, 120, JSON.stringify(result));
     }
 
     return result;
