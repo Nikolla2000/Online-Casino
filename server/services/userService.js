@@ -295,6 +295,12 @@ class UserService {
 
 
   async getProfileById(targetUserId, currentUserId) {
+    const cacheKey = `user:profile:${targetUserId}`;
+    const cached = await redis.get(cacheKey).catch(() => null);
+    if (cached) {
+      return JSON.parse(cached);
+    }
+
     const user = await User.findById(targetUserId)
       .select('-password -email -oauthProvider -oauthId -hasPassword -totalCredits -refreshToken -bonusOffers -gameUpdates -vipEvents');
 
@@ -309,6 +315,8 @@ class UserService {
 
     const userObject = user.toObject();
     userObject.isBlocked = isBlocked;
+
+    await redis.setEx(cacheKey, 300, JSON.stringify(userObject)).catch(() => {});
   
     return userObject;
   }

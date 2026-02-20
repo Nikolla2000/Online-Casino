@@ -179,6 +179,8 @@ const uploadPicture = async (req, res) => {
       { new: true }
     );
 
+    await redis.del(`user:profile:${req.userId}`).catch(() => {});
+
     res.json({
       message: 'Profile picture uploaded successfully',
       profilePic: updatedUser.profileImage
