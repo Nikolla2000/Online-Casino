@@ -57,5 +57,6 @@ module.exports = {
     generalLimiter,
     authLimiter,
     gameLimiter,
-    chatbotLimiter
+    chatbotLimiter,
+    createHandler
 }

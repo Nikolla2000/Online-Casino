@@ -100,7 +100,7 @@ const chatRouter = require('./routes/v1/Chat.router');
 const chatBotRouter = require('./routes/v1/ChatBot.router');
 const gameRouter = require('./routes/v1/Game.router');
 const userRouterV2 = require('./routes/v2/User.routerV2');
-const { generalLimiter, authLimiter, chatbotLimiter, gameLimiter } = require("./middleware/rateLimiter");
+const { generalLimiter, authLimiter, chatbotLimiter, gameLimiter } = require("./middleware/rateLimiterRedis");
 
 //Middleware
 app.use(cookieParser());
