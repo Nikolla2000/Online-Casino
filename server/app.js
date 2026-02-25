@@ -164,16 +164,20 @@ process.on('uncaughtException', (err) => {
   process.exit(1);
 });
 
-const start = async () => {
-  try {
-    await connectDB(process.env.MONGO_URL);
-    await redisClient.connect();
-    server.listen(port, () =>
-      console.log(`Server is listening on port ${port}...`)
-    );
-  } catch (error) {
-    console.log(error);
-  }
-};
+module.exports = app;
 
-start();
+if (require.main === module) {
+  const start = async () => {
+    try {
+      await connectDB(process.env.MONGO_URL);
+      await redisClient.connect();
+      server.listen(port, () =>
+        console.log(`Server is listening on port ${port}...`)
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
+  start();
+}
