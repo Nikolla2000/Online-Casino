@@ -27,22 +27,58 @@ describe('Auth Endpoints', () => {
 
             User.findOne.mockResolvedValue(mockUser);
 
-            // User.findById.mockReturnValue({
-            //     select: jest.fn().mockReturnThis(),
-            //     lean: jest.fn().mockResolvedValue(mockUser)
-            // });
-
             comparePasswords.mockResolvedValue(true);
 
             const response = await request(app)
                 .post('/server/v1/auth/login')
                 .send({
                     username: 'chicho_mitko5',
-                    password: '123456Ff!'
+                    password: 'somePasswordJh?'
                 });
 
             expect(response.status).toBe(200);
             expect(response.body).toHaveProperty('accessToken');
+            expect(User.findOne).toHaveBeenCalledWith({ username: 'chicho_mitko5' });
+            expect(comparePasswords).toHaveBeenCalledWith('somePasswordJh?', 'hashedPassword123');
+            expect(mockUser.save).toHaveBeenCalled();
+            expect(mockUser.isOnline).toBe(true);
+            expect(mockUser.refreshToken).toBeDefined();
+        });
+
+        it ('should return 401 with invalid password', async () => {
+            const mockUser = {
+                _id: '123',
+                username: 'chicho_mitko5',
+                email: 'test@example.com',
+                password: 'hashedPassword123',
+                refreshToken: null,
+                isOnline: false,
+                lastSeen: null,
+                save: jest.fn()
+            };
+
+            User.findOne.mockResolvedValue(mockUser);
+            comparePasswords.mockResolvedValue(false);
+
+            const response = await request(app)
+                .post('/server/v1/auth/login')
+                .send({
+                    username: 'chicho_mitko5',
+                    password: 'wrongpassworrd'
+                });
+
+            expect(response.status).toBe(401);
+            expect(mockUser.save).not.toHaveBeenCalled();
+        });
+
+        it ('should return 400 when username or password is missing', async () => {
+            const response = await request(app)
+                .post('/server/v1/auth/login')
+                .send({
+                    username: 'chicho_mitko5'
+                });
+
+                expect(response.status).toBe(400);
         })
     })
 })
