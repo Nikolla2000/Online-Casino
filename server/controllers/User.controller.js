@@ -148,10 +148,6 @@ const uploadPicture = async (req, res) => {
       return res.status(400).json({ message: 'No file uploaded' });
     }
 
-    if (!req.userId) {
-      return res.status(401).json({ message: 'User not authenticated' });
-    }
-
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     const fileExtension = req.file.originalname.split('.').pop();
     const filename = `${req.userId}-${uniqueSuffix}.${fileExtension}`;
