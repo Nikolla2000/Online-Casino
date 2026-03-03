@@ -275,7 +275,7 @@ class UserService {
     }).select('_id username email');
 
     if (existingUser) {
-      const conflictField = existingUser.username === username.toLowerCase() ? 'username' : 'email';
+      const conflictField = existingUser.username === validatedData.username.toLowerCase() ? 'username' : 'email';
       throw new ConflictError(`User with this ${conflictField} already exists`);
     }
 
