@@ -28,7 +28,7 @@ const errorHandler = (err, req, res, next) => {
     userId: req.userId
   });
 
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV !== 'production') {
     res.status(err.statusCode).json({
       status: err.status,
       message: err.message,
