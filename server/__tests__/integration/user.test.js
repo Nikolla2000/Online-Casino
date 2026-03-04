@@ -1,11 +1,13 @@
 const request = require('supertest');
 const app = require('../../app');
+jest.mock('../../models/User.model');
 const User = require('../../models/User.model');
+const { generateTestToken } = require('../setup/testHelpers');
 
-jest.mock('../../models/User.model', () => ({
-  findOne: jest.fn(),
-  create: jest.fn()
-}));
+User.findOne = jest.fn();
+User.create = jest.fn();
+User.findByIdAndUpdate = jest.fn();
+
 
 describe('User endpoints', () => {
   let server;
@@ -48,9 +50,8 @@ describe('User endpoints', () => {
 
       expect(response.status).toBe(409);
     });
-  });
 
-  it('should register a new user', async() => {
+    it('should register a new user', async() => {
     User.findOne.mockReturnValue({
       select: jest.fn().mockResolvedValue(null)
     });
@@ -88,5 +89,119 @@ describe('User endpoints', () => {
 
       expect(response.status).toBe(201);
       expect(response.body.success).toBe(true);
+    });
+
+    it('should return 400 for password mismatch', async() => {
+    const response = await request(app)
+      .post('/server/v2/users/register')
+      .send({
+        username: 'testuser',
+        firstName: 'Test',
+        lastName: 'User',
+        email: 'test@test.com',
+        password: '123123testFf!',
+        confirmPassword: 'DifferentPassword!'
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toContain("Validation failed");
+  });
+
+    it('should return 400 for invalid email format', async() => {
+    const response = await request(app)
+      .post('/server/v2/users/register')
+      .send({
+        username: 'testuser',
+        firstName: 'Test',
+        lastName: 'User',
+        email: 'not-an-email',
+        password: '123123testFf!',
+        confirmPassword: '123123testFf!'
+      });
+
+    expect(response.status).toBe(400);
+  });
+  });
+
+  
+
+  describe('PATCH /server/v1/user/notification-preferences', () => {
+    it('should update preferences successfully', async () => {
+        const token = generateTestToken('user123');
+        
+        User.findByIdAndUpdate.mockResolvedValue({});
+
+        const response = await request(app)
+            .patch('/server/v1/user/notification-preferences')
+            .set('Authorization', `Bearer ${token}`)
+            .send({
+                bonusOffers: true,
+                gameUpdates: false,
+                vipEvents: true
+            });
+
+        expect(response.status).toBe(200);
+        expect(response.body.success).toBe(true);
+    });
+
+    it('should return 400 for invalid data types', async () => {
+        const token = generateTestToken('user123');
+
+        const response = await request(app)
+            .patch('/server/v1/user/notification-preferences')
+            .set('Authorization', `Bearer ${token}`)
+            .send({
+                bonusOffers: 'true',
+                gameUpdates: false
+            });
+
+        expect(response.status).toBe(400);
+        expect(response.body.message).toContain('Invalid data format');
+    });
+
+    it('should update only bonusOffers field', async () => {
+      const token = generateTestToken('user123');
+      
+      User.findByIdAndUpdate.mockResolvedValue({});
+
+      const response = await request(app)
+        .patch('/server/v1/user/notification-preferences')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          bonusOffers: true
+        });
+
+      expect(response.status).toBe(200);
+      expect(User.findByIdAndUpdate).toHaveBeenCalledWith(
+        'user123',
+        { bonusOffers: true }
+      );
+    });
+
+    it('should handle all three preferences together', async () => {
+      const token = generateTestToken('user123');
+      
+      User.findByIdAndUpdate.mockResolvedValue({});
+
+      const response = await request(app)
+        .patch('/server/v1/user/notification-preferences')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          bonusOffers: false,
+          gameUpdates: true,
+          vipEvents: false
+        });
+
+      expect(response.status).toBe(200);
+      expect(User.findByIdAndUpdate).toHaveBeenCalledWith(
+        'user123',
+        {
+          bonusOffers: false,
+          gameUpdates: true,
+          vipEvents: false
+        }
+      );
+    });
+
   })
 })
