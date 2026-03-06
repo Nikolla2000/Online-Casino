@@ -424,7 +424,7 @@ const blockUser = asyncHandler(async (req, res) => {
 
   const userToBlock = await User.findById(blockedId);
   if (!userToBlock) {
-    throw new NotFoundError('User not found');
+    throw new NotFoundError('User');
   }
 
   // const existingBlock = await Blocking.findOne({ blockerId, blockedId });
