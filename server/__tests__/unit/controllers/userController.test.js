@@ -1,7 +1,8 @@
 // userController.test.js - само registerUserV2 за да тестваме
-const { registerUserV2, getUsers, getUserProfile, getTotalCredits } = require('../../../controllers/User.controller');
+const { registerUserV2, getUsers, getUserProfile, getTotalCredits, blockUser } = require('../../../controllers/User.controller');
 const userService = require('../../../services/userService');
 const Blocking = require('../../../models/Blocking.model');
+const User = require('../../../models/User.model');
 const { ValidationError, NotFoundError } = require('../../../helpers/errors');
 
 jest.mock('../../../services/userService');
@@ -12,7 +13,6 @@ describe('User Controller', () => {
       beforeEach(() => {
         jest.clearAllMocks();
         
-        // Стандартни mock обекти
         req = {
         userId: 'test-user-id',
         params: {},
@@ -168,7 +168,7 @@ describe('User Controller', () => {
         });
 
         it('should throw ValidationError when userId is missing', async () => {
-            req.params = {}; // без userId
+            req.params = {};
 
             await getUserProfile(req, res, next);
 
@@ -188,25 +188,7 @@ describe('User Controller', () => {
             expect(userService.getTotalCredits).toHaveBeenCalledWith('target-user-id');
             expect(res.status).toHaveBeenCalledWith(200);
             expect(res.json).toHaveBeenCalledWith(mockCredits);
-            });
+          });
 
-        // it('should handle service errors', async () => {
-        //     const error = new NotFoundError('User');
-        //     userService.getTotalCredits.mockRejectedValue(error);
-        //     req.params = { userId: 'nonexistent-id' };
-
-        //     await getTotalCredits(req, res, next);
-
-        //     expect(next).toHaveBeenCalledWith(error);
-        // });
-    });
-
-    // describe('Block User', () => {
-    //     it('should block user successfully', async () => {
-    //         User.findById = jest.fn().mockResolvedValue({ _id: 'target-id'});
-    //         Blocking.create.mockResolvedValue({});
-    //         req.params = { userId: 'target-id' };
-    //         req.userId = 'blocker-id';
-    //     })
-    // })
+      });
 })
