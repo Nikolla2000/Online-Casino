@@ -1,8 +1,9 @@
 const request = require('supertest');
 const app = require('../../app');
-jest.mock('../../models/User.model');
 const User = require('../../models/User.model');
 const { generateTestToken } = require('../setup/testHelpers');
+
+jest.mock('../../models/User.model');
 
 User.findOne = jest.fn();
 User.create = jest.fn();
