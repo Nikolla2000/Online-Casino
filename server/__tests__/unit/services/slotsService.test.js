@@ -28,29 +28,29 @@ describe('SlotsService', () => {
   });
 
   describe('validateBet', () => {
-    test('should throw error for invalid bet amount (non-number)', () => {
+    it('should throw error for invalid bet amount (non-number)', () => {
       expect(() => SlotsService.validateBet('invalid'))
         .toThrow('Invalid bet amount');
     });
 
-    test('should throw error for bet <= 0', () => {
+    it('should throw error for bet <= 0', () => {
       expect(() => SlotsService.validateBet(0))
         .toThrow('Bet amount must be positive');
       expect(() => SlotsService.validateBet(-100))
         .toThrow('Bet amount must be positive');
     });
 
-    test('should throw error for bet below minimum', () => {
+    it('should throw error for bet below minimum', () => {
       expect(() => SlotsService.validateBet(50))
         .toThrow('Bet must be between 100 and 1000');
     });
 
-    test('should throw error for bet above maximum', () => {
+    it('should throw error for bet above maximum', () => {
       expect(() => SlotsService.validateBet(1500))
         .toThrow('Bet must be between 100 and 1000');
     });
 
-    test('should pass for valid bet amount', () => {
+    it('should pass for valid bet amount', () => {
       expect(() => SlotsService.validateBet(500)).not.toThrow();
       expect(() => SlotsService.validateBet(100)).not.toThrow();
       expect(() => SlotsService.validateBet(1000)).not.toThrow();
@@ -58,7 +58,7 @@ describe('SlotsService', () => {
   });
 
   describe('generateSlotReels', () => {
-    test('should generate 3x5 array', () => {
+    it('should generate 3x5 array', () => {
       const reels = SlotsService.generateSlotReels();
       
       expect(reels.length).toBe(3);
@@ -67,7 +67,7 @@ describe('SlotsService', () => {
       expect(reels[2].length).toBe(5);
     });
 
-    test('should generate numbers between 1 and 12', () => {
+    it('should generate numbers between 1 and 12', () => {
       const reels = SlotsService.generateSlotReels();
       
       for (let row = 0; row < 3; row++) {
@@ -80,7 +80,7 @@ describe('SlotsService', () => {
   });
 
   describe('getMultiplier', () => {
-    test('should return correct multiplier for Diamond (symbol 12)', () => {
+    it('should return correct multiplier for Diamond (symbol 12)', () => {
       expect(SlotsService.getMultiplier(12, 5)).toBe(100);
       expect(SlotsService.getMultiplier(12, 4)).toBe(20);
       expect(SlotsService.getMultiplier(12, 3)).toBe(5);
@@ -88,7 +88,7 @@ describe('SlotsService', () => {
       expect(SlotsService.getMultiplier(12, 1)).toBe(0);
     });
 
-    test('should return correct multiplier for low symbol (symbol 1)', () => {
+    it('should return correct multiplier for low symbol (symbol 1)', () => {
       expect(SlotsService.getMultiplier(1, 5)).toBe(5);
       expect(SlotsService.getMultiplier(1, 4)).toBe(1.5);
       expect(SlotsService.getMultiplier(1, 3)).toBe(0.3);
@@ -98,7 +98,7 @@ describe('SlotsService', () => {
   });
 
   describe('checkPayLine', () => {
-    test('should detect winning line with 5 matching symbols', () => {
+    it('should detect winning line with 5 matching symbols', () => {
       const reels = [
         [5, 5, 5, 5, 5],
         [1, 2, 3, 4, 5],
@@ -111,7 +111,7 @@ describe('SlotsService', () => {
       expect(multiplier).toBe(15); // symbol 5 with 5 matches = 15x
     });
 
-    test('should detect winning line with 3 matching symbols', () => {
+    it('should detect winning line with 3 matching symbols', () => {
       const reels = [
         [5, 5, 5, 2, 3],
         [1, 2, 3, 4, 5],
@@ -124,7 +124,7 @@ describe('SlotsService', () => {
       expect(multiplier).toBe(1); // symbol 5 with 3 matches = 1x
     });
 
-    test('should return 0 for non-winning line', () => {
+    it('should return 0 for non-winning line', () => {
       const reels = [
         [1, 2, 3, 4, 5],
         [1, 2, 3, 4, 5],
@@ -139,7 +139,7 @@ describe('SlotsService', () => {
   });
 
   describe('calculateWin', () => {
-    test('should calculate win for multiple winning lines', () => {
+    it('should calculate win for multiple winning lines', () => {
       const reels = [
         [5, 5, 5, 5, 5], // win on top row
         [1, 2, 3, 4, 5],
@@ -153,7 +153,7 @@ describe('SlotsService', () => {
       expect(result.multiplier).toBeGreaterThan(0);
     });
 
-    test('should return zero win for no matches', () => {
+    it('should return zero win for no matches', () => {
       const reels = [
         [1, 2, 1, 4, 5],
         [6, 3, 4, 8, 6],
@@ -169,7 +169,7 @@ describe('SlotsService', () => {
   });
 
   describe('playRound', () => {
-    test('should throw error if user not found', async () => {
+    it('should throw error if user not found', async () => {
       User.findById.mockResolvedValue(null);
       
       await expect(SlotsService.playRound(validUserId, validBetAmount))
@@ -177,7 +177,7 @@ describe('SlotsService', () => {
         .toThrow('User not found');
     });
 
-    test('should throw error if insufficient credits', async () => {
+    it('should throw error if insufficient credits', async () => {
       User.findById.mockResolvedValue({ ...mockUser, totalCredits: 50 });
       
       await expect(SlotsService.playRound(validUserId, validBetAmount))
@@ -185,7 +185,7 @@ describe('SlotsService', () => {
         .toThrow('Not enough credits');
     });
 
-    test('should successfully play round and update user stats', async () => {
+    it('should successfully play round and update user stats', async () => {
       User.findById.mockResolvedValue(mockUser);
       
       const updatedUser = { 
@@ -218,7 +218,7 @@ describe('SlotsService', () => {
       expect(redis.del).toHaveBeenCalledWith(`user:recent-activity:${validUserId}`);
     });
 
-    test('should save game history in production mode', async () => {
+    it('should save game history in production mode', async () => {
       const originalEnv = process.env.NODE_ENV;
       process.env.NODE_ENV = 'production';
       
@@ -235,7 +235,7 @@ describe('SlotsService', () => {
       process.env.NODE_ENV = originalEnv;
     });
 
-    test('should NOT save game history in test mode', async () => {
+    it('should NOT save game history in test mode', async () => {
       process.env.NODE_ENV = 'test';
       
       User.findById.mockResolvedValue(mockUser);

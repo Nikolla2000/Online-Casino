@@ -30,7 +30,7 @@ describe('Chatbot Controller Integration Tests', () => {
         choices: [
             {
             message: {
-                content: 'Това е тестов отговор от AI'
+                content: 'Test answer from AI'
             }
             }
         ]
@@ -132,7 +132,6 @@ describe('Chatbot Controller Integration Tests', () => {
 //           userId: testUser._id.toString()
 //         });
 
-//       // Проверка че правилният prompt е изпратен към Groq
 //       const mockGroqInstance = Groq.mock.results[0]?.value;
 //       const calls = mockGroqInstance.chat.completions.create.mock.calls;
       
@@ -180,7 +179,7 @@ describe('Chatbot Controller Integration Tests', () => {
       expect(response.body[0]).toHaveProperty('userMessage');
       expect(response.body[0]).toHaveProperty('aiResponse');
       expect(response.body[0]).toHaveProperty('timeStamp');
-      expect(response.body[0]).not.toHaveProperty('userId'); // Да няма userId в response
+      expect(response.body[0]).not.toHaveProperty('userId');
     });
 
     test('should limit to 100 messages', async () => {
