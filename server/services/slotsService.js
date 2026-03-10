@@ -124,7 +124,7 @@ class SlotsService {
    * @returns {void}
    */
   validateBet(betAmount) {
-    if (!betAmount || typeof betAmount !== 'number') {
+    if (betAmount === '' || isNaN(Number(betAmount))) {
       const error = new Error('Invalid bet amount');
       error.statusCode = 400;
       throw error;
