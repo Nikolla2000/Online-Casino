@@ -36,9 +36,9 @@ const validateRegisterForm = (formData) => {
     errors.email = 'You must enter a valid email';
   }
 
-  if (!formData.country) {
-    errors.country = 'Please select a country';
-  }
+  // if (!formData.country) {
+  //   errors.country = 'Please select a country';
+  // }
   
   if (!specialCharRegex.test(formData.password)) {
     errors.password = 'Password must contain at least one special character';
