@@ -8,6 +8,7 @@ import { Toaster } from 'react-hot-toast';
 import RegisterForm from './RegisterForm';
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from '@testing-library/user-event';
+import api from "../../../axiosConfig";
 
 vi.mock('../../../axiosConfig');
 
@@ -69,4 +70,71 @@ describe('RegisterForm', () => {
             // expect(screen.getByText(/username is required/i)).toBeInTheDocument();
         });
   });
+
+    it('shows error when passwords do not match', async() => {
+        const user = userEvent.setup();
+        renderWithProviders(<RegisterForm handleClose={mockHandleClose}/>);
+
+        const passwordInputs = screen.getAllByPlaceholderText(/password/i);
+        await user.type(passwordInputs[0], 'Password123!');
+        await user.type(passwordInputs[1], 'lalalal123');
+
+        const submitButton = screen.getByRole('button', { name: /create account/i });
+        await user.click(submitButton);
+
+        await waitFor(() => {
+            expect(screen.getByText(/Passwords do not match/i)).toBeInTheDocument();
+        })
+    });
+
+    it('shows error for invalid email format', async () => {
+        const user = userEvent.setup();
+        renderWithProviders(<RegisterForm handleClose={mockHandleClose} />);
+    
+        const emailInput = screen.getByPlaceholderText(/email address/i);
+        await user.type(emailInput, 'invalidemail@qwd');
+    
+        const submitButton = screen.getByRole('button', { name: /create account/i });
+        await user.click(submitButton);
+    
+        await waitFor(() => {
+          expect(screen.getByText(/You must enter a valid email/i)).toBeInTheDocument();
+        });
+    });
+    
+    it('shows duplicate user error from API', async () => {
+        const user = userEvent.setup();
+        renderWithProviders(<RegisterForm handleClose={mockHandleClose} />);
+    
+        // Fill valid data
+        await user.type(screen.getByPlaceholderText(/first name/i), 'John');
+        await user.type(screen.getByPlaceholderText(/last name/i), 'Doe');
+        await user.type(screen.getByPlaceholderText(/username/i), 'existinguser');
+        await user.type(screen.getByPlaceholderText(/email address/i), 'john@example.com');
+        
+        const passwordInputs = screen.getAllByPlaceholderText(/password/i);
+        await user.type(passwordInputs[0], 'Password123!');
+        await user.type(passwordInputs[1], 'Password123!');
+    
+        api.post.mockRejectedValue({
+          response: { status: 409 }
+        });
+    
+        const submitButton = screen.getByRole('button', { name: /create account/i });
+        await user.click(submitButton);
+    
+        await waitFor(() => {
+          expect(screen.getByText(/user with this username or email already exists/i)).toBeInTheDocument();
+        });
+    });
+
+    it('calls handleClose when close button is clicked', async () => {
+        const user = userEvent.setup();
+        renderWithProviders(<RegisterForm handleClose={mockHandleClose} />);
+    
+        const closeButton = screen.getByRole('button', { name: '' });
+        await user.click(closeButton);
+    
+        expect(mockHandleClose).toHaveBeenCalledTimes(1);
+    });
 })
