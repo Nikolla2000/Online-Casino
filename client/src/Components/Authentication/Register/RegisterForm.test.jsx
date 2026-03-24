@@ -1,12 +1,6 @@
-import { configureStore } from "@reduxjs/toolkit";
 import { vi } from "vitest";
-import authReducer from '../../../redux/features/auth/authSlice';
-import authModalsReducer from '../../../redux/features/auth/authModalsSlice'
-import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast';
 import RegisterForm from './RegisterForm';
-import { render, screen, waitFor } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from '@testing-library/user-event';
 import api from "../../../axiosConfig";
 import { renderWithProviders } from "../../../utils/testUtils";

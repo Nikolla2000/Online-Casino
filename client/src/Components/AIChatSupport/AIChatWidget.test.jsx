@@ -1,15 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
-import { Toaster } from 'react-hot-toast';
 import AIChatWidget from './AIChatWidget';
 import FloatingChatButton from './FloatingChatButton';
 import MessageComponent from './MessageComponent';
 import ConversationHistory from './ConversationHistory';
-import aiChatbotReducer from '../../redux/features/aiChatbot/aiChatbotSlice';
-import authReducer from '../../redux/features/auth/authSlice';
 import * as chatBotAPI from '../../services/api/chatBotAPI';
 import { renderWithProviders } from '../../utils/testUtils';
 
@@ -41,15 +36,8 @@ describe('AI Chat Components', () => {
 
     it('opens chat when clicked', async () => {
       const user = userEvent.setup();
-      const store = configureStore({
-        reducer: { aiChatbot: aiChatbotReducer, auth: authReducer }
-      });
-      
-      render(
-        <Provider store={store}>
-          <FloatingChatButton />
-        </Provider>
-      );
+
+      const { store } = renderWithProviders(<FloatingChatButton/>);
 
       const button = screen.getByRole('button', { name: /ai assistant/i });
       await user.click(button);
@@ -217,18 +205,20 @@ describe('AI Chat Components', () => {
 
     it('closes chat when close button is clicked', async () => {
       const user = userEvent.setup();
-      const store = configureStore({
-        reducer: {
-          aiChatbot: aiChatbotReducer,
-          auth: authReducer
-        }
-      });
+      // const store = configureStore({
+      //   reducer: {
+      //     aiChatbot: aiChatbotReducer,
+      //     auth: authReducer
+      //   }
+      // });
 
-      render(
-        <Provider store={store}>
-          <AIChatWidget />
-        </Provider>
-      );
+      // render(
+      //   <Provider store={store}>
+      //     <AIChatWidget />
+      //   </Provider>
+      // );
+
+      const { store } = renderWithProviders(<AIChatWidget />)
 
       const closeButton = screen.getByText('×');
       await user.click(closeButton);

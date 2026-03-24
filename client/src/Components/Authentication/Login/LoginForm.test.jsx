@@ -1,13 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
-import { configureStore } from '@reduxjs/toolkit';
-import { Toaster } from 'react-hot-toast';
 import LoginForm from './LoginForm';
-import authReducer from '../../../redux/features/auth/authSlice';
-import authModalsReducer from '../../../redux/features/auth/authModalsSlice';
 import { renderWithProviders } from '../../../utils/testUtils';
 
 const mockNavigate = vi.fn();
