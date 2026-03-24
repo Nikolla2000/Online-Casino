@@ -11,6 +11,7 @@ import ConversationHistory from './ConversationHistory';
 import aiChatbotReducer from '../../redux/features/aiChatbot/aiChatbotSlice';
 import authReducer from '../../redux/features/auth/authSlice';
 import * as chatBotAPI from '../../services/api/chatBotAPI';
+import { renderWithProviders } from '../../utils/testUtils';
 
 vi.mock('../../services/api/chatBotAPI');
 
@@ -21,23 +22,6 @@ vi.mock('react-type-animation', () => ({
 vi.mock('../Spinner/Spinner', () => ({
   default: () => <div>Loading...</div>
 }));
-
-const renderWithProviders = (component, initialState = {}) => {
-  const store = configureStore({
-    reducer: {
-      aiChatbot: aiChatbotReducer,
-      auth: authReducer
-    },
-    preloadedState: initialState
-  });
-
-  return render(
-    <Provider store={store}>
-      {component}
-      <Toaster />
-    </Provider>
-  );
-};
 
 describe('AI Chat Components', () => {
   beforeEach(() => {

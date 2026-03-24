@@ -9,6 +9,7 @@ import RegisterForm from './RegisterForm';
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from '@testing-library/user-event';
 import api from "../../../axiosConfig";
+import { renderWithProviders } from "../../../utils/testUtils";
 
 vi.mock('../../../axiosConfig');
 
@@ -20,24 +21,6 @@ vi.mock('react-router-dom', async () => {
         useNavigate: () => mockNavigate,
     };
 });
-
-const renderWithProviders = (component) => {
-    const store = configureStore({
-        reducer: {
-            auth: authReducer,
-            authModals: authModalsReducer
-        }
-    });
-    
-    return render(
-        <Provider store={store}>
-        <BrowserRouter>
-            {component}
-            <Toaster/>
-        </BrowserRouter>
-    </Provider>
-    );
-}
 
 describe('RegisterForm', () => {
     const mockHandleClose = vi.fn();

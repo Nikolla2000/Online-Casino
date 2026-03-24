@@ -8,6 +8,7 @@ import { Toaster } from 'react-hot-toast';
 import LoginForm from './LoginForm';
 import authReducer from '../../../redux/features/auth/authSlice';
 import authModalsReducer from '../../../redux/features/auth/authModalsSlice';
+import { renderWithProviders } from '../../../utils/testUtils';
 
 const mockNavigate = vi.fn();
 vi.mock('react-router-dom', async () => {
@@ -21,25 +22,6 @@ vi.mock('react-router-dom', async () => {
 vi.mock('../../Oauth/LoginGoogleBtn', () => ({
   default: () => <div>Google Login Button</div>
 }));
-
-const renderWithProviders = (component, initialState = {}) => {
-  const store = configureStore({
-    reducer: {
-      auth: authReducer,
-      authModals: authModalsReducer,
-    },
-    preloadedState: initialState,
-  });
-
-  return render(
-    <Provider store={store}>
-      <BrowserRouter>
-        {component}
-        <Toaster />
-      </BrowserRouter>
-    </Provider>
-  );
-};
 
 describe('LoginForm', () => {
   const mockHandleClose = vi.fn();
