@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import "./GameThumbnail.scss";
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { hideModals, setFromGamesPage, showLogin } from '../../redux/features/auth/authModalsSlice';
-import LoginForm from '../Authentication/Login/LoginForm';
+// import LoginForm from '../Authentication/Login/LoginForm';
 
 const GameThumbnail = ({ data, index }) => {
   const [isHovered, setIsHovered] = useState(false);
   const { user, accessToken } = useSelector(state => state.auth);
-  const { showLoginModal } = useSelector(state => state.authModals);
+  // const { showLoginModal } = useSelector(state => state.authModals);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
