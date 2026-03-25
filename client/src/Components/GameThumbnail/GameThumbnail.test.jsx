@@ -1,7 +1,7 @@
 import { fireEvent, screen } from "@testing-library/react";
 import GameThumbnail from "./GameThumbnail";
 import userEvent from '@testing-library/user-event';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderWithProviders } from "../../utils/testUtils";
 
 const mockGame = {

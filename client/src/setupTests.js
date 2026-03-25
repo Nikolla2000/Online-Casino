@@ -21,3 +21,28 @@ Object.defineProperty(window, 'matchMedia', {
     dispatchEvent: vi.fn(),
   })),
 });
+
+vi.mock('*.mp4', () => ({
+  default: 'mock-video-file'
+}));
+vi.mock('*.webm', () => ({
+  default: 'mock-video-file'
+}));
+vi.mock('*.ogg', () => ({
+  default: 'mock-video-file'
+}));
+vi.mock('*.jpg', () => ({
+  default: 'mock-image-file'
+}));
+vi.mock('*.jpeg', () => ({
+  default: 'mock-image-file'
+}));
+vi.mock('*.png', () => ({
+  default: 'mock-image-file'
+}));
+vi.mock('*.gif', () => ({
+  default: 'mock-image-file'
+}));
+vi.mock('*.svg', () => ({
+  default: 'mock-svg-file'
+}));
