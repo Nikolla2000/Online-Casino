@@ -1,4 +1,4 @@
-@import '../../../colorConstants.scss';
+@use '../../../colorConstants.scss' as *;
 
 $gold-primary: #FFD700;
 $gold-secondary: #FFB700;
