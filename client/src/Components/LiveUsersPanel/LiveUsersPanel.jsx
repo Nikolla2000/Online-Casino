@@ -130,7 +130,6 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
   // );
 
   const processedUsers = useMemo(() => {
-    console.log("baa")
     return onlineUsers.map(user => ({
       ...user,
       isBlocked: blockedUsers.has(user._id)
