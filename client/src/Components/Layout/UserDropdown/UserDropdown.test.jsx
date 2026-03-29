@@ -77,7 +77,7 @@ describe('UserDropdown', () => {
 
     const { store } = renderWithProviders(
       <UserDropdown show={true} setShowDropdown={mockSetShowDropdown} />, 
-      { auth: { user: { firstName: 'Ivan' }, accessToken: 'token' } }
+      { auth: { user: { _id: "someid123", firstName: 'Ivan' }, accessToken: 'token' } }
     );
 
     await user.click(screen.getByText(/logout/i));
