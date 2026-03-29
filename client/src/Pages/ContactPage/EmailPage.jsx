@@ -177,6 +177,7 @@ const EmailPage = () => {
                     rows="5"
                     {...register("message", { 
                       required: "Message is required",
+                      minLength: 10,
                       maxLength: { value: 500, message: "Maximum 500 characters" }
                     })}
                     className={errors.message ? 'error' : ''}
@@ -201,6 +202,14 @@ const EmailPage = () => {
                     </>
                   )}
                 </button>
+                
+                <div style={{height: 30}}>
+                  {submitError && (
+                    <div className='submit-error'>
+                      {submitError}
+                      </div>
+                  )}
+                </div>
 
                 {isSubmitted && (
                   <div className="success-message">
