@@ -45,74 +45,77 @@ describe('LiveUsersPanel', () => {
     });
   });
 
-//   it('filters users based on search input', async () => {
-//     const user = userEvent.setup();
-//     renderWithProviders(<LiveUsersPanel isOpen={true} onClose={vi.fn()} />);
+  it('filters users based on search input', async () => {
+    const user = userEvent.setup();
 
-//     await waitFor(() => expect(screen.queryByText('Gamer123')).toBeInTheDocument());
+    renderWithProviders(<LiveUsersPanel isOpen={true} onClose={vi.fn()} />, {
+      auth: { user: { _id: 'user123' }, accessToken: 'valid-token' }
+    });
 
-//     const searchInput = screen.getByPlaceholderText(/Search players.../i);
-//     await user.type(searchInput, 'Pro');
+    await waitFor(() => expect(screen.queryByText('Gamer123')).toBeInTheDocument());
 
-//     expect(screen.getByText('ProPlayer')).toBeInTheDocument();
-//     expect(screen.queryByText('Gamer123')).not.toBeInTheDocument();
-//   });
+    const searchInput = screen.getByPlaceholderText(/Search players.../i);
+    await user.type(searchInput, 'Pro');
 
-//   it('shows blocked status for blocked users', async () => {
-//     // Симулираме, че Gamer123 е блокиран
-//     mockUseGetBlockedUsers.mockReturnValue({ 
-//       data: [{ blockedId: { _id: '1' } }], 
-//       isLoading: false 
-//     });
+    expect(screen.getByText('ProPlayer')).toBeInTheDocument();
+    expect(screen.queryByText('Gamer123')).not.toBeInTheDocument();
+  });
 
-//     renderWithProviders(<LiveUsersPanel isOpen={true} onClose={vi.fn()} />, {
-//       auth: { user: { _id: 'user123' }, accessToken: 'token' }
-//     });
+  it('shows blocked status for blocked users', async () => {
+    // Gamer123 is blocked
+    mockUseGetBlockedUsers.mockReturnValue({ 
+      data: [{ blockedId: { _id: '1' } }], 
+      isLoading: false 
+    });
 
-//     await waitFor(() => {
-//       const userCard = screen.getByText('Gamer123').closest('.user-card');
-//       expect(userCard).toHaveClass('is-blocked');
-//     });
-//   });
+    renderWithProviders(<LiveUsersPanel isOpen={true} onClose={vi.fn()} />, {
+      auth: { user: { _id: 'user123' }, accessToken: 'token' }
+    });
 
-//   it('shows empty state when no users match search', async () => {
-//     const user = userEvent.setup();
-//     renderWithProviders(<LiveUsersPanel isOpen={true} onClose={vi.fn()} />);
+    await waitFor(() => {
+      const userCard = screen.getByText('Gamer123').closest('.user-card');
+      expect(userCard).toHaveClass('is-blocked');
+    });
+  });
 
-//     await waitFor(() => expect(screen.getByText('Gamer123')).toBeInTheDocument());
+  it('shows empty state when no users match search', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<LiveUsersPanel isOpen={true} onClose={vi.fn()} />, {
+      auth: { user: { _id: 'user123' }, accessToken: 'token' }
+    });
 
-//     const searchInput = screen.getByPlaceholderText(/Search players.../i);
-//     await user.type(searchInput, 'NonExistentUser');
+    await waitFor(() => expect(screen.queryAllByText('Gamer123')[0]).toBeInTheDocument());
 
-//     expect(screen.getByText(/No players found/i)).toBeInTheDocument();
-//   });
+    const searchInput = screen.getByPlaceholderText(/Search players.../i);
+    await user.type(searchInput, 'NonExistentUser');
 
-//   it('shows "You" badge for the current user', async () => {
-//     renderWithProviders(<LiveUsersPanel isOpen={true} onClose={vi.fn()} />, {
-//       auth: { user: { _id: 'user123', username: 'Me' }, accessToken: 'token' }
-//     });
+    expect(screen.getByText(/No players found/i)).toBeInTheDocument();
+  });
 
-//     await waitFor(() => {
-//       expect(screen.getByText('(You)')).toBeInTheDocument();
-//     });
-//   });
+  it('shows "You" badge for the current user', async () => {
+    renderWithProviders(<LiveUsersPanel isOpen={true} onClose={vi.fn()} />, {
+      auth: { user: { _id: 'user123', username: 'Me' }, accessToken: 'token' }
+    });
 
-//   it('calls onClose when clicking the close button or overlay', async () => {
-//     const user = userEvent.setup();
-//     const mockOnClose = vi.fn();
+    await waitFor(() => {
+      expect(screen.getByText('(You)')).toBeInTheDocument();
+    });
+  });
+
+  it('calls onClose when clicking the close button or overlay', async () => {
+    const user = userEvent.setup();
+    const mockOnClose = vi.fn();
     
-//     const { container } = renderWithProviders(
-//       <LiveUsersPanel isOpen={true} onClose={mockOnClose} />
-//     );
+    const { container } = renderWithProviders(
+      <LiveUsersPanel isOpen={true} onClose={mockOnClose} />
+    );
 
-//     // Тест на бутона X
-//     const closeBtn = container.querySelector('.close-btn');
-//     await user.click(closeBtn);
-//     expect(mockOnClose).toHaveBeenCalledTimes(1);
+    const closeBtn = container.querySelector('.close-btn');
+    await user.click(closeBtn);
+    expect(mockOnClose).toHaveBeenCalledTimes(1);
 
-//     // Тест на overlay-а
-//     const overlay = container.querySelector('.panel-overlay');
-//     await user.click(overlay);
-//     expect(mockOnClose).toHaveBeenCalledTimes(2);
-//   });
+    const overlay = container.querySelector('.panel-overlay');
+    await user.click(overlay);
+    expect(mockOnClose).toHaveBeenCalledTimes(2);
+  });
 });
