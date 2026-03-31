@@ -90,7 +90,6 @@ export const rouletteSlice = createSlice({
       
       // Add to history (max 10)
       state.lastResults = [action.payload, ...state.lastResults].slice(0, 10);
-      console.log(state.lastResults)
     },
     clearResult(state) {
       state.result = null;
