@@ -87,7 +87,7 @@ const Footer = () => {
                     <Grid container alignItems="center" justifyContent="space-between">
                         <Grid item>
                             <Typography className="copyright-text">
-                                © 2024 LuckySpin Casino. Created by{' '}
+                                © {new Date().getFullYear()} LuckySpin Casino. Created by{' '}
                                 <span className="author-name">Nikola Uzunov</span>. 
                                 All rights reserved.
                             </Typography>
