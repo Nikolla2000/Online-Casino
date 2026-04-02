@@ -8,12 +8,13 @@ import { toast } from 'react-hot-toast'
 import { animateCreditsIncrement, generateRandomSlots } from '../../../utils/slotsUtils';
 import { playSound } from '../../../utils/generalActions';
 import { gameAPI } from '../../../services/api/gameAPI.JS';
+import { useCallback } from 'react';
 
 const SpinButton = () => {
   const dispatch = useDispatch()
   const { isSpinning, autoPlay, slots, totalCredits, bet, soundOn } = useSelector(state => state.slotMachine);
 
-  const handlePlaySlotsRound = async () => {
+  const handlePlaySlotsRound = useCallback(async () => {
     if (isSpinning) return;
 
     if (totalCredits < bet) {
@@ -77,8 +78,9 @@ const SpinButton = () => {
     } catch (err) {
       console.error('Slots game error:', err);
       toast.error(err.response?.data?.message ||'Error on playing game. Please, try again later.');
+      dispatch(stopSpinning());
     }
-  }
+  }, [isSpinning, totalCredits, bet, slots, soundOn, dispatch]); 
   
 
   const toggle = () => {
