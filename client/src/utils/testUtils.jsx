@@ -7,6 +7,7 @@ import aiChatbotReducer from '../redux/features/aiChatbot/aiChatbotSlice';
 import authModalsReducer from '../redux/features/auth/authModalsSlice';
 import chatReducer from '../redux/features/chat/chatSlice.js';
 import rouletteReducer from '../redux/features/roulette/rouletteSlice.js';
+import slotsReducer from "../redux/features/slots/slotMachineSlice.js";
 import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -45,6 +46,7 @@ export const renderWithProviders = (component, initialState = {}, queryClient = 
             aiChatbot: aiChatbotReducer,
             chat: chatReducer,
             roulette: rouletteReducer,
+            slotMachine: slotsReducer,
         },
         preloadedState: initialState
     });
