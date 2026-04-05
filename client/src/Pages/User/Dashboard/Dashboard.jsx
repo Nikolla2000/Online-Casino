@@ -227,6 +227,7 @@ const Dashboard = () => {
                   ref={fileInputRef}
                   onChange={handleFileUpload}
                   accept="image/*"
+                  data-testid="profile-pic-input"
                   style={{ display: 'none' }}
                 />
               </div>
