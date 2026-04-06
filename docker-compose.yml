@@ -1,0 +1,46 @@
+# version: '3.8'
+
+services:
+  # mongodb:
+  #   image: mongo:7
+  #   container_name: casino_db
+  #   restart: unless-stopped
+  #   ports:
+  #     - "27017:27017"
+  #   volumes:
+  #     - mongo_data:/data/db
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: admin
+  #     MONGO_INITDB_ROOT_PASSWORD: secret
+
+  server:
+    build: ./server
+    container_name: casino_server
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./server/.env
+    # environment:
+    #   NODE_ENV: ${NODE_ENV}
+    #   # MONGO_URI: mongodb://admin:secret@mongodb:27017/casino?authSource=admin
+    #   MONGO_URI: ${MONGO_URL}
+    # depends_on:
+    #   - mongodb
+    volumes:
+      - ./server:/app          # Live reload
+      - /app/node_modules
+
+  client:
+    build: ./client
+    container_name: casino_client
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    depends_on:
+      - server
+    env_file:
+      - ./client/.env
+    volumes:
+      - ./client:/app
+      - /app/node_modules
