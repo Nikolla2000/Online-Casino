@@ -101,6 +101,8 @@ const chatBotRouter = require('./routes/v1/ChatBot.router');
 const gameRouter = require('./routes/v1/Game.router');
 const userRouterV2 = require('./routes/v2/User.routerV2');
 const { generalLimiter, authLimiter, chatbotLimiter, gameLimiter } = require("./middleware/rateLimiterRedis");
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./config/swagger');
 
 //Middleware
 app.use(cookieParser());
@@ -111,6 +113,9 @@ app.use(express.json());
 
 //General rate limiter
 app.use(generalLimiter);
+
+//Swagger
+app.use('/server/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 //Specific endpoints rate limits
 app.use('/server/v1/auth/login', authLimiter);
