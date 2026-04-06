@@ -9,7 +9,7 @@ const router = express.Router();
 /**
  * @swagger
  * tags:
- *   name: Users (v2)
+ *   name: Users
  *   description: User management endpoints
  */
 
@@ -115,39 +115,7 @@ router.get('/:userId/credits', verifyJWT, getTotalCredits);
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - firstName
- *               - lastName
- *               - username
- *               - email
- *               - password
- *               - confirmPassword
- *             properties:
- *               firstName:
- *                 type: string
- *                 example: "Mitko"
- *               lastName:
- *                 type: string
- *                 example: "Mitkov"
- *               username:
- *                 type: string
- *                 example: "mitko_mitkov123"
- *               email:
- *                 type: string
- *                 example: "mitko@example.com"
- *               password:
- *                 type: string
- *                 example: "somepass123"
- *               confirmPassword:
- *                 type: string
- *                 example: "somepass123"
- *               country:
- *                 type: string
- *                 example: "BG"
- *               phoneNumber:
- *                 type: string
- *                 example: "0888123456"
+ *            $ref: '#/components/schemas/User'
  *     responses:
  *       201:
  *         description: User registered successfully
