@@ -1,0 +1,250 @@
+@use '../../colorConstants.scss' as *;
+
+.in-development {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  @include flex-center;
+  background: $bg;
+  overflow: hidden;
+//   font-family: 'Georgia', 'Times New Roman', serif;
+}
+
+.bg-cards {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.floating-card {
+  position: absolute;
+  color: $gold;
+  animation: floatUp linear infinite;
+  user-select: none;
+
+  span {
+    display: block;
+  }
+}
+
+@keyframes floatUp {
+  0%   { transform: translateY(0) rotate(0deg);    opacity: inherit; }
+  50%  { transform: translateY(-40px) rotate(15deg); }
+  100% { transform: translateY(0) rotate(0deg);    opacity: inherit; }
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  animation: orbPulse 8s ease-in-out infinite;
+
+  &--gold {
+    width: 500px;
+    height: 500px;
+    top: -15%;
+    right: -10%;
+    background: radial-gradient(circle, rgba($gold, 0.15) 0%, transparent 70%);
+    animation-delay: 0s;
+  }
+
+  &--red {
+    width: 350px;
+    height: 350px;
+    bottom: -10%;
+    left: -8%;
+    background: radial-gradient(circle, rgba($red, 0.1) 0%, transparent 70%);
+    animation-delay: 4s;
+  }
+}
+
+@keyframes orbPulse {
+  0%, 100% { opacity: 1;   transform: scale(1);    }
+  50%       { opacity: 0.6; transform: scale(1.15); }
+}
+
+.content {
+  position: relative;
+  z-index: 10;
+  @include flex-center;
+  flex-direction: column;
+  text-align: center;
+  padding: 3.5rem 3rem;
+  max-width: 560px;
+  width: 90%;
+  background: $bg-card;
+  border: 1px solid $border;
+  border-radius: 4px;
+  box-shadow:
+    0 0 0 1px rgba($gold, 0.06),
+    0 40px 80px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba($gold, 0.12);
+  animation: cardReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+
+  &::before,
+  &::after {
+    content: '✦';
+    position: absolute;
+    color: rgba($gold, 0.25);
+    font-size: 0.7rem;
+  }
+  &::before { top: 12px;  left: 16px;  }
+  &::after  { bottom: 12px; right: 16px; }
+}
+
+@keyframes cardReveal {
+  from { opacity: 0; transform: translateY(24px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+
+.icon-wrap {
+  position: relative;
+  @include flex-center;
+  width: 80px;
+  height: 80px;
+  margin-bottom: 1.6rem;
+}
+
+.icon-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba($gold, 0.3);
+  animation: ringPulse 3s ease-in-out infinite;
+
+  &:nth-child(1) { width: 80px;  height: 80px;  }
+  &--2           { width: 60px;  height: 60px; border-color: rgba($gold, 0.55); animation-delay: 0.4s; }
+}
+
+@keyframes ringPulse {
+  0%, 100% { transform: scale(1);   opacity: 1;   }
+  50%       { transform: scale(1.1); opacity: 0.5; }
+}
+
+.icon-suit {
+  position: relative;
+  font-size: 2.2rem;
+  @include gold-gradient;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 12px rgba($gold, 0.5));
+  animation: suitGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes suitGlow {
+  from { filter: drop-shadow(0 0 8px  rgba($gold, 0.4)); }
+  to   { filter: drop-shadow(0 0 20px rgba($gold, 0.9)); }
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 14px;
+  border: 1px solid rgba($gold, 0.35);
+  border-radius: 100px;
+  background: rgba($gold, 0.07);
+  font-family: 'Courier New', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: $gold-light;
+  margin-bottom: 1.6rem;
+}
+
+.badge__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: $gold-light;
+  animation: blink 1.2s step-start infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+.title {
+  font-size: clamp(2.2rem, 6vw, 3.2rem);
+  font-weight: 400;
+  line-height: 1.1;
+  color: $text;
+  letter-spacing: -0.01em;
+  margin: 0 0 1.2rem;
+
+  &__accent {
+    @include gold-gradient;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+.subtitle {
+  font-size: 0.95rem;
+  color: $text-muted;
+  line-height: 1.7;
+  margin: 0 0 2rem;
+  max-width: 380px;
+  font-family: 'Courier New', monospace;
+}
+
+.dots {
+  display: inline-block;
+  width: 1.4em;
+  text-align: left;
+}
+
+.divider {
+  @include flex-center;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 1.8rem;
+
+  &__line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba($gold, 0.3), transparent);
+  }
+
+  &__icon {
+    color: $gold;
+    font-size: 0.75rem;
+    opacity: 0.7;
+  }
+}
+
+.chips {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba($gold, 0.15);
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.72rem;
+  color: $text-muted;
+  letter-spacing: 0.05em;
+  transition: border-color 0.25s, color 0.25s;
+
+  &:hover {
+    border-color: rgba($gold, 0.45);
+    color: $gold-light;
+  }
+
+  &__icon {
+    font-size: 0.9rem;
+  }
+}
