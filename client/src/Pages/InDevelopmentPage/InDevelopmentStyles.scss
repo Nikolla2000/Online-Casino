@@ -8,12 +8,11 @@
   background: $bg;
   overflow: hidden;
 //   font-family: 'Georgia', 'Times New Roman', serif;
-}
 
 .bg-cards {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
   overflow: hidden;
 }
 
@@ -247,4 +246,5 @@
   &__icon {
     font-size: 0.9rem;
   }
+}
 }
