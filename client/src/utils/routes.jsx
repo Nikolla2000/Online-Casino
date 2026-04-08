@@ -10,6 +10,7 @@ import React from "react";
 import OAuthCallback from "../Components/Oauth/OauthCallback";
 import TermsConditions from "../Pages/TermsConditionsPage/TermsConditions";
 import ProfilePage from "../Pages/ViewProfilePage/ProfilePage";
+import InDevelopmentPage from "../Pages/InDevelopmentPage/InDevelopmentPage";
 
 const routes = {
   main: {
@@ -82,6 +83,12 @@ const routes = {
     name: 'profile',
     includeInNav: false,
   },
+  development: {
+    path: '/development',
+    element: <InDevelopmentPage/>,
+    name: 'in-development',
+    includeInNav: false,
+  }
 }
 
 export default routes

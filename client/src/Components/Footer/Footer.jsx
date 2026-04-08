@@ -35,8 +35,8 @@ const Footer = () => {
                         <ul className="footer-links">
                             <li><Link to="/games/slots">Slot Machines</Link></li>
                             <li><Link to="/games/roulette">Roulette</Link></li>
-                            <li><Link to="/games/blackjack">Blackjack</Link></li>
-                            <li><Link to="/games/poker">Poker</Link></li>
+                            <li><Link to="/development">Blackjack</Link></li>
+                            <li><Link to="/development">Poker</Link></li>
                         </ul>
                     </Grid>
 
