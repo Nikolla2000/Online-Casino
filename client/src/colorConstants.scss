@@ -29,3 +29,23 @@ $user-text-color: white;
 $ai-text-color: #333;
 $shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
 $border-radius: 16px;
+
+$gold:        #c9a84c;
+$gold-light:  #f0d080;
+$gold-dark:   #8a6a20;
+$red:         #c0392b;
+$bg:          #0a0a0f;
+$bg-card:     #11111a;
+$border:      rgba(201, 168, 76, 0.18);
+$text:        #e8e0cc;
+$text-muted:  rgba(232, 224, 204, 0.5);
+
+@mixin gold-gradient {
+  background: linear-gradient(135deg, $gold-dark, $gold-light, $gold-dark);
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

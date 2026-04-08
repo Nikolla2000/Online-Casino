@@ -1,0 +1,50 @@
+@use '../../colorConstants.scss' as *;
+
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 32px;
+  border: 1px solid rgba($gold, 0.6);
+  background: transparent;
+  border-radius: 3px;
+  cursor: pointer;
+  font-family: 'Courier New', monospace;
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: $gold;
+  position: relative;
+  overflow: hidden;
+  transition: color 0.3s, border-color 0.3s;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    @include gold-gradient;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  &:hover {
+    color: $bg;
+    border-color: $gold;
+
+    &::before { opacity: 1; }
+
+    .btn-back__arrow { transform: translateX(-4px); }
+    .btn-back-text { color: black; }
+  }
+
+  &__arrow,
+  span:not(.btn-back__arrow) {
+    position: relative;
+    z-index: 1;
+  }
+
+  &__arrow {
+    font-size: 1.1rem;
+    transition: transform 0.25s;
+  }
+}
