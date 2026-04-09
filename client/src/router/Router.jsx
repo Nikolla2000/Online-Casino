@@ -22,6 +22,7 @@ const router = createBrowserRouter([
       { path: routes.terms.path, element: routes.terms.element },
       { path: routes.profile.path, element: <ProtectedRoute>{routes.profile.element}</ProtectedRoute> },
       { path: routes.development.path, element: routes.development.element },
+      { path: routes.about.path, element: routes.about.element },
     ]
   }
 ])

@@ -11,6 +11,7 @@ import OAuthCallback from "../Components/Oauth/OauthCallback";
 import TermsConditions from "../Pages/TermsConditionsPage/TermsConditions";
 import ProfilePage from "../Pages/ViewProfilePage/ProfilePage";
 import InDevelopmentPage from "../Pages/InDevelopmentPage/InDevelopmentPage";
+import AboutUsPage from "../Pages/AboutUsPage/AboutUsPage";
 
 const routes = {
   main: {
@@ -87,6 +88,12 @@ const routes = {
     path: '/development',
     element: <InDevelopmentPage/>,
     name: 'in-development',
+    includeInNav: false,
+  },
+  about: {
+    path: '/about',
+    element: <AboutUsPage/>,
+    name: 'about-us',
     includeInNav: false,
   }
 }
