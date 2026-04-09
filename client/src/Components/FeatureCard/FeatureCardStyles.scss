@@ -1,0 +1,37 @@
+@use '../../Pages/AboutUsPage/AboutUsStyles.scss' as *;
+
+.feature-card {
+  background: $bg-card;
+  border: 1px solid $border-faint;
+  border-radius: 4px;
+  padding: 24px;
+  animation: fadeUp 0.6s both;
+  transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+
+  &:hover {
+    border-color: rgba($gold, 0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 16px 32px rgba(0,0,0,0.4);
+  }
+
+  &__icon {
+    display: block;
+    font-size: 1.7rem;
+    margin-bottom: 12px;
+  }
+
+  &__title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: $text;
+    margin-bottom: 8px;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 0.04em;
+  }
+
+  &__desc {
+    font-size: 0.84rem;
+    color: $text-muted;
+    line-height: 1.65;
+  }
+}

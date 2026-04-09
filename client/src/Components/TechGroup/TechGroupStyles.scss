@@ -1,0 +1,82 @@
+@use 'sass:list';
+@use '../../Pages/AboutUsPage/AboutUsStyles.scss' as *;
+
+$accent-map: (
+  "teal":   ($teal, $teal-dim),
+  "gold":   ($gold, $gold-dim),
+  "red":    ($red,  $red-dim),
+  "purple": ($purple, $purple-dim),
+);
+
+.tech-group {
+  background: $bg-card;
+  border: 1px solid $border-faint;
+  border-radius: 4px;
+  overflow: hidden;
+
+  @each $name, $vals in $accent-map {
+    &--#{$name} {
+      $clr: list.nth($vals, 1);
+      $dim: list.nth($vals, 2);
+
+      .tech-group__header {
+        background: $dim;
+        border-bottom: 1px solid rgba($clr, 0.2);
+      }
+      .tech-group__category { color: $clr; }
+      .tech-item__name {
+        color: $clr;
+        &::before { background: $clr; }
+      }
+    }
+  }
+
+  &__header {
+    padding: 14px 20px;
+  }
+
+  &__category {
+    font-family: 'Courier New', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  &__list {
+    list-style: none;
+    padding: 8px 0;
+  }
+}
+
+.tech-item {
+  padding: 14px 20px;
+  border-bottom: 1px solid $border-faint;
+
+  &:last-child { border-bottom: none; }
+
+  &__name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin-bottom: 5px;
+
+    &::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+  }
+
+  &__desc {
+    font-size: 0.82rem;
+    color: $text-muted;
+    line-height: 1.65;
+    padding-left: 14px;
+  }
+}

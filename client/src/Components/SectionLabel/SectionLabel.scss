@@ -1,0 +1,23 @@
+@use '../../colorConstants.scss' as *;
+
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 28px;
+
+  &__line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba($gold, 0.25), transparent);
+  }
+
+  &__text {
+    font-family: 'Courier New', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba($gold, 0.7);
+    white-space: nowrap;
+  }
+}
