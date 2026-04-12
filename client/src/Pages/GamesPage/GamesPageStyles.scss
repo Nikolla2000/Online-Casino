@@ -1,4 +1,4 @@
-@import "../../colorConstants.scss";
+@use "../../colorConstants.scss" as *;
 
 .games-page-wrapper {
   min-height: 100vh;

@@ -1,5 +1,6 @@
 // RouletteStyles.scss
-@import "../../colorConstants.scss";
+@use "../../colorConstants.scss" as *;
+@use "sass:color";
 
 // Modern color palette
 $roulette-gold: #FFD700;
@@ -283,8 +284,9 @@ $glow-gold: rgba(255, 215, 0, 0.6);
     .roulette-board {
       background: linear-gradient(135deg, 
         $roulette-card-bg 0%, 
-        lighten($roulette-card-bg, 5%) 100%
-      );
+        // lighten($roulette-card-bg, 5%) 100%
+        color.adjust($roulette-card-bg, $lightness: 5%) 100%
+        );
       border: 3px solid rgba(255, 215, 0, 0.3);
       border-radius: 20px;
       padding: 20px;
@@ -320,9 +322,13 @@ $glow-gold: rgba(255, 215, 0, 0.6);
           writing-mode: vertical-rl;
           text-orientation: mixed;
           background: linear-gradient(135deg, 
-            darken($roulette-green, 10%) 0%, 
+            // darken($roulette-green, 10%) 0%, 
+            // $roulette-green 50%,
+            // darken($roulette-green, 10%) 100%
+            
+            color.adjust($roulette-green, $lightness: -10%) 0%,
             $roulette-green 50%,
-            darken($roulette-green, 10%) 100%
+            color.adjust($roulette-green, $lightness: -10%) 100%
           );
           color: white;
           font-size: 2em;
@@ -341,7 +347,8 @@ $glow-gold: rgba(255, 215, 0, 0.6);
             inset 0 2px 5px rgba(255, 255, 255, 0.2);
 
           &:hover {
-            background: lighten($roulette-green, 10%);
+            // background: lighten($roulette-green, 10%);
+            background: color.adjust($roulette-green, $lightness: 10%);
             box-shadow: 
               0 0 20px $glow-green,
               inset 0 -2px 5px rgba(0, 0, 0, 0.3);
@@ -414,9 +421,9 @@ $glow-gold: rgba(255, 215, 0, 0.6);
 
             &.red-number {
               background: linear-gradient(135deg, 
-                darken($roulette-red, 15%) 0%, 
-                $roulette-red 50%,
-                darken($roulette-red, 15%) 100%
+              color.adjust($roulette-red, $lightness: -15%) 0%, 
+              $roulette-red 50%,
+              color.adjust($roulette-red, $lightness: -15%) 100%
               );
               box-shadow: inset 0 -2px 5px rgba(0, 0, 0, 0.4);
 
@@ -428,7 +435,8 @@ $glow-gold: rgba(255, 215, 0, 0.6);
             &.black-number {
               background: linear-gradient(135deg, 
                 $roulette-black 0%, 
-                lighten($roulette-black, 10%) 50%,
+                // lighten($roulette-black, 10%) 50%,
+                // color.adjust($roulette-black, $lightness: 10%) 50%
                 $roulette-black 100%
               );
               box-shadow: inset 0 -2px 5px rgba(0, 0, 0, 0.6);
@@ -448,7 +456,10 @@ $glow-gold: rgba(255, 215, 0, 0.6);
 
           div {
             background: linear-gradient(135deg, 
-              darken($roulette-green, 10%) 0%, 
+              // darken($roulette-green, 10%) 0%, 
+              // $roulette-green 100%
+
+              color.adjust($roulette-green, $lightness: -10%) 0%,
               $roulette-green 100%
             );
             color: white;
@@ -466,7 +477,8 @@ $glow-gold: rgba(255, 215, 0, 0.6);
             flex: 1;
 
             &:hover {
-              background: lighten($roulette-green, 10%);
+              // background: lighten($roulette-green, 10%);
+              background: color.adjust($roulette-green, $lightness: 10%);
               box-shadow: 0 0 15px $glow-green;
             }
 
@@ -504,7 +516,10 @@ $glow-gold: rgba(255, 215, 0, 0.6);
 
             .bet-option {
               background: linear-gradient(135deg, 
-                darken($roulette-green, 10%) 0%, 
+                // darken($roulette-green, 10%) 0%, 
+                // $roulette-green 100%
+
+                color.adjust($roulette-green, $lightness: -10%) 0%,
                 $roulette-green 100%
               );
               color: white;
@@ -536,7 +551,8 @@ $glow-gold: rgba(255, 215, 0, 0.6);
               }
 
               &:hover {
-                background: lighten($roulette-green, 10%);
+                // background: lighten($roulette-green, 10%);
+                background: color.adjust($roulette-green, $lightness: 10%);
                 box-shadow: 0 0 15px $glow-green;
                 transform: translateY(-2px);
               }
@@ -551,7 +567,10 @@ $glow-gold: rgba(255, 215, 0, 0.6);
 
               &.red-bet {
                 background: linear-gradient(135deg, 
-                  darken($roulette-red, 15%) 0%, 
+                  // darken($roulette-red, 15%) 0%, 
+                  // $roulette-red 100%
+
+                  color.adjust($roulette-red, $lightness: -15%) 0%,
                   $roulette-red 100%
                 );
                 position: relative;
@@ -562,7 +581,7 @@ $glow-gold: rgba(255, 215, 0, 0.6);
                 }
 
                 &:hover {
-                  background: lighten($roulette-red, 5%);
+                  background: color.adjust($roulette-red, $lightness: 5%);
                   box-shadow: 0 0 15px $glow-red;
                 }
               }
@@ -570,18 +589,20 @@ $glow-gold: rgba(255, 215, 0, 0.6);
               &.black-bet {
                 background: linear-gradient(135deg, 
                   $roulette-black 0%, 
-                  lighten($roulette-black, 10%) 100%
+                  // lighten($roulette-black, 10%) 100%
+                  color.adjust($roulette-black, $lightness: 10%) 100%
                 );
                 position: relative;
 
                 .bet-label {
                   position: relative;
                   z-index: 2;
-                  color: #aaa;
+                  // color: #aaa;
                 }
 
                 &:hover {
-                  background: lighten($roulette-black, 15%);
+                  // background: lighten($roulette-black, 15%);
+                  background: color.adjust($roulette-black, $lightness: 15%);
                   box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
                 }
               }
@@ -668,7 +689,10 @@ $glow-gold: rgba(255, 215, 0, 0.6);
 
       .clear-bet-btn {
         background: linear-gradient(135deg, 
-          darken($roulette-red, 10%) 0%, 
+          // darken($roulette-red, 10%) 0%, 
+          // $roulette-red 100%
+
+          color.adjust($roulette-red, $lightness: -10%) 0%,
           $roulette-red 100%
         );
         color: white;
@@ -683,7 +707,10 @@ $glow-gold: rgba(255, 215, 0, 0.6);
 
       .place-bet-btn {
         background: linear-gradient(135deg, 
-          darken($roulette-green, 10%) 0%, 
+          // darken($roulette-green, 10%) 0%, 
+          // $roulette-green 100%
+
+          color.adjust($roulette-green, $lightness: -10%) 0%,
           $roulette-green 100%
         );
         color: white;
@@ -839,7 +866,10 @@ $glow-gold: rgba(255, 215, 0, 0.6);
 
           &.red {
             background: linear-gradient(135deg, 
-              darken($roulette-red, 10%) 0%, 
+              // darken($roulette-red, 10%) 0%, 
+              // $roulette-red 100%
+
+              color.adjust($roulette-red, $lightness: -10%) 0%,
               $roulette-red 100%
             );
           }
@@ -847,13 +877,17 @@ $glow-gold: rgba(255, 215, 0, 0.6);
           &.black {
             background: linear-gradient(135deg, 
               $roulette-black 0%, 
-              lighten($roulette-black, 10%) 100%
+              // lighten($roulette-black, 10%) 100%
+              color.adjust($roulette-black, $lightness: 10%) 100%
             );
           }
 
           &.green {
             background: linear-gradient(135deg, 
-              darken($roulette-green, 10%) 0%, 
+              // darken($roulette-green, 10%) 0%, 
+              // $roulette-green 100%
+
+              color.adjust($roulette-green, $lightness: -10%) 0%,
               $roulette-green 100%
             );
           }

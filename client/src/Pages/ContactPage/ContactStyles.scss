@@ -1,4 +1,4 @@
-@import "../../colorConstants.scss";
+@use "../../colorConstants.scss" as *;
 
 .contact-page-wrapper {
   min-height: 100vh;

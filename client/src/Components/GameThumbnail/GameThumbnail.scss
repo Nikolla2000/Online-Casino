@@ -1,4 +1,4 @@
-@import "../../colorConstants.scss";
+@use "../../colorConstants.scss" as *;
 
 .game-card {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);

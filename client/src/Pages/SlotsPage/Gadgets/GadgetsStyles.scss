@@ -1,3 +1,5 @@
+@use "sass:color"; 
+
 @font-face {
   font-family: 'Digital Numbers Regular';
   font-style: normal;
@@ -198,7 +200,7 @@ $text-dim: #b8c1ec;
 
   // Total Credits
   .total-credits-wrapper {
-    background: linear-gradient(135deg, $dark-card 0%, lighten($dark-card, 5%) 100%);
+    background: linear-gradient(135deg, $dark-card 0%, color.adjust($dark-card, $lightness: 5%) 100%);
     border: 2px solid rgba(93, 159, 255, 0.4);
     box-shadow: 
       0 8px 25px rgba(0, 0, 0, 0.4),
@@ -263,14 +265,14 @@ $text-dim: #b8c1ec;
         shake 0.5s ease-in-out,
         glow-border 0.6s ease-in-out infinite;
       background: linear-gradient(135deg, 
-        lighten($dark-card, 8%) 0%, 
-        lighten($dark-card, 12%) 100%
+      color.adjust($dark-card, $lightness: 8%) 0%, 
+      color.adjust($dark-card, $lightness: 12%) 100%
       );
     }
   }
 
   .bets-wrapper {
-    background: linear-gradient(135deg, $dark-card 0%, lighten($dark-card, 5%) 100%);
+    background: linear-gradient(135deg, $dark-card 0%, color.adjust($dark-card, $lightness: 5%) 100%);
     border: 2px solid rgba(93, 159, 255, 0.3);
     box-shadow: 
       0 5px 20px rgba(0, 0, 0, 0.4),
@@ -293,7 +295,7 @@ $text-dim: #b8c1ec;
     }
 
     .minus, .plus {
-      background: linear-gradient(135deg, $primary-blue 0%, lighten($primary-blue, 10%) 100%);
+      background: linear-gradient(135deg, $primary-blue 0%, color.adjust($primary-blue, $lightness: 10%) 100%);
       color: white;
       font-size: 2em;
       font-weight: bold;
@@ -305,7 +307,7 @@ $text-dim: #b8c1ec;
       box-shadow: inset 0 -2px 5px rgba(0, 0, 0, 0.2);
 
       &:hover {
-        background: linear-gradient(135deg, lighten($primary-blue, 10%) 0%, lighten($primary-blue, 15%) 100%);
+        background: linear-gradient(135deg, color.adjust($primary-blue, $lightness: 10%) 0%, color.adjust($primary-blue, $lightness: 15%) 100%);
         box-shadow: 
           inset 0 -2px 5px rgba(0, 0, 0, 0.2),
           0 0 15px rgba(93, 159, 255, 0.5);
@@ -353,7 +355,7 @@ $text-dim: #b8c1ec;
   }
 
   .max-bets-btn {
-    background: linear-gradient(135deg, $accent-purple 0%, lighten($accent-purple, 10%) 100%);
+    background: linear-gradient(135deg, $accent-purple 0%, color.adjust($accent-purple, $lightness: 10%) 100%);
     color: white;
     border: 2px solid rgba(157, 78, 221, 0.6);
     box-shadow: 
@@ -408,7 +410,7 @@ $text-dim: #b8c1ec;
   }
 
   .double-btn {
-    background: linear-gradient(135deg, darken($primary-green, 10%) 0%, $primary-green 100%);
+    background: linear-gradient(135deg, color.adjust($primary-green, $lightness: -10%) 0%, $primary-green 100%);
     color: white;
     border: 2px solid rgba(15, 216, 80, 0.6);
     box-shadow: 
@@ -469,7 +471,7 @@ $text-dim: #b8c1ec;
     width: 55px;
     height: 55px;
     border-radius: 50%;
-    background: linear-gradient(135deg, $dark-card 0%, lighten($dark-card, 8%) 100%);
+    background: linear-gradient(135deg, $dark-card 0%, color.adjust($dark-card, $lightness: 8%) 100%);
     border: 2px solid rgba(93, 159, 255, 0.3);
     box-shadow: 
       0 5px 20px rgba(0, 0, 0, 0.4),
@@ -517,7 +519,10 @@ $text-dim: #b8c1ec;
     &.muted {
       border-color: rgba(255, 68, 68, 0.4);
       background: linear-gradient(135deg, 
-        darken($dark-card, 5%) 0%, 
+        // darken($dark-card, 5%) 0%, 
+        // $dark-card 100%
+
+        color.adjust($dark-card, $lightness: -5%) 0%,
         $dark-card 100%
       );
   
@@ -535,7 +540,7 @@ $text-dim: #b8c1ec;
         0 0 20px rgba(249, 240, 71, 0.3);
 
       svg {
-        color: lighten($primary-yellow, 10%);
+        color: color.adjust($primary-yellow, $lightness: 10%);
         transform: scale(1.1);
       }
 
@@ -603,9 +608,9 @@ $text-dim: #b8c1ec;
 
       &:hover {
         background: radial-gradient(circle at 30% 30%, 
-          lighten(rgb(255, 157, 255), 5%) 0%, 
-          lighten(rgb(255, 102, 142), 5%) 50%, 
-          lighten(rgb(255, 31, 56), 5%) 100%
+        color.adjust(rgb(255, 157, 255), $lightness: 5%) 0%, 
+        color.adjust(rgb(255, 102, 142), $lightness: 5%) 50%, 
+        color.adjust(rgb(255, 31, 56), $lightness: 5%) 100%
         );
       }
     }
@@ -619,9 +624,9 @@ $text-dim: #b8c1ec;
 
       &:hover {
         background: linear-gradient(135deg, 
-          lighten(#5D9FFF, 5%) 0%, 
-          lighten(#B8DCFF, 5%) 50%, 
-          lighten(#6BBBFF, 5%) 100%
+        color.adjust(#5D9FFF, $lightness: 5%) 0%, 
+        color.adjust(#B8DCFF, $lightness: 5%) 50%, 
+        color.adjust(#6BBBFF, $lightness: 5%) 100%
         );
       }
     }

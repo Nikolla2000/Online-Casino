@@ -1,4 +1,4 @@
-@import "../../colorConstants.scss";
+@use "../../colorConstants.scss" as *;
 
 .goback-btn {
     display: inline-block;
