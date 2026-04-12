@@ -1,3 +1,10 @@
+.loader-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+}
+
 /* NORMAL SPINNER */
 .loader {
     z-index: 100000;

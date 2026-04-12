@@ -39,7 +39,7 @@ const GamesPage = () => {
           </p>
         </div>
 
-        {!isLoading ? (
+        {isLoading ? (
           <LoadingSpinner /> 
         ) : (
           <div className="games-grid">
