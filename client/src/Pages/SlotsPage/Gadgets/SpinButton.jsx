@@ -7,7 +7,7 @@ import { FormLabel } from 'react-bootstrap';
 import { toast } from 'react-hot-toast'
 import { animateCreditsIncrement, generateRandomSlots } from '../../../utils/slotsUtils';
 import { playSound } from '../../../utils/generalActions';
-import { gameAPI } from '../../../services/api/gameAPI.JS';
+import { gameAPI } from '../../../services/api/gameAPI.js';
 import { useCallback } from 'react';
 
 const SpinButton = () => {

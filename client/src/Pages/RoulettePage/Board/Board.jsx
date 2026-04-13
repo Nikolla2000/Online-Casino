@@ -22,7 +22,7 @@ import {
 import { animateCreditsIncrement } from '../../../utils/slotsUtils';
 import CoinRain from '../../SlotsPage/Gadgets/CoinRain'
 import { fadeOutAudio, playSound } from '../../../utils/generalActions';
-import { gameAPI } from '../../../services/api/gameAPI.JS';
+import { gameAPI } from '../../../services/api/gameAPI.js';
 
 const Board = () => {
   const dispatch = useDispatch();
