@@ -13,7 +13,7 @@ const Footer = () => {
             <Container maxWidth="xl" className="footer-content">
                 <Grid container spacing={4}>
 
-                    <Grid item xs={12} md={4}>
+                    <Grid item size={{xs: 12, md: 4}}>
                         <Box className="brand-section">
                             <Box className="logo-container">
                                 <CasinoIcon className="logo-icon" />
@@ -28,7 +28,7 @@ const Footer = () => {
                         </Box>
                     </Grid>
 
-                    <Grid item xs={12} md={2}>
+                    <Grid item size={{xs:12, md:2}}>
                         <Typography variant="h6" className="section-title">
                             Games
                         </Typography>
@@ -40,7 +40,7 @@ const Footer = () => {
                         </ul>
                     </Grid>
 
-                    <Grid item xs={12} md={2}>
+                    <Grid item size={{xs: 12, md:2}}>
                         <Typography variant="h6" className="section-title">
                             Information
                         </Typography>
@@ -52,7 +52,7 @@ const Footer = () => {
                         </ul>
                     </Grid>
 
-                    <Grid item xs={12} md={2}>
+                    <Grid item size={{xs:12, md:2}}>
                         <Typography variant="h6" className="section-title">
                             Support
                         </Typography>
@@ -64,7 +64,7 @@ const Footer = () => {
                         </ul>
                     </Grid>
 
-                    <Grid item xs={12} md={2}>
+                    <Grid item size={{xs:12, md:2}}>
                         <Box className="security-section">
                             <SecurityIcon className="security-icon" />
                             <Typography variant="h6" className="security-title">
@@ -85,8 +85,8 @@ const Footer = () => {
 
             <Box className="footer-bottom">
                 <Container maxWidth="xl">
-                    <Grid container alignItems="center" justifyContent="space-between">
-                        <Grid item>
+                    <Grid container sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
+                        <Grid size="auto">
                             <Typography className="copyright-text">
                                 © {new Date().getFullYear()} LuckySpin Casino. Created by{' '}
                                 <span className="author-name">Nikola Uzunov</span>. 
@@ -94,13 +94,13 @@ const Footer = () => {
                             </Typography>
                         </Grid>
                         
-                        <Grid item>
+                        <Grid size="auto">
                             <Typography className="warning-text">
                                 ⚠️ Games are simulative - money is not real!
                             </Typography>
                         </Grid>
 
-                        <Grid item>
+                        <Grid size="auto">
                             <Box className="social-icons">
                                 <IconButton 
                                     className="social-icon" 
