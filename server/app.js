@@ -17,7 +17,7 @@ const redisClient = require('./config/redis');
 
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:5173',
+    origin: process.env.NODE_ENV !== 'production' ? process.env.LOCAL_FRONTEND_URL: process.env.PRODUCTION_FRONTEND_URL,
     methods: ['GET', 'POST'],
     credentials: true
   }
@@ -71,8 +71,7 @@ const port = process.env.PORT || 3000;
 
 //CORS
 app.use(cors({
-  origin: 'http://localhost:5173',  //for local development, comment for production
-  // origin: 'https://uzu-online-casino.netlify.app', // uncomment for production
+  origin: process.env.NODE_ENV !== 'production' ? process.env.LOCAL_FRONTEND_URL: process.env.PRODUCTION_FRONTEND_URL,
   methods: 'GET,POST,PUT,PATCH,DELETE',
   allowedHeaders: 'Content-Type,Authorization',
   credentials: true,
