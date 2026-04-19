@@ -132,6 +132,11 @@ app.use('/server/v1/game', gameLimiter, gameRouter);
 //V2 routes
 app.use('/server/v2/users', userRouterV2);
 
+//health endpoint for automatic ping every 15 mins
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok' })
+});
+
 //Serve static files
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
