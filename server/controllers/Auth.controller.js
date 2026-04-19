@@ -38,10 +38,10 @@ const login = asyncHandler(async (req, res) => {
 
     res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
-        secure: false,
-        // secure: process.env.NODE_ENV === 'production',
-        sameSite: 'Strict',
-        // sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+        // secure: false,
+        secure: process.env.NODE_ENV === 'production',
+        // sameSite: 'Strict',
+        sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
         maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -122,7 +122,13 @@ const logout = async (req, res) => {
         console.error('Logout error:', error);
     }
 
-    res.clearCookie('refreshToken', { httpOnly: true, sameSite: 'Strict', secure: process.env.NODE_ENV === 'production', path: '/' });
+    res.clearCookie('refreshToken', { 
+        httpOnly: true,
+        // sameSite: 'Strict', 
+        sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+        secure: process.env.NODE_ENV === 'production', 
+        path: '/' 
+    });
     res.sendStatus(204);
 }
 
@@ -218,10 +224,10 @@ const oauthLogin = asyncHandler(async (req, res) => {
 
     res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
-        secure: false,
-        // secure: process.env.NODE_ENV === 'production',
-        sameSite: 'Strict',
-        // sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+        // secure: false,
+        secure: process.env.NODE_ENV === 'production',
+        // sameSite: 'Strict',
+        sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
         maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
