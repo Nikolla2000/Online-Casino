@@ -5,8 +5,7 @@ import toast from "react-hot-toast";
 
 
 const api = axios.create({
-  // baseURL: import.meta.env.VITE_LOCAL_SERVER_URL, // local url
-  baseURL: import.meta.env.VITE_PRODUCTION_SERVER_URL, // production server url
+  baseURL: import.meta.env.VITE_ENV !== 'production' ? import.meta.env.VITE_LOCAL_SERVER_URL : import.meta.env.VITE_PRODUCTION_SERVER_URL,
   withCredentials: true,
 })
 
