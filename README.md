@@ -11,10 +11,13 @@
 ![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?logo=docker&logoColor=white)
 ![WebSockets](https://img.shields.io/badge/Real--time-WebSockets-purple)
 
-[🎮 Live Demo](https://elite-casino.netlify.app/) · [📖 API Docs (Swagger)](https://online-casino.onrender.com/server/docs/) 
+[🎮 Live Demo](https://elite-casino.netlify.app/) · [📖 API Docs (Swagger)](https://online-casino.onrender.com/server/docs/)
 
 </div>
 
 ---
 
-> Elite Casino is not your typical tutorial project. It's a full-stack web application featuring live casino games, real-time communication, AI-powered assistance, Google OAuth, versioned REST APIs, Redis caching, and a CI/CD pipeline, all built with the architecture decisions and code quality you'd expect from a professional engineering team. A WORD OF CAUTION - This is NOT a real gambling site and I'm strongly AGAINTS gambling! This project serves just as as a technical sandbox where I can demonstrate my technical skills and challenge myself to learn new technologies. I chose a casino just because it is suitable for implementing complex logic and a lot of technologies.
+> Elite Casino is not your typical tutorial project. It's a full-stack web application featuring live casino games, real-time communication, AI-powered assistance, Google OAuth, versioned REST APIs, Redis caching, and a CI/CD pipeline, all built with the architecture decisions and code quality you'd expect from a professional engineering team.
+
+> [!WARNING]
+> **This is NOT a real gambling site and I'm strongly against gambling.** This project serves purely as a technical sandbox to demonstrate engineering skills and explore new technologies. A casino was chosen as the domain because it naturally demands complex logic, real-time systems, and a wide range of technical challenges — nothing more.
