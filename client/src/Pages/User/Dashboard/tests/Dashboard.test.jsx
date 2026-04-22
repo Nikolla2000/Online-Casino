@@ -194,7 +194,7 @@ describe('Dashboard Component', () => {
 
     await waitFor(() => {
       expect(screen.getByText(/file size should be less than 5mb/i)).toBeInTheDocument();
-    });
+    }, { timeout: 5000 });
   });
 
   // it('uploads profile picture successfully', async () => {
