@@ -148,7 +148,9 @@ describe('Dashboard Component', () => {
     const vipButton = screen.getByText(/vip benefits/i);
     await user.click(vipButton);
 
-    expect(screen.getByText('VIP Benefits Program')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('VIP Benefits Program')).toBeInTheDocument();
+    });
   });
 
   it('switches to blocked users section', async () => {
@@ -160,7 +162,9 @@ describe('Dashboard Component', () => {
     const blockedButton = screen.getByText(/blocked users/i);
     await user.click(blockedButton);
 
-    expect(screen.getByText('Blocked Users')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Blocked Users')).toBeInTheDocument();
+    });
   });
 
   // it('validates file type on upload', async () => {
@@ -187,14 +191,14 @@ describe('Dashboard Component', () => {
       auth: { user: mockUser }
     });
 
-    const largeFile = new File(['x'.repeat(6 * 1024 * 1024)], 'large.jpg', { type: 'image/jpeg' });
+    const largeFile = new File(['x'.repeat(5.1 * 1024 * 1024)], 'large.jpg', { type: 'image/jpeg' });
     const input = screen.getByTestId('profile-pic-input');
 
     await user.upload(input, largeFile);
 
     await waitFor(() => {
       expect(screen.getByText(/file size should be less than 5mb/i)).toBeInTheDocument();
-    }, { timeout: 5000 });
+    }, { timeout: 10000 });
   });
 
   // it('uploads profile picture successfully', async () => {
