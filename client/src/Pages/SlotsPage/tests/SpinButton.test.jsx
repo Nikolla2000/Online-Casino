@@ -2,11 +2,11 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { screen, waitFor, act, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import SpinButton from '../Gadgets/SpinButton';
-import { gameAPI } from '../../../services/api/gameAPI.JS';
+import { gameAPI } from '../../../services/api/gameAPI.js';
 import { renderWithProviders } from '../../../utils/testUtils';
 import { toast } from 'react-hot-toast';
 
-vi.mock('../../../services/api/gameAPI.JS', () => ({
+vi.mock('../../../services/api/gameAPI.js', () => ({
   gameAPI: { fetchPlaySlotsRound: vi.fn() }
 }));
 
