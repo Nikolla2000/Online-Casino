@@ -4,6 +4,9 @@ import userEvent from '@testing-library/user-event';
 import LoginForm from './LoginForm';
 import { renderWithProviders } from '../../../utils/testUtils';
 
+import api from '../../../axiosConfig';
+vi.mock('../../../axiosConfig');
+
 const mockNavigate = vi.fn();
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
@@ -115,21 +118,21 @@ describe('LoginForm', () => {
 
   it('disables submit button while submitting', async () => {
     const user = userEvent.setup();
+  
+    api.post.mockReturnValueOnce(new Promise(() => {}));
+  
     renderWithProviders(<LoginForm handleClose={mockHandleClose} />);
-
-    const usernameInput = screen.getByPlaceholderText(/enter your username/i);
-    const passwordInput = screen.getByPlaceholderText(/enter your password/i);
-
-    await user.type(usernameInput, 'testuser');
-    await user.type(passwordInput, 'password123');
-
+  
+    await user.type(screen.getByPlaceholderText(/enter your username/i), 'testuser');
+    await user.type(screen.getByPlaceholderText(/enter your password/i), 'password123');
+  
     const submitButton = screen.getByRole('button', { name: /login to play/i });
-    
-    await user.click(submitButton);
-
+  
+    user.click(submitButton);
+  
     await waitFor(() => {
       expect(submitButton).toBeDisabled();
-    }, { timeout: 100 });
+    });
   });
 
   it('shows register link', () => {
