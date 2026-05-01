@@ -7,7 +7,7 @@ import { userAPI } from '../../../../services/api/userAPI';
 import api from '../../../../axiosConfig';
 import { toast } from 'react-hot-toast';
 
-vi.mock('/../../../services/api/userAPI', () => ({
+vi.mock('../../../services/api/userAPI', () => ({
   userAPI: { updatePreferences: vi.fn() }
 }));
 vi.mock('../../../axiosConfig', () => ({
