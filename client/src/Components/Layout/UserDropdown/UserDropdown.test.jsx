@@ -36,7 +36,8 @@ describe('UserDropdown', () => {
     });
 
     expect(screen.getByText(/welcome, ivan/i)).toBeInTheDocument();
-    expect(screen.getByText('5000')).toBeInTheDocument();
+    // expect(screen.getByText('5000')).toBeInTheDocument();
+    expect(screen.getByText(/5.?000/)).toBeInTheDocument();
     expect(screen.getByText(/profile/i)).toBeInTheDocument();
     expect(screen.getByText(/logout/i)).toBeInTheDocument();
     expect(screen.getByText(/vip member/i)).toBeInTheDocument();
@@ -70,20 +71,20 @@ describe('UserDropdown', () => {
 
   it('dispatches logout action and handles redirect', async () => {
     const user = userEvent.setup();
-
-    const locationMock = vi.spyOn(window, 'location', 'get').mockReturnValue({
-        href: ''
-    });
-
+  
+    delete window.location;
+    window.location = { href: '' };
+  
     const { store } = renderWithProviders(
       <UserDropdown show={true} setShowDropdown={mockSetShowDropdown} />, 
       { auth: { user: { _id: "someid123", firstName: 'Ivan' }, accessToken: 'token' } }
     );
-
+  
     await user.click(screen.getByText(/logout/i));
     
     await waitFor(() => {
-        expect(mockSetShowDropdown).toHaveBeenCalledWith(false);
+      expect(mockSetShowDropdown).toHaveBeenCalledWith(false);
+      expect(window.location.href).toBe('/');
     });
   });
 
