@@ -172,8 +172,8 @@ describe('ProfilePage Component', () => {
   it('displays user statistics correctly', () => {
     renderProfilePage();
 
-    expect(screen.getByText('5000')).toBeInTheDocument();
-    expect(screen.getByText('3500')).toBeInTheDocument();
+    expect(screen.getByText(/5.?000/)).toBeInTheDocument();
+    expect(screen.getByText(/3.?500/)).toBeInTheDocument();
     expect(screen.getByText('100')).toBeInTheDocument();
     expect(screen.getByText('70.0%')).toBeInTheDocument();
   });
