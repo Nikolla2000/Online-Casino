@@ -7,14 +7,14 @@ import { userAPI } from '../../../../services/api/userAPI';
 import api from '../../../../axiosConfig';
 import { toast } from 'react-hot-toast';
 
-vi.mock('../../../services/api/userAPI', () => ({
+vi.mock('../../../../services/api/userAPI', () => ({
   userAPI: { updatePreferences: vi.fn() }
 }));
-vi.mock('../../../axiosConfig', () => ({
+vi.mock('../../../../axiosConfig', () => ({
   default: vi.fn()
 }));
 
-vi.mock('../../../hooks/userUserStats', () => ({
+vi.mock('../../../../hooks/userUserStats', () => ({
   useUserStats: () => ({
     data: { stats: { totalRoundsPlayed: 150 }, favoriteGame: 'slots' },
     isLoading: false,
@@ -22,7 +22,7 @@ vi.mock('../../../hooks/userUserStats', () => ({
   })
 }));
 
-vi.mock('../../../hooks/useRecentActivity', () => ({
+vi.mock('../../../../hooks/useRecentActivity', () => ({
   useRecentActivity: () => ({
     data: [],
     isLoading: false,
@@ -30,7 +30,7 @@ vi.mock('../../../hooks/useRecentActivity', () => ({
   })
 }));
 
-vi.mock('../../../hooks/useGameHistory', () => ({
+vi.mock('../../../../hooks/useGameHistory', () => ({
   useGameHistory: () => ({
     data: null,
     isLoading: false,
