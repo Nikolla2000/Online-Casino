@@ -23,9 +23,9 @@ describe('AI Chat Components', () => {
     vi.clearAllMocks();
   });
 
-  // ============================================
+  // ===========================================
   // FloatingChatButton Tests
-  // ============================================
+  // ===========================================
   describe('FloatingChatButton', () => {
     it('renders the button', () => {
       renderWithProviders(<FloatingChatButton />);
