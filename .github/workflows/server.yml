@@ -39,7 +39,8 @@ jobs:
           NODE_ENV: test
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           REFRESH_TOKEN_SECRET: ${{ secrets.REFRESH_TOKEN_SECRET }}
-
+          MONGO_URL: ${{ secrets.MONGO_URL }}
+          GROQ_AI_API_KEY: ${{ secrets.GROQ_AI_API_KEY }}
   deploy:
     name: Deploy to Render
     needs: test
