@@ -21,3 +21,40 @@
 
 > [!WARNING]
 > **This is NOT a real gambling site and I'm strongly against gambling.** This project serves purely as a technical sandbox to demonstrate my technical skills and explore new technologies. A casino platform was chosen as the domain because it naturally demands complex logic, real-time systems, and a wide range of technical challenges, nothing more.
+
+## ✨ Features
+
+### 🔐 Authentication & Authorization
+- Secure **JWT-based** authentication with protected routes
+- **Google OAuth 2.0** sign-in for frictionless onboarding
+- Guest access with limited functionality across the platform
+
+### 📊 Dashboard
+- Personal stats — total credits wagered, total wins, total rounds played, favorite game
+- Recent activity feed and full game history
+- Personal info display (name, country) and **VIP benefits** panel
+
+### 🎮 Games
+- Two fully interactive casino games — **Slots** and **Roulette**
+- Each game features custom logic, dynamic UI and persistent history
+
+### 👥 Social & User Interaction
+- **Live users panel** displaying currently online players
+- View other users' profiles, send direct messages or block them
+
+### 💬 Real-time Communication
+- **Private messaging** between users powered by WebSockets
+- Fully live — no page refresh needed, instant delivery
+
+### 🤖 AI Chatbot Assistant
+- Integrated live chatbot powered by **Groq AI** (`openai/gpt-4o-mini` model)
+- Provides casino tips, game guidance and general site assistance
+- Different experience for guests vs authenticated users
+
+### 📧 Contact & Notifications
+- Contact form with **email delivery** via Nodemailer
+- Toast notifications and real-time UI feedback throughout the app
+
+### 🎨 UI & UX
+- Fully **responsive** across all screen sizes
+- Smooth **animations**, **skeleton loaders** and intuitive navigation
