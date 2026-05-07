@@ -1,10 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import videoBackground from '/images/background-video4.mp4';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import ButtonLink from '../../../../Components/Buttons/ButtonLink/ButtonLink';
+import { useDispatch } from 'react-redux';
+import { showLogin } from '../../../../redux/features/auth/authModalsSlice';
 
 const HeaderSection = () => {
   const [isVisible, setIsVisible] = useState(false);
   const videoRef = useRef(null);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setIsVisible(true);
@@ -57,15 +62,17 @@ const HeaderSection = () => {
         </p>
 
         <div className="cta-buttons">
-          <Link to="/games" className="cta-button primary">
-            <span className="button-text">Start Playing</span>
-            <span className="button-glow"></span>
-            <span className="button-sparkle">🎰</span>
-          </Link>
+          <ButtonLink variant='primary' onClick={() => dispatch(showLogin())}>
+            Sign in
+          </ButtonLink>
           
-          <Link to="/about" className="cta-button secondary">
-            <span className="button-text">Learn More</span>
-          </Link>
+          <ButtonLink variant='secondary' onClick={() => navigate('/about')}>
+            Learn more
+          </ButtonLink>
+
+          <ButtonLink variant='primary' onClick={() => navigate('/games')}>
+            View Games
+          </ButtonLink>
         </div>
 
         <div className="stats-container">
