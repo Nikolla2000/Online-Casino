@@ -4,9 +4,25 @@ import CasinoIcon from '@mui/icons-material/Casino';
 import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import SecurityIcon from '@mui/icons-material/Security';
 import "./FooterStyles.scss";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { setFromGamesPage, showLogin } from '../../redux/features/auth/authModalsSlice';
+
 
 const Footer = () => {
+    const { user, accessToken } = useSelector(state => state.auth);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const handleClickGameLink = (gameLink) => {
+        if (!user || !accessToken) {
+            dispatch(showLogin());
+            dispatch(setFromGamesPage(gameLink));
+        } else {
+            navigate(gameLink);
+        }
+    }
+
     return (
         <Box component="footer" className="casino-footer">
 
@@ -33,8 +49,12 @@ const Footer = () => {
                             Games
                         </Typography>
                         <ul className="footer-links">
-                            <li><Link to="/games/slots">Slot Machines</Link></li>
+                            {/* <li><Link to="/games/slots">Slot Machines</Link></li>
                             <li><Link to="/games/roulette">Roulette</Link></li>
+                            <li><Link to="/development">Blackjack</Link></li>
+                            <li><Link to="/development">Poker</Link></li> */}
+                            <li><a href='#' onClick={() => handleClickGameLink('games/slots')}>Slot Machines</a></li>
+                            <li><a href='#' onClick={() => handleClickGameLink('games/roulette')}>Roulette</a></li>
                             <li><Link to="/development">Blackjack</Link></li>
                             <li><Link to="/development">Poker</Link></li>
                         </ul>

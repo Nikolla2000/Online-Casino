@@ -3,6 +3,7 @@ import { screen } from '@testing-library/react';
 import { renderWithProviders } from '../../utils/testUtils';
 import HeaderSection from './Sections/HeaderSection/HeaderSection';
 import IntroductionSection from './Sections/IntroductionSection/IntroductionSection';
+import userEvent from '@testing-library/user-event';
 
 vi.mock('/images/background-video4.mp4', () => ({
     default: 'mock-video-file'
@@ -44,14 +45,20 @@ describe('Main Page Components', () => {
       expect(screen.queryAllByText(/Players Online/i)[0]).toBeInTheDocument();
     });
 
-    it('contains correct navigation links', () => {
+    it('contains correct navigation links', async () => {
+      const user = userEvent.setup();
       renderWithProviders(<HeaderSection />);
 
-      const startPlayingBtn = screen.getByRole('link', { name: /start playing/i });
-      const learnMoreBtn = screen.getByRole('link', { name: /learn more/i });
+      const viewGamesBtn = screen.getByRole('button', { name: /view games/i });
+      const learnMoreBtn = screen.getByRole('button', { name: /learn more/i });
+      const signInBtn = screen.getByRole('button', { name: /sign in/i });
 
-      expect(startPlayingBtn).toHaveAttribute('href', '/games');
-      expect(learnMoreBtn).toHaveAttribute('href', '/about');
+      await user.click(viewGamesBtn);
+      expect(window.location.pathname).toBe('/games');
+
+      await user.click(learnMoreBtn);
+      expect(window.location.pathname).toBe('/about')
+      expect(signInBtn).toBeInTheDocument();
     });
 
     it('renders the video background', () => {
