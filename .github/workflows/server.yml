@@ -37,10 +37,20 @@ jobs:
         run: npm test
         env:
           NODE_ENV: test
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          ACCESS_TOKEN_SECRET: ${{ secrets.JWT_SECRET }}
           REFRESH_TOKEN_SECRET: ${{ secrets.REFRESH_TOKEN_SECRET }}
           MONGO_URL: ${{ secrets.MONGO_URL }}
           GROQ_AI_API_KEY: ${{ secrets.GROQ_AI_API_KEY }}
+          GROQ_AI_MODEL: ${{ secrets.GROQ_AI_MODEL }}
+          GROQ_AI_GUEST_PROMPT: ${{ secrets.GROQ_AI_GUEST_PROMPT }}
+          GROQ_AI_LOGGED_IN_PROMPT: ${{ secrets.GROQ_AI_LOGGED_IN_PROMPT }}
+          ADDITIONAL_INFO: ${{ secrets.ADDITIONAL_INFO }}
+          LOCAL_FRONTEND_URL: ${{ secrets.LOCAL_FRONTEND_URL }}
+          PRODUCTION_FRONTEND_URL: ${{ secrets.PRODUCTION_FRONTEND_URL }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_SERVICE: ${{ secrets.SMTP_SERVICE }}
+          CONTACT_EMAIL: ${{ secrets.CONTACT_EMAIL }}
   deploy:
     name: Deploy to Render
     needs: test
