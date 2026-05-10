@@ -61,6 +61,46 @@
 - Smooth **animations**, **skeleton loaders** and intuitive navigation
 
 
+## 🎮 Games
+
+### 🎰 Slot Machine
+
+The slot machine is a fully custom-built game with no libraries and templates. Every part of the logic, from reel generation to win calculation, is written from scratch.
+
+#### How it works
+
+The game board consists of a **3×5 grid** — 3 rows and 5 columns of symbols. Each symbol is one of 12 possible values, visually represented as classic slot imagery (fruits, sevens, card signs and more. Underneath every visual, a number from 1 to 12 maps to a specific symbol and its associated payout tier.
+
+When the player hits the **Spin**  button , a single POST request is sent to the backend carrying only the `betAmount`. Everything else happens server-side. The entire game outcome is determined server-side, making it impossible to manipulate from the browser.
+
+#### Server side logic
+
+All game logic lives inside a dedicated `SlotsService` class, keeping it fully decoupled from the controller layer. The controller receives the request, extracts the user ID from the JWT middleware and the bet amount from the request body, and hands both off to the service. From that point on, `SlotsService` takes over and runs through a strict sequence of steps:
+
+1. **Validation** - `validateBet()` ensures the bet is a valid number within the allowed range (100–1000 credits). Invalid or out-of-range bets are rejected before anything else runs and will throw an error.
+2. **Balance check** - the user's current credits are verified against the bet amount. Insufficient funds throw an early error.
+3. **Reel generation** - `generateSlotReels()` produces a new 2D Array of 3×5 grid of random integers from 1 to 12.
+4. **Win calculation** - `calculateWin()` evaluates all **9 paylines** across the grid - three straight rows, two diagonals, V and inverted V patterns, and two zigzag lines. Each payline is checked with `checkPayLine()`, which counts consecutive matching symbols left to right from the first position.
+5. **Payout** - `getMultiplier()` determines the payout for each winning combination based on both the symbol's tier and the number of consecutive matches (2 through 5). A 5-of-a-kind Diamond pays 100× the bet; a 2-of-a-kind King pays 0.1×. Multiple winning paylines stack, so the total multiplier is the sum of all active lines.
+6. **Database update** - the user's balance, total wagered, total won and games played are updated atomically in a single `$inc` operation.
+7. **History & transactions** - in production, two additional DB writes happen - a `GameHistory` record is created for the round and separate `Transaction` records are written for the bet and, if applicable, the win. In development this is skipped to keep the database clean.
+8. **Cache invalidation** - after every round, some Redis keys for user data are invalidated so the dashboard always reflects fresh data on the next request.
+
+A single comprehensive response object - reels, winning lines, multiplier, net profit, new balance is returned to the client in one response.
+
+---
+
+#### Client experience
+
+While the server side processes the round, the frontend runs a **reel spinning animation**, mimicking a real slot machine. When the response arrives, the animation resolves to display the actual results. If its a winning round, it triggers a **win animation** and a **sound effect**.
+
+Additional player controls:
+
+- **Auto Play** - automatically triggers the next spin as soon as the current round completes, without manual input
+- **Max Bet / Double Bet** - quick-set buttons for common bet adjustments
+- **Sound toggle** - mute and unmute sound during play
+
+
 ## ⚙️ Under the Hood
 
 ### 🖥️ Frontend
