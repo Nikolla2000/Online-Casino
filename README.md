@@ -88,8 +88,6 @@ All game logic lives inside a dedicated `SlotsService` class, keeping it fully d
 
 A single comprehensive response object - reels, winning lines, multiplier, net profit, new balance is returned to the client in one response.
 
----
-
 #### Client experience
 
 While the server side processes the round, the frontend runs a **reel spinning animation**, mimicking a real slot machine. When the response arrives, the animation resolves to display the actual results. If its a winning round, it triggers a **win animation** and a **sound effect**.
@@ -100,9 +98,107 @@ Additional player controls:
 - **Max Bet / Double Bet** - quick-set buttons for common bet adjustments
 - **Sound toggle** - mute and unmute sound during play
 
-<p align="center">
+<p>
   <img src="./client/public/images/screenshot_slots.png" alt="Slots Preview" width="600">
 </p>
+
+
+### 🎡 Roulette
+
+The roulette game is a digital recreation of European roulette, built entirely from scratch with a full suite of real betting options, server-side outcome generation and frontend animation sequence. 
+
+---
+
+#### Game board
+
+It has an interactive game board featuring 37 numbers - **0 through 36**  Each number cell is coloured according to the standard roulette table: red, black and green for zero. The player selects their bet type by clicking directly on the board, then builds their stake using physical chip buttons.
+
+---
+
+#### Bet types
+
+The game supports the full range of standard roulette bets:
+
+| Bet Type | Description | Payout |
+|----------|-------------|--------|
+| Single Number | Any specific number from 0 to 36 | **35:1** |
+| Red / Black | All red or all black numbers | **1:1** |
+| Odd / Even | All odd or all even numbers (0 excluded) | **1:1** |
+| Low / High | 1–18 or 19–36 | **1:1** |
+| 1st Dozen | Numbers 1–12 | **2:1** |
+| 2nd Dozen | Numbers 13–24 | **2:1** |
+| 3rd Dozen | Numbers 25–36 | **2:1** |
+
+The player can toggle a selection off by clicking it again, and cannot change the bet or place a new one while the wheel is spinning.
+
+---
+
+#### Chip system
+
+Rather than typing in an amount, the player places their bet using **5 chip denominations**: 5, 10, 25, 50 and 100 credits. Each click on a chip adds its value to the current bet.
+
+---
+
+#### Placing the bet - what happens and when
+
+When the player clicks **Place Bet**, the frontend runs a series of validations locally before any network request is made. If any check fails, no request is sent.
+
+If everything is valid, the player's displayed credit balance is **immediately decremented** by the bet amount on the frontend, giving instant visual feedback before the server responds. The request is then sent to the backend with three values: `betAmount`, `betType` and `betValue` (the specific number, if applicable).
+
+---
+
+#### Server side logic
+
+All game logic lives inside a dedicated `RouletteService` class, following the same architectural pattern as `SlotsService` -  decoupled from the controller layer, instantiated as a singleton and exported as a single instance.
+
+**Step 1 - Bet validation (`validateBet`)** - The incoming bet is validated against a strict allowlist of valid bet types
+
+**Step 2 - User validation and balance check** - this step calls a shared helper — `validateUserAndCredits()` . It fetches the user, throws a 404 if not found, and throws a 400 if the balance is insufficient.
+
+**Step 3 - Spin result generation** - `generateResult()` generates a random integer between 0 and 36 using `Math.random()`, then determines its colour by checking it against the hardcoded `RED_NUMBERS` and `BLACK_NUMBERS` arrays.
+
+**Step 4 - Win calculation** - `calculateWin()` receives the spin result, the bet type, the bet value and the bet amount. Every possible bet type is evaluated:
+- `number` — wins only if `randNumber === betValue`
+- `red` / `black` — wins if the result colour matches
+- `even` / `odd` — wins if the number matches parity, with 0 explicitly excluded
+- `low` / `high` — wins if the number falls within 1–18 or 19–36
+- `first_dozen` / `second_dozen` / `third_dozen` — wins based on the number's range
+
+The final win amount is calculated as `betAmount × (multiplier + 1)` — the `+1` returns the original stake along with the profit, matching standard casino payout convention.
+
+**Step 5 - Database update** - The user's record is updated with a single atomic `$inc` operation.
+
+**Step 6 - Game history and transactions (production only)** -nIdentical pattern to the slots game.
+
+**Step 7 — Logging the outcome and cache invalidation**
+
+The full result object is returned: spin result, bet details, isWin, winAmount, multiplier, net profit and the balance before and after.
+
+---
+
+#### Client side animation sequence
+
+The frontend runs a timed multi-stage animation sequence  to feel like watching a real roulette wheel slow down and settle.
+
+1. **Wheel starts spinning** - immediately on click, the wheel animation begins.
+2. **Request fires**
+3. **Ball enters** - 1.5 seconds after the response arrives, the ball rolling sound plays and the ball animation starts.
+4. **Wheel slows** - 6 seconds later, the wheel spinning animation stops, simulating the wheel decelerating.
+5. **Ball settles** - 2 seconds after that, the ball animation stops and the result is revealed. The ball audio fades out gracefully.
+6. **Win sequence** - if the round is a win, a win sound plays, followed 1.5 seconds later by a coin payout sound and an animated credit increment that counts the balance up from its current value to the new total.
+7. **Board resets** - 3 seconds after the result is shown, the result clears and the board is ready for the next round.
+
+If the request fails at any point, the balance is restored to its pre-bet value, the spinning state is cleared and an error toast is displayed, leaving a clean state.
+
+#### Last results panel
+
+Below the board, a **Last Results** strip displays the outcomes of recent rounds as coloured bubbles - red, black or green.
+
+<p>
+  <img src="./client/public/images/screenshot_roulette.png" alt="Slots Preview" width="600">
+</p>
+
+---
 
 ## ⚙️ Under the Hood
 
