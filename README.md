@@ -100,6 +100,9 @@ Additional player controls:
 - **Max Bet / Double Bet** - quick-set buttons for common bet adjustments
 - **Sound toggle** - mute and unmute sound during play
 
+<p align="center">
+  <img src="./client/public/images/screenshot_slots.png" alt="Slots Preview" width="600">
+</p>
 
 ## ⚙️ Under the Hood
 
