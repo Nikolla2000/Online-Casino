@@ -33,6 +33,10 @@ graph TD
     B --> F["🔐 Google OAuth 2.0"]
 ```
 
+<p>
+  <img src="./client/public/images/project_architecture_diagram.svg" alt="Architecture Diagram" width="800">
+</p>
+
 ## ✨ Features
 
 ### 🔐 Authentication & Authorization
