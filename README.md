@@ -34,7 +34,7 @@ graph TD
 ```
 
 <p>
-  <img src="./client/public/images/project_architecture_diagram.svg" alt="Architecture Diagram" width="800">
+  <img src="./client/public/images/project_architecture_diagram.svg" alt="Architecture Diagram" width="800" style="background-color:white;">
 </p>
 
 ## ✨ Features
