@@ -22,6 +22,17 @@
 > [!WARNING]
 > **This is NOT a real gambling site and I'm strongly against gambling.** This project serves purely as a technical sandbox to demonstrate my technical skills and explore new technologies. A casino platform was chosen as the domain because it naturally demands complex logic, real-time systems, and a wide range of technical challenges, nothing more.
 
+## 🏗️ Architecture diagram
+
+```mermaid
+graph TD
+    A["⚛️ React 18 — Netlify"] -->|"REST · Socket.io"| B["🟢 Express.js · Node 22 — Render"]
+    B --> C["🍃 MongoDB Atlas"]
+    B --> D["🔴 Upstash Redis"]
+    B --> E["🤖 Groq AI API"]
+    B --> F["🔐 Google OAuth 2.0"]
+```
+
 ## ✨ Features
 
 ### 🔐 Authentication & Authorization
