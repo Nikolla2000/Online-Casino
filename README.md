@@ -25,7 +25,7 @@
 ## 🏗️ Architecture diagram
 
 <p>
-  <img src="./client/public/images/project_architecture_diagram_png_variant.png" alt="Architecture Diagram" width="800"/>
+  <img src="./client/public/images/project_architecture_diagram_png_variant.png" alt="Architecture Diagram" width="1000"/>
 </p>
 
 ## ✨ Features
