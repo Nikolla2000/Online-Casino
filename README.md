@@ -24,17 +24,8 @@
 
 ## 🏗️ Architecture diagram
 
-```mermaid
-graph TD
-    A["⚛️ React 18 — Netlify"] -->|"REST · Socket.io"| B["🟢 Express.js · Node 22 — Render"]
-    B --> C["🍃 MongoDB Atlas"]
-    B --> D["🔴 Upstash Redis"]
-    B --> E["🤖 Groq AI API"]
-    B --> F["🔐 Google OAuth 2.0"]
-```
-
 <p>
-  <img src="./client/public/images/project_architecture_diagram.svg" alt="Architecture Diagram" width="800" style="background-color:white;">
+  <img src="./client/public/images/project_architecture_diagram_png_variant.png" alt="Architecture Diagram" width="800"/>
 </p>
 
 ## ✨ Features
