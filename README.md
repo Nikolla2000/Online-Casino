@@ -259,3 +259,60 @@ Below the board, a **Last Results** strip displays the outcomes of recent rounds
 - **Docker** - separate `Dockerfile` for the frontend and backend, orchestrated with Docker Compose. Running the entire stack locally requires a single command, with no manual environment setup. Tried to follow the standard ways teams onboard new developers in professional environments.
 
 - **CI/CD via GitHub Actions** - every push to the repository triggers an automated pipeline for both frontend and backend. Tests run first, and the deployment only proceeds if the full test suite passes. The frontend is deployed to **Netlify** and the backend to **Render**. Every change ships through a verified, automated process. No manual deployments and no "it works on my machine".
+
+
+## 💪 Challenges I faced & Solutions
+
+---
+
+### Live Private Chat with WebSockets
+
+Web sockets were a completely new technology for me my the goal was not to build a simple shared chat room for everyone, which is not that complicated but a private, direct messaging system between individual users like in Messenger, WhatsApp etc..
+
+My core challenge was: **how do I route a message to exactly one other person, persist it, and restore the full conversation history when the chat is reopened?**
+
+The solution uses two MongoDB models working together. A `Chat` document represents a conversation between two participants. It stores their user IDs in a `participants` array and tracks the last message and last activity timestamp. A `Message` document represents a single message. It stores the `chatId`, `senderId`, `receiverId` and `content`, and is linked back to its parent `Chat`. When a user opens a conversation, the backend queries all `Message` documents where the `chatId` matches, ordered chronologically.
+
+On the WebSocket side, each conversation gets its own Socket.io room (`chat_{chatId}`). When a user joins a chat, the server verifies that their ID is in the `participants` array before admitting them to the room, so messages are only emitted to users who actually belong to that conversation.
+
+An additional edge case was handling **temporary chats**. That is when a user initiates a conversation for the first time and no `Chat` document exists yet. Rather than blocking the UI, a temporary chat ID (`temp_*`) is created on the frontend immediately. When the first message is sent, the server creates the real `Chat` document, saves the `Message`, and emits a `chat_created` event back to both participants with the real chat ID, at which point the frontend replaces the temporary ID with the permanent one.
+
+The frontend manages all of this through a `chatSlice` in Redux, with socket event listeners (`private_message`, `user_typing_private`, `messages_read`, `chat_created`) registered and cleaned up inside `useEffect` hooks to avoid duplicate listeners or memory leaks across re-renders.
+
+---
+
+### Game Logic, Multipliers and Frontend Synchronization
+
+I didn't use any libraries for the game logic, everything is build from scratch and that was a bit challenging. For the slot machine, the most complex part was the **win calculation engine**: evaluating 9 distinct paylines across a 3×5 grid, counting consecutive left-to-right symbol matches per line, and applying a per-symbol payout table that covers 4 match levels (2 through 5-of-a-kind) for each of 12 symbols. Multiple winning paylines stack, so the final multiplier is the sum of all active lines, which had to be carefully tested to avoid edge cases where wins were double-counted or missed.
+
+For roulette, the challenge was more or less similar. This time it was implementing every standard bet type, plus edge cases like `even` and `odd` explicitly excluding zero, and column bets mapping to specific non-consecutive number sets.
+
+The second half of the challenge was **synchronizing the backend response with the frontend animations**. Both games are driven by `setTimeout` chains that simulate the physical feel of the machine - reels spinning, the wheel decelerating, the ball settling. The timing had to be tuned so that animations feel natural and the result is revealed at exactly the right moment, not too early and not too late. Sound effects are layered into the same sequence.
+
+---
+
+### JWT Authentication and Token Refresh
+
+Had a bit of difficulties how to exatcly setup tokens in redux state and how to keep the user signed in after his access token expires, not make him login again every 15 mins.
+
+The access token is stored in Redux state (not in `localStorage` or `sessionStorage`, to avoid XSS exposure). The refresh token is stored in an HTTP-only cookie, so JavaScript cannot read or tamper with it. When the access token expires, any outgoing request will receive a `401` response.
+
+The solution is an **Axios interceptor** that sits between every request and the server. When it detects a `401`, it automatically fires a silent request to the `/refresh` endpoint. If the refresh token is still valid, the server issues a new access token, the interceptor updates Redux state, and then **retries the original failed request**, all that without the user ever seeing an error or being redirected to a login page. If the refresh also fails (expired or invalid), the user is logged out.
+
+---
+
+### UI/UX - Animations, Sounds, Game Feel
+
+I've not used any pre-built templates or UI libraries for the games. Everything - the slot reel grid, the roulette board layout, the chip system, the spinning animations, is built from scratch with pure React and CSS.
+
+The biggest challenge here was that specific **game feel**: making interactions feel satisfying and responsive rather than purely functional. This meant carefully coordinating `setTimeout` chains for multi-stage animation sequences, layering sound effects at the right moments, visually reflecting intermediate states (spinning, waiting, win, loss) in the UI without causing layout shifts, and handling edge cases like what happens if the backend returns an error mid-animation, making sure the UI always recovers to a clean, playable state.
+
+---
+
+### Frontend Testing Setup with Vitest
+
+That was a hassle.. Writing frontend tests for components that depend on multiple providers like Redux store, React Query, React Router, toast notifications, required very specific setup and turned out to be significantly more complex than testing isolated functions.
+
+The solution is a custom `renderWithProviders` test utility that wraps any component in the full provider tree before rendering: a pre-configured Redux store (seeded with optional `initialState`), a `QueryClientProvider` with retries and caching disabled (so tests are fast and deterministic), a `BrowserRouter` and a `Toaster`. Every test simply calls `renderWithProviders(component, initialState)` and gets back the standard React Testing Library result plus a reference to the store for state assertions.
+
+Alongside this, `mockUseQuery` and `mockUseMutation` helpers allow any TanStack Query hook to be replaced with a predictable mock object in unit tests, controlling the `data`, `isLoading` and `isError` states without making real network requests.
