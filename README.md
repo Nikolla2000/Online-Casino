@@ -316,3 +316,43 @@ That was a hassle.. Writing frontend tests for components that depend on multipl
 The solution is a custom `renderWithProviders` test utility that wraps any component in the full provider tree before rendering: a pre-configured Redux store (seeded with optional `initialState`), a `QueryClientProvider` with retries and caching disabled (so tests are fast and deterministic), a `BrowserRouter` and a `Toaster`. Every test simply calls `renderWithProviders(component, initialState)` and gets back the standard React Testing Library result plus a reference to the store for state assertions.
 
 Alongside this, `mockUseQuery` and `mockUseMutation` helpers allow any TanStack Query hook to be replaced with a predictable mock object in unit tests, controlling the `data`, `isLoading` and `isError` states without making real network requests.
+
+
+
+## 🎓 What I've Learned
+
+The goal was not to build just another CRUD API with a list of endpoints that return JSON. It was to learn how things are actually done in production, at scale, by real senior engineers. To learn best practices and think in system design.
+
+That meant deliberately choosing complexity over convenience. Some decisions in this project could be considered overengineered for its size - Redis caching, a distributed rate limiter, a lot of libraries, a full CI/CD pipeline just for some portfolio app. And that was completely intentional. The point was not to need these things, but to understand them well enough to reach for them when I do actually need them.
+
+Here is what this project taught me:
+
+**Production engineering principles.** Thinking about scalability, fault tolerance and maintainability from the start rather than as an afterthought. Writing code that another engineer could pick up, understand and extend, not just code that runs.
+
+**API design as a discipline.** Designing endpoints with intention. Clear naming, consistent response shapes, versioning, validation at the boundary, proper status codes, and documentation that makes the API self-explanatory. I understood that routes that just return data is not enough.
+
+**Testing, properly.** Writing unit and integration tests, setting up a test environment that mirrors the real application, and understanding the difference between testing implementation details and testing behaviour.
+
+**Documentation culture.** JSDoc comments, Swagger/OpenAPI specs, this detailed README you read now. I understood that code that is well-documented is a sign of an engineer who respects the next person to read it, because that could be even future themselves.
+
+**WebSockets and real-time systems.** An entirely new paradigm. Stateful connections, rooms, event-driven architecture, and the coordination required between server-side socket logic and client-side state management.
+
+**DevOps fundamentals.** CI/CD pipelines with GitHub Actions taught me how professional teams ship code - automated testing as a gate, environment separation, and the discipline of never deploying something that hasn't passed a pipeline. I can now deploy frontend and backend projects to Netlify and Render confidently, and understand what is happening at each step.
+
+**Docker and environment parity.** Containerisation was new territory. Even at surface level, it solved a real problem: the gap between "works on my machine" and "works everywhere." I think every web developer should have at least a working understanding of what is it. And now I do.
+
+**Rate limiting and security thinking.** Especially on a system like this, rate limiting is crucial. Understanding why it needs to be Redis-backed rather than in-memory, to survive restarts and work across distributed instances, was a meaningful shift in how I think about security.
+
+**Caching strategy.** Knowing what to cache, for how long, and when to invalidate it. Redis taught me that caching is an architectural decision with real tradeoffs and not just a performance trick.
+
+**Full-stack system thinking.** Working alone across an entire stack forces you to hold the whole system in your head. How the frontend state connects to the API, how the API connects to the data layer, how the data layer connects back to the user experience. That kind of end-to-end ownership sharpens architectural thinking in a way that working on one layer alone never does. That is what I like about being a fullstack developer.
+
+**Frontend depth.** Complex Redux state management, React Query server state, coordinated animation sequences, custom test utilities really pushed my understanding of React and state-driven component based libraries/frameworks as a whole.
+
+---
+
+Every project leaves you more capable than when you started. This one left me significantly more capable and significantly more aware of how much there still is to learn, which scares me a bit, but I believe it is exactly the right feeling to finish with.
+
+---
+
+*Thank you for taking the time to read through this. I genuinely hope it gave you a clear picture of both the project and the thinking behind it. If anything caught your eye or you'd like to talk about the work, feel free to reach out, I'd love the conversation.*
