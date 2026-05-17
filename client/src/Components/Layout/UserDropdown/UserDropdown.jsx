@@ -19,6 +19,10 @@ import { showLogin, showRegister } from '../../../redux/features/auth/authModals
 import { useNavigate } from 'react-router-dom';
 import { logoutUser } from '../../../redux/features/auth/authSlice';
 
+const apiURL = import.meta.env.VITE_ENV !== 'production' 
+  ? import.meta.env.VITE_LOCAL_SERVER_URL 
+  : import.meta.env.VITE_PRODUCTION_SERVER_URL;
+
 const UserDropdown = ({ show, setShowDropdown }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -55,7 +59,8 @@ const UserDropdown = ({ show, setShowDropdown }) => {
             <div className="user-avatar-dropdown">
               {user?.profileImage && user.profileImage !== "/images/user.png" ? (
                 <img 
-                  src={`http://localhost:3000${user.profileImage}?${Date.now()}`} 
+                  // src={`${apiURL}${user.profileImage}?${Date.now()}`}
+                  src={new URL(`${user.profileImage}?${Date.now()}`, apiURL).href}   
                   alt="Profile" 
                   className="avatar-image"
                 />

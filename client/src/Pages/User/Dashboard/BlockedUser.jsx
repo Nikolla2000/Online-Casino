@@ -4,6 +4,10 @@ import { faUser, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import './DashboardSections/BlockedSectionStyles.scss';
 import { formatDate, formatTimeAgo } from "../../../utils/timeFormatter";
 
+const apiURL = import.meta.env.VITE_ENV !== 'production' 
+  ? import.meta.env.VITE_LOCAL_SERVER_URL 
+  : import.meta.env.VITE_PRODUCTION_SERVER_URL;
+
 const BlockedUser = ({ blockedUser }) => {
     const navigate = useNavigate();
     console.log(blockedUser)
@@ -20,7 +24,7 @@ const BlockedUser = ({ blockedUser }) => {
           <div className="user-avatar-wrapper">
             {blockedUser.profileImage && blockedUser.profileImage !== "/images/user.png" ? (
               <img 
-                src={`http://localhost:3000${blockedUser.profileImage}`} 
+                src={new URL(blockedUser.profileImage, apiURL).href} 
                 alt={blockedUser.username || 'User'}
                 className="user-avatar"
               />

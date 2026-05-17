@@ -18,6 +18,10 @@ import { normalizeDates } from '../../utils/normalizeDates';
 import { userAPI } from '../../services/api/userAPI';
 import { useGetBlockedUsers } from '../../hooks/useGetBlockedUsers';
 
+const apiURL = import.meta.env.VITE_ENV !== 'production' 
+  ? import.meta.env.VITE_LOCAL_SERVER_URL 
+  : import.meta.env.VITE_PRODUCTION_SERVER_URL;
+
 const LiveUsersPanel = ({ isOpen, onClose }) => {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -200,7 +204,7 @@ const LiveUsersPanel = ({ isOpen, onClose }) => {
                   <div className="avatar-container">
                     {user.profileImage && user.profileImage !== "/images/user.png" ? (
                       <img 
-                        src={`http://localhost:3000${user.profileImage}`} 
+                        src={new URL(user.profileImage, apiURL).href}   
                         alt={user.username}
                         className="user-avatar"
                         onError={(e) => {

@@ -5,6 +5,10 @@ import { useAuthInitialization } from "../src/hooks/useAuthInitialization";
 
 const SocketContext = createContext();
 
+const apiURL = import.meta.env.VITE_ENV !== 'production' 
+  ? import.meta.env.VITE_LOCAL_SERVER_URL 
+  : import.meta.env.VITE_PRODUCTION_SERVER_URL;
+
 export const useSocket = () => {
   const context = useContext(SocketContext);
 
@@ -26,7 +30,7 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     if (accessToken && user) {
-      const newSocket = io('http://localhost:3000', {
+      const newSocket = io(apiURL, {
         auth: {
           userId: user._id,
           token: accessToken,

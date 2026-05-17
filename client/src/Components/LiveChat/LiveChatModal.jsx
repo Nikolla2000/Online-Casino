@@ -9,6 +9,10 @@ import {
 import { useSocket } from "../../../context/SocketContext";
 import './LiveChatStyles.scss';
 
+const apiURL = import.meta.env.VITE_ENV !== 'production' 
+  ? import.meta.env.VITE_LOCAL_SERVER_URL 
+  : import.meta.env.VITE_PRODUCTION_SERVER_URL;
+
 const LiveChatModal = () => {
   const [messageInput, setMessageInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -200,7 +204,7 @@ const LiveChatModal = () => {
           <div className="user-avatar">
             {otherParticipant?.profileImage ? (
               <img 
-                src={`http://localhost:3000${otherParticipant.profileImage}`} 
+                src={new URL(`${otherParticipant.profileImage}`, apiURL).href} 
                 alt={otherParticipant.username}
                 onError={(e) => {
                   e.target.style.display = 'none';

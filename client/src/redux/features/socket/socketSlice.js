@@ -1,6 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import io from 'socket.io-client';
 
+const apiURL = import.meta.env.VITE_ENV !== 'production' 
+  ? import.meta.env.VITE_LOCAL_SERVER_URL 
+  : import.meta.env.VITE_PRODUCTION_SERVER_URL;
+
 export const initializeSocket = createAsyncThunk(
   'socket/initialize',
   async (_, { getState }) => {
@@ -11,7 +15,7 @@ export const initializeSocket = createAsyncThunk(
       throw new Error('No user authenticated');
     }
 
-    const socket = io('http://localhost:3000', {
+    const socket = io(apiURL, {
       auth: {
         token: accessToken,
         user: {

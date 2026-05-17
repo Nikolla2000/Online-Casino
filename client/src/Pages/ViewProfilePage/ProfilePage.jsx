@@ -10,6 +10,10 @@ import MessageButton from '../../Components/MessageButton/MessageButton';
 import { userAPI } from '../../services/api/userAPI';
 import { useBlockUser } from '../../hooks/useBlockUser';
 
+const apiURL = import.meta.env.VITE_ENV !== 'production' 
+  ? import.meta.env.VITE_LOCAL_SERVER_URL 
+  : import.meta.env.VITE_PRODUCTION_SERVER_URL;
+
 const ProfilePage = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
@@ -104,7 +108,7 @@ const ProfilePage = () => {
               <div className="profile-avatar">
                 <img 
                   src={userData.profileImage !== "/images/user.png" 
-                    ? `http://localhost:3000${userData.profileImage}` 
+                    ? new URL(userData.profileImage, apiURL).href
                     : "/images/user.png"
                   } 
                   alt={userData.username}

@@ -18,6 +18,10 @@ import { useSearchParams } from 'react-router-dom';
 import SectionButton from './SectionButton';
 import BlockedSection from './DashboardSections/BlockedSection';
 
+const apiURL = import.meta.env.VITE_ENV !== 'production' 
+  ? import.meta.env.VITE_LOCAL_SERVER_URL 
+  : import.meta.env.VITE_PRODUCTION_SERVER_URL;
+
 const Dashboard = () => {
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
@@ -205,7 +209,7 @@ const Dashboard = () => {
               <div className="profile-image-wrapper">
                 {user.profileImage !== "/images/user.png" ? (
                   <img 
-                    src={`http://localhost:3000${user.profileImage}?${Date.now()}`}  
+                    src={new URL(`${user.profileImage}?${Date.now()}`, apiURL).href}  
                     alt='Profile' 
                     className={isUploading ? 'uploading' : ''}
                   />
