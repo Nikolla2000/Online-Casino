@@ -22,6 +22,19 @@
 > [!WARNING]
 > **This is NOT a real gambling site and I'm strongly against gambling.** This project serves purely as a technical sandbox to demonstrate my technical skills and explore new technologies. A casino platform was chosen as the domain because it naturally demands complex logic, real-time systems, and a wide range of technical challenges, nothing more.
 
+## 📋 Table of Contents
+
+- [1. Architecture](#️-architecture-diagram)
+- [2. Features](#-features)
+- [3. Games](#-games)
+  - [3.1 Slot Machine](#-slot-machine)
+  - [3.2 Roulette](#-roulette)
+- [4. Under the Hood](#️-under-the-hood)
+  - [4.1 Frontend](#️-frontend)
+  - [4.2 Backend](#️-backend)
+- [5. Challenges & Solutions](#-challenges-i-faced--solutions)
+- [6. What I've Learned](#-what-ive-learned)
+
 ## 🏗️ Architecture diagram
 
 <p>
@@ -108,18 +121,15 @@ Additional player controls:
   <img src="./client/public/images/screenshot_slots.png" alt="Slots Preview" width="600">
 </p>
 
+---
 
 ### 🎡 Roulette
 
 The roulette game is a digital recreation of European roulette, built entirely from scratch with a full suite of real betting options, server-side outcome generation and frontend animation sequence. 
 
----
-
 #### Game board
 
 It has an interactive game board featuring 37 numbers - **0 through 36**  Each number cell is coloured according to the standard roulette table: red, black and green for zero. The player selects their bet type by clicking directly on the board, then builds their stake using physical chip buttons.
-
----
 
 #### Bet types
 
@@ -137,21 +147,15 @@ The game supports the full range of standard roulette bets:
 
 The player can toggle a selection off by clicking it again, and cannot change the bet or place a new one while the wheel is spinning.
 
----
-
 #### Chip system
 
 Rather than typing in an amount, the player places their bet using **5 chip denominations**: 5, 10, 25, 50 and 100 credits. Each click on a chip adds its value to the current bet.
-
----
 
 #### Placing the bet - what happens and when
 
 When the player clicks **Place Bet**, the frontend runs a series of validations locally before any network request is made. If any check fails, no request is sent.
 
 If everything is valid, the player's displayed credit balance is **immediately decremented** by the bet amount on the frontend, giving instant visual feedback before the server responds. The request is then sent to the backend with three values: `betAmount`, `betType` and `betValue` (the specific number, if applicable).
-
----
 
 #### Server side logic
 
@@ -174,13 +178,11 @@ The final win amount is calculated as `betAmount × (multiplier + 1)` — the `+
 
 **Step 5 - Database update** - The user's record is updated with a single atomic `$inc` operation.
 
-**Step 6 - Game history and transactions (production only)** -nIdentical pattern to the slots game.
+**Step 6 - Game history and transactions (production only)** -Identical pattern to the slots game.
 
 **Step 7 — Logging the outcome and cache invalidation**
 
 The full result object is returned: spin result, bet details, isWin, winAmount, multiplier, net profit and the balance before and after.
-
----
 
 #### Client side animation sequence
 
@@ -203,8 +205,6 @@ Below the board, a **Last Results** strip displays the outcomes of recent rounds
 <p>
   <img src="./client/public/images/screenshot_roulette.png" alt="Slots Preview" width="600">
 </p>
-
----
 
 ## ⚙️ Under the Hood
 
@@ -261,7 +261,7 @@ Below the board, a **Last Results** strip displays the outcomes of recent rounds
 - **CI/CD via GitHub Actions** - every push to the repository triggers an automated pipeline for both frontend and backend. Tests run first, and the deployment only proceeds if the full test suite passes. The frontend is deployed to **Netlify** and the backend to **Render**. Every change ships through a verified, automated process. No manual deployments and no "it works on my machine".
 
 
-## 💪 Challenges I faced & Solutions
+## 💪 Challenges & Solutions
 
 ---
 
