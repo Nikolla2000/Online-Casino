@@ -2,7 +2,7 @@
 
 # 🎰 Elite Casino
 
-**A production-grade full-stack casino platform built to demonstrate senior-level engineering from system design to real-time infrastructure.**
+**A production-grade full-stack casino platform built to showcase modern software engineering principles from system design to real-time infrastructure.**
 
 ![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-Express-339933?logo=node.js&logoColor=white)
