@@ -24,16 +24,22 @@
 
 ## 📋 Table of Contents
 
-- [1. Architecture](#️-architecture-diagram)
-- [2. Features](#-features)
-- [3. Games](#-games)
-  - [3.1 Slot Machine](#-slot-machine)
-  - [3.2 Roulette](#-roulette)
-- [4. Under the Hood](#️-under-the-hood)
-  - [4.1 Frontend](#️-frontend)
-  - [4.2 Backend](#️-backend)
-- [5. Challenges & Solutions](#-challenges-i-faced--solutions)
-- [6. What I've Learned](#-what-ive-learned)
+- [1. Demo](#️-demo)
+- [2. Architecture](#️-architecture-diagram)
+- [3. Features](#-features)
+- [4. Games](#-games)
+  - [4.1 Slot Machine](#-slot-machine)
+  - [4.2 Roulette](#-roulette)
+- [5. Under the Hood](#️-under-the-hood)
+  - [5.1 Frontend](#️-frontend)
+  - [5.2 Backend](#️-backend)
+- [6. Challenges & Solutions](#-challenges-i-faced--solutions)
+- [7. What I've Learned](#-what-ive-learned)
+
+## Demo
+<p>
+  <img src="./client/public/images/project-recording-4.gif" alt="Architecture Diagram" width="1000"/>
+</p>
 
 ## 🏗️ Architecture diagram
 
@@ -118,7 +124,7 @@ Additional player controls:
 - **Sound toggle** - mute and unmute sound during play
 
 <p>
-  <img src="./client/public/images/project-recording-2.gif" alt="Slots Preview" width="600">
+  <img src="./client/public/images/project-recording-2.gif" alt="Slots Preview" width="800">
 </p>
 
 ---
@@ -203,7 +209,7 @@ If the request fails at any point, the balance is restored to its pre-bet value,
 Below the board, a **Last Results** strip displays the outcomes of recent rounds as coloured bubbles - red, black or green.
 
 <p>
-  <img src="./client/public/images/project-recording-3.gif" alt="Slots Preview" width="600">
+  <img src="./client/public/images/project-recording-3.gif" alt="Slots Preview" width="800">
 </p>
 
 ## ⚙️ Under the Hood
