@@ -22,24 +22,22 @@
 > [!WARNING]
 > **This is NOT a real gambling site and I'm strongly against gambling.** This project serves purely as a technical sandbox to demonstrate my technical skills and explore new technologies. A casino platform was chosen as the domain because it naturally demands complex logic, real-time systems, and a wide range of technical challenges, nothing more.
 
+<p>
+  <img src="./client/public/images/project-recording-4.gif" alt="Architecture Diagram" width="800"/>
+</p>
+
 ## 📋 Table of Contents
 
-- [1. Demo](#️-demo)
-- [2. Architecture](#️-architecture-diagram)
-- [3. Features](#-features)
-- [4. Games](#-games)
-  - [4.1 Slot Machine](#-slot-machine)
-  - [4.2 Roulette](#-roulette)
-- [5. Under the Hood](#️-under-the-hood)
-  - [5.1 Frontend](#️-frontend)
-  - [5.2 Backend](#️-backend)
-- [6. Challenges & Solutions](#-challenges-i-faced--solutions)
-- [7. What I've Learned](#-what-ive-learned)
-
-## Demo
-<p>
-  <img src="./client/public/images/project-recording-4.gif" alt="Architecture Diagram" width="1000"/>
-</p>
+- [1. Architecture Diagram](#️-architecture-diagram)
+- [2. Features](#-features)
+- [3. Games](#-games)
+  - [3.1 Slot Machine](#-slot-machine)
+  - [3.2 Roulette](#-roulette)
+- [4. Under the Hood](#️-under-the-hood)
+  - [4.1 Frontend](#️-frontend)
+  - [4.2 Backend](#️-backend)
+- [5. Challenges & Solutions](#-challenges-i-faced--solutions)
+- [6. What I've Learned](#-what-ive-learned)
 
 ## 🏗️ Architecture diagram
 
