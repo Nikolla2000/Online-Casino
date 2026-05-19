@@ -118,7 +118,7 @@ Additional player controls:
 - **Sound toggle** - mute and unmute sound during play
 
 <p>
-  <img src="./client/public/images/screenshot_slots.png" alt="Slots Preview" width="600">
+  <img src="./client/public/images/project-recording-2.gif" alt="Slots Preview" width="600">
 </p>
 
 ---
@@ -203,7 +203,7 @@ If the request fails at any point, the balance is restored to its pre-bet value,
 Below the board, a **Last Results** strip displays the outcomes of recent rounds as coloured bubbles - red, black or green.
 
 <p>
-  <img src="./client/public/images/screenshot_roulette.png" alt="Slots Preview" width="600">
+  <img src="./client/public/images/project-recording-3.gif" alt="Slots Preview" width="600">
 </p>
 
 ## ⚙️ Under the Hood
